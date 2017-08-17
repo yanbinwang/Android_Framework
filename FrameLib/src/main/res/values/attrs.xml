@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 刷新球 -->
+    <declare-styleable name="ProgressWheel">
+        <attr name="matProg_progressIndeterminate" format="boolean" />
+        <attr name="matProg_barColor" format="color" />
+        <attr name="matProg_rimColor" format="color" />
+        <attr name="matProg_rimWidth" format="dimension" />
+        <attr name="matProg_spinSpeed" format="float" />
+        <attr name="matProg_barSpinCycleTime" format="integer" />
+        <attr name="matProg_circleRadius" format="dimension" />
+        <attr name="matProg_fillRadius" format="boolean" />
+        <attr name="matProg_barWidth" format="dimension" />
+        <attr name="matProg_linearProgress" format="boolean" />
+    </declare-styleable>
+
+    <!-- 自定义评星控件 -->
+    <declare-styleable name="RatingBar">
+        <!-- 星星间距 -->
+        <attr name="starDistance" format="dimension" />
+        <!-- 星星大小 -->
+        <attr name="starSize" format="dimension" />
+        <!-- 星星个数 -->
+        <attr name="starCount" format="integer" />
+        <!-- 星星空图 -->
+        <attr name="starEmpty" format="reference" />
+        <!-- 星星满图 -->
+        <attr name="starFill" format="reference" />
+    </declare-styleable>
+
+    <!-- 圈形进度条 -->
+    <declare-styleable name="CircleProgressBar">
+        <attr name="line_count" format="integer" />
+        <attr name="draw_progress_text" format="boolean" />
+        <attr name="line_width" format="dimension|reference" />
+        <attr name="background_color" format="color|reference" />
+        <attr name="progress_start_color" format="color|reference" />
+        <attr name="progress_end_color" format="color|reference" />
+        <attr name="progress_text_color" format="color|reference" />
+        <attr name="progress_text_size" format="dimension|reference" />
+        <attr name="progress_stroke_width" format="dimension|reference" />
+        <attr name="progress_background_color" format="color|reference" />
+        <attr name="progress_text_format_pattern" format="string|reference" />
+        <attr name="style">
+            <enum name="line" value="0" />
+            <enum name="solid" value="1" />
+            <enum name="solid_line" value="2" />
+        </attr>
+        <attr name="progress_shader">
+            <enum name="linear" value="0" />
+            <enum name="radial" value="1" />
+            <enum name="sweep" value="2" />
+        </attr>
+        <attr name="progress_stroke_cap">
+            <enum name="butt" value="0" />
+            <enum name="round" value="1" />
+            <enum name="square" value="2" />
+        </attr>
+    </declare-styleable>
+
+    <!-- 带动画的checkbox -->
+    <declare-styleable name="SmoothCheckBox">
+        <attr name="duration" format="integer" />
+        <attr name="stroke_width" format="dimension" />
+        <attr name="color_tick" format="color" />
+        <attr name="color_checked" format="color" />
+        <attr name="color_unchecked" format="color" />
+        <attr name="color_unchecked_stroke" format="color" />
+    </declare-styleable>
+
+</resources>

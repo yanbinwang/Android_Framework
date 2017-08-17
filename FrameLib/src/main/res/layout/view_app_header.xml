@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="50dp"
+    android:background="@color/child_title"
+    android:elevation="3dp"
+    android:fitsSystemWindows="true" >
+
+    <ImageView
+        android:id="@+id/mainLeftBtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="10dp"
+        style="@style/Widget.AppCompat.ActionButton"
+        android:src="@mipmap/icon_btn_back" />
+
+    <TextView
+        android:id="@+id/mainTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ellipsize="end"
+        android:maxLength="8"
+        android:singleLine="true"
+        android:textColor="@color/really_white"
+        android:textSize="20sp" />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true" >
+
+        <ImageView
+            android:id="@+id/mainRightBtn"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="10dp"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/mainRightText"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:gravity="right"
+            android:layout_marginRight="10dp"
+            android:singleLine="true"
+            android:textColor="@color/really_white"
+            android:textSize="14sp"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+</RelativeLayout>

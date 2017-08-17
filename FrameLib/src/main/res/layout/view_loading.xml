@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dialog_view"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.wyb.iocframe.view.ProgressWheel
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:paddingTop="20dp"
+        wheel:matProg_barColor="@color/child_title"
+        wheel:matProg_progressIndeterminate="true" />
+
+    <TextView
+        android:id="@+id/msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="5dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:text="正在加载中..."
+        android:textColor="@color/child_title"
+        android:textSize="12sp" />
+
+</LinearLayout>
