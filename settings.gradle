@@ -1,1 +1,1 @@
-include ':app', ':FrameLib'
+include ':app', ':ow_lib_framework', ':ow_lib_base', ':ow_lib_share'

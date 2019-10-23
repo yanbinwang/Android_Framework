@@ -1,61 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.testnew">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.ow.testnew">
 
-    <!-- nohtto的权限 -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!-- 蓝牙分享所需的权限 -->
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- Required 一些系统要求的权限，如访问网络等 -->
-    <uses-permission android:name="android.permission.GET_TASKS" />
+    <!-- 系统 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.RECEIVE_USER_PRESENT" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.WRITE_SETTINGS" />
-    <!-- 百度地图定位权限 -->
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <!-- 新加 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-    <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS" />
-    <!-- 这个权限用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 这个权限用于访问GPS定位 -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <!-- 用于读取手机当前的状态 -->
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 在SDCard中创建与删除文件权限 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 麦克风 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <!-- 在Android/data下产生文件 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <!-- 存储空间 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="com.sonymobile.permission.SYSTEM_UI_VISIBILITY_EXTENSIONS" />
-    <!-- 在SDCard中创建与删除文件权限 -->
-    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
-    <!-- 往SDCard写入数据权限 -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- 在SDCard中创建与删除文件权限 -->
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
-        android:name="com.wyb.iocframe.MyApplication"
-        android:allowBackup="true"
+        android:name=".MyApplication"
+        android:allowBackup="false"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        tools:replace="android:allowBackup,android:icon,android:theme,android:label"
+        tools:targetApi="m">
 
-        <activity android:name=".MainActivity"
+        <meta-data
+            android:name="design_width_in_dp"
+            android:value="750" />
+
+        <meta-data
+            android:name="design_height_in_dp"
+            android:value="1334" />
+
+        <activity android:name=".activity.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -64,32 +48,31 @@
             </intent-filter>
         </activity>
 
-        <!-- 百度地图-->
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="y0t8LpLlUDu5czAggtWYKoGc37r0BDV0" />
+        <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.ow.testnew.fileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
 
-        <!-- 点小图进大图列表页 -->
+        <!-- ******************************************************微信 SDK****************************************************** -->
         <activity
-            android:name="com.wyb.iocframe.activity.ImagePageActivity"
-            android:label="@string/app_name" />
-
-        <!-- 相册页 -->
-        <activity
-            android:name="com.wyb.iocframe.activity.ImageActivity"
-            android:label="@string/app_name"
+            android:name=".wxapi.WXEntryActivity"
+            android:exported="true"
             android:screenOrientation="portrait" />
 
-        <!-- 网页跳转页 -->
         <activity
-            android:name="com.wyb.iocframe.activity.WebviewActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
+            android:name=".wxapi.WXPayEntryActivity"
+            android:exported="true"
+            android:launchMode="singleInstance"
+            android:screenOrientation="portrait"
+            android:theme="@style/noAnimTheme" />
+        <!-- ******************************************************微信 SDK****************************************************** -->
 
     </application>
 

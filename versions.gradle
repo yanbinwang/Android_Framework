@@ -1,0 +1,121 @@
+//---------------------------------------------全局引用配置开始---------------------------------------------
+ext.deps = [:]
+
+//所有库的版本配置
+def versions = [:]
+versions.appcompat = "1.1.0"
+versions.recyclerview = "1.0.0"
+
+versions.core = "1.1.0"
+versions.stdlib = "1.3.50"
+
+versions.glide = "4.9.0"
+versions.glide_compiler = "4.9.0"
+versions.glide_okhttp3 = "4.9.0"
+
+versions.okhttp = "3.14.0"
+versions.retrofit = "2.3.0"
+versions.converter_gson = "2.3.0"
+versions.adapter_rxjava2 = "2.3.0"
+
+versions.arouter = "1.3.1"
+versions.arouter_compiler = "1.1.4"
+
+versions.album = "2.1.3"
+versions.durban = "1.0.1"
+versions.permission = "2.0.2"
+
+versions.butterknife = "10.1.0"
+versions.butterknife_compiler = "10.1.0"
+
+versions.material = "1.0.0"
+versions.rxandroid = "2.1.1"
+versions.autosize = "1.1.2"
+versions.recovery = "1.0.0"
+versions.wechat = "5.1.4"
+
+//安卓x库
+def androidx = [:]
+androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
+androidx.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
+deps.androidx = androidx
+
+//kotlin
+def kotlin = [:]
+kotlin.core = "androidx.core:core-ktx:$versions.core"
+kotlin.stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.stdlib"
+deps.kotlin = kotlin
+
+//图片加载glide
+def bumptech = [:]
+bumptech.glide = "com.github.bumptech.glide:glide:$versions.glide"
+bumptech.glide_okhttp3 = "com.github.bumptech.glide:okhttp3-integration:$versions.glide_okhttp3"
+bumptech.glide_compiler = "com.github.bumptech.glide:compiler:$versions.glide_compiler"
+deps.bumptech = bumptech
+
+//网络请求retrofit2
+def retrofit2 = [:]
+retrofit2.okhttp3 = "com.squareup.okhttp3:okhttp:$versions.okhttp"
+retrofit2.retrofit = "com.squareup.retrofit2:retrofit:$versions.retrofit"
+retrofit2.converter_gson = "com.squareup.retrofit2:converter-gson:$versions.converter_gson"
+retrofit2.adapter_rxjava2 = "com.squareup.retrofit2:adapter-rxjava2:$versions.adapter_rxjava2"
+deps.retrofit2 = retrofit2
+
+//阿里路由
+def alibaba = [:]
+alibaba.arouter = "com.alibaba:arouter-api:$versions.arouter"
+alibaba.arouter_compiler = "com.alibaba:arouter-compiler:$versions.arouter_compiler"
+deps.alibaba = alibaba
+
+//yanzhenjie
+def yanzhenjie = [:]
+yanzhenjie.album = "com.yanzhenjie:album:$versions.album"
+yanzhenjie.durban = "com.yanzhenjie:durban:$versions.durban"
+yanzhenjie.permission = "com.yanzhenjie:permission:$versions.permission"
+deps.yanzhenjie = yanzhenjie
+
+//黄油刀控件绑定
+def jakewharton = [:]
+jakewharton.butterknife ="com.jakewharton:butterknife:$versions.butterknife"
+jakewharton.butterknife_compiler= "com.jakewharton:butterknife-compiler:$versions.butterknife_compiler"
+deps.jakewharton = jakewharton
+
+deps.material = "com.google.android.material:material:$versions.material"//design库
+deps.rxandroid = "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"//rxandroid
+deps.autosize = "me.jessyan:autosize:$versions.autosize"//今日头条布局兼容
+deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
+deps.wechat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat"//微信
+ext.deps = deps
+//---------------------------------------------全局引用配置结束---------------------------------------------
+
+//全局版本配置
+def build_versions = [:]
+build_versions.compileSdkVersion = 28//构建版本号
+build_versions.minSdkVersion = 21//最低安装版本
+build_versions.targetSdkVersion = 28//最高安装版本
+build_versions.versionCode = 1//版本号
+build_versions.versionName = "1.0"//版本名
+build_versions.supportVersion = "1.0.0"//sdk版本
+ext.build_versions = build_versions
+
+//基础参数配置
+def build_config = [:]
+build_config.applicationId = "com.ow.testnew"//主appId（包名）
+build_config.LOCALHOST_DEBUG = "\"http://www.exchange-app.com/\""//测试环境
+build_config.LOCALHOST_RELEASE = "\"https://cpapp.kcmc.cc/coin_api/\""//生产环境
+ext.build_config = build_config
+
+//全局build配置
+static def addRepos(RepositoryHandler handler) {
+    handler.maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
+
+    handler.jcenter()
+    handler.maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
+    handler.maven { url 'https://jitpack.io' }
+    handler.mavenCentral()
+}
+
+ext.addRepos = this.&addRepos

@@ -1,84 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context="com.example.testnew.MainActivity">
+    android:orientation="vertical">
 
-    <ScrollView
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:overScrollMode="never"
-        android:scrollbars="none">
+        android:gravity="center"
+        android:text="Hello World!"
+        android:textColor="@color/gray_9d9c9c"
+        android:textSize="28mm" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <Button
-                android:id="@+id/mBtn"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:text="定位" />
-
-            <Button
-                android:id="@+id/mBtn2"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="提示框" />
-
-            <Button
-                android:id="@+id/mBtn3"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="跳出网页" />
-
-            <Button
-                android:id="@+id/mBtn4"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="post" />
-
-            <Button
-                android:id="@+id/mBtn5"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:text="get" />
-
-            <ImageView
-                android:id="@+id/mImg"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="fitXY" />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center"
-                android:padding="10dp"
-                android:text="sadsadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhptirhyiptrhyiptradsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhadsadsadsaaaaaaaaafkhgoghphgohoghitrhyptrhhrtpyhhiypthripyhtrpihyipthlbvclhblvchblvchblvchblvchblvchblvcb"
-                android:textColor="@color/grey1_text"
-                android:textIsSelectable="true"
-                android:textSize="14sp" />
-
-
-            <TextView
-                android:textColor="@color/really_white"
-                android:text="测试测试"
-                android:gravity="center"
-                android:textSize="@dimen/dp720_36"
-                android:layout_width="@dimen/dp720_660"
-                android:layout_height="@dimen/dp720_96"
-                android:layout_gravity="center"
-                android:background="@color/child_title" />
-
-
-        </LinearLayout>
-    </ScrollView>
 </LinearLayout>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/share_container_rel"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:paddingTop="46mm"
+        android:paddingBottom="46mm">
+
+        <LinearLayout
+            android:id="@+id/share_wechat_lin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="84mm"
+                android:layout_height="84mm"
+                android:src="@mipmap/ic_wechat" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30mm"
+                android:text="微信好友"
+                android:textColor="@color/grey_777777"
+                android:textSize="28mm" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/share_wechat_moments_lin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="84mm"
+                android:layout_height="84mm"
+                android:src="@mipmap/ic_wechat_moments" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30mm"
+                android:text="朋友圈"
+                android:textColor="@color/grey_777777"
+                android:textSize="28mm" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+</RelativeLayout>

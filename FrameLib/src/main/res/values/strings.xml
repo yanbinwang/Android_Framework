@@ -1,6 +1,0 @@
-<resources>
-    <string name="app_name">dp兼容框架</string>
-
-    <drawable name="container_press_true">#d9d9d9</drawable>
-    <drawable name="container_press_false">#ffffff</drawable>
-</resources>
