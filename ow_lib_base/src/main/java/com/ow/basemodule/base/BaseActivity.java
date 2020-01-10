@@ -3,14 +3,12 @@ package com.ow.basemodule.base;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.text.TextUtils;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -43,13 +41,10 @@ import com.ow.framework.utils.SHPUtil;
 import com.ow.framework.utils.StatusBarUtil;
 import com.ow.framework.utils.ToastUtil;
 
-import org.jetbrains.annotations.Nullable;
-
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -81,13 +76,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         presenter = getPresenter();
         if (null != presenter) {
             presenter.attachView(this, this);
         }
         initBaseView();
         initBaseEvent();
-        currentLanguage();
         initView();
         initEvent();
         initData();
@@ -144,40 +139,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="页面语言切换的操作">
-    private void currentLanguage() {
-        //本地语言设置
-        String language = getLanguage();
-        Resources mResources = getResources();
-        DisplayMetrics displayMetrics = mResources.getDisplayMetrics();
-        Configuration configuration = mResources.getConfiguration();// 获得设置对象
-        switch (language) {
-            case "en":
-                configuration.locale = Locale.ENGLISH;   // 英文
-                configuration.setLayoutDirection(Locale.ENGLISH);
-                break;
-            case "zh":
-            default:
-                configuration.locale = Locale.SIMPLIFIED_CHINESE;     // 中文
-                configuration.setLayoutDirection(Locale.SIMPLIFIED_CHINESE);
-                break;
-        }
-        mResources.updateConfiguration(configuration, displayMetrics);
-    }
-
-    //切换系统语言（zh-中文 en-英文）---切语言关闭所有页面，加载首页
-    public void switchLanguage(String language) {
-        appInfoSHP.saveParam(Constants.APP_LANGUAGE, language);
-        currentLanguage();
-        RxBus.Companion.getInstance().post(new RxBusEvent(Constants.APP_SWITCH_LANGUAGE));
-    }
-
-    //获取当前系统选择语言（zh-中文 en-英文）
-    public String getLanguage() {
-        return appInfoSHP.getParam(Constants.APP_LANGUAGE, "zh"); //默认中文
-    }
-    // </editor-fold>
-
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(R.layout.activity_base);
@@ -199,17 +160,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void showDialog() {
-        showDialog("", false);
+        showDialog(false);
     }
 
     @Override
-    public void showDialog(String str) {
-        showDialog(str, false);
-    }
-
-    @Override
-    public void showDialog(@Nullable String msg, @Nullable Boolean isClose) {
-        loadingDialog.show(isClose, msg);
+    public void showDialog(Boolean isClose) {
+        loadingDialog.show(isClose);
     }
 
     @Override

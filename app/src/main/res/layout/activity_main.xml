@@ -9,7 +9,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="Hello World!"
-        android:textColor="@color/gray_9d9c9c"
+        android:textColor="@color/black_010026"
         android:textSize="28mm" />
 
 </LinearLayout>

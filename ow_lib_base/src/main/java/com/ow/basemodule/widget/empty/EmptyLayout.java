@@ -92,7 +92,7 @@ public class EmptyLayout extends ViewGroup {
         emptyRefresh = contextView.findViewById(R.id.empty_refresh);
         emptyImg = contextView.findViewById(R.id.empty_img);
         emptyTxt = contextView.findViewById(R.id.empty_txt);
-        emptyRefresh.setColorSchemeColors(ContextCompat.getColor(context, R.color.purple_8f94fb));
+        emptyRefresh.setColorSchemeColors(ContextCompat.getColor(context, R.color.blue_2e60df));
         emptyRefresh.setOnRefreshListener(() -> {
             emptyRefresh.setRefreshing(false);
             if (null != onEmptyRefreshListener) {

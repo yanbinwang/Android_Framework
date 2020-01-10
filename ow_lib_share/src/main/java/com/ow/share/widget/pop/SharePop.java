@@ -1,7 +1,7 @@
 package com.ow.share.widget.pop;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.transition.Slide;
@@ -17,11 +17,9 @@ import android.widget.RelativeLayout;
 
 import com.ow.share.R;
 import com.ow.share.bean.WeChatBean;
-import com.ow.share.bean.WeChatMethod;
-import com.ow.share.utils.WeChatUtil;
+import com.ow.share.utils.ShareSDKUtil;
+import com.ow.share.widget.pop.callback.OnSharePopListener;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
-
-import java.lang.ref.WeakReference;
 
 
 /**
@@ -31,26 +29,20 @@ import java.lang.ref.WeakReference;
  */
 @SuppressLint("InflateParams")
 public class SharePop implements View.OnClickListener {
-    private WeakReference<Activity> mActivity;
-    private WindowManager.LayoutParams layoutParams;
+    private Context context;
     private View popView;
     private PopupWindow sharePop;
     private WeChatBean weChatBean;
-    private WeChatUtil weChatUtil;
+    private OnSharePopListener onSharePopListener;
 
-    public SharePop(Activity activity) {
+    public SharePop(Context context) {
         super();
-        mActivity = new WeakReference<>(activity);
-        weChatUtil = new WeChatUtil(mActivity.get());
-        layoutParams = mActivity.get().getWindow().getAttributes();
+        this.context = context;
     }
 
     public void showPop(View view) {
-        layoutParams.alpha = 0.7f;
-        mActivity.get().getWindow().setAttributes(layoutParams);
-
         if (popView == null) {
-            popView = LayoutInflater.from(mActivity.get()).inflate(R.layout.view_pop_share, null);
+            popView = LayoutInflater.from(context).inflate(R.layout.view_pop_share, null);
             RelativeLayout shareContainerRel = popView.findViewById(R.id.share_container_rel);
             LinearLayout shareWechatLin = popView.findViewById(R.id.share_wechat_lin);
             LinearLayout shareWechatMomentsLin = popView.findViewById(R.id.share_wechat_moments_lin);
@@ -87,10 +79,6 @@ public class SharePop implements View.OnClickListener {
             sharePop.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
             sharePop.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
             sharePop.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-            sharePop.setOnDismissListener(() -> {
-                layoutParams.alpha = 1f;
-                mActivity.get().getWindow().setAttributes(layoutParams);
-            });
         }
 
         sharePop.showAtLocation(view, Gravity.BOTTOM, 0, 0);
@@ -106,18 +94,25 @@ public class SharePop implements View.OnClickListener {
         this.weChatBean = weChatBean;
     }
 
+    public void setOnSharePopListener(OnSharePopListener onSharePopListener) {
+        this.onSharePopListener = onSharePopListener;
+    }
+
     @Override
     public void onClick(View v) {
         int viewId = v.getId();
-        if (viewId == R.id.share_container_rel) {
+        if (viewId == R.id.share_container_rel || viewId == R.id.share_cancel_tv) {
+            if (null != onSharePopListener) {
+                onSharePopListener.onShareCancel();
+            }
             hidePop();
         } else if (viewId == R.id.share_wechat_lin) {
-            weChatUtil.setWeChatBean(WeChatMethod.WEBPAGE, weChatBean, SendMessageToWX.Req.WXSceneSession);
-            weChatUtil.toShare();
+            weChatBean.setType(SendMessageToWX.Req.WXSceneSession);
+            ShareSDKUtil.getInstance().shareWebPage(weChatBean);
             hidePop();
         } else if (viewId == R.id.share_wechat_moments_lin) {
-            weChatUtil.setWeChatBean(WeChatMethod.WEBPAGE, weChatBean, SendMessageToWX.Req.WXSceneTimeline);
-            weChatUtil.toShare();
+            weChatBean.setType(SendMessageToWX.Req.WXSceneTimeline);
+            ShareSDKUtil.getInstance().shareWebPage(weChatBean);
             hidePop();
         }
     }

@@ -16,7 +16,6 @@ import com.ow.basemodule.utils.http.download.callback.OnDownloadListener;
 import com.ow.framework.utils.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.lang.ref.WeakReference;
@@ -51,7 +50,7 @@ public class DownLoadUtil {
                 }
 
                 @Override
-                public void onDownloading(@Nullable Integer progress) {
+                public void onDownloading(int progress) {
                 }
 
                 @Override

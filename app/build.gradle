@@ -2,6 +2,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.mob.sdk'
 
 android {
     signingConfigs {
@@ -33,8 +34,8 @@ android {
         versionCode build_versions.versionCode
         versionName build_versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-//        //减少语言支持
-//        resConfigs "zh"
+        //减少语言支持
+        resConfigs "zh"
         //dex突破65535的限制
         multiDexEnabled true
         kapt {
@@ -53,7 +54,8 @@ android {
         release {
             //架构支持
             ndk {
-                abiFilter "armeabi"
+//                abiFilter "armeabi"
+                abiFilters 'armeabi', 'armeabi-v7a', 'arm64-v8a'
             }
 
             //移除无用资源
@@ -91,8 +93,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation project(':ow_lib_base')
+//    implementation project(':ow_lib_base')
 //    implementation project(':bitnew_module_quotation')
+    implementation project(':ow_lib_share')
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
     implementation deps.jakewharton.butterknife

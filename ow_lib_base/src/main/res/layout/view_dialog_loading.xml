@@ -10,7 +10,7 @@
         android:layout_width="160mm"
         android:layout_height="160mm"
         android:paddingTop="40mm"
-        wheel:matProg_barColor="@color/purple_8f94fb"
+        wheel:matProg_barColor="@color/blue_2e60df"
         wheel:matProg_progressIndeterminate="true" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:paddingLeft="50mm"
         android:paddingRight="50mm"
         android:text="@string/view_loading_txt"
-        android:textColor="@color/purple_8f94fb"
+        android:textColor="@color/blue_2e60df"
         android:textSize="26mm" />
 
 </LinearLayout>

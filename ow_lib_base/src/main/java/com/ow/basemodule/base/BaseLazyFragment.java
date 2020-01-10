@@ -36,7 +36,6 @@ import com.ow.framework.utils.StatusBarUtil;
 import com.ow.framework.utils.ToastUtil;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -173,17 +172,12 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
 
     @Override
     public void showDialog() {
-        showDialog("", false);
+        showDialog(false);
     }
 
     @Override
-    public void showDialog(String str) {
-        showDialog(str, false);
-    }
-
-    @Override
-    public void showDialog(@Nullable String msg, @Nullable Boolean isClose) {
-        loadingDialog.show(isClose, msg);
+    public void showDialog(Boolean isClose) {
+        loadingDialog.show(isClose);
     }
 
     @Override

@@ -42,7 +42,7 @@
             android:layout_height="80mm"
             android:layout_weight="1"
             android:gravity="center"
-            android:textColor="@color/purple_8f94fb"
+            android:textColor="@color/blue_2e60df"
             android:textSize="32mm" />
 
     </LinearLayout>

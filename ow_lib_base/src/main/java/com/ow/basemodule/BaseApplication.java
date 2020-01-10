@@ -1,6 +1,7 @@
 package com.ow.basemodule;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Application;
 import android.content.Context;
@@ -8,9 +9,13 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AbsListView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.ow.basemodule.constant.Constants;
@@ -27,6 +32,8 @@ import com.tencent.smtt.sdk.QbSdk;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -114,6 +121,8 @@ public class BaseApplication extends Application {
         Constants.MAC = getMac();
         //获取手机的DeviceId
         Constants.DEVICE_ID = getDeviceId();
+        //防止短时间内多次点击，弹出多个activity 或者 dialog ，等操作
+        registerActivityLifecycleCallbacks(lifecycleCallbacks);
     }
 
     //获取当前设备ip地址
@@ -203,6 +212,111 @@ public class BaseApplication extends Application {
             }
         }
         return false;
+    }
+
+    private Application.ActivityLifecycleCallbacks lifecycleCallbacks = new Application.ActivityLifecycleCallbacks() {
+
+        @Override
+        public void onActivityCreated(Activity activity, Bundle bundle) {
+            activity.getWindow().getDecorView().getViewTreeObserver().addOnGlobalLayoutListener(() -> proxyOnClick(activity.getWindow().getDecorView(), 5));
+        }
+
+        @Override
+        public void onActivityStarted(Activity activity) {
+        }
+
+        @Override
+        public void onActivityResumed(Activity activity) {
+        }
+
+        @Override
+        public void onActivityPaused(Activity activity) {
+        }
+
+        @Override
+        public void onActivityStopped(Activity activity) {
+        }
+
+        @Override
+        public void onActivitySaveInstanceState(Activity activity, Bundle bundle) {
+        }
+
+        @Override
+        public void onActivityDestroyed(Activity activity) {
+        }
+    };
+
+    private void proxyOnClick(View view, int recycledContainerDeep) {
+        if (view.getVisibility() == View.VISIBLE) {
+            if (view instanceof ViewGroup) {
+                boolean existAncestorRecycle = recycledContainerDeep > 0;
+                ViewGroup p = (ViewGroup) view;
+                if (!(p instanceof AbsListView) || existAncestorRecycle) {
+                    getClickListenerForView(view);
+                    if (existAncestorRecycle) {
+                        recycledContainerDeep++;
+                    }
+                } else {
+                    recycledContainerDeep = 1;
+                }
+                int childCount = p.getChildCount();
+                for (int i = 0; i < childCount; i++) {
+                    View child = p.getChildAt(i);
+                    proxyOnClick(child, recycledContainerDeep);
+                }
+            } else {
+                getClickListenerForView(view);
+            }
+        }
+    }
+
+    private void getClickListenerForView(View view) {
+        try {
+            Class viewClazz = Class.forName("android.view.View");
+            //事件监听器都是这个实例保存的
+            Method listenerInfoMethod = viewClazz.getDeclaredMethod("getListenerInfo");
+            if (!listenerInfoMethod.isAccessible()) {
+                listenerInfoMethod.setAccessible(true);
+            }
+            Object listenerInfoObj = listenerInfoMethod.invoke(view);
+            Class listenerInfoClazz = Class.forName("android.view.View$ListenerInfo");
+            Field onClickListenerField = listenerInfoClazz.getDeclaredField("mOnClickListener");
+
+            if (!onClickListenerField.isAccessible()) {
+                onClickListenerField.setAccessible(true);
+            }
+            View.OnClickListener mOnClickListener = (View.OnClickListener) onClickListenerField.get(listenerInfoObj);
+            if (!(mOnClickListener instanceof ProxyOnclickListener)) {
+                //自定义代理事件监听器
+                View.OnClickListener onClickListenerProxy = new ProxyOnclickListener(mOnClickListener);
+                //更换
+                onClickListenerField.set(listenerInfoObj, onClickListenerProxy);
+            } else {
+                LogUtil.INSTANCE.e("OnClickListenerProxy", "setted proxy listener ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private class ProxyOnclickListener implements View.OnClickListener {
+        private View.OnClickListener onclick;
+        private long lastClickTime = 0;
+
+        ProxyOnclickListener(View.OnClickListener onclick) {
+            this.onclick = onclick;
+        }
+
+        @Override
+        public void onClick(View v) {
+            //点击时间控制
+            long currentTime = System.currentTimeMillis();
+            int MIN_CLICK_DELAY_TIME = 500;
+            if (currentTime - lastClickTime > MIN_CLICK_DELAY_TIME) {
+                lastClickTime = currentTime;
+                if (onclick != null) onclick.onClick(v);
+            }
+        }
     }
 
 }

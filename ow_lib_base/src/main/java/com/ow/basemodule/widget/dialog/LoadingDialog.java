@@ -3,11 +3,9 @@ package com.ow.basemodule.widget.dialog;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.ow.basemodule.R;
 
@@ -27,13 +25,13 @@ public class LoadingDialog {
         this.context = context;
     }
 
-    public void show(boolean isClose, String str) {
+    public void show(boolean isClose) {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.view_dialog_loading, null);
-            TextView msgTxt = view.findViewById(R.id.msg_txt);
-            if (!TextUtils.isEmpty(str)) {
-                msgTxt.setText(str);
-            }
+//            TextView msgTxt = view.findViewById(R.id.msg_txt);
+//            if (!TextUtils.isEmpty(str)) {
+//                msgTxt.setText(str);
+//            }
         }
         if (loadingDialog == null) {
             loadingDialog = new Dialog(context, R.style.loadingStyle);

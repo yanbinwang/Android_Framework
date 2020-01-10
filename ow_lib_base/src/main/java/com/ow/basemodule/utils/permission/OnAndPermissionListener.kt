@@ -7,6 +7,6 @@ package com.ow.basemodule.utils.permission
  */
 interface OnAndPermissionListener {
 
-    fun onAndPermissionListener(isGranted: Boolean)
+    fun onAndPermissionListener(isGranted: Boolean = false)
 
 }

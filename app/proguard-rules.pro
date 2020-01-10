@@ -532,6 +532,16 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 }
 #------------------------Retrofit混淆结束------------------------
 
+#------------------------sharesdk混淆开始------------------------
+-keep class cn.sharesdk.**{*;}
+-keep class com.sina.**{*;}
+-keep class com.mob.**{*;}
+-keep class com.bytedance.**{*;}
+-dontwarn cn.sharesdk.**
+-dontwarn com.sina.**
+-dontwarn com.mob.**
+#------------------------sharesdk混淆结束------------------------
+
 -keep class com.ow.basemodule.bean.** {*;}
 -keep class com.ow.basemodule.bus.RxBusEvent{*;}
 -keep class com.ow.basemodule.utils.http.BaseModel{*;}

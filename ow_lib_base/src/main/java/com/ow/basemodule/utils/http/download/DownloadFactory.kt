@@ -90,7 +90,7 @@ class DownloadFactory {
     private fun doLoading(progress: Int?, onDownloadFactoryListener: OnDownloadFactoryListener?) {
         LogUtil.e("DownloadFactory", progress.toString())
         weakHandler.post {
-            onDownloadFactoryListener?.onDownloading(progress)
+            onDownloadFactoryListener?.onDownloading(progress!!)
         }
     }
 

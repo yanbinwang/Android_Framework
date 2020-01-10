@@ -40,4 +40,7 @@ public class Constants {
     public static final String APP_USER_INFO_UPDATE = "com.bitnew.tech.APP_USER_INFO_UPDATE";//用户信息更新
     public static final String APP_SWITCH_LANGUAGE = "com.bitnew.tech.APP_SWITCH_LANGUAGE";//切换语言
     public static final String APP_SELECT_COIN_VALUE = "com.shuniuyun.wallet.APP_SELECT_COIN_VALUE";//选择货币单位
+    public static final String APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS";//分享成功
+    public static final String APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL";//分享取消
+    public static final String APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE";//分享失败
 }

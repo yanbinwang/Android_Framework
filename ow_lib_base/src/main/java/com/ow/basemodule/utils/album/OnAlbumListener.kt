@@ -7,6 +7,6 @@ package com.ow.basemodule.utils.album
  */
 interface OnAlbumListener {
 
-    fun onAlbumListener(albumPath: String)
+    fun onAlbumListener(albumPath: String?)
 
 }

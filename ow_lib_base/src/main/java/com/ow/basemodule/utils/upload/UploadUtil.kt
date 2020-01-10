@@ -48,7 +48,7 @@ class UploadUtil(private val context: Context) {
             val filePart = MultipartBody.Part.createFormData("file[]", fileCompress.name, requestFile)
             parts.add(filePart)
         }
-        loadingDialog.show(false, "")
+        loadingDialog.show(false)
         BaseSubscribe.getUploadFile(RequestCode.CODE_406, parts, object : RxSubscribe<UploadBean>() {
             override fun onSuccess(data: UploadBean?) {
                 if (null != onUploadListener) {

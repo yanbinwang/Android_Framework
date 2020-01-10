@@ -7,9 +7,9 @@ package com.ow.basemodule.utils.http.download.callback
  */
 interface OnDownloadListener {
 
-    fun onDownloadSuccess(path: String)
+    fun onDownloadSuccess(path: String?)
 
-    fun onDownloadFailed(e: Throwable)
+    fun onDownloadFailed(e: Throwable?)
 
     fun onDownloadFinish()
 

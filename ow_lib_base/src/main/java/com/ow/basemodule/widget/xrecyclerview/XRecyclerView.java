@@ -107,7 +107,7 @@ public class XRecyclerView extends ViewGroup {
                 emptyLayout = view.findViewById(R.id.empty_layout);
                 swipeRefreshLayout = view.findViewById(R.id.m_refresh);
                 detectionRecyclerView = view.findViewById(R.id.m_rec);
-                swipeRefreshLayout.setColorSchemeResources(R.color.purple_8f94fb);
+                swipeRefreshLayout.setColorSchemeResources(R.color.blue_2e60df);
                 switch (refreshDirection) {
                     case 0:
                         swipeRefreshLayout.setDirection(SwipeRefreshLayoutDirection.TOP);

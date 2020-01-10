@@ -11,7 +11,6 @@ import com.ow.basemodule.widget.dialog.callback.OnAndDialogListener
 import com.yanzhenjie.permission.AndPermission
 import com.yanzhenjie.permission.runtime.Permission
 import java.text.MessageFormat
-import java.util.*
 
 /**
  * author: wyb
@@ -40,10 +39,10 @@ class AndPermissionUtil(private val context: Context) {
                 onAndPermissionListener?.onAndPermissionListener(false)
                 //提示参数
                 var result: String? = null
-                if (!permissions.isEmpty()) {
+                if (permissions.isNotEmpty()) {
                     var permissionIndex = 0
                     for (i in permissionGroup.indices) {
-                        if (Arrays.asList(*permissionGroup[i]).contains(permissions[0])) {
+                        if (listOf(*permissionGroup[i]).contains(permissions[0])) {
                             permissionIndex = i
                             break
                         }

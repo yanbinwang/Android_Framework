@@ -11,7 +11,7 @@ interface OnDownloadFactoryListener {
     fun onDownloadSuccess(path: String?)
 
     //下载进度
-    fun onDownloading(progress: Int?)
+    fun onDownloading(progress: Int = 0)
 
     //下载失败
     fun onDownloadFailed(e: Throwable?)
