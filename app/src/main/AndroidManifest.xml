@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.ow.testnew">
+    package="com.example.testnew">
 
     <!-- 系统 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.example.testnew.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -40,7 +40,7 @@
             android:name="design_height_in_dp"
             android:value="1334" />
 
-        <activity android:name=".activity.MainActivity">
+        <activity android:name="com.example.testnew.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -51,7 +51,7 @@
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.ow.testnew.fileProvider"
+            android:authorities="com.example.testnew.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
