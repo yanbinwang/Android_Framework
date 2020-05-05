@@ -10,7 +10,7 @@ import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
-import com.example.framework.net.OkHttpFactory
+import com.example.framework.network.OkHttpFactory
 import java.io.InputStream
 
 /**

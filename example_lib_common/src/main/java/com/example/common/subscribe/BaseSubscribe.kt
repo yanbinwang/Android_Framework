@@ -1,7 +1,7 @@
 package com.example.common.subscribe
 
 import com.example.common.utils.http.Header
-import com.example.framework.net.RetrofitFactory
+import com.example.framework.network.RetrofitFactory
 
 /**
  * author:wyb

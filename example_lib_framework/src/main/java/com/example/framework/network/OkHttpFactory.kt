@@ -1,4 +1,4 @@
-package com.example.framework.net
+package com.example.framework.network
 
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
