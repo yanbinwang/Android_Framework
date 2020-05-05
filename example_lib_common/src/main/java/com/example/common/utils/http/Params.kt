@@ -2,7 +2,6 @@ package com.example.common.utils.http
 
 import android.text.TextUtils
 import com.example.common.utils.NetWorkUtil
-import com.example.common.utils.http.encryption.SecurityUtil
 import java.util.*
 
 class Params {
@@ -26,19 +25,19 @@ class Params {
         return map
     }
 
-    //请求参数加密
-    fun getParams(timestamp: String?): Map<String, String> {
-        map["timestamp"] = timestamp!!
-        map["network"] = NetWorkUtil.getAPNType()
-        map["sign"] = SecurityUtil.doSign(map)
-        map = SecurityUtil.sortParams(map)
-        if (SecurityUtil.needEncrypt()) {
-            val param = SecurityUtil.doEncrypt(map)
-            map.clear()
-            map["param"] = param
-            map["timestamp"] = timestamp
-        }
-        return map
-    }
+//    //请求参数加密
+//    fun getParams(timestamp: String?): Map<String, String> {
+//        map["timestamp"] = timestamp!!
+//        map["network"] = NetWorkUtil.getAPNType()
+//        map["sign"] = SecurityUtil.doSign(map)
+//        map = SecurityUtil.sortParams(map)
+//        if (SecurityUtil.needEncrypt()) {
+//            val param = SecurityUtil.doEncrypt(map)
+//            map.clear()
+//            map["param"] = param
+//            map["timestamp"] = timestamp
+//        }
+//        return map
+//    }
 
 }

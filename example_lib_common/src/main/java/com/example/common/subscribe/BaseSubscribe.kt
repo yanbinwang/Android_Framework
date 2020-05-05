@@ -4,7 +4,6 @@ import com.example.common.bean.UploadBean
 import com.example.common.utils.http.BaseBean
 import com.example.common.utils.http.Params
 import com.example.common.utils.http.Request
-import com.example.common.utils.http.encryption.SecurityUtil
 import com.example.framework.net.RetrofitFactory
 import io.reactivex.disposables.Disposable
 import io.reactivex.subscribers.ResourceSubscriber

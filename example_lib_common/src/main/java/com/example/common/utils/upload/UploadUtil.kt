@@ -1,10 +1,6 @@
 package com.example.common.utils.upload
 
 import android.content.Context
-import com.example.common.bean.UploadBean
-import com.example.common.constant.RequestCode
-import com.example.common.subscribe.BaseSubscribe
-import com.example.common.utils.http.RxSubscribe
 import com.example.common.widget.dialog.LoadingDialog
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -18,7 +14,7 @@ import java.util.*
  * 图片上传工具类
  */
 class UploadUtil(private val context: Context) {
-    private val loadingDialog: LoadingDialog = LoadingDialog(context)
+    private var loadingDialog: LoadingDialog = LoadingDialog(context)
     private var onUploadListener: OnUploadListener? = null
 
     fun toUpload(filePaths: ArrayList<String>) {
@@ -49,28 +45,28 @@ class UploadUtil(private val context: Context) {
             parts.add(filePart)
         }
         loadingDialog.show(false)
-        BaseSubscribe.getUploadFile(RequestCode.CODE_406, parts, object : RxSubscribe<UploadBean>() {
-            override fun onSuccess(data: UploadBean?) {
-                if (null != onUploadListener) {
-                    val list = data!!.list
-                    if (null != list && list.isNotEmpty()) {
-                        onUploadListener!!.onUploadImageSuccess(list)
-                    } else {
-                        onUploadListener!!.onUploadImageFailed()
-                    }
-                }
-            }
-
-            override fun onFailed(e: Throwable?, msg: String?) {
-                if (null != onUploadListener) {
-                    onUploadListener!!.onUploadImageFailed()
-                }
-            }
-
-            override fun onFinish() {
-                loadingDialog.hide()
-            }
-        })
+//        BaseSubscribe.getUploadFile(RequestCode.CODE_406, parts, object : RxSubscribe<UploadBean>() {
+//            override fun onSuccess(data: UploadBean?) {
+//                if (null != onUploadListener) {
+//                    val list = data!!.list
+//                    if (null != list && list.isNotEmpty()) {
+//                        onUploadListener!!.onUploadImageSuccess(list)
+//                    } else {
+//                        onUploadListener!!.onUploadImageFailed()
+//                    }
+//                }
+//            }
+//
+//            override fun onFailed(e: Throwable?, msg: String?) {
+//                if (null != onUploadListener) {
+//                    onUploadListener!!.onUploadImageFailed()
+//                }
+//            }
+//
+//            override fun onFinish() {
+//                loadingDialog.hide()
+//            }
+//        })
     }
 
     //上传图片监听

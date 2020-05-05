@@ -38,8 +38,22 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    api project(':example_lib_framework')
+    //xwebview的jar
     api files('libs/tbs_sdk_thirdapp_v3.6.0.1310_43612_sharewithdownload_withoutGame_obfs_20180706_163319.jar')
+    //框架库
+    api project(':example_lib_framework')
+    //页面路由
     api deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
+    //黄油刀控件绑定
+    api deps.jakewharton.butterknife
+    kapt deps.jakewharton.butterknife_compiler
+    //严正杰相册，裁剪，权限库
+    api deps.yanzhenjie.album
+    api deps.yanzhenjie.durban
+    api deps.yanzhenjie.permission
+    //其余第三方库
+    api deps.autosize
+    api deps.recovery
+    api deps.wechat
 }

@@ -8,7 +8,6 @@ import com.example.common.R;
 import com.example.common.bean.KeyBean;
 import com.example.common.bean.UserBean;
 import com.example.common.constant.Constants;
-import com.example.common.utils.http.encryption.RSAKeyFactory;
 import com.example.framework.utils.GsonUtil;
 import com.example.framework.utils.SHPUtil;
 
@@ -158,7 +157,6 @@ public class UserUtil {
     public static void signOut() {
         userInfoSHP.clearParam();
         userConfigSHP.clearParam();
-        RSAKeyFactory.getInstance().clear();
     }
 
 }

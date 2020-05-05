@@ -95,9 +95,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 //    implementation project(':example_lib_base')
 //    implementation project(':example_module_quotation')
+    //基础库
     implementation project(':example_lib_share')
+    //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
+    //黄油刀控件绑定
     implementation deps.jakewharton.butterknife
     kapt deps.jakewharton.butterknife_compiler
 }

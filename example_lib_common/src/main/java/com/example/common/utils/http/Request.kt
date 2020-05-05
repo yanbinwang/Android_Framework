@@ -5,6 +5,7 @@ import android.os.Build
 import android.text.TextUtils
 import androidx.collection.ArrayMap
 import com.example.common.utils.UserUtil
+import com.example.framework.BuildConfig
 import java.util.*
 
 
@@ -18,10 +19,10 @@ open class Request {
     //获取每次发起请求需要的基础头
     protected open fun defaultHeaders(): ArrayMap<String, String> {
         val headersMap = ArrayMap<String, String>()
-        val token: String? = UserUtil.getToken()//取得本地token
-        if (!TextUtils.isEmpty(token)) {
-            headersMap["Authorization"] = "basic $token"
-        }
+//        val token: String? = UserUtil.getToken()//取得本地token
+//        if (!TextUtils.isEmpty(token)) {
+//            headersMap["Authorization"] = "basic $token"
+//        }
         headersMap["yoogurt-request-id"] = UUID.randomUUID().toString()
         headersMap["X-yoogurt-system-type"] = "1"
         headersMap["X-yoogurt-system-name"] = "Android"

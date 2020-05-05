@@ -23,8 +23,6 @@ import com.example.common.utils.CrashHandler;
 import com.example.common.utils.UserUtil;
 import com.example.common.utils.album.GlideAlbumLoader;
 import com.example.common.utils.http.download.DownloadFactory;
-import com.example.common.utils.http.encryption.DeviceUuidFactory;
-import com.example.common.utils.http.encryption.RSAKeyFactory;
 import com.example.framework.net.OkHttpFactory;
 import com.example.framework.net.RetrofitFactory;
 import com.example.framework.utils.LogUtil;
@@ -101,8 +99,6 @@ public class BaseApplication extends Application {
         OkHttpFactory.Companion.getInstance();
         RetrofitFactory.Companion.getInstance();
         DownloadFactory.Companion.getInstance();
-        RSAKeyFactory.getInstance();
-        DeviceUuidFactory.getInstance();
         //实例化抓包文件
         CrashHandler.Companion.getInstance();
         //在程序运行时取值，保证长宽静态变量不丢失
