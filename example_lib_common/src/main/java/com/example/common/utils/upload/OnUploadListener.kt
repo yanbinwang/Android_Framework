@@ -7,8 +7,8 @@ package com.example.common.utils.upload
  */
 interface OnUploadListener {
 
-    fun onUploadImageSuccess(ossUrl: List<String>?)
+    fun onUploadSuccess(ossUrl: List<String>?)
 
-    fun onUploadImageFailed()
+    fun onUploadFailed()
 
 }
