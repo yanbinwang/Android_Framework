@@ -1,4 +1,4 @@
-package com.example.framework.glide
+package com.example.glide.utils
 
 import android.content.Context
 import com.bumptech.glide.Glide

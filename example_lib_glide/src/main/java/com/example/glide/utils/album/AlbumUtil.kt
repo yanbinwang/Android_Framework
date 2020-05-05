@@ -1,12 +1,12 @@
-package com.example.common.utils.album
+package com.example.glide.utils.album
 
 import android.app.Activity
 
 import androidx.core.content.ContextCompat
 
-import com.example.common.R
-import com.example.common.constant.Constants
-import com.example.common.constant.RequestCode
+import com.example.glide.R
+import com.example.glide.constant.Constants
+import com.example.glide.constant.RequestCode
 import com.example.framework.utils.ToastUtil
 import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.api.widget.Widget

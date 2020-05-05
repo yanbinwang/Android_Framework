@@ -29,7 +29,7 @@ import com.example.common.utils.ARouterParams;
 import com.example.common.utils.http.RxManager;
 import com.example.common.utils.permission.AndPermissionUtil;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.framework.glide.GlideUtil;
+import com.example.glide.utils.GlideUtil;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.SHPUtil;
 import com.example.framework.utils.StatusBarUtil;

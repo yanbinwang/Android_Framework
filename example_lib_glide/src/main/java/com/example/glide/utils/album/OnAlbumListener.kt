@@ -1,4 +1,4 @@
-package com.example.common.utils.album
+package com.example.glide.utils.album
 
 /**
  * author: wyb

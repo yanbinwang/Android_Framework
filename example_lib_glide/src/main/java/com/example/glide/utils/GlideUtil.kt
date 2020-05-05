@@ -1,4 +1,4 @@
-package com.example.framework.glide
+package com.example.glide.utils
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -86,7 +86,10 @@ class GlideUtil(private var context: Context) : GlideModuleImpl() {
     }
 
     fun displayRound(view: ImageView, string: String, id: Int, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
-        val transformation = CornerTransform(context, roundingRadius.toFloat())
+        val transformation = CornerTransform(
+            context,
+            roundingRadius.toFloat()
+        )
         transformation.setExceptCorner(leftTop, rightTop, leftBottom, rightBottom)
         glideRequest!!.load(string).transform(transformation).placeholder(R.drawable.img_loading).error(id).dontAnimate().into(view)
     }

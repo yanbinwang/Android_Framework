@@ -1,1 +1,2 @@
 include ':app', ':example_lib_framework', ':example_lib_common', ':example_lib_share'
+include ':example_lib_glide'
