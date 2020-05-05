@@ -1,6 +1,8 @@
 package com.example.common.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -8,7 +10,11 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
+
+import androidx.core.content.FileProvider;
 
 import com.example.common.BaseApplication;
 import com.example.common.constant.Constants;
@@ -19,6 +25,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.ref.SoftReference;
+import java.lang.ref.WeakReference;
 import java.nio.channels.FileChannel;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
@@ -204,21 +212,38 @@ public class FileUtil {
     }
 
     //获取app的图标
-    public static Bitmap getLargeIcon(Context context) {
+    public static Bitmap getApplicationIcon(Context context) {
         try {
             Drawable drawable = context.getPackageManager().getApplicationIcon(Constants.APPLICATION_ID);
-            Bitmap bitmap = Bitmap.createBitmap(
+            SoftReference<Bitmap> bitmap = new SoftReference<>(Bitmap.createBitmap(
                     drawable.getIntrinsicWidth(),
                     drawable.getIntrinsicHeight(),
-                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
+                    drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888 : Bitmap.Config.RGB_565));
+            Canvas canvas = new Canvas(bitmap.get());
             //canvas.setBitmap(bitmap);
             drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
             drawable.draw(canvas);
-            return bitmap;
+            return bitmap.get();
         } catch (Exception ignored) {
         }
         return null;
+    }
+
+    //获取安装跳转的行为
+    private Intent getSetupApk(Activity activity, String apkFilePath) {
+        WeakReference<Activity> mActivity = new WeakReference<>(activity);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+            File file = new File(apkFilePath);
+            Uri contentUri = FileProvider.getUriForFile(mActivity.get(), Constants.APPLICATION_ID + ".fileProvider", file);
+            intent.setDataAndType(contentUri, "application/vnd.android.package-archive");
+        } else {
+            intent.setDataAndType(Uri.parse("file://" + apkFilePath), "application/vnd.android.package-archive");
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
+        return intent;
     }
 
 }

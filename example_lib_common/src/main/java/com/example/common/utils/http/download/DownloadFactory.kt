@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.os.Looper
 import com.example.common.subscribe.BaseApi
 import com.example.common.utils.FileUtil
-import com.example.common.utils.http.download.callback.OnDownloadFactoryListener
 import com.example.framework.network.RetrofitFactory
 import com.example.framework.utils.LogUtil
 import com.example.framework.widget.WeakHandler

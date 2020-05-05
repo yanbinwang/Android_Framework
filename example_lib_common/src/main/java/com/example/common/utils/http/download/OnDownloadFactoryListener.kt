@@ -1,4 +1,4 @@
-package com.example.common.utils.http.download.callback
+package com.example.common.utils.http.download
 
 /**
  * author: wyb
