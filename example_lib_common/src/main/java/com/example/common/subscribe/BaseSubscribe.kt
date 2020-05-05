@@ -1,19 +1,13 @@
 package com.example.common.subscribe
 
-import com.example.common.bean.UploadBean
-import com.example.common.utils.http.BaseBean
-import com.example.common.utils.http.Params
-import com.example.common.utils.http.Request
+import com.example.common.utils.http.Header
 import com.example.framework.net.RetrofitFactory
-import io.reactivex.disposables.Disposable
-import io.reactivex.subscribers.ResourceSubscriber
-import okhttp3.MultipartBody
 
 /**
  * author:wyb
  * 通用接口类
  */
-object BaseSubscribe : Request() {
+object BaseSubscribe : Header() {
     private val baseApi = RetrofitFactory.getInstance().create(BaseApi::class.java)
 
 //    //上传图片接口

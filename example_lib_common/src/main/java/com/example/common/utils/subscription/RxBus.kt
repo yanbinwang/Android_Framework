@@ -1,4 +1,4 @@
-package com.example.common.utils.bus
+package com.example.common.utils.subscription
 
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers

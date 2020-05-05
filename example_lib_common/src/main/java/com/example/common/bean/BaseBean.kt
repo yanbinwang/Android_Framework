@@ -1,4 +1,4 @@
-package com.example.common.utils.http
+package com.example.common.bean
 
 /**
  * author: wyb

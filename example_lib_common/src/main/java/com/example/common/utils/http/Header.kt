@@ -14,7 +14,7 @@ import java.util.*
  * date: 2019/8/1.
  */
 @SuppressLint("StaticFieldLeak")
-open class Request {
+open class Header {
 
     //获取每次发起请求需要的基础头
     protected open fun defaultHeaders(): ArrayMap<String, String> {

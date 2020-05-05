@@ -5,7 +5,7 @@ import android.text.TextUtils
 import android.view.View
 import com.example.common.R
 import com.example.common.utils.NetWorkUtil
-import com.example.common.utils.http.RxManager
+import com.example.common.utils.subscription.RxManager
 import com.example.common.widget.empty.EmptyLayout
 import com.example.common.widget.xrecyclerview.XRecyclerView
 import io.reactivex.disposables.Disposable

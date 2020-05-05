@@ -1,11 +1,10 @@
-package com.example.common.utils.http;
+package com.example.common.utils.subscription;
 
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.utils.bus.RxBus;
-import com.example.common.utils.bus.RxBusEvent;
 import com.example.common.constant.ARouterPath;
 import com.example.common.constant.Constants;
 import com.example.common.utils.UserUtil;
+import com.example.common.bean.BaseBean;
 import com.example.framework.utils.GsonUtil;
 
 import io.reactivex.subscribers.ResourceSubscriber;

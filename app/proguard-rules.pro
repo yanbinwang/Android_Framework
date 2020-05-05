@@ -543,10 +543,9 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 #------------------------sharesdk混淆结束------------------------
 
 -keep class com.example.common.bean.** {*;}
--keep class com.example.common.utils.bus.RxBusEvent{*;}
--keep class com.example.common.utils.http.BaseModel{*;}
 -keep class com.example.common.utils.http.Params{*;}
--keep class com.example.common.utils.ARouterParams{*;}
+-keep class com.example.common.utils.subscription.RxBusEvent{*;}
+-keep class com.example.common.base.interceptor.ARouterParams{*;}
 -keep class com.example.share.bean.** {*;}
 #-keep class com.example.homepage.bean.** {*;}
 #-keep class com.example.assets.bean.** {*;}
