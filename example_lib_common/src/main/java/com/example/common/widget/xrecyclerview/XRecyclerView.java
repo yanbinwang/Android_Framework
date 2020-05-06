@@ -105,7 +105,6 @@ public class XRecyclerView extends ViewGroup {
                 view = LayoutInflater.from(context).inflate(R.layout.view_xrecyclerview_refresh, null);
                 emptyLayout = view.findViewById(R.id.empty_layout);
                 xRefresh = view.findViewById(R.id.x_refresh);
-                xRec = view.findViewById(R.id.x_rec);
                 xRefresh.setColorSchemeResources(R.color.blue_2e60df);
                 switch (refreshDirection) {
                     case 0:
@@ -118,6 +117,7 @@ public class XRecyclerView extends ViewGroup {
                         xRefresh.setDirection(SwipeRefreshLayoutDirection.BOTH);
                         break;
                 }
+                xRec = view.findViewById(R.id.x_rec);
                 xRec.setHasFixedSize(true);
                 xRec.setItemAnimator(new DefaultItemAnimator());
                 if (0 != emptyType) {
