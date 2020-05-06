@@ -56,4 +56,5 @@ dependencies {
     api deps.autosize
     api deps.recovery
     api deps.wechat
+    api deps.tkrefreshlayout
 }

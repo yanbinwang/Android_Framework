@@ -4,12 +4,12 @@
     android:layout_height="match_parent">
 
     <com.example.common.widget.xrecyclerview.refresh.SwipeRefreshLayout
-        android:id="@+id/m_refresh"
+        android:id="@+id/x_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.example.common.widget.xrecyclerview.DetectionRecyclerView
-            android:id="@+id/m_rec"
+            android:id="@+id/x_rec"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never" />
