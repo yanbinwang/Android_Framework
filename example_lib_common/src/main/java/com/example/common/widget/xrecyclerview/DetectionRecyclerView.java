@@ -35,8 +35,7 @@ public class DetectionRecyclerView extends RecyclerView {
     //检测内容是否为空
     private void checkIfEmpty() {
         if (mEmptyView != null && getAdapter() != null) {
-            final boolean emptyViewVisible =
-                    getAdapter().getItemCount() == 0;
+            final boolean emptyViewVisible = getAdapter().getItemCount() == 0;
             mEmptyView.setVisibility(emptyViewVisible ? VISIBLE : GONE);
             setVisibility(emptyViewVisible ? GONE : VISIBLE);
         }
