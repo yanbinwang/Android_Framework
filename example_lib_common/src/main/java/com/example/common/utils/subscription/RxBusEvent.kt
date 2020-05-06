@@ -1,4 +1,4 @@
-package com.example.common.utils.bus
+package com.example.common.utils.subscription
 
 import android.os.Bundle
 

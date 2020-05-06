@@ -1,4 +1,4 @@
-package com.example.framework.net
+package com.example.framework.network
 
 import com.example.framework.BuildConfig
 import com.example.framework.utils.LogUtil

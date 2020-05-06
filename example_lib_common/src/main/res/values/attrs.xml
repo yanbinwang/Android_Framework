@@ -27,18 +27,18 @@
     <!-- 自定义XRecyclerView -->
     <declare-styleable name="XRecyclerView">
         <!-- recyclerview的类型 -->
-        <attr name="recyclerViewType">
-            <enum name="noRefresh" value="0" />
-            <enum name="haveRefresh" value="1" />
+        <attr name="refreshType">
+            <enum name="ordinary" value="0" />
+            <enum name="equipped" value="1" />
         </attr>
         <attr name="refreshDirection">
             <enum name="top" value="0" />
             <enum name="bottom" value="1" />
             <enum name="both" value="2" />
         </attr>
-        <attr name="containerType">
-            <enum name="noEmpty" value="0" />
-            <enum name="haveEmpty" value="1" />
+        <attr name="emptyType">
+            <enum name="ordinary" value="0" />
+            <enum name="equipped" value="1" />
         </attr>
     </declare-styleable>
 
@@ -46,18 +46,13 @@
     <declare-styleable name="UpdateAppNumberProgressBar">
         <attr name="progress_current" format="integer" />
         <attr name="progress_max" format="integer" />
-
         <attr name="progress_unreached_color" format="color" />
         <attr name="progress_reached_color" format="color" />
-
         <attr name="progress_reached_bar_height" format="dimension" />
         <attr name="progress_unreached_bar_height" format="dimension" />
-
         <attr name="progress_text_size" format="dimension" />
         <attr name="progress_text_color" format="color" />
-
         <attr name="progress_text_offset" format="dimension" />
-
         <attr name="progress_text_visibility" format="enum">
             <enum name="visible" value="0" />
             <enum name="invisible" value="1" />

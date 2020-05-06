@@ -1,4 +1,4 @@
-package com.example.common.utils.http
+package com.example.common.utils.subscription
 
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable

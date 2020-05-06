@@ -5,7 +5,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import com.example.common.R;
-import com.example.common.bean.KeyBean;
 import com.example.common.bean.UserBean;
 import com.example.common.constant.Constants;
 import com.example.framework.utils.GsonUtil;
@@ -27,43 +26,26 @@ public class UserUtil {
         userConfigSHP = new SHPUtil(context, context.getString(R.string.shp_user_configure_fileName));
     }
 
-    //存储用户键值类
-    public static void setKeyBean(KeyBean bean) {
-        if (null != bean) {
-            userInfoSHP.saveParam(Constants.KEY_BEAN, GsonUtil.INSTANCE.objToJson(bean));
-        }
-    }
-
-    //得到用户键值类
-    private static KeyBean getKeyBean() {
-        KeyBean keyBean = null;
-        String keyBeanJson = userInfoSHP.getParam(Constants.KEY_BEAN);
-        if (!TextUtils.isEmpty(keyBeanJson)) {
-            keyBean = GsonUtil.INSTANCE.jsonToObj(keyBeanJson, KeyBean.class);
-        }
-        return keyBean;
-    }
-
     //修改是否登陆
     public static void setLogin(boolean isLogin) {
-        KeyBean keyBean = getKeyBean();
-        if (null != keyBean) {
-            if (isLogin) {
-                keyBean.setUid("1");
-            } else {
-                keyBean.setUid("0");
-            }
-            setKeyBean(keyBean);
-        }
+//        KeyBean keyBean = getKeyBean();
+//        if (null != keyBean) {
+//            if (isLogin) {
+//                keyBean.setUid("1");
+//            } else {
+//                keyBean.setUid("0");
+//            }
+//            setKeyBean(keyBean);
+//        }
     }
 
     //用户是否登陆
     public static boolean isLogin() {
         boolean isLogin = false;
-        KeyBean keyBean = getKeyBean();
-        if (null != keyBean) {
-            isLogin = "1".equals(keyBean.getUid());
-        }
+//        KeyBean keyBean = getKeyBean();
+//        if (null != keyBean) {
+//            isLogin = "1".equals(keyBean.getUid());
+//        }
         return isLogin;
     }
 

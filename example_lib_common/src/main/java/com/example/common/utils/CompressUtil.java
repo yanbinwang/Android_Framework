@@ -1,4 +1,4 @@
-package com.example.common.utils.upload;
+package com.example.common.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

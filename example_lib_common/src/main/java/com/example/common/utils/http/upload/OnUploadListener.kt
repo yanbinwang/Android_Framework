@@ -1,4 +1,4 @@
-package com.example.common.utils.upload
+package com.example.common.utils.http.upload
 
 /**
  * author: wyb

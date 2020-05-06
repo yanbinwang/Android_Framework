@@ -32,6 +32,7 @@ versions.rxandroid = "2.1.1"
 versions.autosize = "1.1.2"
 versions.recovery = "1.0.0"
 versions.wechat = "5.1.4"
+versions.tkrefreshlayout = "1.0.7"
 
 //安卓x库
 def androidx = [:]
@@ -81,6 +82,7 @@ deps.rxandroid = "io.reactivex.rxjava2:rxandroid:$versions.rxandroid"//rxandroid
 deps.autosize = "me.jessyan:autosize:$versions.autosize"//今日头条布局兼容
 deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
 deps.wechat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat"//微信
+deps.tkrefreshlayout = "com.lcodecorex:tkrefreshlayout:$versions.tkrefreshlayout"//刷新控件
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
 

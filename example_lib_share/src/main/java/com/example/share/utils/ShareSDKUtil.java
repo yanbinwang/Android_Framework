@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.content.Context;
 
 import com.example.common.BaseApplication;
-import com.example.common.utils.bus.RxBus;
-import com.example.common.utils.bus.RxBusEvent;
+import com.example.common.utils.subscription.RxBus;
+import com.example.common.utils.subscription.RxBusEvent;
 import com.example.common.constant.Constants;
 import com.example.share.bean.WeChatBean;
 import com.example.share.utils.callback.IShareCallback;

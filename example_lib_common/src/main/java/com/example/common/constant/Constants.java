@@ -32,7 +32,6 @@ public class Constants {
     public static final int LOGIN_INTERCEPTOR_CODE = 1;//阿里路由登录全局拦截器编号
     //SHP存储字段
     public static final String APP_LANGUAGE = "appLanguage";//app语言
-    public static final String KEY_BEAN = "keyBean";//用户键值类
     public static final String USER_BEAN = "userBean";//用户类
     //系统广播
     public static final String APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN";//用户登录
