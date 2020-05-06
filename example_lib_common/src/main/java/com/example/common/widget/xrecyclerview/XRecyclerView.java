@@ -37,7 +37,7 @@ public class XRecyclerView extends ViewGroup {
     private DetectionRecyclerView xRec;//数据列表
     private OnEmptyClickListener onEmptyClickListener;//空布局点击
     private OnRefreshListener onRefreshListener;//刷新回调
-    private int refreshType, emptyType, refreshDirection;//页面类型(0无刷新-1带刷新)刷新类型（0顶部-1底部-2全部）是否具有空布局（0无-1有）
+    private int refreshType, refreshDirection, emptyType;//页面类型(0无刷新-1带刷新)刷新类型（0顶部-1底部-2全部）是否具有空布局（0无-1有）
 
     public XRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
