@@ -16,7 +16,7 @@
     </declare-styleable>
 
     <!-- 刷新控件 -->
-    <declare-styleable name="SwipeRefreshLayout">
+    <declare-styleable name="XRefreshLayout">
         <attr name="direction">
             <enum name="top" value="0" />
             <enum name="bottom" value="1" />
@@ -40,31 +40,6 @@
             <enum name="ordinary" value="0" />
             <enum name="equipped" value="1" />
         </attr>
-    </declare-styleable>
-
-    <!-- 数字进度条 -->
-    <declare-styleable name="UpdateAppNumberProgressBar">
-        <attr name="progress_current" format="integer" />
-        <attr name="progress_max" format="integer" />
-        <attr name="progress_unreached_color" format="color" />
-        <attr name="progress_reached_color" format="color" />
-        <attr name="progress_reached_bar_height" format="dimension" />
-        <attr name="progress_unreached_bar_height" format="dimension" />
-        <attr name="progress_text_size" format="dimension" />
-        <attr name="progress_text_color" format="color" />
-        <attr name="progress_text_offset" format="dimension" />
-        <attr name="progress_text_visibility" format="enum">
-            <enum name="visible" value="0" />
-            <enum name="invisible" value="1" />
-        </attr>
-    </declare-styleable>
-
-    <!-- 伸缩控件 -->
-    <declare-styleable name="ExpandableLayout">
-        <attr name="el_duration" format="integer" />
-        <attr name="el_expanded" format="boolean" />
-        <attr name="el_parallax" format="float" />
-        <attr name="android:orientation" />
     </declare-styleable>
 
     <!-- 侧滑控件 -->
