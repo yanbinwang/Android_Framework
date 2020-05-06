@@ -41,13 +41,17 @@ dependencies {
     //xwebview的jar
     api files('libs/tbs_sdk_thirdapp_v3.6.0.1310_43612_sharewithdownload_withoutGame_obfs_20180706_163319.jar')
     //图片库
-    api project(':example_lib_glide')
+    api project(':example_lib_framework')
     //页面路由
     api deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
     //黄油刀控件绑定
     api deps.jakewharton.butterknife
     kapt deps.jakewharton.butterknife_compiler
+    //严正杰相册，裁剪，权限库
+    api deps.yanzhenjie.album
+    api deps.yanzhenjie.durban
+    api deps.yanzhenjie.permission
     //其余第三方库
     api deps.autosize
     api deps.recovery

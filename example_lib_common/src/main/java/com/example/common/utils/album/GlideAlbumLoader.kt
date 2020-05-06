@@ -1,8 +1,8 @@
-package com.example.glide.utils.album
+package com.example.common.utils.album
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide
-import com.example.glide.R
+import com.example.common.R
 import com.yanzhenjie.album.AlbumFile
 import com.yanzhenjie.album.AlbumLoader
 
