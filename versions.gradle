@@ -3,7 +3,6 @@ ext.deps = [:]
 
 //所有库的版本配置
 def versions = [:]
-versions.core = "1.2.0"
 versions.appcompat = "1.1.0"
 versions.recyclerview = "1.0.0"
 //------------------------------------------------------------------------------------------
@@ -36,7 +35,6 @@ versions.tkrefreshlayout = "1.0.7"
 
 //安卓x库
 def androidx = [:]
-androidx.core = "androidx.core:core-ktx:$versions.core"
 androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 androidx.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
 deps.androidx = androidx

@@ -96,7 +96,7 @@ dependencies {
 //    implementation project(':example_lib_base')
 //    implementation project(':example_module_quotation')
     //基础库
-    implementation project(':example_lib_share')
+    implementation project(':lib_share')
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
