@@ -34,7 +34,6 @@ public class MyApplication extends BaseApplication {
         //单列返回值（能让程序在任意地方取到context）
         instance = this;
         init();
-
     }
 
     //初始化一些第三方控件和单例工具类等
