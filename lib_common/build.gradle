@@ -54,7 +54,6 @@ dependencies {
     //框架库
     api project(':lib_framework')
     //网络请求
-    api deps.retrofit2.okhttp3
     api deps.retrofit2.retrofit
     api deps.retrofit2.converter_gson
     api deps.retrofit2.adapter_rxjava2
@@ -73,6 +72,7 @@ dependencies {
     api deps.yanzhenjie.durban
     api deps.yanzhenjie.permission
     //其余第三方库
+    api deps.okhttp3
     api deps.rxandroid
     api deps.autosize
     api deps.recovery

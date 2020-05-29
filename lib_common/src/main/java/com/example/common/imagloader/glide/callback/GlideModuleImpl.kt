@@ -1,4 +1,4 @@
-package com.example.common.imagloader.glide
+package com.example.common.imagloader.glide.callback
 
 import android.content.Context
 import com.bumptech.glide.Glide
@@ -37,7 +37,6 @@ open class GlideModuleImpl : AppGlideModule() {
         builder.setMemoryCache(LruResourceCache(calculator.memoryCacheSize.toLong()))
     }
 
-
     //禁止解析Manifest文件,提升初始化速度，避免一些潜在错误
     override fun isManifestParsingEnabled(): Boolean {
         return false
@@ -45,8 +44,7 @@ open class GlideModuleImpl : AppGlideModule() {
 
     //注册自定义组件
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(
-            OkHttpFactory.getInstance().okHttpClient))
+        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(OkHttpFactory.getInstance().okHttpClient))
     }
 
 }

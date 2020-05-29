@@ -8,7 +8,7 @@ import com.example.common.bus.RxBus;
 import com.example.common.model.BusEventModel;
 import com.example.common.constant.Constants;
 import com.example.share.model.WeChatModel;
-import com.example.share.utils.callback.IShareCallback;
+import com.example.share.utils.callback.OnShareListener;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 
 import java.lang.ref.WeakReference;
@@ -100,7 +100,7 @@ public class ShareSDKUtil {
     }
 
     //微信授权登录
-    public void authorize(Activity activity, IShareCallback callback) {
+    public void authorize(Activity activity, OnShareListener callback) {
         WeakReference<Activity> mActivity = new WeakReference<>(activity);
         Platform platform = ShareSDK.getPlatform(Wechat.NAME);
         ShareSDK.setActivity(mActivity.get());
@@ -108,7 +108,7 @@ public class ShareSDKUtil {
         platform.setPlatformActionListener(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                mActivity.get().runOnUiThread(() -> callback.authorizeSuccess());
+                mActivity.get().runOnUiThread(() -> callback.onAuthorizeSuccess());
             }
 
             @Override

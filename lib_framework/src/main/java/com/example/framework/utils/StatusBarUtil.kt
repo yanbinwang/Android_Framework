@@ -7,7 +7,6 @@ import android.os.Build
 import android.view.View
 import android.view.Window
 import android.view.WindowManager
-import androidx.core.content.ContextCompat
 import java.lang.ref.WeakReference
 
 /**
@@ -16,7 +15,7 @@ import java.lang.ref.WeakReference
  * 导航栏工具类（）
  * 从5.0+开始兼容色值
  */
-@SuppressLint("PrivateApi")
+@SuppressLint("PrivateApi","InlinedApi")
 class StatusBarUtil(activity: Activity) {
     //弱应用传入的activity
     private val mActivity : WeakReference<Activity> = WeakReference(activity)
@@ -35,7 +34,7 @@ class StatusBarUtil(activity: Activity) {
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window.statusBarColor = Color.TRANSPARENT
-            setMIUIStatusBarLightMode(window, false)
+            setMiuiStatusBarLightMode(window, false)
             setFlymeStatusBarLightMode(window, false)
         }
     }
@@ -48,7 +47,7 @@ class StatusBarUtil(activity: Activity) {
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             window.statusBarColor = Color.TRANSPARENT
-            setMIUIStatusBarLightMode(window, true)
+            setMiuiStatusBarLightMode(window, true)
             setFlymeStatusBarLightMode(window, true)
         }
     }
@@ -60,7 +59,7 @@ class StatusBarUtil(activity: Activity) {
             window.statusBarColor = colorId
         } else {
             //统一兼容，6.0以下全部走黑电池
-            window.statusBarColor = ContextCompat.getColor(mActivity.get()!!, 0)
+            window.statusBarColor = Color.BLACK
         }
     }
 
@@ -74,7 +73,7 @@ class StatusBarUtil(activity: Activity) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 setNormalStatusBarLightMode(window, isDark)
                 //如果是6.0的系统，小米魅族有不同的处理
-                setMIUIStatusBarLightMode(mActivity.get()!!.window, isDark)
+                setMiuiStatusBarLightMode(mActivity.get()!!.window, isDark)
                 setFlymeStatusBarLightMode(mActivity.get()!!.window, isDark)
             }
         }
@@ -84,16 +83,16 @@ class StatusBarUtil(activity: Activity) {
     private fun setNormalStatusBarLightMode(window: Window, isDark: Boolean) {
         val decorView = window.decorView
         var vis = decorView.systemUiVisibility
-        if (isDark) {
-            vis = vis or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        vis = if (isDark) {
+            vis or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
         } else {
-            vis = vis and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
+            vis and View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR.inv()
         }
         decorView.systemUiVisibility = vis
     }
 
     //设置状态栏字体图标，需要MIUIV6以上
-    private fun setMIUIStatusBarLightMode(window: Window, isDark: Boolean) {
+    private fun setMiuiStatusBarLightMode(window: Window, isDark: Boolean) {
         val clazz = window.javaClass
         try {
             val darkModeFlag: Int
@@ -121,10 +120,10 @@ class StatusBarUtil(activity: Activity) {
             meizuFlags.isAccessible = true
             val bit = darkFlag.getInt(null)
             var value = meizuFlags.getInt(lp)
-            if (isDark) {
-                value = value or bit
+            value = if (isDark) {
+                value or bit
             } else {
-                value = value and bit.inv()
+                value and bit.inv()
             }
             meizuFlags.setInt(lp, value)
             window.attributes = lp

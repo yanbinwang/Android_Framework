@@ -5,7 +5,6 @@ import android.os.Looper
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.subscribe.BaseApi
 import com.example.common.utils.FileUtil
-import com.example.common.utils.LogUtil
 import com.example.framework.widget.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +35,7 @@ class DownloadFactory {
         }
     }
 
-    fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadFactoryListener: OnDownloadFactoryListener) {
+    fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) {
         FileUtil.deleteDir(saveDir)
         RetrofitFactory.getInstance().create(BaseApi::class.java).download(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
@@ -58,10 +57,10 @@ class DownloadFactory {
                                     fileOutputStream.write(buf, 0, len)
                                     sum += len.toLong()
                                     val progress = (sum * 1.0f / total * 100).toInt()
-                                    weakHandler.post { onDownloadFactoryListener.onDownloading(progress) }
+                                    weakHandler.post { onDownloadListener.onDownloading(progress) }
                                 }
                                 fileOutputStream.flush()
-                                weakHandler.post { onDownloadFactoryListener.onDownloadSuccess(file.path) }
+                                weakHandler.post { onDownloadListener.onDownloadSuccess(file.path) }
                             } catch (e: Exception) {
                                 onError(e)
                             } finally {
@@ -76,7 +75,7 @@ class DownloadFactory {
                 }
 
                 override fun onError(t: Throwable?) {
-                    weakHandler.post { onDownloadFactoryListener.onDownloadFailed(t) }
+                    weakHandler.post { onDownloadListener.onDownloadFailed(t) }
                 }
 
                 override fun onComplete() {

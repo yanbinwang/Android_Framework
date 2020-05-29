@@ -1,4 +1,4 @@
-package com.example.common.imagloader.glide
+package com.example.common.imagloader.glide.callback
 
 import android.widget.ImageView
 import com.bumptech.glide.Glide

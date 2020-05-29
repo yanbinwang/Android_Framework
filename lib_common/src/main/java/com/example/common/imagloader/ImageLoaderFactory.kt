@@ -10,16 +10,19 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.example.common.BaseApplication
 import com.example.common.R
-import com.example.common.imagloader.glide.CornerTransform
-import com.example.common.imagloader.glide.GlideModuleImpl
+import com.example.common.http.factory.OkHttpFactory
+import com.example.common.imagloader.glide.callback.GlideImpl
+import com.example.common.imagloader.glide.callback.GlideModuleImpl
+import com.example.common.imagloader.glide.transform.CornerTransform
+import java.io.File
 
 /**
- * author: wyb
- * date: 2017/11/15.
- * 加载图片工具类
+ * Created by WangYanBin on 2020/5/29.
+ * 图片加载库使用Application上下文，Glide请求将不受Activity/Fragment生命周期控制。
  */
-class ImageLoaderFactory(private var context: Context) : GlideModuleImpl() {
-    private var glideRequest: RequestManager = Glide.with(this.context)
+class ImageLoaderFactory : GlideModuleImpl(), GlideImpl {
+    private val context: Context = BaseApplication.getInstance().applicationContext
+    private val manager: RequestManager
 
     companion object {
         private var instance: ImageLoaderFactory? = null
@@ -27,78 +30,90 @@ class ImageLoaderFactory(private var context: Context) : GlideModuleImpl() {
         @Synchronized
         fun getInstance(): ImageLoaderFactory {
             if (instance == null) {
-                instance = ImageLoaderFactory(BaseApplication.instance)
+                instance = ImageLoaderFactory()
             }
             return instance!!
         }
     }
 
-    fun display(view: ImageView, model: Any) {
-        display(view, model, R.drawable.shape_loading_normal, 0, null)
+    init {
+        manager = Glide.with(context)
     }
 
-    fun display(view: ImageView, model: Any, errorId: Int) {
-        display(view, model, R.drawable.shape_loading_normal, errorId, null)
+    override fun displayImage(view: ImageView?, string: String?) {
+        displayImage(view, string, 0)
     }
 
-    fun display(view: ImageView, model: Any, requestListener: RequestListener<Drawable>) {
-        display(view, model, R.drawable.shape_loading_normal, 0, requestListener)
+    override fun displayImage(view: ImageView?, string: String?, errorId: Int) {
+        displayImage(view, string, R.drawable.shape_loading_normal, errorId, null)
     }
 
-    fun display(view: ImageView, model: Any, placeholderId: Int, errorId: Int, requestListener: RequestListener<Drawable>?) {
-        glideRequest
-                .load(if (model is String) model.toString() else model.toString().toInt())
-                .placeholder(placeholderId)
-                .error(errorId)
-                .dontAnimate()
-                .listener(requestListener)
-                .into(view)
+    override fun displayImage(view: ImageView?, string: String?, requestListener: RequestListener<Drawable?>?) {
+        displayImage(view, string, R.drawable.shape_loading_normal, 0, requestListener)
     }
 
-    fun displayRound(view: ImageView, string: String, roundingRadius: Int) {
-        displayRound(view, string, 0, roundingRadius)
+    override fun displayImage(view: ImageView?, string: String?, placeholderId: Int, errorId: Int, requestListener: RequestListener<Drawable?>?) {
+        manager
+            .load(string)
+            .placeholder(placeholderId)
+            .error(errorId)
+            .dontAnimate()
+            .listener(requestListener)
+            .into(view!!)
     }
 
-    fun displayRound(view: ImageView, string: String, errorId: Int, roundingRadius: Int) {
-        glideRequest.load(string)
-                .apply(RequestOptions.bitmapTransform(RoundedCorners(roundingRadius)))
-                .placeholder(R.drawable.shape_loading_normal)
-                .error(errorId)
-                .dontAnimate()
-                .into(view)
+    override fun displayRoundImage(view: ImageView?, string: String?, roundingRadius: Int) {
+        displayRoundImage(view, string, 0, roundingRadius)
     }
 
-    fun displayRound(view: ImageView, string: String, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
-        displayRound(view, string, 0, roundingRadius, leftTop, rightTop, leftBottom, rightBottom)
+    override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int) {
+        manager.load(string)
+            .apply(RequestOptions.bitmapTransform(RoundedCorners(roundingRadius)))
+            .placeholder(R.drawable.shape_loading_normal)
+            .error(errorId)
+            .dontAnimate()
+            .into(view!!)
     }
 
-    fun displayRound(view: ImageView, string: String, errorId: Int, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
-        val transformation = CornerTransform(
-            context,
-            roundingRadius.toFloat()
-        )
+    override fun displayRoundImage(view: ImageView?, string: String?, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
+        displayRoundImage(view, string, 0, roundingRadius, leftTop, rightTop, leftBottom, rightBottom)
+    }
+
+    override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
+        val transformation = CornerTransform(context, roundingRadius.toFloat())
         transformation.setExceptCorner(leftTop, rightTop, leftBottom, rightBottom)
-        glideRequest
-                .load(string)
-                .transform(transformation)
-                .placeholder(R.drawable.shape_loading_normal)
-                .error(errorId)
-                .dontAnimate()
-                .into(view)
+        manager
+            .load(string)
+            .transform(transformation)
+            .placeholder(R.drawable.shape_loading_normal)
+            .error(errorId)
+            .dontAnimate()
+            .into(view!!)
     }
 
-    fun displayCircle(view: ImageView, string: String) {
-        displayCircle(view, string, R.drawable.shape_loading_round)
+    override fun displayCircleImage(view: ImageView?, string: String?) {
+        displayCircleImage(view, string, R.drawable.shape_loading_round)
     }
 
-    fun displayCircle(view: ImageView, string: String, errorId: Int) {
-        glideRequest
-                .load(string)
-                .apply(RequestOptions.circleCropTransform())
-                .placeholder(R.drawable.shape_loading_round)
-                .error(errorId)
-                .dontAnimate()
-                .into(view)
+    override fun displayCircleImage(view: ImageView?, string: String?, errorId: Int) {
+        manager
+            .load(string)
+            .apply(RequestOptions.circleCropTransform())
+            .placeholder(R.drawable.shape_loading_round)
+            .error(errorId)
+            .dontAnimate()
+            .into(view!!)
+    }
+
+    override val cacheDir: File?
+        get() = Glide.getPhotoCacheDir(context)
+
+    override fun clearMemoryCache() {
+        Glide.get(context).clearMemory()
+    }
+
+    override fun clearDiskCache() {
+        Glide.get(context).clearDiskCache()
     }
 
 }

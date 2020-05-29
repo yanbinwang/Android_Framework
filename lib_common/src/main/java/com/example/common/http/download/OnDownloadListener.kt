@@ -5,7 +5,7 @@ package com.example.common.http.download
  * date: 2018/1/22.
  * 下载文件监听
  */
-interface OnDownloadFactoryListener {
+interface OnDownloadListener {
 
     //下载成功
     fun onDownloadSuccess(path: String?)

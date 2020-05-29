@@ -3,8 +3,8 @@ package com.example.share.utils.callback
 /**
  * author:wyb
  */
-interface IShareCallback {
+interface OnShareListener {
 
-    fun authorizeSuccess()
+    fun onAuthorizeSuccess()
 
 }

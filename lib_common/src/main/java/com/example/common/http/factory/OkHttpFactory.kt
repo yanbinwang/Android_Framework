@@ -1,6 +1,6 @@
 package com.example.common.http.factory
 
-import com.example.common.http.LoggingInterceptor
+import com.example.common.http.factory.interceptor.LoggingInterceptor
 import okhttp3.ConnectionPool
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit

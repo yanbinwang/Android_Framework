@@ -15,14 +15,10 @@ import java.util.*
  * 图片上传工具类
  */
 class FilesUploadUtil(private val context: Context) {
-    private var loadingDialog: LoadingDialog = LoadingDialog(context)
     private var onFilesUploadListener: OnFilesUploadListener? = null
 
-    fun toUpload(filePaths: ArrayList<String>) {
-        toUpload(filePaths, 0)
-    }
-
     //手动配置压缩比例
+    @JvmOverloads
     fun toUpload(filePaths: ArrayList<String>, fileMaxSize: Long = 0) {
         val parts = ArrayList<MultipartBody.Part>()
         for (path in filePaths) {
@@ -45,33 +41,31 @@ class FilesUploadUtil(private val context: Context) {
             val filePart = MultipartBody.Part.createFormData("file[]", fileCompress.name, requestFile)
             parts.add(filePart)
         }
-        loadingDialog.show(false)
+//        onFilesUploadListener?.onFilesUploadStart()
 //        BaseSubscribe.getUploadFile(RequestCode.CODE_406, parts, object : RxSubscribe<UploadBean>() {
 //            override fun onSuccess(data: UploadBean?) {
 //                if (null != onUploadListener) {
 //                    val list = data!!.list
 //                    if (null != list && list.isNotEmpty()) {
-//                        onUploadListener!!.onUploadImageSuccess(list)
+//                        onUploadListener?.onUploadImageSuccess(list)
 //                    } else {
-//                        onUploadListener!!.onUploadImageFailed()
+//                        onUploadListener?.onUploadImageFailed()
 //                    }
 //                }
 //            }
 //
 //            override fun onFailed(e: Throwable?, msg: String?) {
-//                if (null != onUploadListener) {
-//                    onUploadListener!!.onUploadImageFailed()
-//                }
+//                onUploadListener?.onUploadImageFailed(e)
 //            }
 //
 //            override fun onFinish() {
-//                loadingDialog.hide()
+//                onFilesUploadListener?.onFilesUploadFinish()
 //            }
 //        })
     }
 
     //上传图片监听
-    fun setOnUploadImageListener(onFilesUploadListener: OnFilesUploadListener) {
+    fun setOnFilesUploadListener(onFilesUploadListener: OnFilesUploadListener) {
         this.onFilesUploadListener = onFilesUploadListener
     }
 

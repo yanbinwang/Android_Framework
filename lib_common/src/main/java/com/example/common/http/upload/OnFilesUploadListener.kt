@@ -7,8 +7,12 @@ package com.example.common.http.upload
  */
 interface OnFilesUploadListener {
 
+    fun onFilesUploadStart()
+
     fun onFilesUploadSuccess(ossUrl: List<String>?)
 
-    fun onFilesUploadFailed()
+    fun onFilesUploadFailed(e: Throwable?)
+
+    fun onFilesUploadFinish()
 
 }
