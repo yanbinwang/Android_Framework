@@ -5,7 +5,7 @@ import android.content.Context;
 
 import com.example.common.BaseApplication;
 import com.example.common.bus.RxBus;
-import com.example.common.model.BusEventModel;
+import com.example.common.model.BusModel;
 import com.example.common.constant.Constants;
 import com.example.share.model.WeChatModel;
 import com.example.share.utils.callback.OnShareListener;
@@ -54,17 +54,17 @@ public class ShareSDKUtil {
         platform.setPlatformActionListener(new PlatformActionListener() {
             public void onError(Platform arg0, int arg1, Throwable arg2) {
                 //失败的回调，arg:平台对象，arg1:表示当前的动作，arg2:异常信息
-                RxBus.Companion.getInstance().post(new BusEventModel(Constants.APP_SHARE_FAILURE));
+                RxBus.Companion.getInstance().post(new BusModel(Constants.APP_SHARE_FAILURE));
             }
 
             public void onComplete(Platform arg0, int arg1, HashMap arg2) {
                 //分享成功的回调
-                RxBus.Companion.getInstance().post(new BusEventModel(Constants.APP_SHARE_SUCCESS));
+                RxBus.Companion.getInstance().post(new BusModel(Constants.APP_SHARE_SUCCESS));
             }
 
             public void onCancel(Platform arg0, int arg1) {
                 //取消分享的回调
-                RxBus.Companion.getInstance().post(new BusEventModel(Constants.APP_SHARE_CANCEL));
+                RxBus.Companion.getInstance().post(new BusModel(Constants.APP_SHARE_CANCEL));
             }
         });
         platform.share(shareParams);

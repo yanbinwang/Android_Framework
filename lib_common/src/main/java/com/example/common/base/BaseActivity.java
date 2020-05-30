@@ -27,7 +27,7 @@ import com.example.common.R;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.bus.RxBus;
-import com.example.common.model.BusEventModel;
+import com.example.common.model.BusModel;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.base.bridge.PageParams;
@@ -118,8 +118,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     private void initBaseEvent() {
-        addDisposable(RxBus.Companion.getInstance().toFlowable(BusEventModel.class).subscribe(busEventModel -> {
-            String action = busEventModel.getAction();
+        addDisposable(RxBus.Companion.getInstance().toFlowable(BusModel.class).subscribe(busModel -> {
+            String action = busModel.getAction();
             switch (action) {
                 //注销登出
                 case Constants.APP_USER_LOGIN_OUT:
