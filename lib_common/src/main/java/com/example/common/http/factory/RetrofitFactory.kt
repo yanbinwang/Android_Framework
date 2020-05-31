@@ -35,10 +35,10 @@ class RetrofitFactory private constructor() {
         return retrofit.create(service)
     }
 
-    //发起一个请求
-    @Synchronized
-    fun <T> subscribeWith(flowable: Flowable<T>, resourceSubscriber: ResourceSubscriber<T>): Disposable {
-        return flowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(resourceSubscriber)
-    }
+//    //发起一个请求
+//    @Synchronized
+//    fun <T> subscribeWith(flowable: Flowable<T>, resourceSubscriber: ResourceSubscriber<T>): Disposable {
+//        return flowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(resourceSubscriber)
+//    }
 
 }

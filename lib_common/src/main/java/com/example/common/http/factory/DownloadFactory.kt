@@ -3,6 +3,7 @@ package com.example.common.http.factory
 import android.annotation.SuppressLint
 import android.os.Looper
 import com.example.common.subscribe.BaseApi
+import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.framework.widget.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -30,9 +31,10 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) {
         FileUtil.deleteDir(saveDir)
-        RetrofitFactory.instance.create(BaseApi::class.java).download(downloadUrl)
+        BaseSubscribe.download(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : ResourceSubscriber<ResponseBody>() {
+
                 override fun onNext(responseBody: ResponseBody?) {
                     object : Thread() {
                         override fun run() {
@@ -76,7 +78,7 @@ class DownloadFactory private constructor() {
                         dispose()
                     }
                 }
-            })
+            });
     }
 
     interface OnDownloadListener {

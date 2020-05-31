@@ -2,13 +2,43 @@ package com.example.common.subscribe
 
 import com.example.common.http.HttpHeaders
 import com.example.common.http.factory.RetrofitFactory
+import com.example.common.model.BaseModel
+import com.example.common.model.FilesUploadModel
+import io.reactivex.Flowable
+import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 /**
  * author:wyb
  * 通用接口类
  */
-object BaseSubscribe : HttpHeaders() {
+object BaseSubscribe : HttpHeaders(), BaseApi {
     private val baseApi = RetrofitFactory.instance.create(BaseApi::class.java)
+
+    override fun download(downloadUrl: String): Flowable<ResponseBody> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getUploadFile(
+        agent: String,
+        partList: List<MultipartBody.Part>
+    ): Flowable<BaseModel<FilesUploadModel>> {
+        TODO("Not yet implemented")
+    }
+
+    override fun getSendVerification(
+        agent: String,
+        map: Map<String, String>
+    ): Flowable<BaseModel<Any>> {
+        return baseApi.getSendVerification(agent, map)
+    }
+
+    override fun getVerification(
+        agent: String,
+        map: Map<String, String>
+    ): Flowable<BaseModel<Any>> {
+        TODO("Not yet implemented")
+    }
 
 //    //上传图片接口
 //    fun getUploadFile(header: Int, partList: MutableList<MultipartBody.Part>, resourceSubscriber: ResourceSubscriber<BaseBean<UploadBean>>): Disposable {
