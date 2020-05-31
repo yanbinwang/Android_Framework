@@ -19,7 +19,7 @@ import retrofit2.HttpException;
  * rxjava处理回调
  */
 @SuppressWarnings("unchecked")
-public abstract class HttpSubscribe<T> extends ResourceSubscriber<BaseModel<T>> {
+public abstract class HttpResourceSubscriber<T> extends ResourceSubscriber<BaseModel<T>> {
 
     @Override
     public void onNext(BaseModel<T> baseModel) {
