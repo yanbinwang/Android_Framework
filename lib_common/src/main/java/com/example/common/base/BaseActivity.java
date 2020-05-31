@@ -30,7 +30,7 @@ import com.example.common.bus.RxBus;
 import com.example.common.model.BusModel;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
-import com.example.common.base.bridge.PageParams;
+import com.example.common.base.page.PageParams;
 import com.example.common.utils.TitleBuilder;
 import com.example.common.bus.RxManager;
 import com.example.common.utils.permission.AndPermissionUtil;

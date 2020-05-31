@@ -3,10 +3,10 @@ package com.example.common.http
 import android.text.TextUtils
 import java.util.*
 
-class Params {
+class HttpParams {
     private var map: MutableMap<String, String> = HashMap()
 
-    fun append(key: String, value: String?): Params {
+    fun append(key: String, value: String?): HttpParams {
         if (!TextUtils.isEmpty(value)) {
             if (value != null) {
                 map[key] = value
@@ -15,7 +15,7 @@ class Params {
         return this
     }
 
-    fun setMap(map: MutableMap<String, String>): Params {
+    fun setMap(map: MutableMap<String, String>): HttpParams {
         this.map = map
         return this
     }

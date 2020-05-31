@@ -25,7 +25,7 @@ import com.example.common.R;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.constant.Extras;
-import com.example.common.base.bridge.PageParams;
+import com.example.common.base.page.PageParams;
 import com.example.common.bus.RxManager;
 import com.example.common.utils.permission.AndPermissionUtil;
 import com.example.common.widget.dialog.LoadingDialog;

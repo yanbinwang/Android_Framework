@@ -1,4 +1,4 @@
-package com.example.common.base.bridge
+package com.example.common.base.page
 
 import java.util.*
 
