@@ -2,7 +2,6 @@ package com.example.common.http.factory
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import com.example.common.subscribe.BaseApi
 import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.framework.widget.WeakHandler
