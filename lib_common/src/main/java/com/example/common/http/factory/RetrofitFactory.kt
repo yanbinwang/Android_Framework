@@ -18,21 +18,15 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class RetrofitFactory private constructor() {
     private val retrofit: Retrofit = Retrofit.Builder()
-            .client(OkHttpFactory.getInstance().okHttpClient)
+            .client(OkHttpFactory.instance.okHttpClient)
             .baseUrl(BuildConfig.LOCALHOST)
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()
 
     companion object {
-        private var instance: RetrofitFactory? = null
-
-        @Synchronized
-        fun getInstance(): RetrofitFactory {
-            if (instance == null) {
-                instance = RetrofitFactory()
-            }
-            return instance!!
+        val instance: RetrofitFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            RetrofitFactory()
         }
     }
 

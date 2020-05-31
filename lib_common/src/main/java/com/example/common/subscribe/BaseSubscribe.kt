@@ -8,7 +8,7 @@ import com.example.common.http.factory.RetrofitFactory
  * 通用接口类
  */
 object BaseSubscribe : HttpHeaders() {
-    private val baseApi = RetrofitFactory.getInstance().create(BaseApi::class.java)
+    private val baseApi = RetrofitFactory.instance.create(BaseApi::class.java)
 
 //    //上传图片接口
 //    fun getUploadFile(header: Int, partList: MutableList<MultipartBody.Part>, resourceSubscriber: ResourceSubscriber<BaseBean<UploadBean>>): Disposable {

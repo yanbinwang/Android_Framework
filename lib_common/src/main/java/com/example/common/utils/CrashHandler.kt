@@ -21,26 +21,19 @@ import kotlin.system.exitProcess
  * 异常抓包类，处理闪退的异常文件
  */
 @SuppressLint("StaticFieldLeak")
-class CrashHandler : Thread.UncaughtExceptionHandler {
-    private var context: Context? = null
+class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
+    private var context: Context = BaseApplication.getInstance().applicationContext
     private var logFile: File? = null //log文件
     private var mDefaultHandler: Thread.UncaughtExceptionHandler? = null
     private val TAG = "CrashHandler" //文件name
 
     companion object {
-        private var instance: CrashHandler? = null
-
-        @Synchronized
-        fun getInstance(): CrashHandler {
-            if (instance == null) {
-                instance = CrashHandler()
-            }
-            return instance!!
+        val instance: CrashHandler by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            CrashHandler()
         }
     }
 
     init {
-        context = BaseApplication.getInstance().applicationContext
         //获取默认异常处理器
         mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         //将此类设为默认异常处理器

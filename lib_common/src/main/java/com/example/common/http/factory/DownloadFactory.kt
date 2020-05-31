@@ -1,8 +1,7 @@
-package com.example.common.http.download
+package com.example.common.http.factory
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import com.example.common.http.factory.RetrofitFactory
 import com.example.common.subscribe.BaseApi
 import com.example.common.utils.FileUtil
 import com.example.framework.widget.WeakHandler
@@ -20,24 +19,18 @@ import java.io.InputStream
  * 下载单例
  */
 @SuppressLint("CheckResult")
-class DownloadFactory {
+class DownloadFactory private constructor() {
     private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
 
     companion object {
-        private var instance: DownloadFactory? = null
-
-        @Synchronized
-        fun getInstance(): DownloadFactory {
-            if (instance == null) {
-                instance = DownloadFactory()
-            }
-            return instance!!
+        val instance: DownloadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            DownloadFactory()
         }
     }
 
     fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) {
         FileUtil.deleteDir(saveDir)
-        RetrofitFactory.getInstance().create(BaseApi::class.java).download(downloadUrl)
+        RetrofitFactory.instance.create(BaseApi::class.java).download(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribe(object : ResourceSubscriber<ResponseBody>() {
                 override fun onNext(responseBody: ResponseBody?) {
@@ -84,6 +77,19 @@ class DownloadFactory {
                     }
                 }
             })
+    }
+
+    interface OnDownloadListener {
+
+        //下载成功
+        fun onDownloadSuccess(path: String?)
+
+        //下载进度
+        fun onDownloading(progress: Int = 0)
+
+        //下载失败
+        fun onDownloadFailed(e: Throwable?)
+
     }
 
 }

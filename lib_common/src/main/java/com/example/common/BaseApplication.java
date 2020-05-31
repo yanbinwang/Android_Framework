@@ -23,7 +23,7 @@ import com.example.common.imagloader.ImageLoaderFactory;
 import com.example.common.imagloader.glide.callback.GlideAlbumLoader;
 import com.example.common.utils.CrashHandler;
 import com.example.common.utils.AccountUtil;
-import com.example.common.http.download.DownloadFactory;
+import com.example.common.http.factory.DownloadFactory;
 import com.example.common.http.factory.OkHttpFactory;
 import com.example.common.http.factory.RetrofitFactory;
 import com.example.common.utils.LogUtil;
