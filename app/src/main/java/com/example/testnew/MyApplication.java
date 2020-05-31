@@ -2,7 +2,7 @@ package com.example.testnew;
 
 import com.example.common.BaseApplication;
 import com.example.common.constant.Constants;
-import com.example.common.utils.FileUtil;
+import com.example.common.utils.file.FileUtil;
 import com.example.common.BuildConfig;
 import com.example.share.utils.ShareSDKUtil;
 import com.example.testnew.activity.MainActivity;

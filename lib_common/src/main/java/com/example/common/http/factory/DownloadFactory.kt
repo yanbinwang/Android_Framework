@@ -3,7 +3,7 @@ package com.example.common.http.factory
 import android.annotation.SuppressLint
 import android.os.Looper
 import com.example.common.subscribe.BaseApi
-import com.example.common.utils.FileUtil
+import com.example.common.utils.file.FileUtil
 import com.example.framework.widget.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers

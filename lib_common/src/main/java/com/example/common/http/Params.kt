@@ -1,4 +1,4 @@
-package com.example.common.http.request
+package com.example.common.http
 
 import android.text.TextUtils
 import java.util.*

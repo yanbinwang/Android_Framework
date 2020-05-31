@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import com.example.common.R;
 import com.example.common.model.UserModel;
 import com.example.common.constant.Constants;
-import com.example.common.http.response.analysis.GsonHelper;
 import com.example.framework.utils.SHPUtil;
 
 
@@ -52,7 +51,7 @@ public class AccountUtil {
     //存储用户对象
     public static void setUserBean(UserModel bean) {
         if (null != bean) {
-            userInfoSHP.saveParam(Constants.USER_BEAN, GsonHelper.INSTANCE.objToJson(bean));
+            userInfoSHP.saveParam(Constants.USER_BEAN, GsonUtil.INSTANCE.objToJson(bean));
         }
     }
 
@@ -61,7 +60,7 @@ public class AccountUtil {
         UserModel userInfoBean = null;
         String userInfoJson = userInfoSHP.getParam(Constants.USER_BEAN);
         if (!TextUtils.isEmpty(userInfoJson)) {
-            userInfoBean = GsonHelper.INSTANCE.jsonToObj(userInfoJson, UserModel.class);
+            userInfoBean = GsonUtil.INSTANCE.jsonToObj(userInfoJson, UserModel.class);
         }
         return userInfoBean;
     }

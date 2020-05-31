@@ -1,8 +1,7 @@
-package com.example.common.http.upload
+package com.example.common.utils.file.upload
 
 import android.content.Context
-import com.example.common.utils.CompressUtil
-import com.example.common.widget.dialog.LoadingDialog
+import com.example.common.utils.file.CompressUtil
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody

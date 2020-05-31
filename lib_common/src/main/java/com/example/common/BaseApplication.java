@@ -21,7 +21,7 @@ import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.common.constant.Constants;
 import com.example.common.imagloader.ImageLoaderFactory;
 import com.example.common.imagloader.glide.callback.GlideAlbumLoader;
-import com.example.common.utils.CrashHandler;
+import com.example.common.utils.file.CrashHandler;
 import com.example.common.utils.AccountUtil;
 import com.example.common.http.factory.DownloadFactory;
 import com.example.common.http.factory.OkHttpFactory;

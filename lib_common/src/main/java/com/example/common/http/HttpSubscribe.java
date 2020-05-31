@@ -1,4 +1,4 @@
-package com.example.common.http.response;
+package com.example.common.http;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.common.bus.RxBus;
@@ -7,7 +7,7 @@ import com.example.common.constant.ARouterPath;
 import com.example.common.constant.Constants;
 import com.example.common.utils.AccountUtil;
 import com.example.common.model.BaseModel;
-import com.example.common.http.response.analysis.GsonHelper;
+import com.example.common.utils.GsonUtil;
 
 import io.reactivex.subscribers.ResourceSubscriber;
 import okhttp3.ResponseBody;
@@ -31,7 +31,7 @@ public abstract class HttpSubscribe<T> extends ResourceSubscriber<BaseModel<T>> 
         try {
             ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
             if (null != responseBody) {
-                BaseModel baseModel = GsonHelper.INSTANCE.jsonToObj(responseBody.string(), BaseModel.class);
+                BaseModel baseModel = GsonUtil.INSTANCE.jsonToObj(responseBody.string(), BaseModel.class);
                 doResult(baseModel, throwable);
             } else {
                 doResult(null, throwable);

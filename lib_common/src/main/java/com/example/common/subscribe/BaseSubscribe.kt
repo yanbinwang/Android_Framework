@@ -1,6 +1,6 @@
 package com.example.common.subscribe
 
-import com.example.common.http.request.HttpHeaders
+import com.example.common.http.HttpHeaders
 import com.example.common.http.factory.RetrofitFactory
 
 /**

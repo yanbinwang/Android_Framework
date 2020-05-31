@@ -1,10 +1,12 @@
-package com.example.common.utils;
+package com.example.common.utils.file;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.media.ExifInterface;
+
+import com.example.common.utils.LogUtil;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
