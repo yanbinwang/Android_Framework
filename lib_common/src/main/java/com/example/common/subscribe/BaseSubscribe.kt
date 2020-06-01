@@ -2,7 +2,7 @@ package com.example.common.subscribe
 
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.model.BaseModel
-import com.example.common.model.FilesUploadModel
+import com.example.common.model.UploadModel
 import io.reactivex.Flowable
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -18,7 +18,7 @@ object BaseSubscribe : BaseApi {
         return baseApi.download(downloadUrl)
     }
 
-    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<BaseModel<FilesUploadModel>> {
+    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<BaseModel<UploadModel>> {
         TODO("Not yet implemented")
     }
 

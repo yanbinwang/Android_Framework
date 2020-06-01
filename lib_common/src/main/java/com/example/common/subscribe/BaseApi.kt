@@ -2,7 +2,7 @@ package com.example.common.subscribe
 
 import com.example.common.constant.Constants.URL
 import com.example.common.model.BaseModel
-import com.example.common.model.FilesUploadModel
+import com.example.common.model.UploadModel
 import io.reactivex.Flowable
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody
@@ -21,7 +21,7 @@ interface BaseApi {
     @Multipart
     @Streaming
     @POST(URL)
-    fun getUploadFile(@Header("User-Agent") agent: String, @Part partList: List<MultipartBody.Part>): Flowable<BaseModel<FilesUploadModel>>
+    fun getUploadFile(@Header("User-Agent") agent: String, @Part partList: List<MultipartBody.Part>): Flowable<BaseModel<UploadModel>>
 
     @FormUrlEncoded
     @POST(URL)

@@ -3,6 +3,6 @@ package com.example.common.model
 /**
  * author:wyb
  */
-class FilesUploadModel {
+class UploadModel {
     var list: List<String>? = null
 }
