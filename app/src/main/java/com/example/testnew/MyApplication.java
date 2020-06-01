@@ -4,7 +4,7 @@ import com.example.common.BaseApplication;
 import com.example.common.BuildConfig;
 import com.example.common.constant.Constants;
 import com.example.common.utils.file.FileUtil;
-import com.example.share.utils.ShareSDKUtil;
+//import com.example.share.utils.ShareSDKUtil;
 import com.example.testnew.activity.MainActivity;
 import com.zxy.recovery.core.Recovery;
 
@@ -62,8 +62,8 @@ public class MyApplication extends BaseApplication {
         //获取应用名和包名
         Constants.APPLICATION_NAME = FileUtil.getApplicationName(this);
         Constants.APPLICATION_ID = FileUtil.getApplicationId(this);
-        //分享工具类初始化
-        ShareSDKUtil.getInstance();
+//        //分享工具类初始化
+//        ShareSDKUtil.getInstance();
     }
 
 }

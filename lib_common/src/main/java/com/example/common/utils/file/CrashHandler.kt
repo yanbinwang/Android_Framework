@@ -24,8 +24,7 @@ import kotlin.system.exitProcess
 @SuppressLint("StaticFieldLeak")
 class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     private var context: Context = BaseApplication.getInstance().applicationContext
-    private var logFile: File? = null //log文件
-    private var mDefaultHandler: Thread.UncaughtExceptionHandler? = null
+    private var mDefaultHandler: Thread.UncaughtExceptionHandler = Thread.getDefaultUncaughtExceptionHandler()
     private val TAG = "CrashHandler" //文件name
 
     companion object {
@@ -35,8 +34,6 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     }
 
     init {
-        //获取默认异常处理器
-        mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler()
         //将此类设为默认异常处理器
         Thread.setDefaultUncaughtExceptionHandler(this)
     }
@@ -44,7 +41,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     override fun uncaughtException(thread: Thread, throwable: Throwable) {
         if (!handleException(throwable)) {
             //未经过人为处理,则调用系统默认处理异常,弹出系统强制关闭的对话框
-            mDefaultHandler!!.uncaughtException(thread, throwable)
+            mDefaultHandler.uncaughtException(thread, throwable)
         } else {
             //已经人为处理,系统自己退出
             android.os.Process.killProcess(android.os.Process.myPid())
@@ -74,14 +71,13 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 try {
                     if (FileUtil.hasSDCard()) {
-                        logFile = File(FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + BuildConfig.VERSION_NAME + "_exception_" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".log")
-                        logFile!!.createNewFile() //6.0+的系统需要写入权限才能生成对应文件
+                        val logFile = File(FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + BuildConfig.VERSION_NAME + "_exception_" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".log")
+                        logFile.createNewFile() //6.0+的系统需要写入权限才能生成对应文件
+                        val bufferedWriter = BufferedWriter(FileWriter(logFile, true))
+                        bufferedWriter.write(result)
+                        bufferedWriter.write("\n")
+                        bufferedWriter.close()
                     }
-
-                    val bufferedWriter = BufferedWriter(FileWriter(logFile, true))
-                    bufferedWriter.write(result)
-                    bufferedWriter.write("\n")
-                    bufferedWriter.close()
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
