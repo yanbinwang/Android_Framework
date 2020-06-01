@@ -34,7 +34,6 @@ public class AnimationLoader {
         in.addAnimation(scale1);
         in.addAnimation(scale2);
         in.addAnimation(scale3);
-
         return in;
     }
 
