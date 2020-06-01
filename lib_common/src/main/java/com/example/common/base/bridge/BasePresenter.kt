@@ -5,11 +5,10 @@ import android.text.TextUtils
 import android.view.View
 import com.example.common.R
 import com.example.common.bus.RxManager
+import com.example.common.utils.NetWorkUtil
 import com.example.common.widget.empty.EmptyLayout
 import com.example.common.widget.xrecyclerview.XRecyclerView
-import com.example.common.utils.NetWorkUtil
 import io.reactivex.disposables.Disposable
-import java.lang.ref.SoftReference
 
 /**
  * author: wyb
@@ -20,12 +19,11 @@ import java.lang.ref.SoftReference
 abstract class BasePresenter<T : BaseView> {
     protected var view: T? = null
     protected var context: Context? = null
-    private var viewRef: SoftReference<T>? = null
     private var rxManager: RxManager? = null
 //    private var currentCount: Int = 0
 //    private var totalCount: Int = 0
-    private var index: Int = 1
-    private var hasNextPage: Boolean? = false
+//    private var index: Int = 1
+//    private var hasNextPage: Boolean? = false
 
     fun attachView(context: Context, view: T?) {
         if (null == view) {
@@ -33,14 +31,11 @@ abstract class BasePresenter<T : BaseView> {
         }
         this.context = context
         this.view = view
-        this.viewRef = SoftReference(view)
         this.rxManager = RxManager()
     }
 
     fun detachView() {
         rxManager?.clear()
-        viewRef?.clear()
-        viewRef = null
         view = null
     }
 
@@ -96,30 +91,30 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    //刷新清空
-    fun onRefresh() {
-        index = 1
-    }
-
-    fun onLoad(): Boolean {
-        return if (hasNextPage!!) {
-            ++index
-            true
-        } else {
-            false
-        }
-    }
-
-    //设置是否需要加载更多
-    fun hasNextPage(hasNextPage: Boolean?) {
-        this.hasNextPage = hasNextPage
-    }
-
-    //获取当前的数组长度
-    fun getIndex(): Int {
-        return index
-    }
-
+//    //刷新清空
+//    fun onRefresh() {
+//        index = 1
+//    }
+//
+//    fun onLoad(): Boolean {
+//        return if (hasNextPage!!) {
+//            ++index
+//            true
+//        } else {
+//            false
+//        }
+//    }
+//
+//    //设置是否需要加载更多
+//    fun hasNextPage(hasNextPage: Boolean?) {
+//        this.hasNextPage = hasNextPage
+//    }
+//
+//    //获取当前的数组长度
+//    fun getIndex(): Int {
+//        return index
+//    }
+//
 //    //刷新清空
 //    fun onRefresh() {
 //        currentCount = 0
