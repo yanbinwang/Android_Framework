@@ -1,4 +1,4 @@
-package com.example.common.utils.file.download
+package com.example.common.utils.file.callback
 
 /**
  * Created by WangYanBin on 2020/6/1.

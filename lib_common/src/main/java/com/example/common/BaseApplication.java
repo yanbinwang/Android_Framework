@@ -25,6 +25,8 @@ import com.example.common.imagloader.ImageLoaderFactory;
 import com.example.common.imagloader.glide.callback.GlideAlbumLoader;
 import com.example.common.utils.LogUtil;
 import com.example.common.utils.file.CrashHandler;
+import com.example.common.utils.file.factory.DownloadFactory;
+import com.example.common.utils.file.factory.UploadFactory;
 import com.example.common.utils.helper.AccountHelper;
 import com.example.common.utils.helper.ConfigHelper;
 import com.tencent.smtt.sdk.QbSdk;
@@ -100,6 +102,9 @@ public class BaseApplication extends Application {
         //网络请求类初始化
         OkHttpFactory.Companion.getInstance();
         RetrofitFactory.Companion.getInstance();
+        //文件上传下载类初始化
+        UploadFactory.Companion.getINSTANCE();
+        DownloadFactory.Companion.getInstance();
         //实例化抓包文件
         CrashHandler.Companion.getInstance();
         //图片库初始化

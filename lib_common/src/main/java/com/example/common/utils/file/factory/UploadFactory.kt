@@ -1,7 +1,9 @@
-package com.example.common.utils.file.upload
+package com.example.common.utils.file.factory
 
 import android.content.Context
-import com.example.common.utils.file.CompressUtil
+import com.example.common.BaseApplication
+import com.example.common.utils.CompressUtil
+import com.example.common.utils.file.callback.OnUploadListener
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -13,8 +15,15 @@ import java.util.*
  * date: 2017/10/9.
  * 图片上传工具类
  */
-class FilesUploadUtil(private val context: Context) {
-    private var onFilesUploadListener: OnFilesUploadListener? = null
+class UploadFactory private constructor() {
+    private val context:Context = BaseApplication.instance.applicationContext
+    private var onUploadListener: OnUploadListener? = null
+
+    companion object {
+        val INSTANCE: UploadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            UploadFactory()
+        }
+    }
 
     //手动配置压缩比例
     @JvmOverloads
@@ -65,8 +74,8 @@ class FilesUploadUtil(private val context: Context) {
     }
 
     //上传图片监听
-    fun setOnFilesUploadListener(onFilesUploadListener: OnFilesUploadListener) {
-        this.onFilesUploadListener = onFilesUploadListener
+    fun setOnFilesUploadListener(onUploadListener: OnUploadListener) {
+        this.onUploadListener = onUploadListener
     }
 
 }

@@ -1,9 +1,10 @@
-package com.example.common.utils.file.download
+package com.example.common.utils.file.factory
 
 import android.annotation.SuppressLint
 import android.os.Looper
 import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
+import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.framework.widget.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -20,8 +21,14 @@ import java.io.InputStream
  * 下载单例
  */
 @SuppressLint("CheckResult")
-class DownloadUtil() {
+class DownloadFactory private constructor() {
     private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
+
+    companion object {
+        val instance: DownloadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            DownloadFactory()
+        }
+    }
 
     fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) : Disposable {
         FileUtil.deleteDir(saveDir)
