@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.common.BaseApplication
 import com.example.common.R
 import com.example.common.imagloader.glide.callback.GlideImpl
-import com.example.common.imagloader.glide.callback.GlideModuleImpl
+import com.example.common.imagloader.glide.callback.GlideModule
 import com.example.common.imagloader.glide.transform.CornerTransform
 import java.io.File
 
@@ -19,7 +19,7 @@ import java.io.File
  * Created by WangYanBin on 2020/5/29.
  * 图片加载库使用Application上下文，Glide请求将不受Activity/Fragment生命周期控制。
  */
-class ImageLoaderFactory : GlideModuleImpl(), GlideImpl {
+class ImageLoaderFactory : GlideModule(), GlideImpl {
     private val context: Context = BaseApplication.getInstance().applicationContext
     private val manager: RequestManager
 
