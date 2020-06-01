@@ -1,6 +1,5 @@
 package com.example.common.subscribe
 
-import com.example.common.http.HttpHeaders
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.model.BaseModel
 import com.example.common.model.FilesUploadModel
@@ -12,7 +11,7 @@ import okhttp3.ResponseBody
  * author:wyb
  * 通用接口类
  */
-object BaseSubscribe : HttpHeaders(), BaseApi {
+object BaseSubscribe : BaseApi {
     private val baseApi = RetrofitFactory.instance.create(BaseApi::class.java)
 
     override fun download(downloadUrl: String): Flowable<ResponseBody> {

@@ -8,8 +8,8 @@ import com.alibaba.android.arouter.facade.template.IInterceptor
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.common.constant.ARouterPath
 import com.example.common.constant.Constants
-import com.example.common.utils.AccountUtil
 import com.example.common.utils.LogUtil
+import com.example.common.utils.helper.AccountHelper
 
 /**
  * author:wyb
@@ -29,7 +29,7 @@ class PageInterceptor : IInterceptor {
         //先判断需不需要
         if (postcard.extra == Constants.LOGIN_INTERCEPTOR_CODE) {
             //判断用户的登录情况，可以把值保存在sp中
-            if (AccountUtil.isLogin()) {
+            if (AccountHelper.isLogin()) {
                 callback.onContinue(postcard)
             } else { //没有登录,注意需要传入context
                 ARouter.getInstance().build(ARouterPath.LoginActivity).navigation()

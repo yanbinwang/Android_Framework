@@ -1,4 +1,4 @@
-package com.example.common.http.factory
+package com.example.common.utils.file.download
 
 import android.annotation.SuppressLint
 import android.os.Looper
@@ -19,14 +19,8 @@ import java.io.InputStream
  * 下载单例
  */
 @SuppressLint("CheckResult")
-class DownloadFactory private constructor() {
+class DownloadUtil() {
     private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
-
-    companion object {
-        val instance: DownloadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            DownloadFactory()
-        }
-    }
 
     fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) {
         FileUtil.deleteDir(saveDir)
@@ -78,19 +72,6 @@ class DownloadFactory private constructor() {
                     }
                 }
             });
-    }
-
-    interface OnDownloadListener {
-
-        //下载成功
-        fun onDownloadSuccess(path: String?)
-
-        //下载进度
-        fun onDownloading(progress: Int = 0)
-
-        //下载失败
-        fun onDownloadFailed(e: Throwable?)
-
     }
 
 }

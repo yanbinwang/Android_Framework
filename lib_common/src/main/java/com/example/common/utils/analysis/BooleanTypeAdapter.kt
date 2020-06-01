@@ -1,4 +1,4 @@
-package com.example.common.http.adapter
+package com.example.common.utils.analysis
 
 import com.google.gson.TypeAdapter
 import com.google.gson.stream.JsonReader

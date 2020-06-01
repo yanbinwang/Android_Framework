@@ -1,4 +1,4 @@
-package com.example.common.http.factory.interceptor
+package com.example.common.http.interceptor
 
 import com.example.common.BuildConfig
 import com.example.common.utils.LogUtil

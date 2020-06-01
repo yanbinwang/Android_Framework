@@ -19,14 +19,14 @@ import android.widget.AbsListView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.common.constant.Constants;
-import com.example.common.imagloader.ImageLoaderFactory;
-import com.example.common.imagloader.glide.callback.GlideAlbumLoader;
-import com.example.common.utils.file.CrashHandler;
-import com.example.common.utils.AccountUtil;
-import com.example.common.http.factory.DownloadFactory;
 import com.example.common.http.factory.OkHttpFactory;
 import com.example.common.http.factory.RetrofitFactory;
+import com.example.common.imagloader.ImageLoaderFactory;
+import com.example.common.imagloader.glide.callback.GlideAlbumLoader;
 import com.example.common.utils.LogUtil;
+import com.example.common.utils.file.CrashHandler;
+import com.example.common.utils.helper.AccountHelper;
+import com.example.common.utils.helper.ConfigHelper;
 import com.tencent.smtt.sdk.QbSdk;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
@@ -94,12 +94,12 @@ public class BaseApplication extends Application {
                         .setLocale(Locale.CHINA)//强制设置在任何语言下都用中文显示。
                         .build()
         );
-        //用户类初始化
-        AccountUtil.init(this);
+        //应用和用户配置类初始化
+        ConfigHelper.init(this);
+        AccountHelper.init(this);
         //网络请求类初始化
         OkHttpFactory.Companion.getInstance();
         RetrofitFactory.Companion.getInstance();
-        DownloadFactory.Companion.getInstance();
         //实例化抓包文件
         CrashHandler.Companion.getInstance();
         //图片库初始化

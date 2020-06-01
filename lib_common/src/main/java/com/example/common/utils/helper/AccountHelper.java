@@ -1,12 +1,13 @@
-package com.example.common.utils;
+package com.example.common.utils.helper;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.text.TextUtils;
 
 import com.example.common.R;
-import com.example.common.model.UserModel;
 import com.example.common.constant.Constants;
+import com.example.common.model.UserModel;
+import com.example.common.utils.analysis.GsonUtil;
 import com.example.framework.utils.SHPUtil;
 
 
@@ -16,7 +17,7 @@ import com.example.framework.utils.SHPUtil;
  * 该工具类对key值和用户信息的一些字做了规整和管控，全局直接调用即可
  */
 @SuppressLint("StaticFieldLeak")
-public class AccountUtil {
+public class AccountHelper {
     private static SHPUtil userInfoSHP;
     private static SHPUtil userConfigSHP;
 

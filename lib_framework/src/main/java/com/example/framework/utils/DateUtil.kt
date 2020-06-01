@@ -1,4 +1,4 @@
-package com.example.common.utils
+package com.example.framework.utils
 
 import android.text.TextUtils
 import org.json.JSONObject
@@ -135,10 +135,10 @@ object DateUtil {
             val comparedDate = dateFormat.parse(fromDate)
             val comparedDate2 = dateFormat.parse(toDate)
             if (comparedDate.time > comparedDate2.time) {
-                LogUtil.e("日程时间大于系统时间")
+                //日程时间大于系统时间
                 return 1
             } else if (comparedDate.time < comparedDate2.time) {
-                LogUtil.e("日程时间小于系统时间")
+                //日程时间小于系统时间
                 return -1
             } else {
                 return 0

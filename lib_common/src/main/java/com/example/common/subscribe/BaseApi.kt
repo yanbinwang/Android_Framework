@@ -1,9 +1,8 @@
 package com.example.common.subscribe
 
+import com.example.common.constant.Constants.URL
 import com.example.common.model.BaseModel
 import com.example.common.model.FilesUploadModel
-import com.example.common.constant.Constants.URL
-import com.example.common.http.factory.RetrofitFactory
 import io.reactivex.Flowable
 import okhttp3.MultipartBody
 import okhttp3.ResponseBody

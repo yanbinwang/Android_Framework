@@ -71,7 +71,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
         if (!TextUtils.isEmpty(result)) {
             LogUtil.e(TAG, result) //给出错误的log提示
             //如果具备权限，写入本地
-            if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 try {
                     if (FileUtil.hasSDCard()) {
                         logFile = File(FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + BuildConfig.VERSION_NAME + "_exception_" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".log")

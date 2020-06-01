@@ -44,7 +44,7 @@ open class GlideModuleImpl : AppGlideModule() {
 
     //注册自定义组件
     override fun registerComponents(context: Context, glide: Glide, registry: Registry) {
-        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(OkHttpFactory.getInstance().okHttpClient))
+        registry.replace(GlideUrl::class.java, InputStream::class.java, OkHttpUrlLoader.Factory(OkHttpFactory.instance.okHttpClient))
     }
 
 }

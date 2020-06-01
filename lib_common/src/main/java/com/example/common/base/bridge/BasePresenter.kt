@@ -4,10 +4,10 @@ import android.content.Context
 import android.text.TextUtils
 import android.view.View
 import com.example.common.R
-import com.example.common.utils.NetWorkUtil
 import com.example.common.bus.RxManager
 import com.example.common.widget.empty.EmptyLayout
 import com.example.common.widget.xrecyclerview.XRecyclerView
+import com.example.common.utils.NetWorkUtil
 import io.reactivex.disposables.Disposable
 import java.lang.ref.SoftReference
 
@@ -38,15 +38,15 @@ abstract class BasePresenter<T : BaseView> {
     }
 
     fun detachView() {
-        rxManager!!.clear()
-        viewRef!!.clear()
+        rxManager?.clear()
+        viewRef?.clear()
         viewRef = null
         view = null
     }
 
     protected fun addDisposable(disposable: Disposable?) {
         if (null != disposable) {
-            rxManager!!.add(disposable)
+            rxManager?.add(disposable)
         }
     }
 
@@ -56,9 +56,9 @@ abstract class BasePresenter<T : BaseView> {
             message = context!!.getString(R.string.label_response_err)
         }
         if (!NetWorkUtil.isNetworkAvailable()) {
-            view!!.showToast(context!!.getString(R.string.label_response_net_err))
+            view?.showToast(context!!.getString(R.string.label_response_net_err))
         } else {
-            view!!.showToast(message!!)
+            view?.showToast(message!!)
         }
         return true
     }
@@ -66,12 +66,12 @@ abstract class BasePresenter<T : BaseView> {
     //针对页面
     @Synchronized
     fun emptyState(emptyLayout: EmptyLayout?, msg: String?) {
-        emptyLayout!!.visibility = View.VISIBLE
+        emptyLayout?.visibility = View.VISIBLE
         if (doResponse(msg)) {
-            emptyLayout.showEmpty()
+            emptyLayout?.showEmpty()
         }
         if (!NetWorkUtil.isNetworkAvailable()) {
-            emptyLayout.showError()
+            emptyLayout?.showError()
         }
     }
 

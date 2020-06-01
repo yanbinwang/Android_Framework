@@ -1,6 +1,5 @@
-package com.example.common.utils
+package com.example.common.utils.analysis
 
-import com.example.common.http.adapter.BooleanTypeAdapter
 import com.google.gson.GsonBuilder
 
 /**

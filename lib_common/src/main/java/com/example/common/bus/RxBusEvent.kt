@@ -1,4 +1,4 @@
-package com.example.common.model
+package com.example.common.bus
 
 import android.os.Bundle
 
@@ -7,7 +7,7 @@ import android.os.Bundle
  * date: 2018/4/16.
  * eventbus传递事件类
  */
-class BusModel {
+class RxBusEvent {
     private var action: String? = null //广播名称
     private var args: Bundle? = null //额外参数
 

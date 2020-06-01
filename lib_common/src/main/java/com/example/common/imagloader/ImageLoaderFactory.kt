@@ -10,7 +10,6 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.example.common.BaseApplication
 import com.example.common.R
-import com.example.common.http.factory.OkHttpFactory
 import com.example.common.imagloader.glide.callback.GlideImpl
 import com.example.common.imagloader.glide.callback.GlideModuleImpl
 import com.example.common.imagloader.glide.transform.CornerTransform
