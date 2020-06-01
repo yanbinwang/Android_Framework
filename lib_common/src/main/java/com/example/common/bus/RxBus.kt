@@ -21,8 +21,7 @@ class RxBus private constructor() {
         @Synchronized
         fun getInstance(): RxBus {
             if (instance == null) {
-                instance =
-                    RxBus()
+                instance = RxBus()
             }
             return instance!!
         }

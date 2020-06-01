@@ -18,7 +18,8 @@ class FilesUploadUtil(private val context: Context) {
 
     //手动配置压缩比例
     @JvmOverloads
-    fun toUpload(filePaths: ArrayList<String>, fileMaxSize: Long = 0) {
+//    fun toUpload(filePaths: ArrayList<String>, fileMaxSize: Long = 0) : Disposable {
+    fun toUpload(filePaths: ArrayList<String>, fileMaxSize: Long = 0)  {
         val parts = ArrayList<MultipartBody.Part>()
         for (path in filePaths) {
             val file = File(path)

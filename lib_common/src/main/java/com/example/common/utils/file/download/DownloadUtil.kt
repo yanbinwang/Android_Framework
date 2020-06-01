@@ -6,6 +6,7 @@ import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.framework.widget.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.ResourceSubscriber
 import okhttp3.ResponseBody
@@ -22,11 +23,11 @@ import java.io.InputStream
 class DownloadUtil() {
     private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
 
-    fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) {
+    fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) : Disposable {
         FileUtil.deleteDir(saveDir)
-        BaseSubscribe.download(downloadUrl)
+        return BaseSubscribe.download(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-            .subscribe(object : ResourceSubscriber<ResponseBody>() {
+            .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
                 override fun onNext(responseBody: ResponseBody?) {
                     object : Thread() {

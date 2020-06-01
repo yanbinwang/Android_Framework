@@ -15,27 +15,18 @@ object BaseSubscribe : BaseApi {
     private val baseApi = RetrofitFactory.instance.create(BaseApi::class.java)
 
     override fun download(downloadUrl: String): Flowable<ResponseBody> {
+        return baseApi.download(downloadUrl)
+    }
+
+    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<BaseModel<FilesUploadModel>> {
         TODO("Not yet implemented")
     }
 
-    override fun getUploadFile(
-        agent: String,
-        partList: List<MultipartBody.Part>
-    ): Flowable<BaseModel<FilesUploadModel>> {
-        TODO("Not yet implemented")
-    }
-
-    override fun getSendVerification(
-        agent: String,
-        map: Map<String, String>
-    ): Flowable<BaseModel<Any>> {
+    override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<BaseModel<Any>> {
         return baseApi.getSendVerification(agent, map)
     }
 
-    override fun getVerification(
-        agent: String,
-        map: Map<String, String>
-    ): Flowable<BaseModel<Any>> {
+    override fun getVerification(agent: String, map: Map<String, String>): Flowable<BaseModel<Any>> {
         TODO("Not yet implemented")
     }
 
