@@ -19,24 +19,24 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
-        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
-                    @Override
-                    public void onNext(ResponseBody responseBody) {
-
-                    }
-
-                    @Override
-                    public void onError(Throwable t) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-
-                    }
-                }));
+//        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
+//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+//                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
+//                    @Override
+//                    public void onNext(ResponseBody responseBody) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable t) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onComplete() {
+//
+//                    }
+//                }));
     }
 
 }
