@@ -35,26 +35,26 @@ class TitleBuilder(activity: Activity) {
     }
 
     private fun instanceObjects() {
-        view = mActivity.get()!!.findViewById(R.id.rl_main)
-        mainTitleTxt = view!!.findViewById(R.id.tv_main_title)
-        mainLeftTxt = view!!.findViewById(R.id.tv_main_left)
-        mainRightTxt = view!!.findViewById(R.id.tv_main_right)
-        mainLeftLin = view!!.findViewById(R.id.ll_main_left)
-        mainLeftImg = view!!.findViewById(R.id.iv_main_left)
-        mainRightLin = view!!.findViewById(R.id.ll_main_right)
-        mainRightImg = view!!.findViewById(R.id.iv_main_right)
-        mainLine = view!!.findViewById(R.id.v_main_line)
+        view = mActivity.get()?.findViewById(R.id.rl_main)
+        mainTitleTxt = view?.findViewById(R.id.tv_main_title)
+        mainLeftTxt = view?.findViewById(R.id.tv_main_left)
+        mainRightTxt = view?.findViewById(R.id.tv_main_right)
+        mainLeftLin = view?.findViewById(R.id.ll_main_left)
+        mainLeftImg = view?.findViewById(R.id.iv_main_left)
+        mainRightLin = view?.findViewById(R.id.ll_main_right)
+        mainRightImg = view?.findViewById(R.id.iv_main_right)
+        mainLine = view?.findViewById(R.id.v_main_line)
     }
 
     fun getDefault(): TitleBuilder {
-        mainLeftLin!!.visibility = View.VISIBLE
-        mainLeftLin!!.setOnClickListener { mActivity.get()!!.finish() }
+        mainLeftLin?.visibility = View.VISIBLE
+        mainLeftLin?.setOnClickListener { mActivity.get()?.finish() }
         return this
     }
 
     fun hideBack(): TitleBuilder {
-        mainLeftLin!!.visibility = View.GONE
-        mainLeftLin!!.setOnClickListener(null)
+        mainLeftLin?.visibility = View.GONE
+        mainLeftLin?.setOnClickListener(null)
         return this
     }
 
@@ -64,8 +64,8 @@ class TitleBuilder(activity: Activity) {
     }
 
     fun hideTitle(isDark: Boolean): TitleBuilder {
-        view!!.visibility = View.GONE
-        mainLine!!.visibility = View.GONE
+        view?.visibility = View.GONE
+        mainLine?.visibility = View.GONE
         statusBarUtil.setStatusBarLightMode(isDark)
         return this
     }
@@ -87,76 +87,76 @@ class TitleBuilder(activity: Activity) {
 
     fun setTitle(titleStr: String, color: Int, isShade: Boolean, isDark: Boolean): TitleBuilder {
         if (mainTitleTxt != null) {
-            mainTitleTxt!!.text = titleStr
-            mainTitleTxt!!.setTextColor(color)
+            mainTitleTxt?.text = titleStr
+            mainTitleTxt?.setTextColor(color)
         }
         if (isShade) {
-            mainLine!!.visibility = View.VISIBLE
+            mainLine?.visibility = View.VISIBLE
         } else {
-            mainLine!!.visibility = View.GONE
+            mainLine?.visibility = View.GONE
         }
         statusBarUtil.setStatusBarLightMode(isDark)
         return this
     }
 
     fun setTitleTextColor(color: Int): TitleBuilder {
-        mainTitleTxt!!.setTextColor(color)
+        mainTitleTxt?.setTextColor(color)
         return this
     }
 
     fun setTitleBackgroundColor(color: Int): TitleBuilder {
         statusBarUtil.setStatusBarColor(color)
-        view!!.setBackgroundColor(color)
+        view?.setBackgroundColor(color)
         return this
     }
 
     fun setLeftImageResource(resId: Int): TitleBuilder {
-        mainLeftTxt!!.visibility = View.GONE
-        mainLeftImg!!.visibility = View.VISIBLE
-        mainLeftImg!!.setImageResource(resId)
+        mainLeftTxt?.visibility = View.GONE
+        mainLeftImg?.visibility = View.VISIBLE
+        mainLeftImg?.setImageResource(resId)
         return this
     }
 
     fun setLeftText(text: String): TitleBuilder {
-        mainLeftTxt!!.visibility = View.VISIBLE
-        mainLeftImg!!.visibility = View.GONE
-        mainLeftTxt!!.text = text
+        mainLeftTxt?.visibility = View.VISIBLE
+        mainLeftImg?.visibility = View.GONE
+        mainLeftTxt?.text = text
         return this
     }
 
     fun setLeftTextColor(color: Int): TitleBuilder {
-        mainLeftTxt!!.setTextColor(color)
+        mainLeftTxt?.setTextColor(color)
         return this
     }
 
     fun setLeftOnclick(onclick: View.OnClickListener): TitleBuilder {
-        mainLeftLin!!.visibility = View.VISIBLE
-        mainLeftLin!!.setOnClickListener(onclick)
+        mainLeftLin?.visibility = View.VISIBLE
+        mainLeftLin?.setOnClickListener(onclick)
         return this
     }
 
     fun setRightImageResource(resId: Int): TitleBuilder {
-        mainRightTxt!!.visibility = View.GONE
-        mainRightImg!!.visibility = View.VISIBLE
-        mainRightImg!!.setImageResource(resId)
+        mainRightTxt?.visibility = View.GONE
+        mainRightImg?.visibility = View.VISIBLE
+        mainRightImg?.setImageResource(resId)
         return this
     }
 
     fun setRightText(text: String): TitleBuilder {
-        mainRightTxt!!.visibility = View.VISIBLE
-        mainRightImg!!.visibility = View.GONE
-        mainRightTxt!!.text = text
+        mainRightTxt?.visibility = View.VISIBLE
+        mainRightImg?.visibility = View.GONE
+        mainRightTxt?.text = text
         return this
     }
 
     fun setRightTextColor(color: Int): TitleBuilder {
-        mainRightTxt!!.setTextColor(color)
+        mainRightTxt?.setTextColor(color)
         return this
     }
 
     fun setRightOnclick(onclick: View.OnClickListener): TitleBuilder {
-        mainRightLin!!.visibility = View.VISIBLE
-        mainRightLin!!.setOnClickListener(onclick)
+        mainRightLin?.visibility = View.VISIBLE
+        mainRightLin?.setOnClickListener(onclick)
         return this
     }
 
