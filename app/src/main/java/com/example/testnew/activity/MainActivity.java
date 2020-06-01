@@ -19,6 +19,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void initView() {
         super.initView();
+
 //        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 //                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
