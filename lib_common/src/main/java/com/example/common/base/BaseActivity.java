@@ -61,7 +61,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected TitleBuilder titleBuilder;//标题栏
     protected AndPermissionUtil andPermissionUtil;//获取权限类
-    private Unbinder mUnbinder;//黄油刀绑定
+    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -130,7 +130,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
         addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
         titleBuilder = new TitleBuilder(this);
-        mUnbinder = ButterKnife.bind(this);
+        unBinder = ButterKnife.bind(this);
     }
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法">
@@ -392,8 +392,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (null != mUnbinder) {
-            mUnbinder.unbind();
+        if (null != unBinder) {
+            unBinder.unbind();
         }
     }
 }

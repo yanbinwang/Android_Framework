@@ -51,12 +51,13 @@ import io.reactivex.disposables.Disposable;
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment implements BaseView {
+    protected WeakReference<Activity> activity;//基类activity弱引用
+    protected WeakReference<Context> context;//基类context弱引用
     protected P presenter;//P层泛型
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
-    protected WeakReference<Activity> mActivity;//基类activity弱引用
     private Unbinder mUnbinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private boolean isVisible, isInitView, isFirstLoad = true;//当前Fragment是否可见,是否与View建立起映射关系,是否是第一次加载数据
@@ -135,15 +136,16 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     private void init() {
         ARouter.getInstance().inject(this);
         isInitView = true;
-        rxManager = new RxManager();
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(mActivity.get(), this);
+            presenter.attachView(activity.get(), this);
         }
-        andPermissionUtil = new AndPermissionUtil(mActivity.get());
-        loadingDialog = new LoadingDialog(mActivity.get());
-        mActivity = new WeakReference<>(mActivity.get());
-        statusBarUtil = new StatusBarUtil(mActivity.get());
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
 
     }
     // </editor-fold>
@@ -245,9 +247,9 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         if (code == null) {
             postcard.navigation();
         } else {
-            postcard.navigation(mActivity.get(), code);
+            postcard.navigation(activity.get(), code);
         }
-        return mActivity.get();
+        return activity.get();
     }
     // </editor-fold>
 
@@ -282,21 +284,21 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                ((InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
+                ((InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }, 200);
         if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(view, 2);
         }
     }
 
     protected void closeDecor() {
-        View decorView = mActivity.get().getWindow().peekDecorView();
+        View decorView = activity.get().getWindow().peekDecorView();
         // 隐藏软键盘
         if (decorView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
     }

@@ -48,13 +48,14 @@ import io.reactivex.disposables.Disposable;
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
+    protected WeakReference<Activity> activity;//基类activity弱引用
+    protected WeakReference<Context> context;//基类context弱引用
     protected P presenter;//P层泛型
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
-    protected WeakReference<Activity> mActivity;//基类activity弱引用
-    private Unbinder mUnbinder;//黄油刀绑定
+    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -62,7 +63,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         log(TAG);
         convertView = inflater.inflate(getLayoutResID(), container, false);
-        mUnbinder = ButterKnife.bind(this, convertView);
+        unBinder = ButterKnife.bind(this, convertView);
         init();
         initView();
         initEvent();
@@ -91,15 +92,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     private void init() {
         ARouter.getInstance().inject(this);
-        rxManager = new RxManager();
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(mActivity.get(), this);
+            presenter.attachView(activity.get(), this);
         }
-        andPermissionUtil = new AndPermissionUtil(mActivity.get());
-        loadingDialog = new LoadingDialog(mActivity.get());
-        mActivity = new WeakReference<>(mActivity.get());
-        statusBarUtil = new StatusBarUtil(mActivity.get());
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
     }
     // </editor-fold>
 
@@ -200,9 +202,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         if (code == null) {
             postcard.navigation();
         } else {
-            postcard.navigation(mActivity.get(), code);
+            postcard.navigation(activity.get(), code);
         }
-        return mActivity.get();
+        return activity.get();
     }
     // </editor-fold>
 
@@ -237,21 +239,21 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                ((InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
+                ((InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }, 200);
         if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(view, 2);
         }
     }
 
     protected void closeDecor() {
-        View decorView = mActivity.get().getWindow().peekDecorView();
+        View decorView = activity.get().getWindow().peekDecorView();
         // 隐藏软键盘
         if (decorView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) mActivity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
     }
@@ -331,8 +333,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void onDetach() {
         super.onDetach();
-        if (null != mUnbinder) {
-            mUnbinder.unbind();
+        if (null != unBinder) {
+            unBinder.unbind();
         }
     }
 }
