@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.common.R;
+import com.example.common.utils.AnimationLoader;
 import com.example.common.widget.dialog.callback.OnAppConfirmDialogListener;
 import com.example.common.widget.dialog.callback.OnAppConfirmOrCancelDialogListener;
 

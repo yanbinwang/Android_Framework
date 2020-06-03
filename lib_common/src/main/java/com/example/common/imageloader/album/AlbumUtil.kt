@@ -1,4 +1,4 @@
-package com.example.common.imagloader.album
+package com.example.common.imageloader.album
 
 import android.app.Activity
 

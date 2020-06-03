@@ -1,25 +1,31 @@
-package com.example.common.imagloader
+package com.example.common.imageloader
 
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
 import com.example.common.BaseApplication
 import com.example.common.R
-import com.example.common.imagloader.glide.callback.GlideImpl
-import com.example.common.imagloader.glide.callback.GlideModule
-import com.example.common.imagloader.glide.transform.CornerTransform
+import com.example.common.imageloader.glide.callback.GlideImpl
+import com.example.common.imageloader.glide.callback.GlideModule
+import com.example.common.imageloader.glide.transform.CornerTransform
 import java.io.File
 
 /**
  * Created by WangYanBin on 2020/5/29.
  * 图片加载库使用Application上下文，Glide请求将不受Activity/Fragment生命周期控制。
  */
-class ImageLoaderFactory private constructor(): GlideModule(), GlideImpl {
-    private val context: Context = BaseApplication.getInstance().applicationContext
+class ImageLoaderFactory private constructor() : GlideModule(), GlideImpl {
+    private var context: Context = BaseApplication.getInstance().applicationContext
+    private var manager: RequestManager? = null
+
+    init {
+        this.manager = Glide.with(context)
+    }
 
     companion object {
         val instance: ImageLoaderFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
@@ -40,7 +46,7 @@ class ImageLoaderFactory private constructor(): GlideModule(), GlideImpl {
     }
 
     override fun displayImage(view: ImageView?, string: String?, placeholderId: Int, errorId: Int, requestListener: RequestListener<Drawable?>?) {
-        Glide.with(context)
+        manager!!
             .load(string)
             .placeholder(placeholderId)
             .error(errorId)
@@ -54,7 +60,7 @@ class ImageLoaderFactory private constructor(): GlideModule(), GlideImpl {
     }
 
     override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int) {
-        Glide.with(context)
+        manager!!
             .load(string)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(roundingRadius)))
             .placeholder(R.drawable.shape_loading_normal)
@@ -70,7 +76,7 @@ class ImageLoaderFactory private constructor(): GlideModule(), GlideImpl {
     override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
         val transformation = CornerTransform(context, roundingRadius.toFloat())
         transformation.setExceptCorner(leftTop, rightTop, leftBottom, rightBottom)
-        Glide.with(context)
+        manager!!
             .load(string)
             .transform(transformation)
             .placeholder(R.drawable.shape_loading_normal)
@@ -84,7 +90,7 @@ class ImageLoaderFactory private constructor(): GlideModule(), GlideImpl {
     }
 
     override fun displayCircleImage(view: ImageView?, string: String?, errorId: Int) {
-        Glide.with(context)
+        manager!!
             .load(string)
             .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.shape_loading_round)

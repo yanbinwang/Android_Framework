@@ -1,4 +1,4 @@
-package com.example.common.widget.dialog;
+package com.example.common.utils;
 
 import android.content.Context;
 import android.view.animation.AlphaAnimation;

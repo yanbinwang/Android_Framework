@@ -1,4 +1,4 @@
-package com.example.common.imagloader.glide.callback
+package com.example.common.imageloader.glide.callback
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView

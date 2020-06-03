@@ -6,9 +6,9 @@ def versions = [:]
 versions.appcompat = "1.1.0"
 versions.recyclerview = "1.1.0"
 //------------------------------------------------------------------------------------------
-versions.glide = "4.11.0"
+versions.glide = "4.9.0"
 versions.glide_compiler = "4.9.0"
-versions.glide_okhttp3 = "4.11.0"
+versions.glide_okhttp3 = "4.9.0"
 //------------------------------------------------------------------------------------------
 versions.retrofit = "2.3.0"
 versions.converter_gson = "2.3.0"
