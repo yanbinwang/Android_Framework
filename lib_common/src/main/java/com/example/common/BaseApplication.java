@@ -103,7 +103,7 @@ public class BaseApplication extends Application {
         OkHttpFactory.Companion.getInstance();
         RetrofitFactory.Companion.getInstance();
         //文件上传下载类初始化
-        UploadFactory.Companion.getINSTANCE();
+        UploadFactory.Companion.getInstance();
         DownloadFactory.Companion.getInstance();
         //实例化抓包文件
         CrashHandler.Companion.getInstance();
