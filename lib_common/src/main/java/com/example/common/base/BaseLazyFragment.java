@@ -76,50 +76,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
-    public void initView() {
-        ARouter.getInstance().inject(this);
-        isInitView = true;
-        activity = new WeakReference<>(getActivity());
-        context = new WeakReference<>(getContext());
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(activity.get(), this);
-        }
-        rxManager = new RxManager();
-        andPermissionUtil = new AndPermissionUtil(activity.get());
-        loadingDialog = new LoadingDialog(activity.get());
-        statusBarUtil = new StatusBarUtil(activity.get());
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
-            if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
-            }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void initEvent() {
-
-    }
-
-    @Override
-    public void initData() {
-
-    }
-
-    @Override
     public void log(String content) {
         LogUtil.INSTANCE.e(TAG, content);
     }
@@ -315,8 +271,49 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="重写的基类方法">
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected abstract int getLayoutResID();
+
+    protected void initView() {
+        ARouter.getInstance().inject(this);
+        isInitView = true;
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(activity.get(), this);
+        }
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
+    }
+
+    private <P> P getPresenter() {
+        try {
+            Type superClass = getClass().getGenericSuperclass();
+            ParameterizedType parameterizedType = (ParameterizedType) superClass;
+            Type type = null;
+            if (parameterizedType != null) {
+                type = parameterizedType.getActualTypeArguments()[0];
+            }
+            Class<P> tClass = (Class<P>) type;
+            if (tClass != null) {
+                return tClass.newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void initEvent() {
+
+    }
+
+    protected void initData() {
+
+    }
 
     @Override
     public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {

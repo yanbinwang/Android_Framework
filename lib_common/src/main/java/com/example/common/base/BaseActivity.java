@@ -77,61 +77,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
-    public void initView() {
-        ARouter.getInstance().inject(this);
-        rxManager = new RxManager();
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(this, this);
-        }
-        loadingDialog = new LoadingDialog(this);
-        statusBarUtil = new StatusBarUtil(this);
-        andPermissionUtil = new AndPermissionUtil(this);
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
-            if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
-            }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    public void initEvent() {
-        addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
-            String action = rxBusEvent.getAction();
-            switch (action) {
-                //注销登出
-                case Constants.APP_USER_LOGIN_OUT:
-                    if (!"mainactivity".equals(TAG)) {
-                        finish();
-                    }
-                    break;
-                //切换语言
-                case Constants.APP_SWITCH_LANGUAGE:
-                    finish();
-                    break;
-            }
-        }));
-    }
-
-    @Override
-    public void initData() {
-
-    }
-
-    @Override
     public void log(String content) {
         LogUtil.INSTANCE.e(TAG, content);
     }
@@ -354,8 +299,60 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="重写的基类方法">
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected abstract int getLayoutResID();
+
+    protected void initView() {
+        ARouter.getInstance().inject(this);
+        rxManager = new RxManager();
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(this, this);
+        }
+        loadingDialog = new LoadingDialog(this);
+        statusBarUtil = new StatusBarUtil(this);
+        andPermissionUtil = new AndPermissionUtil(this);
+    }
+
+    private <P> P getPresenter() {
+        try {
+            Type superClass = getClass().getGenericSuperclass();
+            ParameterizedType parameterizedType = (ParameterizedType) superClass;
+            Type type = null;
+            if (parameterizedType != null) {
+                type = parameterizedType.getActualTypeArguments()[0];
+            }
+            Class<P> tClass = (Class<P>) type;
+            if (tClass != null) {
+                return tClass.newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void initEvent() {
+        addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
+            String action = rxBusEvent.getAction();
+            switch (action) {
+                //注销登出
+                case Constants.APP_USER_LOGIN_OUT:
+                    if (!"mainactivity".equals(TAG)) {
+                        finish();
+                    }
+                    break;
+                //切换语言
+                case Constants.APP_SWITCH_LANGUAGE:
+                    finish();
+                    break;
+            }
+        }));
+    }
+
+    protected void initData() {
+
+    }
 
     @Override
     public void setContentView(int layoutResID) {
