@@ -37,6 +37,7 @@ import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
+import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.text.MessageFormat;
@@ -56,6 +57,8 @@ import io.reactivex.disposables.Disposable;
 @SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
     protected P presenter;//P层泛型
+    protected WeakReference<Activity> activity;//基类activity弱引用
+    protected WeakReference<Context> context;//基类context弱引用
     protected RxManager rxManager;//事务管理器
     protected CountDownTimer countDownTimer;//计时器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
@@ -304,11 +307,13 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     protected void initView() {
         ARouter.getInstance().inject(this);
-        rxManager = new RxManager();
+        activity = new WeakReference<>(this);
+        context = new WeakReference<>(this);
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(this, this);
+            presenter.attachView(this, this, this);
         }
+        rxManager = new RxManager();
         loadingDialog = new LoadingDialog(this);
         statusBarUtil = new StatusBarUtil(this);
         andPermissionUtil = new AndPermissionUtil(this);

@@ -48,9 +48,9 @@ import io.reactivex.disposables.Disposable;
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseView {
+    protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected P presenter;//P层泛型
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
@@ -276,7 +276,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         context = new WeakReference<>(getContext());
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(activity.get(), this);
+            presenter.attachView(activity.get(), context.get(), this);
         }
         rxManager = new RxManager();
         andPermissionUtil = new AndPermissionUtil(activity.get());

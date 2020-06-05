@@ -1,5 +1,6 @@
 package com.example.common.base.bridge
 
+import android.app.Activity
 import android.content.Context
 import android.text.TextUtils
 import android.view.View
@@ -9,6 +10,8 @@ import com.example.common.utils.NetWorkUtil
 import com.example.common.widget.empty.EmptyLayout
 import com.example.common.widget.xrecyclerview.XRecyclerView
 import io.reactivex.disposables.Disposable
+import java.lang.ref.SoftReference
+import java.lang.ref.WeakReference
 
 /**
  * author: wyb
@@ -17,24 +20,28 @@ import io.reactivex.disposables.Disposable
  * 完成View和Presenter的关联性
  */
 abstract class BasePresenter<T : BaseView> {
-    protected var view: T? = null
-    protected var context: Context? = null
+    protected var activity: WeakReference<Activity>? = null
+    protected var context: WeakReference<Context>? = null
+    protected var view: SoftReference<T>? = null
     private var rxManager: RxManager? = null
 //    private var currentCount: Int = 0
 //    private var totalCount: Int = 0
 //    private var index: Int = 1
 //    private var hasNextPage: Boolean? = false
 
-    fun attachView(context: Context?, view: T?) {
+    fun attachView(activity: Activity?, context: Context?, view: T?) {
         if (null == view) {
             throw NullPointerException("BasePresenter#attechView view can not be null")
         }
-        this.context = context
-        this.view = view
+        this.activity = WeakReference(activity!!)
+        this.context = WeakReference(context!!)
+        this.view = SoftReference(view)
         this.rxManager = RxManager()
     }
 
     fun detachView() {
+        activity?.clear()
+        context?.clear()
         rxManager?.clear()
         view = null
     }
@@ -48,12 +55,12 @@ abstract class BasePresenter<T : BaseView> {
     protected fun doResponse(msg: String?): Boolean {
         var message = msg
         if (TextUtils.isEmpty(msg)) {
-            message = context!!.getString(R.string.label_response_err)
+            message = context?.get()?.getString(R.string.label_response_err)
         }
         if (!NetWorkUtil.isNetworkAvailable()) {
-            view?.showToast(context!!.getString(R.string.label_response_net_err))
+            view?.get()?.showToast(context?.get()?.getString(R.string.label_response_net_err))
         } else {
-            view?.showToast(message!!)
+            view?.get()?.showToast(message)
         }
         return true
     }

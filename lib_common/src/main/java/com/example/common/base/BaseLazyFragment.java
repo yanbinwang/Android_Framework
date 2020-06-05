@@ -51,9 +51,9 @@ import io.reactivex.disposables.Disposable;
  */
 @SuppressWarnings("unchecked")
 public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment implements BaseView {
+    protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected P presenter;//P层泛型
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
@@ -70,7 +70,7 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         unBinder = ButterKnife.bind(this, convertView);
         initView();
         initEvent();
-        lazyLoadData();
+        initLazyData();
         return convertView;
     }
 
@@ -281,7 +281,7 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         context = new WeakReference<>(getContext());
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(activity.get(), this);
+            presenter.attachView(activity.get(), context.get(), this);
         }
         rxManager = new RxManager();
         andPermissionUtil = new AndPermissionUtil(activity.get());
@@ -332,14 +332,14 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         log("isVisibleToUser " + isVisibleToUser + "   " + TAG);
         if (isVisibleToUser) {
             isVisible = true;
-            lazyLoadData();
+            initLazyData();
         } else {
             isVisible = false;
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
 
-    private void lazyLoadData() {
+    private void initLazyData() {
         if (isFirstLoad) {
             log("第一次加载 " + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
         } else {
