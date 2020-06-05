@@ -70,13 +70,25 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         super.onCreate(savedInstanceState);
         setContentView(getLayoutResID());
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        init();
         initView();
         initEvent();
         initData();
     }
 
-    // <editor-fold defaultstate="collapsed" desc="初始化一些工具类和全局的订阅（顶号关闭等操作）">
+    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
+    @Override
+    public void initView() {
+        ARouter.getInstance().inject(this);
+        rxManager = new RxManager();
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(this, this);
+        }
+        loadingDialog = new LoadingDialog(this);
+        statusBarUtil = new StatusBarUtil(this);
+        andPermissionUtil = new AndPermissionUtil(this);
+    }
+
     private <P> P getPresenter() {
         try {
             Type superClass = getClass().getGenericSuperclass();
@@ -95,17 +107,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         return null;
     }
 
-    private void init() {
-        ARouter.getInstance().inject(this);
-        rxManager = new RxManager();
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(this, this);
-        }
-        loadingDialog = new LoadingDialog(this);
-        statusBarUtil = new StatusBarUtil(this);
-        andPermissionUtil = new AndPermissionUtil(this);
-
+    @Override
+    public void initEvent() {
         addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
             String action = rxBusEvent.getAction();
             switch (action) {
@@ -122,18 +125,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             }
         }));
     }
-    // </editor-fold>
 
     @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_base);
-        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
-        titleBuilder = new TitleBuilder(this);
-        unBinder = ButterKnife.bind(this);
+    public void initData() {
+
     }
 
-    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法">
     @Override
     public void log(String content) {
         LogUtil.INSTANCE.e(TAG, content);
@@ -233,23 +230,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             postcard.navigation(this, code);
         }
         return this;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="页面覆写方法">
-    //加载页面布局文件
-    protected abstract int getLayoutResID();
-
-    //加载页面控件view
-    protected void initView() {
-    }
-
-    //加载页面监听
-    protected void initEvent() {
-    }
-
-    //加载页面接口数据
-    protected void initData() {
     }
     // </editor-fold>
 
@@ -376,6 +356,18 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="重写的基类方法">
+    protected abstract int getLayoutResID();
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(R.layout.activity_base);
+        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
+        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
+        titleBuilder = new TitleBuilder(this);
+        unBinder = ButterKnife.bind(this);
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -396,4 +388,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             unBinder.unbind();
         }
     }
+    // </editor-fold>
+
 }

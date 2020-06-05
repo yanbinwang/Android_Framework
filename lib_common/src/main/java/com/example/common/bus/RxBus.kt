@@ -16,14 +16,8 @@ class RxBus private constructor() {
     private val mBus: FlowableProcessor<Any> = PublishProcessor.create<Any>().toSerialized()
 
     companion object {
-        private var instance: RxBus? = null
-
-        @Synchronized
-        fun getInstance(): RxBus {
-            if (instance == null) {
-                instance = RxBus()
-            }
-            return instance!!
+        val instance: RxBus by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            RxBus()
         }
     }
 

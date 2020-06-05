@@ -64,14 +64,28 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         log(TAG);
         convertView = inflater.inflate(getLayoutResID(), container, false);
         unBinder = ButterKnife.bind(this, convertView);
-        init();
         initView();
         initEvent();
         initData();
         return convertView;
     }
 
-    // <editor-fold defaultstate="collapsed" desc="初始化一些工具类">
+    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
+    @Override
+    public void initView() {
+        ARouter.getInstance().inject(this);
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(activity.get(), this);
+        }
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
+    }
+
     private <P> P getPresenter() {
         try {
             Type superClass = getClass().getGenericSuperclass();
@@ -90,22 +104,16 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         return null;
     }
 
-    private void init() {
-        ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(getActivity());
-        context = new WeakReference<>(getContext());
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(activity.get(), this);
-        }
-        rxManager = new RxManager();
-        andPermissionUtil = new AndPermissionUtil(activity.get());
-        loadingDialog = new LoadingDialog(activity.get());
-        statusBarUtil = new StatusBarUtil(activity.get());
-    }
-    // </editor-fold>
+    @Override
+    public void initEvent() {
 
-    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法">
+    }
+
+    @Override
+    public void initData() {
+
+    }
+
     @Override
     public void log(String content) {
         LogUtil.INSTANCE.e(TAG, content);
@@ -145,7 +153,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public  boolean isEmpty(Object... objs) {
+    public boolean isEmpty(Object... objs) {
         for (Object obj : objs) {
             if (obj == null) {
                 return true;
@@ -157,12 +165,12 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public  Activity navigation(String path) {
+    public Activity navigation(String path) {
         return navigation(path, null);
     }
 
     @Override
-    public  Activity navigation(String path, PageParams pageParams) {
+    public Activity navigation(String path, PageParams pageParams) {
         Postcard postcard = ARouter.getInstance().build(path);
         Integer code = null;
         if (pageParams != null) {
@@ -205,23 +213,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             postcard.navigation(activity.get(), code);
         }
         return activity.get();
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="页面覆写方法">
-    //加载页面布局文件
-    protected abstract int getLayoutResID();
-
-    //让布局中的view与fragment中的变量建立起映射
-    protected void initView() {
-    }
-
-    //加载页面监听
-    protected void initEvent() {
-    }
-
-    //加载要显示的数据(已经做了懒加载)
-    protected void initData() {
     }
     // </editor-fold>
 
@@ -321,6 +312,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="重写的基类方法">
+    protected abstract int getLayoutResID();
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -337,4 +331,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             unBinder.unbind();
         }
     }
+    // </editor-fold>
+
 }

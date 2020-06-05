@@ -68,26 +68,29 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         log(TAG);
         convertView = inflater.inflate(getLayoutResID(), container, false);
         mUnbinder = ButterKnife.bind(this, convertView);
-        init();
         initView();
         initEvent();
         lazyLoadData();
         return convertView;
     }
 
+    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        log(TAG);
+    public void initView() {
+        ARouter.getInstance().inject(this);
+        isInitView = true;
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(activity.get(), this);
+        }
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
     }
 
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-        log("context" + "   " + TAG);
-    }
-
-    // <editor-fold defaultstate="collapsed" desc="初始化懒加载以及一些工具类">
     private <P> P getPresenter() {
         try {
             Type superClass = getClass().getGenericSuperclass();
@@ -106,51 +109,16 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         return null;
     }
 
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        log("isVisibleToUser " + isVisibleToUser + "   " + TAG);
-        if (isVisibleToUser) {
-            isVisible = true;
-            lazyLoadData();
-        } else {
-            isVisible = false;
-        }
-        super.setUserVisibleHint(isVisibleToUser);
-    }
-
-    private void lazyLoadData() {
-        if (isFirstLoad) {
-            log("第一次加载 " + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
-        } else {
-            log("不是第一次加载" + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
-        }
-        if (!isFirstLoad || !isVisible || !isInitView) {
-            log("不加载" + "   " + TAG);
-            return;
-        }
-
-        log("完成数据第一次加载" + "   " + TAG);
-        initData();
-        isFirstLoad = false;
-    }
-
-    private void init() {
-        ARouter.getInstance().inject(this);
-        isInitView = true;
-        activity = new WeakReference<>(getActivity());
-        context = new WeakReference<>(getContext());
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(activity.get(), this);
-        }
-        rxManager = new RxManager();
-        andPermissionUtil = new AndPermissionUtil(activity.get());
-        loadingDialog = new LoadingDialog(activity.get());
-        statusBarUtil = new StatusBarUtil(activity.get());
+    @Override
+    public void initEvent() {
 
     }
-    // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="BaseView实现方法">
+    @Override
+    public void initData() {
+
+    }
+
     @Override
     public void log(String content) {
         LogUtil.INSTANCE.e(TAG, content);
@@ -253,23 +221,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="页面覆写方法">
-    //加载页面布局文件
-    protected abstract int getLayoutResID();
-
-    //让布局中的view与fragment中的变量建立起映射
-    protected void initView() {
-    }
-
-    //加载页面监听
-    protected void initEvent() {
-    }
-
-    //加载要显示的数据(已经做了懒加载)
-    protected void initData() {
-    }
-    // </editor-fold>
-
     // <editor-fold defaultstate="collapsed" desc="添加事务管理">
     protected void addDisposable(Disposable disposable) {
         if (null != disposable) {
@@ -366,6 +317,49 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="重写的基类方法">
+    protected abstract int getLayoutResID();
+
+    @Override
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        log(TAG);
+    }
+
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        log("context" + "   " + TAG);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        log("isVisibleToUser " + isVisibleToUser + "   " + TAG);
+        if (isVisibleToUser) {
+            isVisible = true;
+            lazyLoadData();
+        } else {
+            isVisible = false;
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    private void lazyLoadData() {
+        if (isFirstLoad) {
+            log("第一次加载 " + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
+        } else {
+            log("不是第一次加载" + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
+        }
+        if (!isFirstLoad || !isVisible || !isInitView) {
+            log("不加载" + "   " + TAG);
+            return;
+        }
+
+        log("完成数据第一次加载" + "   " + TAG);
+        initData();
+        isFirstLoad = false;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -382,5 +376,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
             mUnbinder.unbind();
         }
     }
+    // </editor-fold>
 
 }

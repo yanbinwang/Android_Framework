@@ -25,7 +25,7 @@ abstract class BasePresenter<T : BaseView> {
 //    private var index: Int = 1
 //    private var hasNextPage: Boolean? = false
 
-    fun attachView(context: Context, view: T?) {
+    fun attachView(context: Context?, view: T?) {
         if (null == view) {
             throw NullPointerException("BasePresenter#attechView view can not be null")
         }
@@ -83,11 +83,11 @@ abstract class BasePresenter<T : BaseView> {
         if (length!! > 0) {
             return
         }
-        xRecyclerView!!.setVisibilityEmptyView(View.VISIBLE)
+        xRecyclerView?.setVisibilityEmptyView(View.VISIBLE)
         if (!NetWorkUtil.isNetworkAvailable()) {
-            xRecyclerView.showError()
+            xRecyclerView?.showError()
         } else {
-            xRecyclerView.showEmpty(imgInt!!, emptyStr)
+            xRecyclerView?.showEmpty(imgInt!!, emptyStr)
         }
     }
 

@@ -11,6 +11,21 @@ import com.example.common.base.page.PageParams
 interface BaseView {
 
     /**
+     * 初始化控件的适配器，控件属性
+     */
+    fun initView()
+
+    /**
+     * 初始化监听行为
+     */
+    fun initEvent()
+
+    /**
+     * 初始化数据，发起网络请求
+     */
+    fun initData();
+
+    /**
      * 显示log
      */
     fun log(msg: String?)
