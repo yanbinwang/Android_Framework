@@ -18,10 +18,11 @@ import android.view.WindowManager;
 import android.widget.AbsListView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.common.bus.RxBus;
 import com.example.common.constant.Constants;
 import com.example.common.http.factory.OkHttpFactory;
 import com.example.common.http.factory.RetrofitFactory;
-import com.example.common.imageloader.ImageLoaderFactory;
+import com.example.common.imageloader.ImageLoader;
 import com.example.common.imageloader.glide.callback.GlideAlbumLoader;
 import com.example.common.utils.LogUtil;
 import com.example.common.utils.file.CrashHandler;
@@ -99,6 +100,8 @@ public class BaseApplication extends Application {
         //应用和用户配置类初始化
         ConfigHelper.init(this);
         AccountHelper.init(this);
+        //Rxbus初始化
+        RxBus.Companion.getInstance();
         //网络请求类初始化
         OkHttpFactory.Companion.getInstance();
         RetrofitFactory.Companion.getInstance();
@@ -108,7 +111,7 @@ public class BaseApplication extends Application {
         //实例化抓包文件
         CrashHandler.Companion.getInstance();
         //图片库初始化
-        ImageLoaderFactory.Companion.getInstance();
+        ImageLoader.Companion.getInstance();
         //在程序运行时取值，保证长宽静态变量不丢失
         DisplayMetrics metric = new DisplayMetrics();
         WindowManager mWindowManager = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);

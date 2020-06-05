@@ -19,7 +19,7 @@ import java.io.File
  * Created by WangYanBin on 2020/5/29.
  * 图片加载库使用Application上下文，Glide请求将不受Activity/Fragment生命周期控制。
  */
-class ImageLoaderFactory private constructor() : GlideModule(), GlideImpl {
+class ImageLoader private constructor() : GlideModule(), GlideImpl {
     private var context: Context = BaseApplication.getInstance().applicationContext
     private var manager: RequestManager? = null
 
@@ -28,8 +28,8 @@ class ImageLoaderFactory private constructor() : GlideModule(), GlideImpl {
     }
 
     companion object {
-        val instance: ImageLoaderFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
-            ImageLoaderFactory()
+        val instance: ImageLoader by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+            ImageLoader()
         }
     }
 
