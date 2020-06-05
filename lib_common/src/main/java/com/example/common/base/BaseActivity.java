@@ -157,31 +157,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    @Override
-    public boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
     public Activity navigation(String path) {
         return navigation(path, null);
     }
@@ -267,7 +242,30 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="针对textview的一些赋值操作">
+    // <editor-fold defaultstate="collapsed" desc="赋值操作">
+    protected boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    protected String processedString(String source, String defaultStr) {
+        if (source == null) {
+            return defaultStr;
+        } else {
+            if (source.trim().isEmpty()) {
+                return defaultStr;
+            } else {
+                return source;
+            }
+        }
+    }
+
     protected void setText(int res, String str) {
         ((TextView) findViewById(res)).setText(str);
     }

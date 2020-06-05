@@ -51,16 +51,6 @@ interface BaseView {
     fun hideDialog()
 
     /**
-     * 非空判断
-     */
-    fun isEmpty(vararg anys: Any?): Boolean
-
-    /**
-     * 防止报空
-     */
-    fun processedString(source: String?, defaultStr: String?): String
-
-    /**
      * 路由跳转
      */
     fun navigation(path:String?):Activity
