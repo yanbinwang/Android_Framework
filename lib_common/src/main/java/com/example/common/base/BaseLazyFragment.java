@@ -58,7 +58,7 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     protected RxManager rxManager;//事务管理器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
-    private Unbinder mUnbinder;//黄油刀绑定
+    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private boolean isVisible, isInitView, isFirstLoad = true;//当前Fragment是否可见,是否与View建立起映射关系,是否是第一次加载数据
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
@@ -67,7 +67,7 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         log(TAG);
         convertView = inflater.inflate(getLayoutResID(), container, false);
-        mUnbinder = ButterKnife.bind(this, convertView);
+        unBinder = ButterKnife.bind(this, convertView);
         initView();
         initEvent();
         lazyLoadData();
@@ -367,8 +367,8 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     @Override
     public void onDetach() {
         super.onDetach();
-        if (null != mUnbinder) {
-            mUnbinder.unbind();
+        if (null != unBinder) {
+            unBinder.unbind();
         }
     }
     // </editor-fold>
