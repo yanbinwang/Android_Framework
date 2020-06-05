@@ -30,12 +30,9 @@ abstract class BasePresenter<T : BaseView> {
 //    private var hasNextPage: Boolean? = false
 
     fun attachView(activity: Activity?, context: Context?, view: T?) {
-        if (null == view) {
-            throw NullPointerException("BasePresenter#attechView view can not be null")
-        }
         this.activity = WeakReference(activity!!)
         this.context = WeakReference(context!!)
-        this.view = SoftReference(view)
+        this.view = SoftReference(view!!)
         this.rxManager = RxManager()
     }
 
