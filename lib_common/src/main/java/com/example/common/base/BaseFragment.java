@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.facade.Postcard;
@@ -59,16 +60,82 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
+    protected abstract int getLayoutResID();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         log(TAG);
         convertView = inflater.inflate(getLayoutResID(), container, false);
         unBinder = ButterKnife.bind(this, convertView);
+        return convertView;
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         initView();
         initEvent();
         initData();
-        return convertView;
     }
+
+    protected void initView() {
+        ARouter.getInstance().inject(this);
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(activity.get(), context.get(), this);
+        }
+        rxManager = new RxManager();
+        andPermissionUtil = new AndPermissionUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
+        statusBarUtil = new StatusBarUtil(activity.get());
+    }
+
+    private <P> P getPresenter() {
+        try {
+            Type superClass = getClass().getGenericSuperclass();
+            ParameterizedType parameterizedType = (ParameterizedType) superClass;
+            Type type = null;
+            if (parameterizedType != null) {
+                type = parameterizedType.getActualTypeArguments()[0];
+            }
+            Class<P> tClass = (Class<P>) type;
+            if (tClass != null) {
+                return tClass.newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void initEvent() {
+
+    }
+
+    protected void initData() {
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        rxManager.clear();
+        if (presenter != null) {
+            presenter.detachView();
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        if (null != unBinder) {
+            unBinder.unbind();
+        }
+    }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
@@ -182,36 +249,20 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="赋值操作">
-    protected boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
+    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
+    protected String getViewValue(View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
         }
-        return false;
-    }
-
-    protected String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    protected void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    protected void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
+        return null;
     }
     // </editor-fold>
 
@@ -250,81 +301,36 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
-    protected String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="基类方法">
-    protected abstract int getLayoutResID();
-
-    protected void initView() {
-        ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(getActivity());
-        context = new WeakReference<>(getContext());
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(activity.get(), context.get(), this);
-        }
-        rxManager = new RxManager();
-        andPermissionUtil = new AndPermissionUtil(activity.get());
-        loadingDialog = new LoadingDialog(activity.get());
-        statusBarUtil = new StatusBarUtil(activity.get());
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
-            if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
+    // <editor-fold defaultstate="collapsed" desc="赋值操作">
+    protected boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
             }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
+        }
+        return false;
+    }
+
+    protected String processedString(String source, String defaultStr) {
+        if (source == null) {
+            return defaultStr;
+        } else {
+            if (source.trim().isEmpty()) {
+                return defaultStr;
+            } else {
+                return source;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    protected void initEvent() {
-
-    }
-
-    protected void initData() {
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        rxManager.clear();
-        if (presenter != null) {
-            presenter.detachView();
         }
     }
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        if (null != unBinder) {
-            unBinder.unbind();
-        }
+    protected void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    protected void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
     // </editor-fold>
 
