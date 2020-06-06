@@ -68,6 +68,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
+    protected abstract int getLayoutResID();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,6 +80,90 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         initEvent();
         initData();
     }
+
+    protected void initView() {
+        ARouter.getInstance().inject(this);
+        activity = new WeakReference<>(this);
+        context = new WeakReference<>(this);
+        presenter = getPresenter();
+        if (null != presenter) {
+            presenter.attachView(this, this, this);
+        }
+        rxManager = new RxManager();
+        loadingDialog = new LoadingDialog(this);
+        statusBarUtil = new StatusBarUtil(this);
+        andPermissionUtil = new AndPermissionUtil(this);
+    }
+
+    private <P> P getPresenter() {
+        try {
+            Type superClass = getClass().getGenericSuperclass();
+            ParameterizedType parameterizedType = (ParameterizedType) superClass;
+            Type type = null;
+            if (parameterizedType != null) {
+                type = parameterizedType.getActualTypeArguments()[0];
+            }
+            Class<P> tClass = (Class<P>) type;
+            if (tClass != null) {
+                return tClass.newInstance();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    protected void initEvent() {
+        addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
+            String action = rxBusEvent.getAction();
+            switch (action) {
+                //注销登出
+                case Constants.APP_USER_LOGIN_OUT:
+                    if (!"mainactivity".equals(TAG)) {
+                        finish();
+                    }
+                    break;
+                //切换语言
+                case Constants.APP_SWITCH_LANGUAGE:
+                    finish();
+                    break;
+            }
+        }));
+    }
+
+    protected void initData() {
+    }
+
+    @Override
+    public void setContentView(int layoutResID) {
+        super.setContentView(R.layout.activity_base);
+        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
+        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
+        titleBuilder = new TitleBuilder(this);
+        unBinder = ButterKnife.bind(this);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        rxManager.clear();
+        if (presenter != null) {
+            presenter.detachView();
+        }
+        if (countDownTimer != null) {
+            countDownTimer.cancel();
+        }
+        log("onDestroy...");
+    }
+
+    @Override
+    public void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        if (null != unBinder) {
+            unBinder.unbind();
+        }
+    }
+    // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
@@ -190,6 +277,58 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
+    protected String getViewValue(View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="让一个view获得焦点">
+    protected void setViewFocus(View view) {
+        view.setFocusable(true);//设置输入框可聚集
+        view.setFocusableInTouchMode(true);//设置触摸聚焦
+        view.requestFocus();//请求焦点
+        view.findFocus();//获取焦点
+    }
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="批量设置View隐藏显示状态">
+    protected void VISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    protected void INVISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    protected void GONE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+    // </editor-fold>
+
     // <editor-fold defaultstate="collapsed" desc="赋值操作">
     protected boolean isEmpty(Object... objs) {
         for (Object obj : objs) {
@@ -223,15 +362,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="让一个view获得焦点">
-    protected void setViewFocus(View view) {
-        view.setFocusable(true);//设置输入框可聚集
-        view.setFocusableInTouchMode(true);//设置触摸聚焦
-        view.requestFocus();//请求焦点
-        view.findFocus();//获取焦点
-    }
-    // </editor-fold>
-
     // <editor-fold defaultstate="collapsed" desc="倒计时">
     protected void setDownTime(final TextView txt) {
         setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
@@ -256,137 +386,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             };
         }
         countDownTimer.start();
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="批量设置View隐藏显示状态">
-    protected void VISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    protected void INVISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    protected void GONE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.GONE);
-            }
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
-    protected String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="基类方法">
-    protected abstract int getLayoutResID();
-
-    protected void initView() {
-        ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(this);
-        context = new WeakReference<>(this);
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(this, this, this);
-        }
-        rxManager = new RxManager();
-        loadingDialog = new LoadingDialog(this);
-        statusBarUtil = new StatusBarUtil(this);
-        andPermissionUtil = new AndPermissionUtil(this);
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
-            if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
-            }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    protected void initEvent() {
-        addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
-            String action = rxBusEvent.getAction();
-            switch (action) {
-                //注销登出
-                case Constants.APP_USER_LOGIN_OUT:
-                    if (!"mainactivity".equals(TAG)) {
-                        finish();
-                    }
-                    break;
-                //切换语言
-                case Constants.APP_SWITCH_LANGUAGE:
-                    finish();
-                    break;
-            }
-        }));
-    }
-
-    protected void initData() {
-
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_base);
-        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
-        titleBuilder = new TitleBuilder(this);
-        unBinder = ButterKnife.bind(this);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        rxManager.clear();
-        if (presenter != null) {
-            presenter.detachView();
-        }
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
-        }
-        log("onDestroy...");
-    }
-
-    @Override
-    public void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        if (null != unBinder) {
-            unBinder.unbind();
-        }
     }
     // </editor-fold>
 
