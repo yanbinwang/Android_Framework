@@ -21,9 +21,4 @@
     <string name="label_data_net">没有网络</string>
     <string name="toast_download_err">下载出错</string>
 
-    <!-- shp文件夹字段 -->
-    <string name="shp_user_info_fileName">example_user_info_data</string>
-    <string name="shp_user_configure_fileName">example_user_configure_data</string>
-    <string name="shp_app_info_fileName">example_app_info_data</string>
-    <string name="shp_app_configure_fileName">example_app_configure_data</string>
 </resources>

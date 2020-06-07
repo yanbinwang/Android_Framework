@@ -6,6 +6,7 @@ import android.view.MotionEvent;
 import android.view.ViewConfiguration;
 import android.widget.ScrollView;
 
+import com.example.framework.utils.LogUtil;
 
 
 /**
@@ -50,9 +51,11 @@ public class MyScrollView extends ScrollView {
                 setTop(false);
                 downX = (int) e.getRawX();
                 downY = (int) e.getRawY();
+                LogUtil.INSTANCE.i("-----::----downY-----::", downY + "");
                 break;
             case MotionEvent.ACTION_MOVE:
                 int moveY = (int) e.getRawY();
+                LogUtil.INSTANCE.i("-----::----moveY-----::", moveY + "");
                 //判断是向下滑动，才设置为true
                 if (downY - moveY > 0) {
                     setTop(true);

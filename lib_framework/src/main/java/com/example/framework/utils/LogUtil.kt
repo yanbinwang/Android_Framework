@@ -1,7 +1,7 @@
-package com.example.common.utils
+package com.example.framework.utils
 
 import android.util.Log
-import com.example.common.BuildConfig
+import com.example.framework.BuildConfig
 
 /**
  * 日志输出类

@@ -1,12 +1,13 @@
 package com.example.testnew;
 
 import com.example.common.BaseApplication;
-import com.example.common.BuildConfig;
+import com.example.framework.BuildConfig;
 import com.example.common.constant.Constants;
 import com.example.common.utils.file.FileUtil;
-//import com.example.share.utils.ShareSDKUtil;
 import com.example.testnew.activity.MainActivity;
 import com.zxy.recovery.core.Recovery;
+
+//import com.example.share.utils.ShareSDKUtil;
 
 
 /**

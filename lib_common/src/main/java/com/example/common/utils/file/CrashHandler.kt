@@ -9,7 +9,7 @@ import androidx.core.app.ActivityCompat
 import com.example.common.BaseApplication
 import com.example.common.BuildConfig
 import com.example.common.constant.Constants
-import com.example.common.utils.LogUtil
+import com.example.framework.utils.LogUtil
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*

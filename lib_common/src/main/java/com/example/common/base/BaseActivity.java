@@ -21,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.common.R;
+import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
@@ -29,10 +30,10 @@ import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
-import com.example.common.utils.LogUtil;
 import com.example.common.utils.TitleBuilder;
 import com.example.common.utils.permission.AndPermissionUtil;
 import com.example.common.widget.dialog.LoadingDialog;
+import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
 
@@ -55,14 +56,14 @@ import io.reactivex.disposables.Disposable;
  * 所有activity的基类，包含了一些方法，全局广播等
  */
 @SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseView {
+public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseImpl, BaseView {
     protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected RxManager rxManager;//事务管理器
     protected CountDownTimer countDownTimer;//计时器
-    protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected TitleBuilder titleBuilder;//标题栏
+    protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
     private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
@@ -81,7 +82,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         initData();
     }
 
-    protected void initView() {
+    @Override
+    public void initView() {
         ARouter.getInstance().inject(this);
         activity = new WeakReference<>(this);
         context = new WeakReference<>(this);
@@ -113,7 +115,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         return null;
     }
 
-    protected void initEvent() {
+    @Override
+    public void initEvent() {
         addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
             String action = rxBusEvent.getAction();
             switch (action) {
@@ -131,7 +134,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         }));
     }
 
-    protected void initData() {
+    @Override
+    public void initData() {
     }
 
     @Override
@@ -141,6 +145,125 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
         titleBuilder = new TitleBuilder(this);
         unBinder = ButterKnife.bind(this);
+    }
+
+    @Override
+    public void addDisposable(Disposable disposable) {
+        if (null != disposable) {
+            rxManager.add(disposable);
+        }
+    }
+
+    @Override
+    public void openDecor(View view) {
+        closeDecor();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(0,
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }, 200);
+        if (view != null) {
+            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputmanger.showSoftInput(view, 2);
+        }
+    }
+
+    @Override
+    public void closeDecor() {
+        View decorView = getWindow().peekDecorView();
+        // 隐藏软键盘
+        if (decorView != null) {
+            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public String getViewValue(View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
+    }
+
+    @Override
+    public void setViewFocus(View view) {
+        view.setFocusable(true);//设置输入框可聚集
+        view.setFocusableInTouchMode(true);//设置触摸聚焦
+        view.requestFocus();//请求焦点
+        view.findFocus();//获取焦点
+    }
+
+    @Override
+    public void VISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void INVISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void GONE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String processedString(String source, String defaultStr) {
+        if (source == null) {
+            return defaultStr;
+        } else {
+            if (source.trim().isEmpty()) {
+                return defaultStr;
+            } else {
+                return source;
+            }
+        }
+    }
+
+    @Override
+    public void setText(int res, String str) {
+        ((TextView) findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -243,131 +366,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
     // </editor-fold>
 
-    // <editor-fold defaultstate="collapsed" desc="添加事务管理">
-    protected void addDisposable(Disposable disposable) {
-        if (null != disposable) {
-            rxManager.add(disposable);
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="虚拟键盘操作">
-    protected void openDecor(View view) {
-        closeDecor();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE)).toggleSoftInput(0,
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }, 200);
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.showSoftInput(view, 2);
-        }
-    }
-
-    protected void closeDecor() {
-        View decorView = getWindow().peekDecorView();
-        // 隐藏软键盘
-        if (decorView != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
-    protected String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="让一个view获得焦点">
-    protected void setViewFocus(View view) {
-        view.setFocusable(true);//设置输入框可聚集
-        view.setFocusableInTouchMode(true);//设置触摸聚焦
-        view.requestFocus();//请求焦点
-        view.findFocus();//获取焦点
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="批量设置View隐藏显示状态">
-    protected void VISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    protected void INVISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    protected void GONE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.GONE);
-            }
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="赋值操作">
-    protected boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    protected void setText(int res, String str) {
-        ((TextView) findViewById(res)).setText(str);
-    }
-
-    protected void setTextColor(int res, int color) {
-        ((TextView) findViewById(res)).setTextColor(color);
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="倒计时">
-    protected void setDownTime(final TextView txt) {
+    // <editor-fold defaultstate="collapsed" desc="定时器管理">
+    protected void setDownTime(TextView txt) {
         setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
     }
 
-    protected void setDownTime(final TextView txt, final int startColorId, final int endColorId) {
+    protected void setDownTime(TextView txt, int startColorId, int endColorId) {
         if (countDownTimer == null) {
             countDownTimer = new CountDownTimer(60 * 1000, 1000) {
                 @Override

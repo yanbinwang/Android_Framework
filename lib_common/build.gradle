@@ -27,7 +27,6 @@ android {
     buildTypes {
         //测试环境
         debug {
-            buildConfigField "boolean", "ISDEBUG", "true"
             buildConfigField "String", "LOCALHOST", build_config.LOCALHOST_DEBUG
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -35,7 +34,6 @@ android {
 
         //生产环境
         release {
-            buildConfigField "boolean", "ISDEBUG", "false"
             buildConfigField "String", "LOCALHOST", build_config.LOCALHOST_RELEASE
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
@@ -75,6 +73,7 @@ dependencies {
     api deps.okhttp3
     api deps.rxandroid
     api deps.autosize
+    api deps.mmkv
     api deps.recovery
     api deps.wechat
     api deps.tkrefreshlayout

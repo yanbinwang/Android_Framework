@@ -19,14 +19,15 @@ import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
-import com.example.common.utils.LogUtil;
 import com.example.common.utils.permission.AndPermissionUtil;
 import com.example.common.widget.dialog.LoadingDialog;
+import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
 
@@ -51,7 +52,7 @@ import io.reactivex.disposables.Disposable;
  * 适用于viewpage+fragment的形式
  */
 @SuppressWarnings("unchecked")
-public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment implements BaseView {
+public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment implements BaseImpl,BaseView {
     protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
@@ -66,6 +67,12 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected abstract int getLayoutResID();
+
+    @Override
+    public void onAttach(@NotNull Context context) {
+        super.onAttach(context);
+        log("context" + "   " + TAG);
+    }
 
     @Override
     public View onCreateView(@NotNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,7 +90,26 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         initLazyData();
     }
 
-    protected void initView() {
+    @Override
+    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        log(TAG);
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        log("isVisibleToUser " + isVisibleToUser + "   " + TAG);
+        if (isVisibleToUser) {
+            isVisible = true;
+            initLazyData();
+        } else {
+            isVisible = false;
+        }
+        super.setUserVisibleHint(isVisibleToUser);
+    }
+
+    @Override
+    public void initView() {
         ARouter.getInstance().inject(this);
         isInitView = true;
         activity = new WeakReference<>(getActivity());
@@ -116,36 +142,8 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         return null;
     }
 
-    protected void initEvent() {
-
-    }
-
-    protected void initData() {
-
-    }
-
     @Override
-    public void onViewCreated(@NotNull View view, Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        log(TAG);
-    }
-
-    @Override
-    public void onAttach(@NotNull Context context) {
-        super.onAttach(context);
-        log("context" + "   " + TAG);
-    }
-
-    @Override
-    public void setUserVisibleHint(boolean isVisibleToUser) {
-        log("isVisibleToUser " + isVisibleToUser + "   " + TAG);
-        if (isVisibleToUser) {
-            isVisible = true;
-            initLazyData();
-        } else {
-            isVisible = false;
-        }
-        super.setUserVisibleHint(isVisibleToUser);
+    public void initEvent() {
     }
 
     private void initLazyData() {
@@ -162,6 +160,129 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
         log("完成数据第一次加载" + "   " + TAG);
         initData();
         isFirstLoad = false;
+    }
+
+    @Override
+    public void initData() {
+    }
+
+    @Override
+    public void addDisposable(Disposable disposable) {
+        if (null != disposable) {
+            rxManager.add(disposable);
+        }
+    }
+
+    @Override
+    public void openDecor(View view) {
+        closeDecor();
+        new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                ((InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
+                        InputMethodManager.HIDE_NOT_ALWAYS);
+            }
+        }, 200);
+        if (view != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(view, 2);
+        }
+    }
+
+    @Override
+    public void closeDecor() {
+        View decorView = activity.get().getWindow().peekDecorView();
+        // 隐藏软键盘
+        if (decorView != null) {
+            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public String getViewValue(View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
+    }
+
+    @Override
+    public void setViewFocus(View view) {
+        view.setFocusable(true);//设置输入框可聚集
+        view.setFocusableInTouchMode(true);//设置触摸聚焦
+        view.requestFocus();//请求焦点
+        view.findFocus();//获取焦点
+    }
+
+    @Override
+    public void VISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void INVISIBLE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.INVISIBLE);
+            }
+        }
+    }
+
+    @Override
+    public void GONE(View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String processedString(String source, String defaultStr) {
+        if (source == null) {
+            return defaultStr;
+        } else {
+            if (source.trim().isEmpty()) {
+                return defaultStr;
+            } else {
+                return source;
+            }
+        }
+    }
+
+    @Override
+    public void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -257,125 +378,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
             postcard.navigation(activity.get(), code);
         }
         return activity.get();
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="添加事务管理">
-    protected void addDisposable(Disposable disposable) {
-        if (null != disposable) {
-            rxManager.add(disposable);
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="虚拟键盘操作">
-    protected void openDecor(View view) {
-        closeDecor();
-        new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                ((InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE)).toggleSoftInput(0,
-                        InputMethodManager.HIDE_NOT_ALWAYS);
-            }
-        }, 200);
-        if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(view, 2);
-        }
-    }
-
-    protected void closeDecor() {
-        View decorView = activity.get().getWindow().peekDecorView();
-        // 隐藏软键盘
-        if (decorView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="获取控件信息">
-    protected String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="让一个view获得焦点">
-    protected void setViewFocus(View view) {
-        view.setFocusable(true);//设置输入框可聚集
-        view.setFocusableInTouchMode(true);//设置触摸聚焦
-        view.requestFocus();//请求焦点
-        view.findFocus();//获取焦点
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="批量设置View隐藏显示状态">
-    protected void VISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    protected void INVISIBLE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.INVISIBLE);
-            }
-        }
-    }
-
-    protected void GONE(View... views) {
-        for (View view : views) {
-            if (view != null) {
-                view.setVisibility(View.GONE);
-            }
-        }
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="赋值操作">
-    protected boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    protected String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    protected void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    protected void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
     // </editor-fold>
 

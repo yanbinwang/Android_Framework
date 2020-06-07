@@ -1,4 +1,4 @@
-package com.example.common.utils;
+package com.example.framework.utils;
 
 import android.content.Context;
 import android.view.animation.AlphaAnimation;

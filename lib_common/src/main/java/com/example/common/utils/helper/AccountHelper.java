@@ -1,14 +1,12 @@
 package com.example.common.utils.helper;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.text.TextUtils;
 
-import com.example.common.R;
 import com.example.common.constant.Constants;
 import com.example.common.model.UserModel;
 import com.example.common.utils.analysis.GsonUtil;
-import com.example.framework.utils.SHPUtil;
+import com.tencent.mmkv.MMKV;
 
 
 /**
@@ -18,12 +16,10 @@ import com.example.framework.utils.SHPUtil;
  */
 @SuppressLint("StaticFieldLeak")
 public class AccountHelper {
-    private static SHPUtil userInfoSHP;
-    private static SHPUtil userConfigSHP;
+    private static MMKV mmkv;
 
-    public static void init(Context context) {
-        userInfoSHP = new SHPUtil(context, context.getString(R.string.shp_user_info_fileName));
-        userConfigSHP = new SHPUtil(context, context.getString(R.string.shp_user_configure_fileName));
+    static {
+        mmkv = MMKV.defaultMMKV();
     }
 
     //修改是否登陆
@@ -52,14 +48,14 @@ public class AccountHelper {
     //存储用户对象
     public static void setUserBean(UserModel bean) {
         if (null != bean) {
-            userInfoSHP.saveParam(Constants.USER_BEAN, GsonUtil.INSTANCE.objToJson(bean));
+            mmkv.encode(Constants.USER_BEAN, GsonUtil.INSTANCE.objToJson(bean));
         }
     }
 
     //获取用户对象
     public static UserModel getUserBean() {
         UserModel userInfoBean = null;
-        String userInfoJson = userInfoSHP.getParam(Constants.USER_BEAN);
+        String userInfoJson = mmkv.decodeString(Constants.USER_BEAN);
         if (!TextUtils.isEmpty(userInfoJson)) {
             userInfoBean = GsonUtil.INSTANCE.jsonToObj(userInfoJson, UserModel.class);
         }
@@ -137,8 +133,7 @@ public class AccountHelper {
 
     //用户注销操作（清除信息,清除用户凭证）
     public static void signOut() {
-        userInfoSHP.clearParam();
-        userConfigSHP.clearParam();
+        mmkv.encode(Constants.USER_BEAN, "");
     }
 
 }

@@ -24,12 +24,11 @@ import com.example.common.http.factory.OkHttpFactory;
 import com.example.common.http.factory.RetrofitFactory;
 import com.example.common.imageloader.ImageLoader;
 import com.example.common.imageloader.glide.callback.GlideAlbumLoader;
-import com.example.common.utils.LogUtil;
 import com.example.common.utils.file.CrashHandler;
 import com.example.common.utils.file.factory.DownloadFactory;
 import com.example.common.utils.file.factory.UploadFactory;
-import com.example.common.utils.helper.AccountHelper;
-import com.example.common.utils.helper.ConfigHelper;
+import com.example.framework.utils.LogUtil;
+import com.tencent.mmkv.MMKV;
 import com.tencent.smtt.sdk.QbSdk;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
@@ -97,9 +96,8 @@ public class BaseApplication extends Application {
                         .setLocale(Locale.CHINA)//强制设置在任何语言下都用中文显示。
                         .build()
         );
-        //应用和用户配置类初始化
-        ConfigHelper.init(this);
-        AccountHelper.init(this);
+        //腾讯读写mmkv初始化
+        MMKV.initialize(this);
         //Rxbus初始化
         RxBus.Companion.getInstance();
         //网络请求类初始化
