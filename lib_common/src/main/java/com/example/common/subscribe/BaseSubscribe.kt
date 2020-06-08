@@ -27,7 +27,7 @@ object BaseSubscribe : BaseApi {
     }
 
     override fun getVerification(agent: String, map: Map<String, String>): Flowable<BaseModel<Any>> {
-        TODO("Not yet implemented")
+        return baseApi.getVerification(agent, map)
     }
 
 //    //上传图片接口
