@@ -3,6 +3,7 @@ package com.example.common.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,10 +16,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.common.R;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -35,6 +38,7 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -55,6 +59,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected WeakReference<Context> context;//基类context弱引用
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
+    protected CountDownTimer countDownTimer;//计时器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
     private Unbinder unBinder;//黄油刀绑定
@@ -240,6 +245,33 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void setTextColor(int res, int color) {
         ((TextView) convertView.findViewById(res)).setTextColor(color);
+    }
+
+    @Override
+    public void setDownTime(TextView txt) {
+        setDownTime(txt, ContextCompat.getColor(context.get(), R.color.gray_9f9f9f), ContextCompat.getColor(context.get(), R.color.gray_9f9f9f));
+    }
+
+    @Override
+    public void setDownTime(TextView txt, int startColorId, int endColorId) {
+        if (countDownTimer == null) {
+            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
+                    txt.setTextColor(startColorId);
+                    txt.setEnabled(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    txt.setEnabled(true);
+                    txt.setTextColor(endColorId);
+                    txt.setText("重新发送");
+                }
+            };
+        }
+        countDownTimer.start();
     }
 
     @Override

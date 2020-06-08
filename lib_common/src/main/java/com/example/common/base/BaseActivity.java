@@ -267,6 +267,33 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
+    public void setDownTime(TextView txt) {
+        setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
+    }
+
+    @Override
+    public void setDownTime(TextView txt, int startColorId, int endColorId) {
+        if (countDownTimer == null) {
+            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
+                    txt.setTextColor(startColorId);
+                    txt.setEnabled(false);
+                }
+
+                @Override
+                public void onFinish() {
+                    txt.setEnabled(true);
+                    txt.setTextColor(endColorId);
+                    txt.setText("重新发送");
+                }
+            };
+        }
+        countDownTimer.start();
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         rxManager.clear();
@@ -363,33 +390,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             postcard.navigation(this, code);
         }
         return this;
-    }
-    // </editor-fold>
-
-    // <editor-fold defaultstate="collapsed" desc="定时器管理">
-    protected void setDownTime(TextView txt) {
-        setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
-    }
-
-    protected void setDownTime(TextView txt, int startColorId, int endColorId) {
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
-                    txt.setTextColor(startColorId);
-                    txt.setEnabled(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    txt.setEnabled(true);
-                    txt.setTextColor(endColorId);
-                    txt.setText("重新发送");
-                }
-            };
-        }
-        countDownTimer.start();
     }
     // </editor-fold>
 

@@ -1,6 +1,7 @@
 package com.example.common.base.bridge
 
 import android.view.View
+import android.widget.TextView
 import io.reactivex.disposables.Disposable
 
 /**
@@ -75,7 +76,7 @@ interface BaseImpl {
     fun processedString(source: String?, defaultStr: String?): String
 
     /**
-     * 赋值=文案
+     * 赋值-文案
      */
     fun setText(res: Int, str: String?)
 
@@ -83,5 +84,15 @@ interface BaseImpl {
      * 赋值-颜色
      */
     fun setTextColor(res: Int, color: Int)
+
+    /**
+     * 定时器
+     */
+    fun setDownTime(txt: TextView?)
+
+    /**
+     * 定时器-完成结束颜色设置
+     */
+    fun setDownTime(txt: TextView?, startColorId: Int, endColorId: Int)
 
 }
