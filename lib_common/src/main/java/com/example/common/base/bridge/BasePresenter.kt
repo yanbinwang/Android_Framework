@@ -55,9 +55,9 @@ abstract class BasePresenter<T : BaseView> {
             message = context?.get()?.getString(R.string.label_response_err)
         }
         if (!NetWorkUtil.isNetworkAvailable()) {
-            view?.get()?.showToast(context?.get()?.getString(R.string.label_response_net_err))
+            view?.get()?.showToast(context?.get()?.getString(R.string.label_response_net_err)!!)
         } else {
-            view?.get()?.showToast(message)
+            view?.get()?.showToast(message!!)
         }
         return true
     }
