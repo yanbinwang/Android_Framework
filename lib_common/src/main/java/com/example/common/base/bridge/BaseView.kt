@@ -13,12 +13,12 @@ interface BaseView {
     /**
      * 显示log
      */
-    fun log(msg: String?)
+    fun log(msg: String)
 
     /**
      * Toast显示
      */
-    fun showToast(msg: String?)
+    fun showToast(msg: String)
 
     /**
      * 显示刷新球动画
@@ -38,11 +38,11 @@ interface BaseView {
     /**
      * 路由跳转
      */
-    fun navigation(path:String?):Activity
+    fun navigation(path: String): Activity
 
     /**
      * 路由跳转,带参数
      */
-    fun navigation(path:String?,params: PageParams):Activity
+    fun navigation(path: String, params: PageParams): Activity
 
 }
