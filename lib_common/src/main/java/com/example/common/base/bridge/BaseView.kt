@@ -28,7 +28,7 @@ interface BaseView {
     /**
      * 不能点击关闭的dialog
      */
-    fun showDialog(isClose: Boolean? = false)
+    fun showDialog(isClose: Boolean)
 
     /**
      * 隐藏刷新球控件

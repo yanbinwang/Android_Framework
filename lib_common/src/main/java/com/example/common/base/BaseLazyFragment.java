@@ -352,7 +352,7 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     }
 
     @Override
-    public void showDialog(Boolean isClose) {
+    public void showDialog(boolean isClose) {
         loadingDialog.show(isClose);
     }
 

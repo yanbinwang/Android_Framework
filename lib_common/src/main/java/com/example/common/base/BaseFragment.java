@@ -309,7 +309,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void showDialog(Boolean isClose) {
+    public void showDialog(boolean isClose) {
         loadingDialog.show(isClose);
     }
 
