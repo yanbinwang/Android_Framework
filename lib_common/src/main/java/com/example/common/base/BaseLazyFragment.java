@@ -62,11 +62,11 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends Fragment
     protected WeakReference<Context> context;//基类context弱引用
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
-    protected CountDownTimer countDownTimer;//计时器
     protected StatusBarUtil statusBarUtil;//状态栏工具类
     protected AndPermissionUtil andPermissionUtil;//获取权限类
     private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
+    private CountDownTimer countDownTimer;//计时器
     private boolean isVisible, isInitView, isFirstLoad = true;//当前Fragment是否可见,是否与View建立起映射关系,是否是第一次加载数据
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
