@@ -12,8 +12,8 @@ import android.widget.TextView;
 
 import com.example.common.R;
 import com.example.framework.utils.AnimationLoader;
-import com.example.common.widget.dialog.callback.OnAppConfirmDialogListener;
-import com.example.common.widget.dialog.callback.OnAppConfirmOrCancelDialogListener;
+import com.example.common.widget.dialog.callback.OnConfirmDialogListener;
+import com.example.common.widget.dialog.callback.OnConfirmOrCancelDialogListener;
 
 
 /**
@@ -26,7 +26,7 @@ public class AppDialog {
     private static AnimationSet mAnimIn, mAnimOut;
 
     //包含確定取消的提示框
-    public static void show(Context context, String tipStr, String contentStr, String sureStr, String cancelStr, OnAppConfirmOrCancelDialogListener onAppConfirmOrCancelDialogListener) {
+    public static void show(Context context, String tipStr, String contentStr, String sureStr, String cancelStr, OnConfirmOrCancelDialogListener onConfirmOrCancelDialogListener) {
         //定义开始和退出的动画
         mAnimIn = AnimationLoader.getInAnimation(context);
         mAnimOut = AnimationLoader.getOutAnimation(context);
@@ -69,23 +69,23 @@ public class AppDialog {
         //点击了取消按钮的回调
         dialogCancelTxt.setOnClickListener(v -> {
             myDialog.dismiss();
-            if (null != onAppConfirmOrCancelDialogListener) {
-                onAppConfirmOrCancelDialogListener.onDialogCancel();
+            if (null != onConfirmOrCancelDialogListener) {
+                onConfirmOrCancelDialogListener.onDialogCancel();
             }
         });
 
         //点击了确定按钮的回调
         dialogSureTxt.setOnClickListener(v -> {
             myDialog.dismiss();
-            if (null != onAppConfirmOrCancelDialogListener) {
-                onAppConfirmOrCancelDialogListener.onDialogConfirm();
+            if (null != onConfirmOrCancelDialogListener) {
+                onConfirmOrCancelDialogListener.onDialogConfirm();
             }
 
         });
     }
 
     //包含確定的提示框
-    public static void show(Context context, String tipStr, String contentStr, String sureStr, OnAppConfirmDialogListener onAppConfirmDialogListener) {
+    public static void show(Context context, String tipStr, String contentStr, String sureStr, OnConfirmDialogListener onConfirmDialogListener) {
         //定义开始和退出的动画
         mAnimIn = AnimationLoader.getInAnimation(context);
         mAnimOut = AnimationLoader.getOutAnimation(context);
@@ -125,8 +125,8 @@ public class AppDialog {
         //点击了确定按钮的回调
         dialogSureTxt.setOnClickListener(v -> {
             myDialog.dismiss();
-            if (null != onAppConfirmDialogListener) {
-                onAppConfirmDialogListener.onDialogConfirm();
+            if (null != onConfirmDialogListener) {
+                onConfirmDialogListener.onDialogConfirm();
             }
         });
     }
