@@ -30,16 +30,6 @@ interface BaseImpl {
     fun addDisposable(disposable: Disposable?)
 
     /**
-     * 是否为空
-     */
-    fun isEmpty(vararg objs: Any?): Boolean
-
-    /**
-     * 赋值-文案带默认值
-     */
-    fun processedString(source: String?, defaultStr: String?): String
-
-    /**
      * 赋值-文案
      */
     fun setText(res: Int, str: String?)
@@ -58,11 +48,6 @@ interface BaseImpl {
      * 虚拟键盘关闭
      */
     fun closeDecor()
-
-    /**
-     * 获取控件信息
-     */
-    fun getViewValue(view: View?): String
 
     /**
      * 让一个view获得焦点

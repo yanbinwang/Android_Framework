@@ -7,10 +7,6 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -136,31 +132,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    @Override
     public void setText(int res, String str) {
         ((TextView) findViewById(res)).setText(str);
     }
@@ -194,22 +165,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
     }
 
     @Override
