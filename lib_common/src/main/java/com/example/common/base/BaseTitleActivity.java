@@ -15,6 +15,7 @@ import butterknife.ButterKnife;
 public abstract class BaseTitleActivity<P extends BasePresenter> extends BaseActivity<P> {
     protected TitleBuilder titleBuilder;//标题栏
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     @Override
     public void initView() {
         super.initView();
@@ -28,5 +29,6 @@ public abstract class BaseTitleActivity<P extends BasePresenter> extends BaseAct
         addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
         unBinder = ButterKnife.bind(this);
     }
+    // </editor-fold>
 
 }
