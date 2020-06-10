@@ -6,7 +6,7 @@ import com.example.common.base.page.PageParams
 /**
  * author: wyb
  * date: 2018/7/26.
- * 基础view层,包含基础的view操作
+ * 基础View层,包含能在Presenter层对View的操作
  */
 interface BaseView {
 

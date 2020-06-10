@@ -16,7 +16,7 @@ import java.lang.ref.WeakReference
 /**
  * author: wyb
  * date: 2018/7/26.
- * 基础presenter层，可在此处加载初始化
+ * 基础Presenter层，可在此处加载初始化
  * 完成View和Presenter的关联性
  */
 abstract class BasePresenter<T : BaseView> {

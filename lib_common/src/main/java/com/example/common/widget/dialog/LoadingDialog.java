@@ -25,7 +25,7 @@ public class LoadingDialog {
         this.context = context;
     }
 
-    public void show(boolean isClose) {
+    public void show(boolean flag) {
         if (view == null) {
             view = LayoutInflater.from(context).inflate(R.layout.view_dialog_loading, null);
 //            TextView msgTxt = view.findViewById(R.id.msg_txt);
@@ -38,7 +38,7 @@ public class LoadingDialog {
             loadingDialog.setContentView(view, new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.WRAP_CONTENT,
                     LinearLayout.LayoutParams.WRAP_CONTENT));
-            loadingDialog.setCancelable(isClose);
+            loadingDialog.setCancelable(flag);
         }
         if (!loadingDialog.isShowing()) {
             loadingDialog.show();

@@ -4,23 +4,19 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.R;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -30,8 +26,6 @@ import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
-import com.example.common.utils.TitleBuilder;
-import com.example.common.utils.permission.AndPermissionUtil;
 import com.example.common.widget.dialog.LoadingDialog;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
@@ -41,7 +35,6 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,7 +46,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * author: wyb
  * date: 2018/7/26.
- * 所有activity的基类，包含了一些方法，全局广播等
+ * activity基类，包含了一些方法，全局广播等
  */
 @SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseImpl, BaseView {
@@ -61,12 +54,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected RxManager rxManager;//事务管理器
-    protected TitleBuilder titleBuilder;//标题栏
+    protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarUtil statusBarUtil;//状态栏工具类
-    protected AndPermissionUtil andPermissionUtil;//获取权限类
-    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
-    private CountDownTimer countDownTimer;//计时器
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
@@ -85,16 +75,16 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(this);
-        context = new WeakReference<>(this);
         presenter = getPresenter();
         if (null != presenter) {
             presenter.attachView(this, this, this);
         }
+        activity = new WeakReference<>(this);
+        context = new WeakReference<>(this);
         rxManager = new RxManager();
-        loadingDialog = new LoadingDialog(this);
         statusBarUtil = new StatusBarUtil(this);
-        andPermissionUtil = new AndPermissionUtil(this);
+        loadingDialog = new LoadingDialog(this);
+        unBinder = ButterKnife.bind(this);
     }
 
     private <P> P getPresenter() {
@@ -136,15 +126,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void initData() {
-    }
-
-    @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_base);
-        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
-        titleBuilder = new TitleBuilder(this);
-        unBinder = ButterKnife.bind(this);
     }
 
     @Override
@@ -267,41 +248,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void setDownTime(TextView txt) {
-        setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
-    }
-
-    @Override
-    public void setDownTime(TextView txt, int startColorId, int endColorId) {
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
-                    txt.setTextColor(startColorId);
-                    txt.setEnabled(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    txt.setEnabled(true);
-                    txt.setTextColor(endColorId);
-                    txt.setText("重新发送");
-                }
-            };
-        }
-        countDownTimer.start();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         rxManager.clear();
         if (presenter != null) {
             presenter.detachView();
-        }
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
         }
         log("onDestroy...");
     }

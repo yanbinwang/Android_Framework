@@ -1,12 +1,11 @@
 package com.example.common.base.bridge
 
 import android.view.View
-import android.widget.TextView
 import io.reactivex.disposables.Disposable
 
 /**
  * author: wyb
- * 基础方法
+ * 基类的基础方法
  */
 interface BaseImpl {
 
@@ -84,15 +83,5 @@ interface BaseImpl {
      * 赋值-颜色
      */
     fun setTextColor(res: Int, color: Int)
-
-    /**
-     * 定时器
-     */
-    fun setDownTime(txt: TextView?)
-
-    /**
-     * 定时器-完成结束颜色设置
-     */
-    fun setDownTime(txt: TextView?, startColorId: Int, endColorId: Int)
 
 }
