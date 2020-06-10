@@ -112,12 +112,10 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     @Override
     public void initEvent() {
-
     }
 
     @Override
     public void initData() {
-
     }
 
     @Override
@@ -125,6 +123,41 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         if (null != disposable) {
             rxManager.add(disposable);
         }
+    }
+
+    @Override
+    public boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String processedString(String source, String defaultStr) {
+        if (source == null) {
+            return defaultStr;
+        } else {
+            if (source.trim().isEmpty()) {
+                return defaultStr;
+            } else {
+                return source;
+            }
+        }
+    }
+
+    @Override
+    public void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -202,41 +235,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
                 view.setVisibility(View.GONE);
             }
         }
-    }
-
-    @Override
-    public boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    @Override
-    public void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
 
     @Override

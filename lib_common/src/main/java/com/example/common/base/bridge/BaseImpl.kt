@@ -30,6 +30,26 @@ interface BaseImpl {
     fun addDisposable(disposable: Disposable?)
 
     /**
+     * 是否为空
+     */
+    fun isEmpty(vararg objs: Any?): Boolean
+
+    /**
+     * 赋值-文案带默认值
+     */
+    fun processedString(source: String?, defaultStr: String?): String
+
+    /**
+     * 赋值-文案
+     */
+    fun setText(res: Int, str: String?)
+
+    /**
+     * 赋值-颜色
+     */
+    fun setTextColor(res: Int, color: Int)
+
+    /**
      * 虚拟键盘开启
      */
     fun openDecor(view: View?)
@@ -63,25 +83,5 @@ interface BaseImpl {
      * 控件隐藏（不占位）
      */
     fun GONE(vararg views: View?)
-
-    /**
-     * 是否为空
-     */
-    fun isEmpty(vararg objs: Any?): Boolean
-
-    /**
-     * 赋值-文案带默认值
-     */
-    fun processedString(source: String?, defaultStr: String?): String
-
-    /**
-     * 赋值-文案
-     */
-    fun setText(res: Int, str: String?)
-
-    /**
-     * 赋值-颜色
-     */
-    fun setTextColor(res: Int, color: Int)
 
 }
