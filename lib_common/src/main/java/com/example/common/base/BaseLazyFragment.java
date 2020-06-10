@@ -57,11 +57,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends BaseFrag
         isInitView = true;
     }
 
-    @Override
-    public void initEvent() {
-        super.initEvent();
-    }
-
     private void initLazyData() {
         if (isFirstLoad) {
             log("第一次加载 " + " isInitView  " + isInitView + "  isVisible  " + isVisible + "   " + TAG);
@@ -76,11 +71,6 @@ public abstract class BaseLazyFragment<P extends BasePresenter> extends BaseFrag
         log("完成数据第一次加载" + "   " + TAG);
         initData();
         isFirstLoad = false;
-    }
-
-    @Override
-    public void initData() {
-        super.initData();
     }
     // </editor-fold>
 
