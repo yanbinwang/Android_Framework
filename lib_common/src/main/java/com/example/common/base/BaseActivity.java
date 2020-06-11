@@ -238,8 +238,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void showDialog(boolean isClose) {
-        loadingDialog.show(isClose);
+    public void showDialog(boolean flag) {
+        loadingDialog.show(flag);
     }
 
     @Override
