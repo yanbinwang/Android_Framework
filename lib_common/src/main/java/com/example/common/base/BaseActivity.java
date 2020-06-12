@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.common.R;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -22,7 +24,10 @@ import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
+import com.example.common.utils.NetWorkUtil;
 import com.example.common.widget.dialog.LoadingDialog;
+import com.example.common.widget.empty.EmptyLayout;
+import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
@@ -128,6 +133,45 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     public void addDisposable(Disposable disposable) {
         if (null != disposable) {
             rxManager.add(disposable);
+        }
+    }
+
+    @Override
+    public boolean doResponse(String msg) {
+        if (TextUtils.isEmpty(msg)) {
+            msg = getString(R.string.label_response_err);
+        }
+        showToast(!NetWorkUtil.INSTANCE.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
+        return true;
+    }
+
+    @Override
+    public void emptyState(EmptyLayout emptyLayout, String msg) {
+        emptyLayout.setVisibility(View.VISIBLE);
+        if (doResponse(msg)) {
+            emptyLayout.showEmpty();
+        }
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            emptyLayout.showError();
+        }
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length) {
+        emptyState(xRecyclerView, msg, length, R.mipmap.img_data_empty, EmptyLayout.EMPTY_TXT);
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
+        doResponse(msg);
+        if (length > 0) {
+            return;
+        }
+        xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            xRecyclerView.showError();
+        } else {
+            xRecyclerView.showEmpty(imgInt, emptyStr);
         }
     }
 

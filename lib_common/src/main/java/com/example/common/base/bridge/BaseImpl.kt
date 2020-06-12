@@ -1,11 +1,14 @@
 package com.example.common.base.bridge
 
 import android.view.View
+import com.example.common.widget.empty.EmptyLayout
+import com.example.common.widget.xrecyclerview.XRecyclerView
 import io.reactivex.disposables.Disposable
 
 /**
  * author: wyb
- * 基类的基础方法
+ * 基类Controller层
+ * 主要针对View层的控件和Model层的数据做取值和基础逻辑的处理
  */
 interface BaseImpl {
 
@@ -28,6 +31,26 @@ interface BaseImpl {
      * 添加事务
      */
     fun addDisposable(disposable: Disposable?)
+
+    /**
+     * 接口返回提示
+     */
+    fun doResponse(msg: String?): Boolean
+
+    /**
+     * 遮罩层处理
+     */
+    fun emptyState(emptyLayout: EmptyLayout?, msg: String?)
+
+    /**
+     * 列表遮罩层处理
+     */
+    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int)
+
+    /**
+     * 列表遮罩层处理（自定义错误图片）
+     */
+    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int, imgInt: Int, emptyStr: String?)
 
     /**
      * 赋值-文案

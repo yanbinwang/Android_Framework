@@ -2,13 +2,7 @@ package com.example.common.base.bridge
 
 import android.app.Activity
 import android.content.Context
-import android.text.TextUtils
-import android.view.View
-import com.example.common.R
 import com.example.common.bus.RxManager
-import com.example.common.utils.NetWorkUtil
-import com.example.common.widget.empty.EmptyLayout
-import com.example.common.widget.xrecyclerview.XRecyclerView
 import io.reactivex.disposables.Disposable
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
@@ -49,52 +43,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun doResponse(msg: String?): Boolean {
-        var message = msg
-        if (TextUtils.isEmpty(msg)) {
-            message = context?.get()?.getString(R.string.label_response_err)
-        }
-        if (!NetWorkUtil.isNetworkAvailable()) {
-            view?.get()?.showToast(context?.get()?.getString(R.string.label_response_net_err)!!)
-        } else {
-            view?.get()?.showToast(message!!)
-        }
-        return true
-    }
-
-    //针对页面
-    @Synchronized
-    fun emptyState(emptyLayout: EmptyLayout?, msg: String?) {
-        emptyLayout?.visibility = View.VISIBLE
-        if (doResponse(msg)) {
-            emptyLayout?.showEmpty()
-        }
-        if (!NetWorkUtil.isNetworkAvailable()) {
-            emptyLayout?.showError()
-        }
-    }
-
-    //针对列表
-    @Synchronized
-    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int?) {
-        emptyState(xRecyclerView, msg, length, R.mipmap.img_data_empty, EmptyLayout.EMPTY_TXT)
-    }
-
-    //针对列表
-    @Synchronized
-    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int?, imgInt: Int?, emptyStr: String?) {
-        doResponse(msg)
-        if (length!! > 0) {
-            return
-        }
-        xRecyclerView?.setVisibilityEmptyView(View.VISIBLE)
-        if (!NetWorkUtil.isNetworkAvailable()) {
-            xRecyclerView?.showError()
-        } else {
-            xRecyclerView?.showEmpty(imgInt!!, emptyStr)
-        }
-    }
-
+//刷新页面的逻辑，对页面page的处理可放在P层实现
 //    //刷新清空
 //    fun onRefresh() {
 //        index = 1
