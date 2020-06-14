@@ -18,10 +18,6 @@ abstract class BasePresenter<T : BaseView> {
     protected var context: WeakReference<Context>? = null
     protected var view: SoftReference<T>? = null
     private var rxManager: RxManager? = null
-//    private var currentCount: Int = 0
-//    private var totalCount: Int = 0
-//    private var index: Int = 1
-//    private var hasNextPage: Boolean? = false
 
     fun attachView(activity: Activity?, context: Context?, view: T?) {
         this.activity = WeakReference(activity!!)
@@ -42,56 +38,5 @@ abstract class BasePresenter<T : BaseView> {
             rxManager?.add(disposable)
         }
     }
-
-//刷新页面的逻辑，对页面page的处理可放在P层实现
-//    //刷新清空
-//    fun onRefresh() {
-//        index = 1
-//    }
-//
-//    fun onLoad(): Boolean {
-//        return if (hasNextPage!!) {
-//            ++index
-//            true
-//        } else {
-//            false
-//        }
-//    }
-//
-//    //设置是否需要加载更多
-//    fun hasNextPage(hasNextPage: Boolean?) {
-//        this.hasNextPage = hasNextPage
-//    }
-//
-//    //获取当前的数组长度
-//    fun getIndex(): Int {
-//        return index
-//    }
-//
-//    //刷新清空
-//    fun onRefresh() {
-//        currentCount = 0
-//        totalCount = 0
-//    }
-//
-//    //是否需要加载更多
-//    fun hasNextPage(): Boolean {
-//        return currentCount < totalCount
-//    }
-//
-//    //获取当前的数组长度
-//    fun getCurrentCount(): Int {
-//        return currentCount
-//    }
-//
-//    //列加数组长度
-//    fun setCurrentCount(currentCount: Int) {
-//        this.currentCount += currentCount
-//    }
-//
-//    //设置总数
-//    fun setTotalCount(totalCount: Int) {
-//        this.totalCount = totalCount
-//    }
 
 }
