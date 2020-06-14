@@ -1,6 +1,5 @@
-package com.example.common.widget.dialog;
+package com.example.testnew;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.text.TextUtils;
@@ -12,22 +11,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.example.common.R;
 import com.example.common.widget.dialog.callback.OnConfirmDialogListener;
 import com.example.common.widget.dialog.callback.OnConfirmOrCancelDialogListener;
 import com.example.framework.utils.AnimationLoader;
 
-
-/**
- * author: wyb
- * date: 2017/8/25.
- * 类似苹果的弹出窗口类
- */
-@SuppressLint("InflateParams")
-public class AppDialog extends Dialog {
+public class TestDialog extends Dialog {
     private AnimationSet mAnimIn, mAnimOut;
 
-    public AppDialog(@NonNull Context context) {
+    public TestDialog(@NonNull Context context) {
         super(context, R.style.appDialogStyle);
         //定义开始和退出的动画
         mAnimIn = AnimationLoader.getInAnimation(context);
@@ -35,7 +26,7 @@ public class AppDialog extends Dialog {
     }
 
     //包含確定取消的提示框
-    public AppDialog show(String tipText, String contentText, String sureText, String cancelText, OnConfirmOrCancelDialogListener onConfirmOrCancelDialogListener) {
+    public TestDialog show(String tipText, String contentText, String sureText, String cancelText, OnConfirmOrCancelDialogListener onConfirmOrCancelDialogListener) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_dialog_confirm_or_cancel, null);
         setContentView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //当布局show出来的时候执行开始动画
@@ -87,7 +78,7 @@ public class AppDialog extends Dialog {
     }
 
     //包含確定的提示框
-    public AppDialog show(String tipText, String contentText, String sureText, OnConfirmDialogListener onConfirmDialogListener) {
+    public TestDialog show(String tipText, String contentText, String sureText, OnConfirmDialogListener onConfirmDialogListener) {
         View view = LayoutInflater.from(getContext()).inflate(R.layout.view_dialog_confirm, null);
         setContentView(view, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         //当布局show出来的时候执行开始动画
