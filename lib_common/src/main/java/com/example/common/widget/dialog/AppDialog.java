@@ -128,4 +128,8 @@ public class AppDialog extends Dialog {
         return this;
     }
 
+    public static AppDialog with(Context context) {
+        return new AppDialog(context);
+    }
+
 }
