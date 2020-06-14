@@ -41,4 +41,8 @@ public class AndDialog extends AlertDialog.Builder {
         return this;
     }
 
+    public static AndDialog with(Context context){
+        return new AndDialog(context);
+    }
+
 }
