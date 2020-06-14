@@ -3,20 +3,15 @@ package com.example.common.base;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.alibaba.android.arouter.facade.Postcard;
@@ -28,8 +23,10 @@ import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
-import com.example.common.utils.permission.AndPermissionUtil;
+import com.example.common.utils.NetWorkUtil;
 import com.example.common.widget.dialog.LoadingDialog;
+import com.example.common.widget.empty.EmptyLayout;
+import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
@@ -38,7 +35,6 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -59,11 +55,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected WeakReference<Context> context;//基类context弱引用
     protected View convertView;//传入的View
     protected RxManager rxManager;//事务管理器
+    protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarUtil statusBarUtil;//状态栏工具类
-    protected AndPermissionUtil andPermissionUtil;//获取权限类
-    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
-    private CountDownTimer countDownTimer;//计时器
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
@@ -88,16 +82,15 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(getActivity());
-        context = new WeakReference<>(getContext());
         presenter = getPresenter();
         if (null != presenter) {
-            presenter.attachView(activity.get(), context.get(), this);
+            presenter.attachView(getActivity(), getContext(), this);
         }
+        activity = new WeakReference<>(getActivity());
+        context = new WeakReference<>(getContext());
         rxManager = new RxManager();
-        andPermissionUtil = new AndPermissionUtil(activity.get());
-        loadingDialog = new LoadingDialog(activity.get());
         statusBarUtil = new StatusBarUtil(activity.get());
+        loadingDialog = new LoadingDialog(activity.get());
     }
 
     private <P> P getPresenter() {
@@ -120,12 +113,10 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     @Override
     public void initEvent() {
-
     }
 
     @Override
     public void initData() {
-
     }
 
     @Override
@@ -133,6 +124,55 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         if (null != disposable) {
             rxManager.add(disposable);
         }
+    }
+
+    @Override
+    public boolean doResponse(String msg) {
+        if (TextUtils.isEmpty(msg)) {
+            msg = getString(R.string.label_response_err);
+        }
+        showToast(!NetWorkUtil.INSTANCE.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
+        return true;
+    }
+
+    @Override
+    public void emptyState(EmptyLayout emptyLayout, String msg) {
+        emptyLayout.setVisibility(View.VISIBLE);
+        if (doResponse(msg)) {
+            emptyLayout.showEmpty();
+        }
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            emptyLayout.showError();
+        }
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length) {
+        emptyState(xRecyclerView, msg, length, R.mipmap.img_data_empty, EmptyLayout.EMPTY_TXT);
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
+        doResponse(msg);
+        if (length > 0) {
+            return;
+        }
+        xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            xRecyclerView.showError();
+        } else {
+            xRecyclerView.showEmpty(imgInt, emptyStr);
+        }
+    }
+
+    @Override
+    public void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -159,22 +199,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
     }
 
     @Override
@@ -213,68 +237,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    @Override
-    public void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
-    }
-
-    @Override
-    public void setDownTime(TextView txt) {
-        setDownTime(txt, ContextCompat.getColor(context.get(), R.color.gray_9f9f9f), ContextCompat.getColor(context.get(), R.color.gray_9f9f9f));
-    }
-
-    @Override
-    public void setDownTime(TextView txt, int startColorId, int endColorId) {
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
-                    txt.setTextColor(startColorId);
-                    txt.setEnabled(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    txt.setEnabled(true);
-                    txt.setTextColor(endColorId);
-                    txt.setText("重新发送");
-                }
-            };
-        }
-        countDownTimer.start();
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
         rxManager.clear();
@@ -309,8 +271,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void showDialog(boolean isClose) {
-        loadingDialog.show(isClose);
+    public void showDialog(boolean flag) {
+        loadingDialog.show(flag);
     }
 
     @Override

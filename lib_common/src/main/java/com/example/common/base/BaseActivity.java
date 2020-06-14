@@ -4,19 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.CountDownTimer;
 import android.os.Parcelable;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.FrameLayout;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -30,9 +24,10 @@ import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
-import com.example.common.utils.TitleBuilder;
-import com.example.common.utils.permission.AndPermissionUtil;
+import com.example.common.utils.NetWorkUtil;
 import com.example.common.widget.dialog.LoadingDialog;
+import com.example.common.widget.empty.EmptyLayout;
+import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
@@ -41,7 +36,6 @@ import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
-import java.text.MessageFormat;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -53,7 +47,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * author: wyb
  * date: 2018/7/26.
- * 所有activity的基类，包含了一些方法，全局广播等
+ * activity基类，包含了一些方法，全局广播等
  */
 @SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
 public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseImpl, BaseView {
@@ -61,12 +55,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected RxManager rxManager;//事务管理器
-    protected TitleBuilder titleBuilder;//标题栏
+    protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarUtil statusBarUtil;//状态栏工具类
-    protected AndPermissionUtil andPermissionUtil;//获取权限类
-    private Unbinder unBinder;//黄油刀绑定
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
-    private CountDownTimer countDownTimer;//计时器
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
@@ -85,16 +76,16 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        activity = new WeakReference<>(this);
-        context = new WeakReference<>(this);
         presenter = getPresenter();
         if (null != presenter) {
             presenter.attachView(this, this, this);
         }
+        activity = new WeakReference<>(this);
+        context = new WeakReference<>(this);
         rxManager = new RxManager();
-        loadingDialog = new LoadingDialog(this);
         statusBarUtil = new StatusBarUtil(this);
-        andPermissionUtil = new AndPermissionUtil(this);
+        loadingDialog = new LoadingDialog(this);
+        unBinder = ButterKnife.bind(this);
     }
 
     private <P> P getPresenter() {
@@ -139,19 +130,59 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void setContentView(int layoutResID) {
-        super.setContentView(R.layout.activity_base);
-        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
-        titleBuilder = new TitleBuilder(this);
-        unBinder = ButterKnife.bind(this);
-    }
-
-    @Override
     public void addDisposable(Disposable disposable) {
         if (null != disposable) {
             rxManager.add(disposable);
         }
+    }
+
+    @Override
+    public boolean doResponse(String msg) {
+        if (TextUtils.isEmpty(msg)) {
+            msg = getString(R.string.label_response_err);
+        }
+        showToast(!NetWorkUtil.INSTANCE.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
+        return true;
+    }
+
+    @Override
+    public void emptyState(EmptyLayout emptyLayout, String msg) {
+        emptyLayout.setVisibility(View.VISIBLE);
+        if (doResponse(msg)) {
+            emptyLayout.showEmpty();
+        }
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            emptyLayout.showError();
+        }
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length) {
+        emptyState(xRecyclerView, msg, length, R.mipmap.img_data_empty, EmptyLayout.EMPTY_TXT);
+    }
+
+    @Override
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
+        doResponse(msg);
+        if (length > 0) {
+            return;
+        }
+        xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
+        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+            xRecyclerView.showError();
+        } else {
+            xRecyclerView.showEmpty(imgInt, emptyStr);
+        }
+    }
+
+    @Override
+    public void setText(int res, String str) {
+        ((TextView) findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -178,22 +209,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public String getViewValue(View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
     }
 
     @Override
@@ -232,76 +247,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public boolean isEmpty(Object... objs) {
-        for (Object obj : objs) {
-            if (obj == null) {
-                return true;
-            } else if (obj instanceof String && obj.equals("")) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public String processedString(String source, String defaultStr) {
-        if (source == null) {
-            return defaultStr;
-        } else {
-            if (source.trim().isEmpty()) {
-                return defaultStr;
-            } else {
-                return source;
-            }
-        }
-    }
-
-    @Override
-    public void setText(int res, String str) {
-        ((TextView) findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) findViewById(res)).setTextColor(color);
-    }
-
-    @Override
-    public void setDownTime(TextView txt) {
-        setDownTime(txt, ContextCompat.getColor(this, R.color.gray_9f9f9f), ContextCompat.getColor(this, R.color.gray_9f9f9f));
-    }
-
-    @Override
-    public void setDownTime(TextView txt, int startColorId, int endColorId) {
-        if (countDownTimer == null) {
-            countDownTimer = new CountDownTimer(60 * 1000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    txt.setText(MessageFormat.format("{0}s后重新获取", millisUntilFinished / 1000));// 剩余多少毫秒
-                    txt.setTextColor(startColorId);
-                    txt.setEnabled(false);
-                }
-
-                @Override
-                public void onFinish() {
-                    txt.setEnabled(true);
-                    txt.setTextColor(endColorId);
-                    txt.setText("重新发送");
-                }
-            };
-        }
-        countDownTimer.start();
-    }
-
-    @Override
     protected void onDestroy() {
         super.onDestroy();
         rxManager.clear();
         if (presenter != null) {
             presenter.detachView();
-        }
-        if (countDownTimer != null) {
-            countDownTimer.cancel();
         }
         log("onDestroy...");
     }
@@ -332,8 +282,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void showDialog(boolean isClose) {
-        loadingDialog.show(isClose);
+    public void showDialog(boolean flag) {
+        loadingDialog.show(flag);
     }
 
     @Override
