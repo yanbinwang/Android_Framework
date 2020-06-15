@@ -5,12 +5,10 @@ import com.example.common.bus.RxBus;
 import com.example.common.bus.RxBusEvent;
 import com.example.common.constant.ARouterPath;
 import com.example.common.constant.Constants;
-import com.example.common.model.BaseModel;
 import com.example.common.utils.analysis.GsonUtil;
 import com.example.common.utils.helper.AccountHelper;
 
 import io.reactivex.subscribers.ResourceSubscriber;
-import okhttp3.ResponseBody;
 import retrofit2.HttpException;
 
 /**
@@ -19,19 +17,19 @@ import retrofit2.HttpException;
  * rxjava处理回调
  */
 @SuppressWarnings("unchecked")
-public abstract class HttpSubscriber<T> extends ResourceSubscriber<BaseModel<T>> {
+public abstract class HttpSubscriber<T> extends ResourceSubscriber<ResponseBody<T>> {
 
     @Override
-    public void onNext(BaseModel<T> baseModel) {
-        doResult(baseModel, null);
+    public void onNext(ResponseBody<T> responseBody) {
+        doResult(responseBody, null);
     }
 
     @Override
     public void onError(Throwable throwable) {
         try {
-            ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
+            okhttp3.ResponseBody responseBody = ((HttpException) throwable).response().errorBody();
             if (null != responseBody) {
-                BaseModel baseModel = GsonUtil.INSTANCE.jsonToObj(responseBody.string(), BaseModel.class);
+                ResponseBody baseModel = GsonUtil.INSTANCE.jsonToObj(responseBody.string(), ResponseBody.class);
                 doResult(baseModel, throwable);
             } else {
                 doResult(null, throwable);
@@ -42,12 +40,12 @@ public abstract class HttpSubscriber<T> extends ResourceSubscriber<BaseModel<T>>
     }
 
     //处理请求
-    private void doResult(BaseModel<T> baseModel, Throwable throwable) {
-        if (null != baseModel) {
-            String msg = baseModel.getMsg();
-            int e = baseModel.getE();
+    private void doResult(ResponseBody<T> responseBody, Throwable throwable) {
+        if (null != responseBody) {
+            String msg = responseBody.getMsg();
+            int e = responseBody.getE();
             if (0 == e) {
-                onSuccess(baseModel.getData());
+                onSuccess(responseBody.getData());
             } else {
                 //账号还没有登录，解密失败，重新获取
                 if (100005 == e || 100008 == e) {
