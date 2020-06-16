@@ -63,6 +63,16 @@ interface BaseImpl {
     fun setTextColor(res: Int, color: Int)
 
     /**
+     * 获取控件的基础值
+     */
+    fun getViewValue(view: View?): String?
+
+    /**
+     * 对象判空（批量）
+     */
+    fun isEmpty(vararg objs: Any?): Boolean
+
+    /**
      * 虚拟键盘开启
      */
     fun openDecor(view: View?)

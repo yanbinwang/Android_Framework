@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -173,6 +177,34 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void setTextColor(int res, int color) {
         ((TextView) convertView.findViewById(res)).setTextColor(color);
+    }
+
+    @Override
+    public String getViewValue(@org.jetbrains.annotations.Nullable View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
+    }
+
+    @Override
+    public boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
