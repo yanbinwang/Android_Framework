@@ -170,32 +170,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
-    }
-
-    @Override
-    public String getViewValue(@org.jetbrains.annotations.Nullable View view) {
-        if (view instanceof EditText) {
-            return ((EditText) view).getText().toString().trim();
-        } else if (view instanceof TextView) {
-            return ((TextView) view).getText().toString().trim();
-        } else if (view instanceof CheckBox) {
-            return ((CheckBox) view).getText().toString().trim();
-        } else if (view instanceof RadioButton) {
-            return ((RadioButton) view).getText().toString().trim();
-        } else if (view instanceof Button) {
-            return ((Button) view).getText().toString().trim();
-        }
-        return null;
-    }
-
-    @Override
     public boolean isEmpty(Object... objs) {
         for (Object obj : objs) {
             if (obj == null) {
@@ -234,11 +208,37 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
+    public void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
+    }
+
+    @Override
     public void setViewFocus(View view) {
         view.setFocusable(true);//设置输入框可聚集
         view.setFocusableInTouchMode(true);//设置触摸聚焦
         view.requestFocus();//请求焦点
         view.findFocus();//获取焦点
+    }
+
+    @Override
+    public String getViewValue(@org.jetbrains.annotations.Nullable View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
     }
 
     @Override
