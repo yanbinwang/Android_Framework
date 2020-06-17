@@ -5,15 +5,12 @@ import android.widget.ImageView;
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.imageloader.ImageLoader;
 import com.example.testnew.R;
-import com.example.testnew.TestDialog;
 
 import butterknife.BindView;
 
 public class MainActivity extends BaseTitleActivity {
     @BindView(R.id.iv_test)
     ImageView ivTest;
-
-    private TestDialog dialog;
 
     @Override
     protected int getLayoutResID() {
