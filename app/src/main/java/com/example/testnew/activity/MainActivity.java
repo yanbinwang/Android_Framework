@@ -8,6 +8,12 @@ import com.example.testnew.R;
 
 import butterknife.BindView;
 
+/**
+ * MVP中，Activity的代码量会相对MVC有所缩减，部分的逻辑会移交给P层做处理
+ * 1）页面涉及到处理数据，例如读写数据库，网络请求等，这部分代码全部移交给P层实现，通过回调接口丢给Activity处理好的数据
+ * 2）在移交给P层处理数据前先对从View里取得的数据做一定的简单处理，一些处理方法在基类中已经实现，丢给P层后P层可以对数据进一步处理并及时回调
+ * 3）每个请求返回的事务都添加进事务管理器内，在基类中重写了销毁方法，避免内存泄漏
+ */
 public class MainActivity extends BaseTitleActivity {
     @BindView(R.id.iv_test)
     ImageView ivTest;
