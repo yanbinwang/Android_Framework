@@ -53,14 +53,9 @@ interface BaseImpl {
     fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int, imgInt: Int, emptyStr: String?)
 
     /**
-     * 赋值-文案
+     * 对象判空（批量）
      */
-    fun setText(res: Int, str: String?)
-
-    /**
-     * 赋值-颜色
-     */
-    fun setTextColor(res: Int, color: Int)
+    fun isEmpty(vararg objs: Any?): Boolean
 
     /**
      * 虚拟键盘开启
@@ -73,9 +68,24 @@ interface BaseImpl {
     fun closeDecor()
 
     /**
+     * 赋值-文案
+     */
+    fun setText(res: Int, str: String?)
+
+    /**
+     * 赋值-颜色
+     */
+    fun setTextColor(res: Int, color: Int)
+
+    /**
      * 让一个view获得焦点
      */
     fun setViewFocus(view: View?)
+
+    /**
+     * 获取控件的基础值
+     */
+    fun getViewValue(view: View?): String?
 
     /**
      * 控件显示

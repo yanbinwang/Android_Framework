@@ -29,8 +29,8 @@ abstract class BasePresenter<T : BaseView> {
     fun detachView() {
         activity?.clear()
         context?.clear()
+        view?.clear()
         rxManager?.clear()
-        view = null
     }
 
     protected fun addDisposable(disposable: Disposable?) {

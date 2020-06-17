@@ -9,6 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -54,9 +58,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected View convertView;//传入的View
-    protected RxManager rxManager;//事务管理器
     protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarUtil statusBarUtil;//状态栏工具类
+    private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -88,8 +92,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         }
         activity = new WeakReference<>(getActivity());
         context = new WeakReference<>(getContext());
-        rxManager = new RxManager();
         statusBarUtil = new StatusBarUtil(activity.get());
+        rxManager = new RxManager();
         loadingDialog = new LoadingDialog(activity.get());
     }
 
@@ -166,13 +170,15 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
+    public boolean isEmpty(Object... objs) {
+        for (Object obj : objs) {
+            if (obj == null) {
+                return true;
+            } else if (obj instanceof String && obj.equals("")) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Override
@@ -202,11 +208,37 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
+    public void setText(int res, String str) {
+        ((TextView) convertView.findViewById(res)).setText(str);
+    }
+
+    @Override
+    public void setTextColor(int res, int color) {
+        ((TextView) convertView.findViewById(res)).setTextColor(color);
+    }
+
+    @Override
     public void setViewFocus(View view) {
         view.setFocusable(true);//设置输入框可聚集
         view.setFocusableInTouchMode(true);//设置触摸聚焦
         view.requestFocus();//请求焦点
         view.findFocus();//获取焦点
+    }
+
+    @Override
+    public String getViewValue(@org.jetbrains.annotations.Nullable View view) {
+        if (view instanceof EditText) {
+            return ((EditText) view).getText().toString().trim();
+        } else if (view instanceof TextView) {
+            return ((TextView) view).getText().toString().trim();
+        } else if (view instanceof CheckBox) {
+            return ((CheckBox) view).getText().toString().trim();
+        } else if (view instanceof RadioButton) {
+            return ((RadioButton) view).getText().toString().trim();
+        } else if (view instanceof Button) {
+            return ((Button) view).getText().toString().trim();
+        }
+        return null;
     }
 
     @Override
