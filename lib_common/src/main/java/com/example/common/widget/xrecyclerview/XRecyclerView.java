@@ -193,7 +193,7 @@ public class XRecyclerView extends ViewGroup {
     }
 
     //修改背景颜色
-    public void setBackgroundColor(int color) {
+    public void setEmptyBackgroundColor(int color) {
         el.setBackgroundColor(color);
     }
 
