@@ -58,9 +58,9 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected RxManager rxManager;//事务管理器
-    protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarUtil statusBarUtil;//状态栏工具类
+    protected Unbinder unBinder;//黄油刀绑定
+    private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -86,10 +86,10 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         }
         activity = new WeakReference<>(this);
         context = new WeakReference<>(this);
-        rxManager = new RxManager();
         statusBarUtil = new StatusBarUtil(this);
-        loadingDialog = new LoadingDialog(this);
         unBinder = ButterKnife.bind(this);
+        rxManager = new RxManager();
+        loadingDialog = new LoadingDialog(this);
     }
 
     private <P> P getPresenter() {
