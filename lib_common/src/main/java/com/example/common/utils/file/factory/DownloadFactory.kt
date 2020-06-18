@@ -5,7 +5,7 @@ import android.os.Looper
 import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
-import com.example.framework.widget.WeakHandler
+import com.example.framework.os.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -22,7 +22,8 @@ import java.io.InputStream
  */
 @SuppressLint("CheckResult")
 class DownloadFactory private constructor() {
-    private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
+    private val weakHandler: WeakHandler =
+        WeakHandler(Looper.getMainLooper())
 
     companion object {
         val instance: DownloadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
