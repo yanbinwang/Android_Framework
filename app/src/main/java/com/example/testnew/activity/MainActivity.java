@@ -48,7 +48,6 @@ public class MainActivity extends BaseTitleActivity {
 //                    }
 //                }));
 
-
 //        addDisposable(BaseSubscribe.INSTANCE.getVerification("dsfsd",new HttpParams().append("dsadsa","sddas").getParams())
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 //                .subscribeWith(new HttpSubscriber<Object>() {
