@@ -4,7 +4,7 @@ import android.widget.FrameLayout;
 
 import com.example.common.R;
 import com.example.common.base.bridge.BasePresenter;
-import com.example.common.utils.TitleBuilder;
+import com.example.common.utils.builder.TitleBuilder;
 
 import butterknife.ButterKnife;
 

@@ -5,7 +5,7 @@ import android.os.Looper
 import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
-import com.example.framework.widget.WeakHandler
+import com.example.framework.utils.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -31,8 +31,8 @@ class DownloadFactory private constructor() {
         }
     }
 
-    fun download(downloadUrl: String, saveDir: String, fileName: String, onDownloadListener: OnDownloadListener) : Disposable {
-        FileUtil.deleteDir(saveDir)
+    fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener) : Disposable {
+        FileUtil.deleteDir(filePath)
         return BaseSubscribe.download(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
@@ -47,7 +47,7 @@ class DownloadFactory private constructor() {
                             try {
                                 inputStream = responseBody!!.byteStream()
                                 val total = responseBody.contentLength()
-                                val file = File(FileUtil.isExistDir(saveDir), fileName)
+                                val file = File(FileUtil.isExistDir(filePath), fileName)
                                 fileOutputStream = FileOutputStream(file)
                                 var sum: Long = 0
                                 while (((inputStream.read(buf)).also { len = it }) != -1) {

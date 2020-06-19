@@ -32,7 +32,7 @@ import com.example.common.widget.dialog.LoadingDialog;
 import com.example.common.widget.empty.EmptyLayout;
 import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
-import com.example.framework.utils.StatusBarUtil;
+import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
@@ -59,7 +59,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected WeakReference<Context> context;//基类context弱引用
     protected View convertView;//传入的View
     protected Unbinder unBinder;//黄油刀绑定
-    protected StatusBarUtil statusBarUtil;//状态栏工具类
+    protected StatusBarBuilder statusBarBuilder;//状态栏工具类
     private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
@@ -92,7 +92,7 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         }
         activity = new WeakReference<>(getActivity());
         context = new WeakReference<>(getContext());
-        statusBarUtil = new StatusBarUtil(activity.get());
+        statusBarBuilder = new StatusBarBuilder(activity.get());
         rxManager = new RxManager();
         loadingDialog = new LoadingDialog(activity.get());
     }
