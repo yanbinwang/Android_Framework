@@ -29,11 +29,11 @@ import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.utils.NetWorkUtil;
+import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
 import com.example.common.widget.empty.EmptyLayout;
 import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
-import com.example.framework.utils.StatusBarUtil;
 import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
@@ -58,7 +58,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected StatusBarUtil statusBarUtil;//状态栏工具类
+    protected StatusBarBuilder statusBarBuilder;//状态栏工具类
     protected Unbinder unBinder;//黄油刀绑定
     private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
@@ -86,7 +86,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         }
         activity = new WeakReference<>(this);
         context = new WeakReference<>(this);
-        statusBarUtil = new StatusBarUtil(this);
+        statusBarBuilder = new StatusBarBuilder(this);
         unBinder = ButterKnife.bind(this);
         rxManager = new RxManager();
         loadingDialog = new LoadingDialog(this);
@@ -300,12 +300,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
     public void log(String content) {
-        LogUtil.INSTANCE.e(TAG, content);
+        LogUtil.e(TAG, content);
     }
 
     @Override
     public void showToast(String str) {
-        ToastUtil.INSTANCE.mackToastSHORT(str, getApplicationContext());
+        ToastUtil.mackToastSHORT(str, getApplicationContext());
     }
 
     @Override
