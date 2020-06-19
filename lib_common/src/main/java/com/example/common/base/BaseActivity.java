@@ -145,7 +145,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (TextUtils.isEmpty(msg)) {
             msg = getString(R.string.label_response_err);
         }
-        showToast(!NetWorkUtil.INSTANCE.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
+        showToast(!NetWorkUtil.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
         return true;
     }
 
@@ -155,7 +155,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (doResponse(msg)) {
             emptyLayout.showEmpty();
         }
-        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+        if (!NetWorkUtil.isNetworkAvailable()) {
             emptyLayout.showError();
         }
     }
@@ -172,7 +172,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             return;
         }
         xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
-        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
+        if (!NetWorkUtil.isNetworkAvailable()) {
             xRecyclerView.showError();
         } else {
             xRecyclerView.showEmpty(imgInt, emptyStr);
