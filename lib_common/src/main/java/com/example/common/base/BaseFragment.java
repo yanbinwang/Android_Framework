@@ -28,11 +28,11 @@ import com.example.common.base.page.PageParams;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
 import com.example.common.utils.NetWorkUtil;
+import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
 import com.example.common.widget.empty.EmptyLayout;
 import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
-import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
@@ -289,12 +289,12 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
     @Override
     public void log(String content) {
-        LogUtil.INSTANCE.e(TAG, content);
+        LogUtil.e(TAG, content);
     }
 
     @Override
     public void showToast(String str) {
-        ToastUtil.INSTANCE.mackToastSHORT(str, requireContext().getApplicationContext());
+        ToastUtil.mackToastSHORT(str, requireContext().getApplicationContext());
     }
 
     @Override
