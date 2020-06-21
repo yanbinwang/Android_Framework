@@ -45,7 +45,7 @@ interface BaseImpl {
     /**
      * 列表遮罩层处理（自定义错误图片）
      */
-    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int, imgInt: Int, emptyStr: String?)
+    fun emptyState(xRecyclerView: XRecyclerView?, msg: String?, length: Int, imgRes: Int, emptyText: String?)
 
     /**
      * 对象判空（批量）

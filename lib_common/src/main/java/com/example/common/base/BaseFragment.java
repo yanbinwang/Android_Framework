@@ -154,16 +154,17 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     }
 
     @Override
-    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgRes, String emptyText) {
         doResponse(msg);
         if (length > 0) {
             return;
         }
+        xRecyclerView.setRefreshing(false);
         xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
         if (!NetWorkUtil.isNetworkAvailable()) {
             xRecyclerView.showError();
         } else {
-            xRecyclerView.showEmpty(imgInt, emptyStr);
+            xRecyclerView.showEmpty(imgRes, emptyText);
         }
     }
 

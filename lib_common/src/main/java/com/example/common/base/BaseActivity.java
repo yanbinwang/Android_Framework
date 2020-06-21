@@ -164,7 +164,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
+    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgRes, String emptyText) {
         doResponse(msg);
         if (length > 0) {
             return;
@@ -173,7 +173,7 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
         if (!NetWorkUtil.isNetworkAvailable()) {
             xRecyclerView.showError();
         } else {
-            xRecyclerView.showEmpty(imgInt, emptyStr);
+            xRecyclerView.showEmpty(imgRes, emptyText);
         }
     }
 
