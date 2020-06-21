@@ -67,6 +67,12 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected abstract int getLayoutResID();
 
+    protected void addDisposable(Disposable disposable) {
+        if (null != disposable) {
+            rxManager.add(disposable);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -134,29 +140,21 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     }
 
     @Override
-    public void addDisposable(Disposable disposable) {
-        if (null != disposable) {
-            rxManager.add(disposable);
-        }
-    }
-
-    @Override
-    public boolean doResponse(String msg) {
+    public void doResponse(String msg) {
         if (TextUtils.isEmpty(msg)) {
             msg = getString(R.string.label_response_err);
         }
         showToast(!NetWorkUtil.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
-        return true;
     }
 
     @Override
     public void emptyState(EmptyLayout emptyLayout, String msg) {
-        emptyLayout.setVisibility(View.VISIBLE);
-        if (doResponse(msg)) {
-            emptyLayout.showEmpty();
-        }
+        doResponse(msg);
+        VISIBLE(emptyLayout);
         if (!NetWorkUtil.isNetworkAvailable()) {
             emptyLayout.showError();
+        } else {
+            emptyLayout.showEmpty();
         }
     }
 

@@ -28,14 +28,9 @@ interface BaseImpl {
     fun initData()
 
     /**
-     * 添加事务
-     */
-    fun addDisposable(disposable: Disposable?)
-
-    /**
      * 接口返回提示
      */
-    fun doResponse(msg: String?): Boolean
+    fun doResponse(msg: String?)
 
     /**
      * 遮罩层处理
