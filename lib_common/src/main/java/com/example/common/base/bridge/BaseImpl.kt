@@ -1,9 +1,6 @@
 package com.example.common.base.bridge
 
 import android.view.View
-import com.example.common.widget.empty.EmptyLayout
-import com.example.common.widget.xrecyclerview.XRecyclerView
-import io.reactivex.disposables.Disposable
 
 /**
  * author: wyb
@@ -26,31 +23,6 @@ interface BaseImpl {
      * 初始化数据
      */
     fun initData()
-
-    /**
-     * 接口返回提示
-     */
-    fun doResponse(msg: String?)
-
-    /**
-     * 遮罩层处理
-     */
-    fun emptyState(emptyLayout: EmptyLayout?, msg: String?)
-
-    /**
-     * 遮罩层处理（自定义错误图片）
-     */
-    fun emptyState(emptyLayout: EmptyLayout?, msg: String?, imgRes: Int, emptyText: String?)
-
-    /**
-     * 列表遮罩层处理
-     */
-    fun listEmptyState(xRecyclerView: XRecyclerView?, refresh: Boolean, msg: String?, length: Int)
-
-    /**
-     * 列表遮罩层处理（自定义错误图片）
-     */
-    fun listEmptyState(xRecyclerView: XRecyclerView?, refresh: Boolean, msg: String?, length: Int, imgRes: Int, emptyText: String?)
 
     /**
      * 对象判空（批量）

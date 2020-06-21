@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -18,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.R;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -28,11 +26,8 @@ import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
-import com.example.common.utils.NetWorkUtil;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.common.widget.empty.EmptyLayout;
-import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.ToastUtil;
 
@@ -137,51 +132,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
 
     @Override
     public void initData() {
-    }
-
-    @Override
-    public void doResponse(String msg) {
-        if (TextUtils.isEmpty(msg)) {
-            msg = getString(R.string.label_response_err);
-        }
-        showToast(!NetWorkUtil.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
-    }
-
-    @Override
-    public void emptyState(EmptyLayout emptyLayout, String msg) {
-        emptyState(emptyLayout, msg, -1, null);
-    }
-
-    @Override
-    public void emptyState(EmptyLayout emptyLayout, String msg, int imgRes, String emptyText) {
-        doResponse(msg);
-        VISIBLE(emptyLayout);
-        if (!NetWorkUtil.isNetworkAvailable()) {
-            emptyLayout.showError();
-        } else {
-            emptyLayout.showEmpty(imgRes, emptyText);
-        }
-    }
-
-    @Override
-    public void listEmptyState(XRecyclerView xRecyclerView, boolean refresh, String msg, int length) {
-        listEmptyState(xRecyclerView, refresh, msg, length, -1, null);
-    }
-
-    @Override
-    public void listEmptyState(XRecyclerView xRecyclerView, boolean refresh, String msg, int length, int imgRes, String emptyText) {
-        EmptyLayout emptyLayout = xRecyclerView.getEmptyView();
-        xRecyclerView.setRefreshing(false);
-        //区分此次刷新是否成功
-        if (refresh) {
-            GONE(emptyLayout);
-        } else {
-            if (length > 0) {
-                doResponse(msg);
-                return;
-            }
-            emptyState(emptyLayout, msg, imgRes, emptyText);
-        }
     }
 
     @Override
