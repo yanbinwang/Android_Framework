@@ -52,9 +52,9 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     protected P presenter;//P层泛型
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected View convertView;//传入的View
     protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
+    private View convertView;//传入的View（子类获取view通过getView方法）
     private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
