@@ -41,11 +41,11 @@ class PermissionHelper(context: Context) {
                 .permission(*groups)
                 .onGranted {
                     // 权限申请成功回调
-                    onPermissionListener?.onAndPermissionListener(true)
+                    onPermissionListener?.onPermissionListener(true)
                 }
                 .onDenied { permissions ->
                     // 权限申请失败回调
-                    onPermissionListener?.onAndPermissionListener(false)
+                    onPermissionListener?.onPermissionListener(false)
                     //提示参数
                     var result: String? = null
                     if (permissions.isNotEmpty()) {
@@ -68,15 +68,17 @@ class PermissionHelper(context: Context) {
 
                     //如果用户拒绝了开启权限
                     if (AndPermission.hasAlwaysDeniedPermission(mContext.get(), permissions)) {
-                        AndDialog.with(mContext.get()).show(
-                            mContext.get()?.getString(R.string.label_dialog_title),
-                            MessageFormat.format(
-                                mContext.get()?.getString(R.string.label_dialog_permission),
-                                result
-                            ),
-                            mContext.get()?.getString(R.string.label_dialog_sure),
-                            mContext.get()?.getString(R.string.label_dialog_cancel),
-                            object : OnDialogListener {
+                        AndDialog.with(mContext.get())
+                            .setParams(
+                                mContext.get()?.getString(R.string.label_dialog_title),
+                                MessageFormat.format(
+                                    mContext.get()?.getString(R.string.label_dialog_permission),
+                                    result
+                                ),
+                                mContext.get()?.getString(R.string.label_dialog_sure),
+                                mContext.get()?.getString(R.string.label_dialog_cancel)
+                            )
+                            .setOnDialogListener(object : OnDialogListener {
                                 override fun onDialogConfirm() {
                                     val packageURI =
                                         Uri.parse("package:" + mContext.get()?.packageName)
@@ -90,10 +92,11 @@ class PermissionHelper(context: Context) {
 
                                 override fun onDialogCancel() {}
                             })
+                            .show()
                     }
                 }.start()
         } else {
-            onPermissionListener?.onAndPermissionListener(true)
+            onPermissionListener?.onPermissionListener(true)
         }
         return this
     }
