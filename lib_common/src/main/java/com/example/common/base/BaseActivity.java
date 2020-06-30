@@ -55,8 +55,8 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
-    private BasePresenter presenter;//P层
     private RxManager rxManager;//事务管理器
+    private BasePresenter presenter;//P层
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -105,8 +105,8 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         activity = new WeakReference<>(this);
         context = new WeakReference<>(this);
         statusBarBuilder = new StatusBarBuilder(this);
-        rxManager = new RxManager();
         loadingDialog = new LoadingDialog(this);
+        rxManager = new RxManager();
     }
 
     @Override

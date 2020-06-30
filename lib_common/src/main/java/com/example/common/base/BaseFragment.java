@@ -53,8 +53,8 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
-    private BasePresenter presenter;//P层
     private RxManager rxManager;//事务管理器
+    private BasePresenter presenter;//P层
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
@@ -107,8 +107,8 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
         activity = new WeakReference<>(getActivity());
         context = new WeakReference<>(getContext());
         statusBarBuilder = new StatusBarBuilder(activity.get());
-        rxManager = new RxManager();
         loadingDialog = new LoadingDialog(activity.get());
+        rxManager = new RxManager();
     }
 
     @Override
