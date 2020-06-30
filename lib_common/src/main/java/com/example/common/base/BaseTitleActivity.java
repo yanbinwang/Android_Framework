@@ -1,18 +1,18 @@
 package com.example.common.base;
 
+import android.view.View;
 import android.widget.FrameLayout;
 
-import com.example.common.R;
-import com.example.common.base.bridge.BasePresenter;
-import com.example.common.utils.builder.TitleBuilder;
+import androidx.viewbinding.ViewBinding;
 
-import butterknife.ButterKnife;
+import com.example.common.R;
+import com.example.common.utils.builder.TitleBuilder;
 
 /**
  * Created by WangYanBin on 2020/6/10.
  * 带标题的基类，将整一个xml插入容器
  */
-public abstract class BaseTitleActivity<P extends BasePresenter> extends BaseActivity<P> {
+public abstract class BaseTitleActivity<VB extends ViewBinding> extends BaseActivity<VB> {
     protected TitleBuilder titleBuilder;//标题栏
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
@@ -23,11 +23,10 @@ public abstract class BaseTitleActivity<P extends BasePresenter> extends BaseAct
     }
 
     @Override
-    public void setContentView(int layoutResID) {
+    public void setContentView(View view) {
         super.setContentView(R.layout.activity_base);
         FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(getLayoutInflater().inflate(layoutResID, null));
-        unBinder = ButterKnife.bind(this);
+        addMainContextFrame.addView(binding.getRoot());
     }
     // </editor-fold>
 

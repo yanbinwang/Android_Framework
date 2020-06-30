@@ -40,16 +40,6 @@ interface BaseImpl {
     fun closeDecor()
 
     /**
-     * 赋值-文案
-     */
-    fun setText(res: Int, str: String?)
-
-    /**
-     * 赋值-颜色
-     */
-    fun setTextColor(res: Int, color: Int)
-
-    /**
      * 让一个view获得焦点
      */
     fun setViewFocus(view: View?)

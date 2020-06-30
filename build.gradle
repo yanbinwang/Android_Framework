@@ -4,12 +4,10 @@ buildscript {
     apply from: 'config.gradle'
     addRepos(repositories)
     ext.gradle_version = '4.0.0'
-    ext.butterknife_version = '10.2.1'
     ext.kotlin_version = '1.3.72'
     ext.MobSDK_version = '2018.0319.1724'
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
-        classpath "com.jakewharton:butterknife-gradle-plugin:$butterknife_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.mob.sdk:MobSDK:$MobSDK_version"
         // NOTE: Do not place your application dependencies here; they belong

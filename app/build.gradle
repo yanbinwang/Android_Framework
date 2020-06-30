@@ -45,6 +45,8 @@ android {
         }
     }
 
+    viewBinding.enabled = true
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -100,7 +102,4 @@ dependencies {
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
-    //黄油刀控件绑定
-    implementation deps.jakewharton.butterknife
-    kapt deps.jakewharton.butterknife_compiler
 }

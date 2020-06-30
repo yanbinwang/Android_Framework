@@ -21,9 +21,6 @@ versions.album = "2.1.3"
 versions.durban = "1.0.1"
 versions.permission = "2.0.2"
 //------------------------------------------------------------------------------------------
-versions.butterknife = "10.2.1"
-versions.butterknife_compiler = "10.2.1"
-//------------------------------------------------------------------------------------------
 versions.kotlin = "1.3.72"
 versions.material = "1.1.0"
 versions.okhttp = "3.14.0"
@@ -67,12 +64,6 @@ yanzhenjie.album = "com.yanzhenjie:album:$versions.album"
 yanzhenjie.durban = "com.yanzhenjie:durban:$versions.durban"
 yanzhenjie.permission = "com.yanzhenjie:permission:$versions.permission"
 deps.yanzhenjie = yanzhenjie
-
-//黄油刀控件绑定
-def jakewharton = [:]
-jakewharton.butterknife ="com.jakewharton:butterknife:$versions.butterknife"
-jakewharton.butterknife_compiler= "com.jakewharton:butterknife-compiler:$versions.butterknife_compiler"
-deps.jakewharton = jakewharton
 
 //非组的第三方控件
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin"//kotlin

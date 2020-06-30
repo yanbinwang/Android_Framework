@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import androidx.annotation.Nullable;
-
-import com.example.common.base.bridge.BasePresenter;
+import androidx.viewbinding.ViewBinding;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -14,7 +13,7 @@ import org.jetbrains.annotations.NotNull;
  * Created by WangYanBin on 2020/6/10.
  * 数据懒加载，当界面不可展示时，不执行加载数据的方法
  */
-public abstract class BaseLazyFragment<P extends BasePresenter> extends BaseFragment<P>{
+public abstract class BaseLazyFragment<VB extends ViewBinding> extends BaseFragment<VB> {
     private boolean isVisible, isInitView, isFirstLoad = true;//当前Fragment是否可见,是否与View建立起映射关系,是否是第一次加载数据
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 

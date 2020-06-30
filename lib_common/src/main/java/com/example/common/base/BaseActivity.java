@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -14,6 +15,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -33,14 +35,13 @@ import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -49,30 +50,50 @@ import io.reactivex.disposables.Disposable;
  * activity基类，包含了一些方法，全局广播等
  */
 @SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
-public abstract class BaseActivity<P extends BasePresenter> extends AppCompatActivity implements BaseImpl, BaseView {
-    protected P presenter;//P层泛型
+public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActivity implements BaseImpl, BaseView {
+    protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
-    protected Unbinder unBinder;//黄油刀绑定
+    private BasePresenter presenter;//P层
     private RxManager rxManager;//事务管理器
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    protected abstract int getLayoutResID();
-
     protected void addDisposable(Disposable disposable) {
         if (null != disposable) {
             rxManager.add(disposable);
         }
     }
 
+    protected <P extends BasePresenter> P getPresenter(Class<P> vmClass) {
+        if (presenter == null) {
+            try {
+                presenter = vmClass.newInstance();
+                presenter.attachView(this, this, this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return (P) presenter;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(getLayoutResID());
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        Type type = getClass().getGenericSuperclass();
+        if (type instanceof ParameterizedType) {
+            try {
+                Class<VB> vbClass = (Class<VB>) ((ParameterizedType) type).getActualTypeArguments()[0];
+                Method method = vbClass.getMethod("inflate", LayoutInflater.class);
+                binding = (VB) method.invoke(null, getLayoutInflater());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            setContentView(binding.getRoot());
+        }
         initView();
         initEvent();
         initData();
@@ -81,33 +102,11 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(this, this, this);
-        }
         activity = new WeakReference<>(this);
         context = new WeakReference<>(this);
         statusBarBuilder = new StatusBarBuilder(this);
-        unBinder = ButterKnife.bind(this);
         rxManager = new RxManager();
         loadingDialog = new LoadingDialog(this);
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            if (parameterizedType != null) {
-                Type type = parameterizedType.getActualTypeArguments()[0];
-                Class<P> pClass = (Class<P>) type;
-                if (pClass != null) {
-                    return pClass.newInstance();
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -169,16 +168,6 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
             InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public void setText(int res, String str) {
-        ((TextView) findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -245,8 +234,8 @@ public abstract class BaseActivity<P extends BasePresenter> extends AppCompatAct
     @Override
     public void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        if (null != unBinder) {
-            unBinder.unbind();
+        if (binding != null) {
+            binding = null;
         }
     }
     // </editor-fold>
