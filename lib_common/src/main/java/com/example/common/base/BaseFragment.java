@@ -102,13 +102,12 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
         try {
             Type superClass = getClass().getGenericSuperclass();
             ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
             if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
-            }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
+                Type type = parameterizedType.getActualTypeArguments()[0];
+                Class<P> pClass = (Class<P>) type;
+                if (pClass != null) {
+                    return pClass.newInstance();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
