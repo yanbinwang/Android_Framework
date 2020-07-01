@@ -67,7 +67,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         }
     }
 
-    protected <P extends BasePresenter> P getPresenter(Class<P> vmClass) {
+    protected <P extends BasePresenter> P createPresenter(Class<P> vmClass) {
         if (presenter == null) {
             try {
                 presenter = vmClass.newInstance();
