@@ -19,6 +19,8 @@ android {
         }
     }
 
+    viewBinding.enabled = true
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -62,9 +64,6 @@ dependencies {
     //页面路由
     api deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
-    //黄油刀控件绑定
-    api deps.jakewharton.butterknife
-    kapt deps.jakewharton.butterknife_compiler
     //严正杰相册，裁剪，权限库
     api deps.yanzhenjie.album
     api deps.yanzhenjie.durban

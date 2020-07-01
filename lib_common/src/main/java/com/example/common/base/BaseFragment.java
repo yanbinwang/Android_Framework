@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,34 +16,30 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.R;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
-import com.example.common.utils.NetWorkUtil;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.common.widget.empty.EmptyLayout;
-import com.example.common.widget.xrecyclerview.XRecyclerView;
 import com.example.framework.utils.LogUtil;
 import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -53,26 +48,49 @@ import io.reactivex.disposables.Disposable;
  * 适用于fragmentmanager管理显示隐藏fragment
  */
 @SuppressWarnings("unchecked")
-public abstract class BaseFragment<P extends BasePresenter> extends Fragment implements BaseImpl, BaseView {
-    protected P presenter;//P层泛型
+public abstract class BaseFragment<VB extends ViewBinding> extends Fragment implements BaseImpl, BaseView {
+    protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
-    protected View convertView;//传入的View
-    protected Unbinder unBinder;//黄油刀绑定
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
     private RxManager rxManager;//事务管理器
+    private BasePresenter presenter;//P层
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    protected abstract int getLayoutResID();
+    protected void addDisposable(Disposable disposable) {
+        if (null != disposable) {
+            rxManager.add(disposable);
+        }
+    }
+
+    protected <P extends BasePresenter> P getPresenter(Class<P> vmClass) {
+        if (presenter == null) {
+            try {
+                presenter = vmClass.newInstance();
+                presenter.attachView(getActivity(), getContext(), this);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return (P) presenter;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         log(TAG);
-        convertView = inflater.inflate(getLayoutResID(), container, false);
-        unBinder = ButterKnife.bind(this, convertView);
-        return convertView;
+        Type type = getClass().getGenericSuperclass();
+        if (type instanceof ParameterizedType) {
+            try {
+                Class<VB> vbClass = (Class<VB>) ((ParameterizedType) type).getActualTypeArguments()[0];
+                Method method = vbClass.getMethod("inflate", LayoutInflater.class, ViewGroup.class, Boolean.class);
+                binding = (VB) method.invoke(null, container, false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return binding.getRoot();
     }
 
     @Override
@@ -86,33 +104,11 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void initView() {
         ARouter.getInstance().inject(this);
-        presenter = getPresenter();
-        if (null != presenter) {
-            presenter.attachView(getActivity(), getContext(), this);
-        }
         activity = new WeakReference<>(getActivity());
         context = new WeakReference<>(getContext());
         statusBarBuilder = new StatusBarBuilder(activity.get());
-        rxManager = new RxManager();
         loadingDialog = new LoadingDialog(activity.get());
-    }
-
-    private <P> P getPresenter() {
-        try {
-            Type superClass = getClass().getGenericSuperclass();
-            ParameterizedType parameterizedType = (ParameterizedType) superClass;
-            Type type = null;
-            if (parameterizedType != null) {
-                type = parameterizedType.getActualTypeArguments()[0];
-            }
-            Class<P> tClass = (Class<P>) type;
-            if (tClass != null) {
-                return tClass.newInstance();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
+        rxManager = new RxManager();
     }
 
     @Override
@@ -121,52 +117,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
 
     @Override
     public void initData() {
-    }
-
-    @Override
-    public void addDisposable(Disposable disposable) {
-        if (null != disposable) {
-            rxManager.add(disposable);
-        }
-    }
-
-    @Override
-    public boolean doResponse(String msg) {
-        if (TextUtils.isEmpty(msg)) {
-            msg = getString(R.string.label_response_err);
-        }
-        showToast(!NetWorkUtil.INSTANCE.isNetworkAvailable() ? getString(R.string.label_response_net_err) : msg);
-        return true;
-    }
-
-    @Override
-    public void emptyState(EmptyLayout emptyLayout, String msg) {
-        emptyLayout.setVisibility(View.VISIBLE);
-        if (doResponse(msg)) {
-            emptyLayout.showEmpty();
-        }
-        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
-            emptyLayout.showError();
-        }
-    }
-
-    @Override
-    public void emptyState(XRecyclerView xRecyclerView, String msg, int length) {
-        emptyState(xRecyclerView, msg, length, R.mipmap.img_data_empty, EmptyLayout.EMPTY_TXT);
-    }
-
-    @Override
-    public void emptyState(XRecyclerView xRecyclerView, String msg, int length, int imgInt, String emptyStr) {
-        doResponse(msg);
-        if (length > 0) {
-            return;
-        }
-        xRecyclerView.setVisibilityEmptyView(View.VISIBLE);
-        if (!NetWorkUtil.INSTANCE.isNetworkAvailable()) {
-            xRecyclerView.showError();
-        } else {
-            xRecyclerView.showEmpty(imgInt, emptyStr);
-        }
     }
 
     @Override
@@ -205,16 +155,6 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
             InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
         }
-    }
-
-    @Override
-    public void setText(int res, String str) {
-        ((TextView) convertView.findViewById(res)).setText(str);
-    }
-
-    @Override
-    public void setTextColor(int res, int color) {
-        ((TextView) convertView.findViewById(res)).setTextColor(color);
     }
 
     @Override
@@ -280,8 +220,8 @@ public abstract class BaseFragment<P extends BasePresenter> extends Fragment imp
     @Override
     public void onDetach() {
         super.onDetach();
-        if (null != unBinder) {
-            unBinder.unbind();
+        if (binding != null) {
+            binding = null;
         }
     }
     // </editor-fold>

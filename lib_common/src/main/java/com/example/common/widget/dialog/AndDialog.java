@@ -17,12 +17,13 @@ import com.example.common.widget.dialog.callback.OnDialogListener;
  * 安卓原生提示框
  */
 public class AndDialog extends AlertDialog.Builder {
+    private OnDialogListener onDialogListener;
 
     public AndDialog(@NonNull Context context) {
         super(context, R.style.dialogStyle);
     }
 
-    public AndDialog show(String tipText, String contentText, String sureText, String cancelText, OnDialogListener onDialogListener) {
+    public AndDialog setParams(String tipText, String contentText, String sureText, String cancelText) {
         if (!TextUtils.isEmpty(tipText)) {
             setTitle(tipText);
         }
@@ -37,11 +38,15 @@ public class AndDialog extends AlertDialog.Builder {
                 onDialogListener.onDialogCancel();
             }
         });
-        show();
         return this;
     }
 
-    public static AndDialog with(Context context){
+    public AndDialog setOnDialogListener(OnDialogListener onDialogListener) {
+        this.onDialogListener = onDialogListener;
+        return this;
+    }
+
+    public static AndDialog with(Context context) {
         return new AndDialog(context);
     }
 
