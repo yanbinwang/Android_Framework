@@ -65,10 +65,10 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
         }
     }
 
-    protected <P extends BasePresenter> P getPresenter(Class<P> vmClass) {
+    protected <P extends BasePresenter> P getPresenter(Class<P> pClass) {
         if (presenter == null) {
             try {
-                presenter = vmClass.newInstance();
+                presenter = pClass.newInstance();
                 presenter.attachView(getActivity(), getContext(), this);
             } catch (Exception e) {
                 e.printStackTrace();
