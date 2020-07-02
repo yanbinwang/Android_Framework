@@ -34,12 +34,10 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
 
     @Override
     public void getUserInfoSuccess(@Nullable Object data) {
-
     }
 
     @Override
     public void getUserInfoFailure(@Nullable Throwable e, @Nullable String msg) {
-
     }
 
 }
