@@ -67,10 +67,10 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         }
     }
 
-    protected <P extends BasePresenter> P createPresenter(Class<P> vmClass) {
+    protected <P extends BasePresenter> P createPresenter(Class<P> pClass) {
         if (presenter == null) {
             try {
-                presenter = vmClass.newInstance();
+                presenter = pClass.newInstance();
                 presenter.attachView(this, this, this);
             } catch (Exception e) {
                 e.printStackTrace();
