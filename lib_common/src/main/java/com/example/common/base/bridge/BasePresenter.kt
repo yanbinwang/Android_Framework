@@ -39,15 +39,15 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun getActivity(): Activity? {
+    protected fun getActivity(): Activity {
         return activity?.get()!!
     }
 
-    protected fun getContext(): Context? {
+    protected fun getContext(): Context {
         return context?.get()!!
     }
 
-    protected fun getView(): T? {
+    protected fun getView(): T {
         return view?.get()!!
     }
 
