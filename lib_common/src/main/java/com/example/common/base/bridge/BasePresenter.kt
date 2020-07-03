@@ -14,9 +14,9 @@ import java.lang.ref.WeakReference
  * 完成View和Presenter的关联性
  */
 abstract class BasePresenter<T : BaseView> {
-    protected var activity: WeakReference<Activity>? = null
-    protected var context: WeakReference<Context>? = null
-    protected var view: SoftReference<T>? = null
+    private var activity: WeakReference<Activity>? = null
+    private var context: WeakReference<Context>? = null
+    private var view: SoftReference<T>? = null
     private var rxManager: RxManager? = null
 
     fun attachView(activity: Activity?, context: Context?, view: T?) {
@@ -37,6 +37,18 @@ abstract class BasePresenter<T : BaseView> {
         if (null != disposable) {
             rxManager?.add(disposable)
         }
+    }
+
+    protected fun getActivity(): Activity? {
+        return activity?.get()!!
+    }
+
+    protected fun getContext(): Context? {
+        return context?.get()!!
+    }
+
+    protected fun getView(): T? {
+        return view?.get()!!
     }
 
 }

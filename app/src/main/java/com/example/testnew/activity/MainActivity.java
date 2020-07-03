@@ -15,7 +15,7 @@ import org.jetbrains.annotations.Nullable;
  * 2）在移交给P层处理数据前先对从View里取得的数据做一定的简单处理，一些处理方法在基类中已经实现，丢给P层后P层可以对数据进一步处理并及时回调
  * 3）每个请求返回的事务都添加进事务管理器内，在基类中重写了销毁方法，避免内存泄漏
  */
-public class MainActivity extends BaseTitleActivity<ActivityMainBinding> implements MainContract.View{
+public class MainActivity extends BaseTitleActivity<ActivityMainBinding> implements MainContract.View {
     private MainPresenter presenter;
 
     @Override

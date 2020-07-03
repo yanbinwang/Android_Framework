@@ -5,11 +5,11 @@ import com.example.testnew.presenter.contract.MainContract
 /**
  * Created by WangYanBin on 2020/6/30.
  */
-class MainPresenter :MainContract.Presenter(){
+class MainPresenter : MainContract.Presenter() {
 
     override fun getUserInfo() {
-        view?.get()?.showDialog()
-            view?.get()?.getUserInfoSuccess(Any())
+        getView()?.showDialog()
+        getView()?.getUserInfoSuccess(Any())
 
         //        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
