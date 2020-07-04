@@ -33,6 +33,7 @@ import com.example.framework.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
@@ -65,7 +66,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
         }
     }
 
-    protected <P extends BasePresenter> P getPresenter(Class<P> pClass) {
+    protected <P extends BasePresenter> P createPresenter(Class<P> pClass) {
         if (presenter == null) {
             try {
                 presenter = pClass.newInstance();
@@ -80,15 +81,13 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         log(TAG);
-        Type type = getClass().getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            try {
-                Class<VB> vbClass = (Class<VB>) ((ParameterizedType) type).getActualTypeArguments()[0];
-                Method method = vbClass.getMethod("inflate", LayoutInflater.class, ViewGroup.class, Boolean.class);
-                binding = (VB) method.invoke(null, container, false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        Type superclass = getClass().getGenericSuperclass();
+        Class<?> aClass = (Class<?>) ((ParameterizedType) superclass).getActualTypeArguments()[0];
+        try {
+            Method method = aClass.getDeclaredMethod("inflate", LayoutInflater.class, ViewGroup.class, boolean.class);
+            binding = (VB) method.invoke(null, getLayoutInflater(), container, false);
+        } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e) {
+            e.printStackTrace();
         }
         return binding.getRoot();
     }
