@@ -25,6 +25,7 @@ import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
+import com.example.common.base.proxy.SimpleTextWatcher;
 import com.example.common.bus.RxBus;
 import com.example.common.bus.RxBusEvent;
 import com.example.common.bus.RxManager;
@@ -171,7 +172,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     }
 
     @Override
-    public void setViewFocus(View view) {
+    public void getFocus(View view) {
         view.setFocusable(true);//设置输入框可聚集
         view.setFocusableInTouchMode(true);//设置触摸聚焦
         view.requestFocus();//请求焦点
@@ -179,7 +180,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     }
 
     @Override
-    public String getViewValue(View view) {
+    public String getParameters(View view) {
         if (view instanceof EditText) {
             return ((EditText) view).getText().toString().trim();
         } else if (view instanceof TextView) {
@@ -192,6 +193,24 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
             return ((Button) view).getText().toString().trim();
         }
         return null;
+    }
+
+    @Override
+    public void onTextChanged(SimpleTextWatcher simpleTextWatcher, View... views) {
+        for (View view : views) {
+            if (view instanceof EditText) {
+                ((EditText) view).addTextChangedListener(simpleTextWatcher);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View.OnClickListener onClickListener, View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setOnClickListener(onClickListener);
+            }
+        }
     }
 
     @Override

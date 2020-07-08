@@ -1,6 +1,7 @@
 package com.example.common.base.bridge
 
 import android.view.View
+import com.example.common.base.proxy.SimpleTextWatcher
 
 /**
  * author: wyb
@@ -42,12 +43,22 @@ interface BaseImpl {
     /**
      * 让一个view获得焦点
      */
-    fun setViewFocus(view: View?)
+    fun getFocus(view: View?)
 
     /**
      * 获取控件的基础值
      */
-    fun getViewValue(view: View?): String?
+    fun getParameters(view: View?): String?
+
+    /**
+     * 批量注入输入监听
+     */
+    fun onTextChanged(simpleTextWatcher: SimpleTextWatcher?, vararg views: View?)
+
+    /**
+     * 批量注入点击事件
+     */
+    fun onClick(onClickListener: View.OnClickListener?, vararg views: View?)
 
     /**
      * 控件显示
