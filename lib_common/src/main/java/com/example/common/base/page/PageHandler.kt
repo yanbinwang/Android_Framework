@@ -12,7 +12,7 @@ import com.example.framework.utils.ToastUtil.mackToastSHORT
 /**
  * 遮罩层操作
  */
-object PageMask {
+object PageHandler {
 
     @JvmStatic
     fun doResponse(msg: String?) {
