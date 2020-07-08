@@ -8,8 +8,8 @@ import com.example.testnew.presenter.contract.MainContract
 class MainPresenter : MainContract.Presenter() {
 
     override fun getUserInfo() {
-        getView().showDialog()
-        getView().getUserInfoSuccess(Any())
+//        getView().showDialog()
+//        getView().getUserInfoSuccess(Any())
 
         //        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())

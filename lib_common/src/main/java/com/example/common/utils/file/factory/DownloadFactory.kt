@@ -41,14 +41,14 @@ class DownloadFactory private constructor() {
                     object : Thread() {
                         override fun run() {
                             var inputStream: InputStream? = null
-                            val buf = ByteArray(2048)
-                            var len: Int
                             var fileOutputStream: FileOutputStream? = null
                             try {
-                                inputStream = responseBody!!.byteStream()
-                                val total = responseBody.contentLength()
                                 val file = File(FileUtil.isExistDir(filePath), fileName)
+                                val buf = ByteArray(2048)
+                                val total = responseBody!!.contentLength()
+                                inputStream = responseBody.byteStream()
                                 fileOutputStream = FileOutputStream(file)
+                                var len: Int
                                 var sum: Long = 0
                                 while (((inputStream.read(buf)).also { len = it }) != -1) {
                                     fileOutputStream.write(buf, 0, len)
@@ -59,7 +59,7 @@ class DownloadFactory private constructor() {
                                 fileOutputStream.flush()
                                 weakHandler.post { onDownloadListener.onDownloadSuccess(file.path) }
                             } catch (e: Exception) {
-                                onError(e)
+                                weakHandler.post { onDownloadListener.onDownloadFailed(e) }
                             } finally {
                                 try {
                                     inputStream?.close()
