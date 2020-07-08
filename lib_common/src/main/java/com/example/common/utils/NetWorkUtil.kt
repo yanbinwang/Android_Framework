@@ -48,17 +48,18 @@ object NetWorkUtil {
     }
 
     //判断当前网络环境是否为wifi
+    @JvmStatic
     fun isWifi(): Boolean {
         val connectivity = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return connectivity.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
     }
 
     //获取网络状态
+    @JvmStatic
     fun getAPNType(): String {
         var netType = ""
         val manager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val networkInfo = manager.activeNetworkInfo ?: return "NULL"
-
         val nType = networkInfo.type
         if (nType == ConnectivityManager.TYPE_WIFI) {
             netType = "wifi"
