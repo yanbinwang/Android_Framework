@@ -24,6 +24,7 @@ import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
+import com.example.common.base.proxy.SimpleTextWatcher;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
@@ -157,7 +158,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
     }
 
     @Override
-    public void setViewFocus(View view) {
+    public void getFocus(View view) {
         view.setFocusable(true);//设置输入框可聚集
         view.setFocusableInTouchMode(true);//设置触摸聚焦
         view.requestFocus();//请求焦点
@@ -165,7 +166,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
     }
 
     @Override
-    public String getViewValue(@org.jetbrains.annotations.Nullable View view) {
+    public String getParameters(@org.jetbrains.annotations.Nullable View view) {
         if (view instanceof EditText) {
             return ((EditText) view).getText().toString().trim();
         } else if (view instanceof TextView) {
@@ -178,6 +179,24 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
             return ((Button) view).getText().toString().trim();
         }
         return null;
+    }
+
+    @Override
+    public void onTextChanged(SimpleTextWatcher simpleTextWatcher, View... views) {
+        for (View view : views) {
+            if (view instanceof EditText) {
+                ((EditText) view).addTextChangedListener(simpleTextWatcher);
+            }
+        }
+    }
+
+    @Override
+    public void onClick(View.OnClickListener onClickListener, View... views) {
+        for (View view : views) {
+            if (view != null) {
+                view.setOnClickListener(onClickListener);
+            }
+        }
     }
 
     @Override
