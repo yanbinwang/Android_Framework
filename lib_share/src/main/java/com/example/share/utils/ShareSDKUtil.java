@@ -27,7 +27,7 @@ public class ShareSDKUtil {
     private static ShareSDKUtil shareUtil;
 
     private ShareSDKUtil() {
-        this.context = BaseApplication.getInstance().getApplicationContext();
+        this.context = BaseApplication.instance.getApplicationContext();
     }
 
     public static ShareSDKUtil getInstance() {

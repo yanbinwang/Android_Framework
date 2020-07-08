@@ -73,7 +73,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         if (presenter == null) {
             try {
                 presenter = pClass.newInstance();
-                presenter.attachView(this, this, this);
+                presenter.attachView(this);
             } catch (Exception e) {
                 e.printStackTrace();
             }

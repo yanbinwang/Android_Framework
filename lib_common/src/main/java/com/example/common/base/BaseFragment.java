@@ -70,7 +70,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
         if (presenter == null) {
             try {
                 presenter = pClass.newInstance();
-                presenter.attachView(getActivity(), getContext(), this);
+                presenter.attachView(this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
