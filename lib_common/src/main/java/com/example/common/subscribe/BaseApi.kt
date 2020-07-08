@@ -1,6 +1,5 @@
 package com.example.common.subscribe
 
-import com.example.common.constant.Constants.URL
 import com.example.common.http.ResponseBody
 import com.example.common.model.UploadModel
 import io.reactivex.Flowable
@@ -19,15 +18,15 @@ interface BaseApi {
 
     @Multipart
     @Streaming
-    @POST(URL)
+    @POST("http://www.baidu.com")
     fun getUploadFile(@Header("User-Agent") agent: String, @Part partList: List<MultipartBody.Part>): Flowable<ResponseBody<UploadModel>>
 
     @FormUrlEncoded
-    @POST(URL)
+    @POST("http://www.baidu.com")
     fun getSendVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ResponseBody<Any>>
 
     @FormUrlEncoded
-    @POST(URL)
+    @POST("http://www.baidu.com")
     fun getVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ResponseBody<Any>>
 
 }

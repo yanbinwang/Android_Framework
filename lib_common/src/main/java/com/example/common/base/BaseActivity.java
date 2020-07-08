@@ -124,10 +124,6 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
                         finish();
                     }
                     break;
-                //切换语言
-                case Constants.APP_SWITCH_LANGUAGE:
-                    finish();
-                    break;
             }
         }));
     }

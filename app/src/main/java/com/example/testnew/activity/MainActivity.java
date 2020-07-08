@@ -36,7 +36,7 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                 .getPermissions(Permission.Group.STORAGE)
                 .setPermissionCallBack(isGranted -> {
                     if (isGranted) {
-                        String filePath = Constants.BASE_PATH.getAbsolutePath() + "/" + Constants.APPLICATION_NAME;
+                        String filePath = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME;
                         String fileName = Constants.APPLICATION_NAME + ".apk";
                         DownloadFactory.Companion.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
                             @Override
