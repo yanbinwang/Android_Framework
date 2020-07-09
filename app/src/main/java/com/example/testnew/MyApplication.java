@@ -65,6 +65,29 @@ public class MyApplication extends BaseApplication {
         Constants.APPLICATION_ID = FileUtil.getApplicationId(this);
 //        //分享工具类初始化
 //        ShareSDKUtil.getInstance();
+
+        //        while (true) {
+//            try {
+//                Looper.loop();
+//            } catch (Throwable e) {
+//                String stackTraceString = Log.getStackTraceString(e);
+//                if (e instanceof NullPointerException) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else if (e instanceof IllegalStateException) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else if (e instanceof ArrayIndexOutOfBoundsException) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else if (e instanceof IndexOutOfBoundsException) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else if (e instanceof OutOfMemoryError) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else if (e instanceof NumberFormatException) {
+//                    LogUtil.i("AppCatch -", stackTraceString);
+//                } else {
+//                    throw e;
+//                }
+//            }
+//        }
     }
 
 }
