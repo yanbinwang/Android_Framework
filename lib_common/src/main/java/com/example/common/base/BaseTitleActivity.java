@@ -1,11 +1,10 @@
 package com.example.common.base;
 
 import android.view.View;
-import android.widget.FrameLayout;
 
 import androidx.viewbinding.ViewBinding;
 
-import com.example.common.R;
+import com.example.common.databinding.ActivityBaseBinding;
 import com.example.common.utils.builder.TitleBuilder;
 
 /**
@@ -24,9 +23,9 @@ public abstract class BaseTitleActivity<VB extends ViewBinding> extends BaseActi
 
     @Override
     public void setContentView(View view) {
-        super.setContentView(R.layout.activity_base);
-        FrameLayout addMainContextFrame = findViewById(R.id.fl_base_container);
-        addMainContextFrame.addView(binding.getRoot());
+        ActivityBaseBinding baseBinding = ActivityBaseBinding.inflate(getLayoutInflater());
+        baseBinding.flBaseContainer.addView(binding.getRoot());
+        super.setContentView(baseBinding.getRoot());
     }
     // </editor-fold>
 

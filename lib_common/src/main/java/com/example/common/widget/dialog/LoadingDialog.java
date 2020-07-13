@@ -1,9 +1,7 @@
 package com.example.common.widget.dialog;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
 import android.content.Context;
-import android.widget.LinearLayout;
 
 import com.example.common.R;
 import com.example.common.databinding.ViewDialogLoadingBinding;
@@ -14,13 +12,11 @@ import com.example.common.databinding.ViewDialogLoadingBinding;
  * https://blog.csdn.net/shulianghan/article/details/105066654
  */
 @SuppressLint("InflateParams")
-public class LoadingDialog extends Dialog {
+public class LoadingDialog extends BaseDialog {
 
     public LoadingDialog(Context context) {
         super(context, R.style.loadingStyle);
-        setContentView(ViewDialogLoadingBinding.inflate(getLayoutInflater()).getRoot(), new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT));
+        setDialogContentView(ViewDialogLoadingBinding.inflate(getLayoutInflater()).getRoot());
     }
 
     public void show(boolean flag) {
