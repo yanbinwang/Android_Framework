@@ -15,7 +15,7 @@ import com.example.framework.utils.AnimationLoader;
  * Created by WangYanBin on 2020/7/13.
  * 所有弹框的基类
  */
-public class BaseDialog extends Dialog {
+public abstract class BaseDialog extends Dialog {
 
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.dialogStyle);

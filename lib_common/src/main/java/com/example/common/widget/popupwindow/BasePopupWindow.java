@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference;
  * Created by WangYanBin on 2020/7/13.
  * 所有弹框的基类
  */
-public class BasePopupWindow extends PopupWindow {
+public abstract class BasePopupWindow extends PopupWindow {
     private boolean dark;
     private WeakReference<Activity> weakActivity;
     private WindowManager.LayoutParams layoutParams;
