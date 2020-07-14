@@ -50,7 +50,9 @@
                 android:textColor="@color/grey_666666"
                 android:textSize="32mm" />
 
-            <View style="@style/lineHeight" />
+            <View
+                android:id="@+id/view_line"
+                style="@style/lineHeight" />
 
             <TextView
                 android:id="@+id/tv_dialog_sure"
