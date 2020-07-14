@@ -50,13 +50,13 @@ public class BaseApplication extends Application {
 
     public void onCreate() {
         super.onCreate();
-        //单列返回值（能让程序在任意地方取到context）
-        instance = this;
-        init();
+        initialize();
     }
 
     //初始化一些第三方控件和单例工具类等
-    private void init() {
+    private void initialize() {
+        //单列返回值（能让程序在任意地方取到context）
+        instance = this;
         //布局初始化
         AutoSizeConfig.getInstance().getUnitsManager()
                 .setSupportDP(false)

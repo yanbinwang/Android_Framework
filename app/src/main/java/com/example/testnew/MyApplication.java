@@ -35,13 +35,13 @@ public class MyApplication extends BaseApplication {
 
     public void onCreate() {
         super.onCreate();
-        //单列返回值（能让程序在任意地方取到context）
-        instance = this;
-        init();
+        initialize();
     }
 
     //初始化一些第三方控件和单例工具类等
-    private void init() {
+    private void initialize() {
+        //单列返回值（能让程序在任意地方取到context）
+        instance = this;
         if (BuildConfig.ISDEBUG) {
             //debug	是否开启debug模式
             //recoverInBackgroud 当应用在后台时发生Crash，是否需要进行恢复
