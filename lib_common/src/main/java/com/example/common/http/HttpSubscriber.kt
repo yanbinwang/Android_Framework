@@ -55,7 +55,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
         } else {
             onFailed(throwable, "")
         }
-        onFinish()
+//        onFinish()
     }
 
     override fun onComplete() {
@@ -68,6 +68,6 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
 
     protected abstract fun onFailed(e: Throwable?, msg: String?)
 
-    protected abstract fun onFinish()
+//    protected abstract fun onFinish()
 
 }
