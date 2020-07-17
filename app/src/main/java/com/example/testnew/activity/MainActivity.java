@@ -8,7 +8,9 @@ import com.example.common.imageloader.ImageLoader;
 import com.example.common.utils.file.callback.OnDownloadListener;
 import com.example.common.utils.file.factory.DownloadFactory;
 import com.example.common.utils.helper.permission.PermissionHelper;
+import com.example.testnew.adapter.TestAdapter;
 import com.example.testnew.databinding.ActivityMainBinding;
+import com.example.testnew.model.TestListModel;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
 import com.yanzhenjie.permission.runtime.Permission;
@@ -16,6 +18,8 @@ import com.yanzhenjie.permission.runtime.Permission;
 import org.jetbrains.annotations.Nullable;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -42,6 +46,9 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void initData() {
         super.initData();
         presenter.getUserInfo();
+
+        List<TestListModel> list = new ArrayList<>();
+        TestAdapter adapter = new TestAdapter(list);
     }
 
     @Override
