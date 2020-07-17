@@ -1,6 +1,6 @@
 package com.example.common.subscribe
 
-import com.example.common.http.ResponseBody
+import com.example.common.http.callback.ResponseBody
 import com.example.common.model.UploadModel
 import io.reactivex.Flowable
 import okhttp3.MultipartBody
