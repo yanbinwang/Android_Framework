@@ -1,15 +1,17 @@
 package com.example.common.base.binding
 
 import androidx.recyclerview.widget.RecyclerView
+import com.example.common.widget.xrecyclerview.callback.OnItemClickListener
 
 /**
  * Created by WangYanBin on 2020/7/17.
  * 基础适配器
  */
 abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
-    private var state: State? = null
-    private var t: T? = null
     private var data: MutableList<T> = ArrayList()
+    private var t: T? = null
+    private var state: State? = null
+    private var onItemClickListener: OnItemClickListener? = null
 
     //默认是返回对象
     constructor() {
@@ -40,6 +42,7 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     }
 
     override fun onBindViewHolder(holder: BaseViewBindingHolder, position: Int) {
+        holder.itemView.setOnClickListener { onItemClickListener?.setOnItemClickListener(position) }
         convert(holder, if (state == State.COLLECTION) data[position] else t)
     }
 
@@ -62,6 +65,11 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
         if (list != null) {
             data.addAll(list)
         }
+    }
+
+    //设置点击
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
+        this.onItemClickListener = onItemClickListener
     }
 
     //统一回调
