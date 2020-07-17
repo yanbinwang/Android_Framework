@@ -9,6 +9,7 @@ public interface ARouterPath {
     //main模块
     String StartActivity = "/main/start";//启动页
     String MainActivity = "/main/main";//首页
+    String TestActivity = "/main/test";
     //homepage模块
     String UnlockIPActivity = "/homepage/unlockIP";//锁定ip页
     String WebViewActivity = "/homepage/webView";//全局网页

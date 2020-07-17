@@ -19,10 +19,6 @@ public class TestAdapter extends BaseQuickAdapter<TestListModel> {
         super(list);
     }
 
-//    public TestAdapter(@Nullable TestListModel testListModel) {
-//        super(testListModel);
-//    }
-
     public BaseViewBindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new BaseViewBindingHolder(ItemTestBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
@@ -31,7 +27,9 @@ public class TestAdapter extends BaseQuickAdapter<TestListModel> {
     protected void convert(BaseViewBindingHolder holder, TestListModel item) {
         if (null != item) {
             ItemTestBinding binding = holder.getBinding();
-//        binding.ivImg
+            binding.ivImg.setBackgroundResource(item.getAvatar());
+            binding.tvTitle.setText(item.getTitle());
+            binding.tvDescribe.setText(item.getDescribe());
         }
 
     }

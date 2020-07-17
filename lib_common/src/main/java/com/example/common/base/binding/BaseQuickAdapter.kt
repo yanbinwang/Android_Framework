@@ -44,7 +44,7 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     }
 
     //设置集合
-    protected fun setData(list: MutableList<T>?) {
+    fun setData(list: MutableList<T>?) {
         if (list != null) {
             data = list
             notifyDataSetChanged()
@@ -52,13 +52,13 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     }
 
     //设置对象
-    protected fun setData(data: T?) {
+    fun setData(data: T?) {
         t = data
         notifyDataSetChanged()
     }
 
     //添加集合
-    protected fun setList(list: MutableList<T>?) {
+    fun setList(list: MutableList<T>?) {
         if (list != null) {
             data.addAll(list)
         }
