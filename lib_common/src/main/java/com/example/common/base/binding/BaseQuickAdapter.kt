@@ -10,19 +10,19 @@ import com.example.common.widget.xrecyclerview.callback.OnItemClickListener
 abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     private var data: MutableList<T> = ArrayList()
     private var t: T? = null
-    private var state: State? = null
+    private var itemType: ItemType? = null
     private var onItemClickListener: OnItemClickListener? = null
 
     //默认是返回对象
     constructor() {
-        state = State.OBJECT
+        itemType = ItemType.Model
     }
 
     //传入对象的方法
     constructor(model: T?) {
         if (t != null) {
             t = model
-            state = State.OBJECT
+            itemType = ItemType.Model
         }
     }
 
@@ -30,51 +30,48 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     constructor(list: MutableList<T>?) {
         if (list != null) {
             data = list
-            state = State.COLLECTION
+            itemType = ItemType.List
         }
     }
 
     override fun getItemCount(): Int {
-        if (state == State.COLLECTION) {
-            return data.size
-        }
-        return 0
+        return if (itemType == ItemType.List) data.size else 0
     }
 
     override fun onBindViewHolder(holder: BaseViewBindingHolder, position: Int) {
         holder.itemView.setOnClickListener { onItemClickListener?.setOnItemClickListener(position) }
-        convert(holder, if (state == State.COLLECTION) data[position] else t)
-    }
-
-    //设置集合
-    fun setData(list: MutableList<T>?) {
-        if (list != null) {
-            data = list
-            notifyDataSetChanged()
-        }
+        convert(holder, if (itemType == ItemType.List) data[position] else t)
     }
 
     //设置对象
-    fun setData(data: T?) {
-        t = data
+    fun setModel(model: T?) {
+        t = model
         notifyDataSetChanged()
+    }
+
+    //获取对象
+    fun getModel(): T? {
+        return t
     }
 
     //添加集合
     fun setList(list: MutableList<T>?) {
-        if (list != null) {
-            data.addAll(list)
+        //设置集合类型不相同时自动替换
+        if (list !== data) {
+            data.clear()
+            if (!list.isNullOrEmpty()) {
+                data.addAll(list)
+            }
+        } else {
+            if (!list.isNullOrEmpty()) {
+                val newList = ArrayList(list)
+                data.clear()
+                data.addAll(newList)
+            } else {
+                data.clear()
+            }
         }
-    }
-
-    //设置点击
-    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
-        this.onItemClickListener = onItemClickListener
-    }
-
-    //获取对象
-    fun getT(): T? {
-        return t
+        notifyDataSetChanged()
     }
 
     //获取集合
@@ -82,9 +79,14 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
         return data
     }
 
+    //设置点击
+    fun setOnItemClickListener(onItemClickListener: OnItemClickListener?) {
+        this.onItemClickListener = onItemClickListener
+    }
+
     //统一回调
     protected abstract fun convert(holder: BaseViewBindingHolder, item: T?)
 
-    enum class State { COLLECTION, OBJECT }
+    enum class ItemType { Model, List }
 
 }
