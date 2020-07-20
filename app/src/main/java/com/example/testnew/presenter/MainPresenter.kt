@@ -1,6 +1,11 @@
 package com.example.testnew.presenter
 
+import com.example.common.http.HttpParams
+import com.example.common.http.callback.HttpSubscriber
+import com.example.common.subscribe.BaseSubscribe.getSendVerification
 import com.example.testnew.presenter.contract.MainContract
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 
 /**
  * Created by WangYanBin on 2020/6/30.
@@ -11,7 +16,29 @@ class MainPresenter : MainContract.Presenter() {
 //        getView().showDialog()
 //        getView().getUserInfoSuccess(Any())
 
-        //        addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
+        addDisposable(
+            getSendVerification("dsfdsfds", HttpParams().getParams())
+                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(object : HttpSubscriber<Any>() {
+
+                    override fun onStart() {
+                        super.onStart()
+                        getView().showDialog()
+                    }
+
+                    override fun onSuccess(data: Any?) {}
+
+                    override fun onFailed(e: Throwable?, msg: String?) {}
+
+                    override fun onComplete() {
+                        super.onComplete()
+                        getView().hideDialog()
+                    }
+
+                })
+        )
+
+//                addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
 //                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
 //                    @Override

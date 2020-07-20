@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?><!-- 中部按钮 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20mm"
+        android:orientation="horizontal">
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮1"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮2"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin3"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮3"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin4"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮4"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+    </LinearLayout>
+
+    <View style="@style/lineWidth" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin5"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮5"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin6"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮6"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin7"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮7"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+        <LinearLayout
+            android:id="@+id/mainBodyLin8"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="80mm"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:src="@mipmap/ic_launcher_round" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="20mm"
+                android:text="按钮8"
+                android:textColor="@color/gray_6c6c6c"
+                android:textSize="28mm" />
+        </LinearLayout>
+
+        <View style="@style/lineHeight" />
+
+    </LinearLayout>
+
+</LinearLayout>

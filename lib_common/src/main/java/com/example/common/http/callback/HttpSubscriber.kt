@@ -1,4 +1,4 @@
-package com.example.common.http
+package com.example.common.http.callback
 
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.common.bus.RxBus.Companion.instance
@@ -55,11 +55,11 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
         } else {
             onFailed(throwable, "")
         }
-        onFinish()
+        onComplete()
     }
 
     override fun onComplete() {
-        if(!isDisposed){
+        if (!isDisposed) {
             dispose()
         }
     }
@@ -67,7 +67,5 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
     protected abstract fun onSuccess(data: T?)
 
     protected abstract fun onFailed(e: Throwable?, msg: String?)
-
-    protected abstract fun onFinish()
 
 }

@@ -17,6 +17,9 @@ public class Constants {
     public static String APPLICATION_NAME;//当前应用名
     public static String APPLICATION_ID;//当前包名
     //app内接口的一些默认配置字段
+    public static final int ADAPTER_ITEM_VIEW_TYPE_HEAD = 1;
+    public static final int ADAPTER_ITEM_VIEW_TYPE_BODY = 2;
+    public static final int ADAPTER_ITEM_VIEW_TYPE_BOTTOM = 3;
     public static final int LOGIN_INTERCEPTOR_CODE = 1;//阿里路由登录全局拦截器编号
     public static final int PUSH_NOTIFY_ID = 0;//固定通知id
     public static final String PUSH_CHANNEL_ID = "shuniuyun";//推送渠道id

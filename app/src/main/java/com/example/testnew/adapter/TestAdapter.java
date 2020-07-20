@@ -3,8 +3,8 @@ package com.example.testnew.adapter;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import androidx.recyclerview.widget.RecyclerView;
-
+import com.example.common.base.binding.BaseQuickAdapter;
+import com.example.common.base.binding.BaseViewBindingHolder;
 import com.example.testnew.databinding.ItemTestBinding;
 import com.example.testnew.model.TestListModel;
 
@@ -13,33 +13,24 @@ import java.util.List;
 /**
  * Created by WangYanBin on 2020/7/13.
  */
-public class TestAdapter extends RecyclerView.Adapter<TestAdapter.ViewHolder> {
-    private List<TestListModel> mList;
+public class TestAdapter extends BaseQuickAdapter<TestListModel> {
 
-    public TestAdapter(List<TestListModel> mList) {
-        this.mList = mList;
+    public TestAdapter(List<TestListModel> list) {
+        super(list);
     }
 
-    public int getItemCount() {
-        return mList.size();
+    public BaseViewBindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        return new BaseViewBindingHolder(ItemTestBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
-    public void onBindViewHolder(ViewHolder holder, int position) {
-//        holder.binding
-    }
-
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new ViewHolder(ItemTestBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
-        private ItemTestBinding binding;
-
-        private ViewHolder(ItemTestBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+    @Override
+    protected void convert(BaseViewBindingHolder holder, TestListModel item) {
+        if (null != item) {
+            ItemTestBinding binding = holder.getBinding();
+            binding.ivImg.setBackgroundResource(item.getAvatar());
+            binding.tvTitle.setText(item.getTitle());
+            binding.tvDescribe.setText(item.getDescribe());
         }
     }
-
 
 }
