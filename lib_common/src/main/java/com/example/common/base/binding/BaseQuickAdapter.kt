@@ -72,6 +72,16 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
         this.onItemClickListener = onItemClickListener
     }
 
+    //获取对象
+    fun getT(): T? {
+        return t
+    }
+
+    //获取集合
+    fun getList(): MutableList<T>? {
+        return data
+    }
+
     //统一回调
     protected abstract fun convert(holder: BaseViewBindingHolder, item: T?)
 
