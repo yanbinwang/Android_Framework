@@ -46,6 +46,7 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     //设置对象
     fun setModel(model: T?) {
         t = model
+        itemType = ItemType.Model
         notifyDataSetChanged()
     }
 
@@ -71,6 +72,7 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
                 data.clear()
             }
         }
+        itemType = ItemType.List
         notifyDataSetChanged()
     }
 

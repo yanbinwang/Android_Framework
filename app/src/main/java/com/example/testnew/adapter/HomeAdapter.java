@@ -21,7 +21,6 @@ import org.jetbrains.annotations.Nullable;
  */
 public class HomeAdapter extends BaseQuickAdapter<HomeModel> {
 
-
     public HomeAdapter(@Nullable HomeModel homeModel) {
         super(homeModel);
     }
@@ -46,7 +45,7 @@ public class HomeAdapter extends BaseQuickAdapter<HomeModel> {
 
     @Override
     public int getItemCount() {
-        return null == getT() ? 0 : getT().getList().size() + 2;
+        return null == getModel() ? 0 : getModel().getList().size() + 2;
     }
 
     @Override
