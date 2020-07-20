@@ -46,12 +46,7 @@ public class HomeAdapter extends BaseQuickAdapter<HomeModel> {
 
     @Override
     public int getItemCount() {
-        HomeModel model = getT();
-        if (null != model) {
-            return model.getList().size() + 2;
-        } else {
-            return 0;
-        }
+        return null == getT() ? 0 : getT().getList().size() + 2;
     }
 
     @Override

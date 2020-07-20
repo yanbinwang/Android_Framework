@@ -31,7 +31,6 @@ public class TestAdapter extends BaseQuickAdapter<TestListModel> {
             binding.tvTitle.setText(item.getTitle());
             binding.tvDescribe.setText(item.getDescribe());
         }
-
     }
 
 }

@@ -19,9 +19,9 @@ abstract class BaseQuickAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?
     }
 
     //传入对象的方法
-    constructor(t: T?) {
+    constructor(model: T?) {
         if (t != null) {
-            this.t = t
+            t = model
             state = State.OBJECT
         }
     }
