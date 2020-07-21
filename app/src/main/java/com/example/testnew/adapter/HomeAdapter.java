@@ -5,6 +5,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 
+import com.example.common.base.binding.BaseAdapter;
 import com.example.common.base.binding.BaseQuickAdapter;
 import com.example.common.base.binding.BaseViewBindingHolder;
 import com.example.common.constant.Constants;
@@ -19,7 +20,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Created by WangYanBin on 2020/7/20.
  */
-public class HomeAdapter extends BaseQuickAdapter<HomeModel> {
+public class HomeAdapter extends BaseAdapter<HomeModel> {
 
     public HomeAdapter(@Nullable HomeModel homeModel) {
         super(homeModel);

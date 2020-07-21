@@ -35,6 +35,6 @@ public class TestActivity extends BaseTitleActivity<ActivityTestBinding> {
         for (int i = 0; i < 10; i++) {
             list.add(new TestListModel("标题" + i,"内容" + i, R.mipmap.ic_launcher_round));
         }
-        adapter.setData(list);
+        adapter.setList(list);
     }
 }
