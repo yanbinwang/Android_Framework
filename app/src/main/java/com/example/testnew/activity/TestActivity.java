@@ -24,6 +24,7 @@ public class TestActivity extends BaseTitleActivity<ActivityTestBinding> {
     @Override
     public void initView() {
         super.initView();
+        titleBuilder.setTitle("列表").getDefault();
         adapter = new TestAdapter(list);
         binding.recTest.setLayoutManager(new GridLayoutManager(this,1));
         binding.recTest.setAdapter(adapter);
