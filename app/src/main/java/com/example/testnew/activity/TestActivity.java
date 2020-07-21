@@ -24,6 +24,7 @@ public class TestActivity extends BaseTitleActivity<ActivityTestBinding> {
     @Override
     public void initView() {
         super.initView();
+        titleBuilder.setTitle("列表").getDefault();
         adapter = new TestAdapter(list);
         binding.recTest.setLayoutManager(new GridLayoutManager(this,1));
         binding.recTest.setAdapter(adapter);
@@ -35,6 +36,6 @@ public class TestActivity extends BaseTitleActivity<ActivityTestBinding> {
         for (int i = 0; i < 10; i++) {
             list.add(new TestListModel("标题" + i,"内容" + i, R.mipmap.ic_launcher_round));
         }
-        adapter.setData(list);
+        adapter.setList(list);
     }
 }

@@ -16,16 +16,11 @@ public abstract class BaseTitleActivity<VB extends ViewBinding> extends BaseActi
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     @Override
-    public void initView() {
-        super.initView();
-        titleBuilder = new TitleBuilder(this);
-    }
-
-    @Override
     public void setContentView(View view) {
         ActivityBaseBinding baseBinding = ActivityBaseBinding.inflate(getLayoutInflater());
         baseBinding.flBaseContainer.addView(binding.getRoot());
         super.setContentView(baseBinding.getRoot());
+        titleBuilder = new TitleBuilder(this, baseBinding.titleContainer);
     }
     // </editor-fold>
 
