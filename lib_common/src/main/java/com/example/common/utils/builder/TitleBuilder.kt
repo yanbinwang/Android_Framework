@@ -9,7 +9,7 @@ import com.example.common.databinding.ViewTitleBarBinding
 import java.lang.ref.WeakReference
 
 @SuppressLint("InflateParams")
-class TitleBuilder(activity: Activity, val binding: ViewTitleBarBinding) {
+class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding) {
     private val weakActivity: WeakReference<Activity> = WeakReference(activity)
     private val statusBarBuilder: StatusBarBuilder
 
