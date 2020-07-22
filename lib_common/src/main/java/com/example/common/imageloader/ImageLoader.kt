@@ -28,7 +28,8 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     }
 
     companion object {
-        val instance: ImageLoader by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        @JvmStatic
+        val instance: ImageLoader by lazy {
             ImageLoader()
         }
     }

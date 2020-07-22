@@ -1,6 +1,6 @@
 package com.example.common.subscribe
 
-import com.example.common.http.callback.ResponseBody
+import com.example.common.http.callback.ApiResponse
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.model.UploadModel
 import io.reactivex.Flowable
@@ -17,15 +17,15 @@ object BaseSubscribe : BaseApi {
         return baseApi.download(downloadUrl)
     }
 
-    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ResponseBody<UploadModel>> {
+    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ResponseBody<Any>> {
+    override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
         return baseApi.getSendVerification(agent, map)
     }
 
-    override fun getVerification(agent: String, map: Map<String, String>): Flowable<ResponseBody<Any>> {
+    override fun getVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
         return baseApi.getVerification(agent, map)
     }
 

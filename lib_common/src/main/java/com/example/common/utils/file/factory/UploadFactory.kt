@@ -20,7 +20,8 @@ class UploadFactory private constructor() {
     private var onUploadListener: OnUploadListener? = null
 
     companion object {
-        val instance: UploadFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        @JvmStatic
+        val instance: UploadFactory by lazy {
             UploadFactory()
         }
     }

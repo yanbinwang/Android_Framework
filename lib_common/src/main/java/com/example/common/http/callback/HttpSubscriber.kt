@@ -13,18 +13,18 @@ import retrofit2.HttpException
 /**
  * Created by WangYanBin on 2020/6/19.
  */
-abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
+abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
 
-    override fun onNext(responseBody: ResponseBody<T>?) {
-        doResult(responseBody, null)
+    override fun onNext(apiResponse: ApiResponse<T>?) {
+        doResult(apiResponse, null)
     }
 
     override fun onError(throwable: Throwable?) {
         try {
             val responseBody = (throwable as HttpException).response().errorBody()
             if (null != responseBody) {
-                val baseModel = jsonToObj(responseBody.string(), ResponseBody::class.java)
-                doResult(baseModel as ResponseBody<T>?, throwable)
+                val baseModel = jsonToObj(responseBody.string(), ApiResponse::class.java)
+                doResult(baseModel as ApiResponse<T>?, throwable)
             } else {
                 doResult(null, throwable)
             }
@@ -33,12 +33,12 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ResponseBody<T>>() {
         }
     }
 
-    private fun doResult(responseBody: ResponseBody<T>?, throwable: Throwable?) {
-        if (null != responseBody) {
-            val msg = responseBody.msg
-            val e = responseBody.e
+    private fun doResult(apiResponse: ApiResponse<T>?, throwable: Throwable?) {
+        if (null != apiResponse) {
+            val msg = apiResponse.msg
+            val e = apiResponse.e
             if (0 == e) {
-                onSuccess(responseBody.data)
+                onSuccess(apiResponse.data)
             } else {
                 //账号还没有登录，解密失败，重新获取
                 if (100005 == e || 100008 == e) {

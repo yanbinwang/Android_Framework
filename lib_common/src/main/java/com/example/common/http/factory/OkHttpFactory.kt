@@ -29,7 +29,8 @@ class OkHttpFactory private constructor() {
             .build()
 
     companion object {
-        val instance: OkHttpFactory by lazy(mode = LazyThreadSafetyMode.SYNCHRONIZED) {
+        @JvmStatic
+        val instance: OkHttpFactory by lazy {
             OkHttpFactory()
         }
     }

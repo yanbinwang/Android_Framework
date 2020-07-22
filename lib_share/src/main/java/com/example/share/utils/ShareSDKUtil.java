@@ -54,17 +54,17 @@ public class ShareSDKUtil {
         platform.setPlatformActionListener(new PlatformActionListener() {
             public void onError(Platform arg0, int arg1, Throwable arg2) {
                 //失败的回调，arg:平台对象，arg1:表示当前的动作，arg2:异常信息
-                RxBus.Companion.getInstance().post(new RxBusEvent(Constants.APP_SHARE_FAILURE));
+                RxBus.getInstance().post(new RxBusEvent(Constants.APP_SHARE_FAILURE));
             }
 
             public void onComplete(Platform arg0, int arg1, HashMap arg2) {
                 //分享成功的回调
-                RxBus.Companion.getInstance().post(new RxBusEvent(Constants.APP_SHARE_SUCCESS));
+                RxBus.getInstance().post(new RxBusEvent(Constants.APP_SHARE_SUCCESS));
             }
 
             public void onCancel(Platform arg0, int arg1) {
                 //取消分享的回调
-                RxBus.Companion.getInstance().post(new RxBusEvent(Constants.APP_SHARE_CANCEL));
+                RxBus.getInstance().post(new RxBusEvent(Constants.APP_SHARE_CANCEL));
             }
         });
         platform.share(shareParams);

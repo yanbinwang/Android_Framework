@@ -116,7 +116,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 
     @Override
     public void initEvent() {
-        addDisposable(RxBus.Companion.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
+        addDisposable(RxBus.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
             String action = rxBusEvent.getAction();
             switch (action) {
                 //注销登出
