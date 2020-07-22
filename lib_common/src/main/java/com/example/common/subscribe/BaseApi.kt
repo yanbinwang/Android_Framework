@@ -1,6 +1,6 @@
 package com.example.common.subscribe
 
-import com.example.common.http.callback.ResponseBody
+import com.example.common.http.callback.ApiResponse
 import com.example.common.model.UploadModel
 import io.reactivex.Flowable
 import okhttp3.MultipartBody
@@ -19,14 +19,14 @@ interface BaseApi {
     @Multipart
     @Streaming
     @POST("http://www.baidu.com")
-    fun getUploadFile(@Header("User-Agent") agent: String, @Part partList: List<MultipartBody.Part>): Flowable<ResponseBody<UploadModel>>
+    fun getUploadFile(@Header("User-Agent") agent: String, @Part partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>>
 
     @FormUrlEncoded
     @POST("http://www.baidu.com")
-    fun getSendVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ResponseBody<Any>>
+    fun getSendVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ApiResponse<Any>>
 
     @FormUrlEncoded
     @POST("http://www.baidu.com")
-    fun getVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ResponseBody<Any>>
+    fun getVerification(@Header("User-Agent") agent: String, @FieldMap map: Map<String, String>): Flowable<ApiResponse<Any>>
 
 }
