@@ -41,20 +41,20 @@ public class EmptyLayout extends ViewGroup {
 
     public EmptyLayout(Context context) {
         super(context);
-        init();
+        initialize();
     }
 
     public EmptyLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        init();
+        initialize();
     }
 
     public EmptyLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        init();
+        initialize();
     }
 
-    private void init() {
+    private void initialize() {
         contextView = LayoutInflater.from(getContext()).inflate(R.layout.view_empty, null);
         emptyRefresh = contextView.findViewById(R.id.srl_empty_refresh);
         ivEmpty = contextView.findViewById(R.id.iv_empty);
