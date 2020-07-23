@@ -5,7 +5,7 @@ import android.os.Looper
 import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
-import com.example.framework.utils.WeakHandler
+import com.example.common.utils.handler.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
