@@ -33,11 +33,14 @@ public class AndDialog extends AlertDialog.Builder {
                 onDialogListener.onDialogConfirm();
             }
         });
-        setPositiveButton(cancelText, (dialog, which) -> {
-            if (null != onDialogListener) {
-                onDialogListener.onDialogCancel();
-            }
-        });
+        //如果没有传入取消字段,则隐藏取消
+        if (!TextUtils.isEmpty(cancelText)) {
+            setPositiveButton(cancelText, (dialog, which) -> {
+                if (null != onDialogListener) {
+                    onDialogListener.onDialogCancel();
+                }
+            });
+        }
         return this;
     }
 
