@@ -6,18 +6,14 @@ import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
 import com.example.common.constant.Constants;
 import com.example.common.imageloader.ImageLoader;
-import com.example.common.utils.file.callback.OnDownloadListener;
-import com.example.common.utils.file.factory.DownloadFactory;
-import com.example.common.utils.helper.permission.PermissionHelper;
+import com.example.common.utils.helper.download.DownLoadHelper;
+import com.example.common.utils.helper.download.callback.DownloadState;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import org.jetbrains.annotations.Nullable;
-
-import java.text.MessageFormat;
 
 
 /**
@@ -58,30 +54,31 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-                PermissionHelper.with(context.get())
-                        .getPermissions(Permission.Group.STORAGE)
-                        .setPermissionCallBack(isGranted -> {
-                            if (isGranted) {
-                                String filePath = Constants.APPLICATION_FILE_PATH + "/安装包";
-                                String fileName = Constants.APPLICATION_NAME + ".apk";
-                                DownloadFactory.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
-                                    @Override
-                                    public void onDownloadSuccess(@Nullable String path) {
-                                        showToast("下载完成");
-                                    }
-
-                                    @Override
-                                    public void onDownloading(int progress) {
-                                        binding.tvDownload.setText(MessageFormat.format("当前进度：{0}", progress));
-                                    }
-
-                                    @Override
-                                    public void onDownloadFailed(@Nullable Throwable e) {
-                                        showToast("下载失败");
-                                    }
-                                });
-                            }
-                        });
+//                PermissionHelper.with(context.get())
+//                        .getPermissions(Permission.Group.STORAGE)
+//                        .setPermissionCallBack(isGranted -> {
+//                            if (isGranted) {
+//                                String filePath = Constants.APPLICATION_FILE_PATH + "/安装包";
+//                                String fileName = Constants.APPLICATION_NAME + ".apk";
+//                                DownloadFactory.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
+//                                    @Override
+//                                    public void onDownloadSuccess(@Nullable String path) {
+//                                        showToast("下载完成");
+//                                    }
+//
+//                                    @Override
+//                                    public void onDownloading(int progress) {
+//                                        binding.tvDownload.setText(MessageFormat.format("当前进度：{0}", progress));
+//                                    }
+//
+//                                    @Override
+//                                    public void onDownloadFailed(@Nullable Throwable e) {
+//                                        showToast("下载失败");
+//                                    }
+//                                });
+//                            }
+//                        });
+                DownLoadHelper.getInstance().download(DownloadState.APP, Constants.APPLICATION_NAME + ".apk", "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk");
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);

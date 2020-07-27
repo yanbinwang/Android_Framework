@@ -22,8 +22,7 @@ import java.io.InputStream
  */
 @SuppressLint("CheckResult")
 class DownloadFactory private constructor() {
-    private val weakHandler: WeakHandler =
-        WeakHandler(Looper.getMainLooper())
+    private val weakHandler: WeakHandler = WeakHandler(Looper.getMainLooper())
 
     companion object {
         @JvmStatic
