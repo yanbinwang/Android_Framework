@@ -14,8 +14,9 @@ public class Constants {
     public static String IP;//当前手机ip
     public static String MAC;//当前手机mac地址
     public static String DEVICE_ID;//当前手机设备id
-    public static String APPLICATION_NAME;//当前应用名
     public static String APPLICATION_ID;//当前包名
+    public static String APPLICATION_NAME;//当前应用名
+    public static String APPLICATION_FILE_PATH;//默认文件保存路径，sd卡下的应用名文件夹
     //app内接口的一些默认配置字段
     public static final int ADAPTER_ITEM_VIEW_TYPE_HEAD = 1;
     public static final int ADAPTER_ITEM_VIEW_TYPE_BODY = 2;
