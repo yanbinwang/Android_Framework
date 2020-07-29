@@ -31,56 +31,66 @@ class DownloadFactory private constructor() {
         }
     }
 
-    fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener) : Disposable {
+    fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener): Disposable {
         FileUtil.deleteDir(filePath)
         return BaseSubscribe.getDownload(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
                 override fun onNext(responseBody: ResponseBody?) {
-                    object : Thread() {
-                        override fun run() {
-                            var inputStream: InputStream? = null
-                            var fileOutputStream: FileOutputStream? = null
-                            try {
-                                val file = File(FileUtil.isExistDir(filePath), fileName)
-                                val buf = ByteArray(2048)
-                                val total = responseBody!!.contentLength()
-                                inputStream = responseBody.byteStream()
-                                fileOutputStream = FileOutputStream(file)
-                                var len: Int
-                                var sum: Long = 0
-                                while (((inputStream.read(buf)).also { len = it }) != -1) {
-                                    fileOutputStream.write(buf, 0, len)
-                                    sum += len.toLong()
-                                    val progress = (sum * 1.0f / total * 100).toInt()
-                                    weakHandler.post { onDownloadListener.onDownloading(progress) }
-                                }
-                                fileOutputStream.flush()
-                                weakHandler.post { onDownloadListener.onDownloadSuccess(file.path) }
-                            } catch (e: Exception) {
-                                weakHandler.post { onDownloadListener.onDownloadFailed(e) }
-                            } finally {
-                                try {
-                                    inputStream?.close()
-                                    fileOutputStream?.close()
-                                } catch (ignored: IOException) {
-                                }
-                            }
-                        }
-                    }.start()
+                    doResult(responseBody, null)
                 }
 
                 override fun onError(t: Throwable?) {
-                    weakHandler.post { onDownloadListener.onDownloadFailed(t) }
+                    doResult(null, t)
+                }
+
+                private fun doResult(responseBody: ResponseBody?, throwable: Throwable?) {
+                    if (null != responseBody) {
+                        object : Thread() {
+                            override fun run() {
+                                var inputStream: InputStream? = null
+                                var fileOutputStream: FileOutputStream? = null
+                                try {
+                                    val file = File(FileUtil.isExistDir(filePath), fileName)
+                                    val buf = ByteArray(2048)
+                                    val total = responseBody.contentLength()
+                                    inputStream = responseBody.byteStream()
+                                    fileOutputStream = FileOutputStream(file)
+                                    var len: Int
+                                    var sum: Long = 0
+                                    while (((inputStream.read(buf)).also { len = it }) != -1) {
+                                        fileOutputStream.write(buf, 0, len)
+                                        sum += len.toLong()
+                                        val progress = (sum * 1.0f / total * 100).toInt()
+                                        weakHandler.post { onDownloadListener.onDownloading(progress) }
+                                    }
+                                    fileOutputStream.flush()
+                                    weakHandler.post { onDownloadListener.onDownloadSuccess(file.path) }
+                                } catch (e: Exception) {
+                                    weakHandler.post { onDownloadListener.onDownloadFailed(e) }
+                                } finally {
+                                    try {
+                                        inputStream?.close()
+                                        fileOutputStream?.close()
+                                    } catch (ignored: IOException) {
+                                    }
+                                }
+                            }
+                        }.start()
+                    } else {
+                        weakHandler.post { onDownloadListener.onDownloadFailed(throwable) }
+                    }
+                    onComplete()
                 }
 
                 override fun onComplete() {
+                    weakHandler.post { onDownloadListener.onDownloadComplete() }
                     if (!isDisposed) {
                         dispose()
                     }
                 }
-            });
+            })
     }
 
 }

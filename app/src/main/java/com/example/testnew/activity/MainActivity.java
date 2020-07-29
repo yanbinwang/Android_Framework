@@ -5,12 +5,18 @@ import android.view.View;
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
 import com.example.common.imageloader.ImageLoader;
+import com.example.common.utils.helper.download.DownLoadHelper;
+import com.example.common.utils.helper.download.callback.OnDownloadCallBack;
+import com.example.common.utils.helper.permission.PermissionHelper;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
+import com.yanzhenjie.permission.runtime.Permission;
 
 import org.jetbrains.annotations.Nullable;
+
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -55,26 +61,21 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
 //                        .getPermissions(Permission.Group.STORAGE)
 //                        .setPermissionCallBack(isGranted -> {
 //                            if (isGranted) {
-//                                String filePath = Constants.APPLICATION_FILE_PATH + "/安装包";
-//                                String fileName = Constants.APPLICATION_NAME + ".apk";
-//                                DownloadFactory.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
-//                                    @Override
-//                                    public void onDownloadSuccess(@Nullable String path) {
-//                                        showToast("下载完成");
-//                                    }
-//
-//                                    @Override
-//                                    public void onDownloading(int progress) {
-//                                        binding.tvDownload.setText(MessageFormat.format("当前进度：{0}", progress));
-//                                    }
-//
-//                                    @Override
-//                                    public void onDownloadFailed(@Nullable Throwable e) {
-//                                        showToast("下载失败");
-//                                    }
-//                                });
+//                                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk");
 //                            }
 //                        });
+                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnDownloadCallBack() {
+                    @Override
+                    public void onDownloadStart(@Nullable Disposable disposable) {
+                        showDialog();
+                        addDisposable(disposable);
+                    }
+
+                    @Override
+                    public void onDownloadComplete() {
+                        hideDialog();
+                    }
+                });
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);
