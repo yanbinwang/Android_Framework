@@ -13,18 +13,22 @@ import okhttp3.MultipartBody
 object BaseSubscribe : BaseApi {
     private val baseApi = RetrofitFactory.instance.create(BaseApi::class.java)
 
-    override fun download(downloadUrl: String): Flowable<okhttp3.ResponseBody> {
-        return baseApi.download(downloadUrl)
+    @Synchronized
+    override fun getDownload(downloadUrl: String): Flowable<okhttp3.ResponseBody> {
+        return baseApi.getDownload(downloadUrl)
     }
 
+    @Synchronized
     override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
         TODO("Not yet implemented")
     }
 
+    @Synchronized
     override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
         return baseApi.getSendVerification(agent, map)
     }
 
+    @Synchronized
     override fun getVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
         return baseApi.getVerification(agent, map)
     }

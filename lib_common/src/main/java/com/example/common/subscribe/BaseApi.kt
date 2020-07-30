@@ -14,7 +14,7 @@ interface BaseApi {
 
     @Streaming
     @GET
-    fun download(@Url downloadUrl: String): Flowable<okhttp3.ResponseBody>
+    fun getDownload(@Url downloadUrl: String): Flowable<okhttp3.ResponseBody>
 
     @Multipart
     @Streaming
