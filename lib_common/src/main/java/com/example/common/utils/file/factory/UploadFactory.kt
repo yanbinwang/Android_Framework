@@ -2,7 +2,7 @@ package com.example.common.utils.file.factory
 
 import android.content.Context
 import com.example.common.BaseApplication
-import com.example.framework.utils.CompressUtil
+import com.example.base.utils.CompressUtil
 import com.example.common.utils.file.callback.OnUploadListener
 import okhttp3.MediaType
 import okhttp3.MultipartBody
