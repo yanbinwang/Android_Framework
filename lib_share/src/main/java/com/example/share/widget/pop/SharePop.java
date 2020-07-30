@@ -25,11 +25,11 @@ public class SharePop extends BasePopupWindow implements View.OnClickListener {
 
     public SharePop(Activity activity) {
         super(activity);
-        initialize(ViewPopShareBinding.inflate(activity.getLayoutInflater()));
-        init();
+        createViewBinding(ViewPopShareBinding.inflate(getActivity().getLayoutInflater()));
+        initialize();
     }
 
-    private void init() {
+    private void initialize() {
         ViewPopShareBinding binding = getBinding();
         binding.llShareWechat.setOnClickListener(this);
         binding.llShareWechatMoments.setOnClickListener(this);

@@ -26,8 +26,8 @@ public abstract class BaseDialog extends Dialog {
         super(context, themeResId);
     }
 
-    protected void initialize(ViewBinding binding) {
-        initialize(binding, false, false);
+    protected void createViewBinding(ViewBinding binding) {
+        createViewBinding(binding, false, false);
     }
 
     /**
@@ -36,7 +36,7 @@ public abstract class BaseDialog extends Dialog {
      * @param anim  是否有进入动画
      * @param close 是否可以关闭
      */
-    protected void initialize(ViewBinding binding, boolean anim, boolean close) {
+    protected void createViewBinding(ViewBinding binding, boolean anim, boolean close) {
         this.binding = binding;
         setContentView(binding.getRoot(), new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
         if (anim) {

@@ -22,7 +22,7 @@ public class AppDialog extends BaseDialog {
 
     public AppDialog(@NonNull Context context) {
         super(context);
-        initialize(ViewDialogBinding.inflate(getLayoutInflater()), true, false);
+        createViewBinding(ViewDialogBinding.inflate(getLayoutInflater()), true, false);
     }
 
     public AppDialog setParams(String tipText, String contentText, String sureText) {

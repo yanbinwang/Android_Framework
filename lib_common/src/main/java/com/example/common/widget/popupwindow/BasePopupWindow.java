@@ -33,7 +33,7 @@ public abstract class BasePopupWindow extends PopupWindow {
         this.dark = dark;
     }
 
-    protected void initialize(ViewBinding binding) {
+    protected void createViewBinding(ViewBinding binding) {
         this.binding = binding;
         setContentView(binding.getRoot());
         setFocusable(true);

@@ -16,7 +16,7 @@ public class LoadingDialog extends BaseDialog {
 
     public LoadingDialog(Context context) {
         super(context, R.style.loadingStyle);
-        initialize(ViewDialogLoadingBinding.inflate(getLayoutInflater()));
+        createViewBinding(ViewDialogLoadingBinding.inflate(getLayoutInflater()));
     }
 
     public void show(boolean flag) {
