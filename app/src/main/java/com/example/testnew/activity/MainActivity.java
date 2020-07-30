@@ -7,12 +7,10 @@ import com.example.common.constant.ARouterPath;
 import com.example.common.imageloader.ImageLoader;
 import com.example.common.utils.helper.download.DownLoadHelper;
 import com.example.common.utils.helper.download.callback.OnDownloadCallBack;
-import com.example.common.utils.helper.permission.PermissionHelper;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -42,7 +40,9 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     @Override
     public void initData() {
         super.initData();
-        presenter.getUserInfo();
+//        for (int i = 0; i < 1000; i++) {
+            presenter.getUserInfo();
+//        }
     }
 
     @Override

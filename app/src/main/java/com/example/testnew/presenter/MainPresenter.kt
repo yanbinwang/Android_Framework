@@ -23,7 +23,7 @@ class MainPresenter : MainContract.Presenter() {
 
                     override fun onStart() {
                         super.onStart()
-                        getView().showDialog()
+                        getView().log("开始")
                     }
 
                     override fun onSuccess(data: Any?) {}
@@ -32,7 +32,7 @@ class MainPresenter : MainContract.Presenter() {
 
                     override fun onComplete() {
                         super.onComplete()
-                        getView().hideDialog()
+                        getView().log("结束")
                     }
 
                 })
