@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.PopupWindow;
 
+import androidx.viewbinding.ViewBinding;
+
 import com.example.common.R;
 
 import java.lang.ref.WeakReference;
@@ -17,6 +19,7 @@ import java.lang.ref.WeakReference;
  */
 public abstract class BasePopupWindow extends PopupWindow {
     private boolean dark;
+    private ViewBinding binding;
     private WeakReference<Activity> weakActivity;
     private WindowManager.LayoutParams layoutParams;
 
@@ -30,8 +33,9 @@ public abstract class BasePopupWindow extends PopupWindow {
         this.dark = dark;
     }
 
-    protected void setPopupWindowContentView(View view) {
-        setContentView(view);
+    protected void initialize(ViewBinding binding) {
+        this.binding = binding;
+        setContentView(binding.getRoot());
         setFocusable(true);
         setOutsideTouchable(true);
         setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -40,6 +44,14 @@ public abstract class BasePopupWindow extends PopupWindow {
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setHideAttributes();
+    }
+
+    protected Activity getActivity() {
+        return weakActivity.get();
+    }
+
+    protected <VB extends ViewBinding> VB getBinding() {
+        return (VB) binding;
     }
 
     private void setShowAttributes() {
@@ -80,10 +92,6 @@ public abstract class BasePopupWindow extends PopupWindow {
     public void showAtLocation(View parent, int gravity, int x, int y) {
         setShowAttributes();
         super.showAtLocation(parent, gravity, x, y);
-    }
-
-    public Activity getWeakActivity() {
-        return weakActivity.get();
     }
 
 }
