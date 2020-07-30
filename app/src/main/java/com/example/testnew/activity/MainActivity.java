@@ -5,8 +5,10 @@ import android.view.View;
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
 import com.example.common.imageloader.ImageLoader;
+import com.example.common.imageloader.album.AlbumHelper;
 import com.example.common.utils.helper.download.DownLoadHelper;
 import com.example.common.utils.helper.download.callback.OnDownloadCallBack;
+import com.example.common.widget.dialog.AppDialog;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
@@ -78,7 +80,10 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                 });
                 break;
             case R.id.btn_list:
-                navigation(ARouterPath.TestActivity);
+                AppDialog.with(this)
+                        .setParams("dfsd","fdsfsd","dfsdfsd","fdsfds")
+                        .show();
+//                navigation(ARouterPath.TestActivity);
                 break;
         }
     }
