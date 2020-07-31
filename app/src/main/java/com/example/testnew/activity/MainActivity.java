@@ -5,16 +5,13 @@ import android.view.View;
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
 import com.example.common.imageloader.ImageLoader;
-import com.example.common.utils.helper.download.DownLoadHelper;
-import com.example.common.utils.helper.download.callback.OnDownloadCallBack;
+import com.example.common.widget.dialog.AppDialog;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
 
 import org.jetbrains.annotations.Nullable;
-
-import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -69,18 +66,22 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
 //                                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk");
 //                            }
 //                        });
-                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnDownloadCallBack() {
-                    @Override
-                    public void onDownloadStart(@Nullable Disposable disposable) {
-                        showDialog();
-                        addDisposable(disposable);
-                    }
+//                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnDownloadCallBack() {
+//                    @Override
+//                    public void onDownloadStart(@Nullable Disposable disposable) {
+//                        showDialog();
+//                        addDisposable(disposable);
+//                    }
+//
+//                    @Override
+//                    public void onDownloadComplete() {
+//                        hideDialog();
+//                    }
+//                });
 
-                    @Override
-                    public void onDownloadComplete() {
-                        hideDialog();
-                    }
-                });
+                AppDialog.with(this)
+                        .setParams("dfds", "fdsfds", "fdsfds", "")
+                        .show();
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);
