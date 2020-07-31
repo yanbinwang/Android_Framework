@@ -70,13 +70,14 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .into(view!!)
     }
 
-    override fun displayRoundImage(view: ImageView?, string: String?, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
-        displayRoundImage(view, string, 0, roundingRadius, leftTop, rightTop, leftBottom, rightBottom)
+    override fun displayRoundImage(view: ImageView?, string: String?, roundingRadius: Int, overRide: BooleanArray) {
+        displayRoundImage(view, string, 0, roundingRadius, overRide)
     }
 
-    override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int, leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
+    //leftTop, rightTop, leftBottom, rightBottom
+    override fun displayRoundImage(view: ImageView?, string: String?, errorId: Int, roundingRadius: Int, overRide: BooleanArray) {
         val transformation = CornerTransform(context, roundingRadius.toFloat())
-        transformation.setExceptCorner(leftTop, rightTop, leftBottom, rightBottom)
+        transformation.setExceptCorner(overRide[0], overRide[1], overRide[2], overRide[3])
         manager!!
             .load(string)
             .transform(transformation)
