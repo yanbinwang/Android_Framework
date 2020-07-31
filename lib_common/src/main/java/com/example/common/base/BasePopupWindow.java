@@ -19,7 +19,8 @@ import java.lang.reflect.Type;
 
 /**
  * Created by WangYanBin on 2020/7/13.
- * 所有弹框的基类
+ * 所有弹出窗口的基类，弹框本身操作并不应该复杂，只拿取对应的binding即可
+ * 如果具有复杂的交互则直接写成activity加入对应的透明动效
  */
 public abstract class BasePopupWindow<VB extends ViewBinding> extends PopupWindow {
     protected VB binding;
