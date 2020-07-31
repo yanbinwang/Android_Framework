@@ -7,7 +7,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import com.example.common.base.binding.BaseDialog;
+import com.example.common.base.BaseDialog;
 import com.example.common.databinding.ViewDialogBinding;
 import com.example.common.widget.dialog.callback.OnDialogListener;
 

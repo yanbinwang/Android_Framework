@@ -3,7 +3,7 @@ package com.example.common.widget.dialog;
 import android.content.Context;
 
 import com.example.common.R;
-import com.example.common.base.binding.BaseDialog;
+import com.example.common.base.BaseDialog;
 import com.example.common.databinding.ViewDialogLoadingBinding;
 
 /**
