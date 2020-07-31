@@ -66,13 +66,6 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-//                PermissionHelper.with(context.get())
-//                        .getPermissions(Permission.Group.STORAGE)
-//                        .setPermissionCallBack(isGranted -> {
-//                            if (isGranted) {
-//                                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk");
-//                            }
-//                        });
 //                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnDownloadCallBack() {
 //                    @Override
 //                    public void onDownloadStart(@Nullable Disposable disposable) {
@@ -85,19 +78,20 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
 //                        hideDialog();
 //                    }
 //                });
-                PermissionHelper.with(this)
-                        .getPermissions(Permission.Group.STORAGE)
-                        .setPermissionCallBack(isGranted -> {
-                            if (isGranted) {
-                                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
 
-                                    @Override
-                                    protected void onStart() {
-                                        showDialog();
-                                    }
+                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
 
-                                    @Override
-                                    protected void onNext(@Nullable File resource) {
+                    @Override
+                    protected void onStart() {
+                        showDialog();
+                    }
+
+                    @Override
+                    protected void onNext(@Nullable File resource) {
+                        PermissionHelper.with(context.get())
+                                .getPermissions(Permission.Group.STORAGE)
+                                .setPermissionCallBack(isGranted -> {
+                                    if (isGranted) {
                                         if (null != resource) {
                                             try {
                                                 File destFile = new File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"), "阿花.jpg");
@@ -107,15 +101,14 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                                             }
                                         }
                                     }
-
-                                    @Override
-                                    protected void onComplete() {
-                                        hideDialog();
-                                    }
                                 });
+                    }
 
-                            }
-                        });
+                    @Override
+                    protected void onComplete() {
+                        hideDialog();
+                    }
+                });
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);

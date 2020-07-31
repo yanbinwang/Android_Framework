@@ -14,12 +14,12 @@ import io.reactivex.disposables.Disposable
  * Created by WangYanBin on 2020/7/27.
  * 下载应用工具类,应用可能采取弹窗动画等形式
  */
-class DownLoadHelper {
+class DownloadHelper {
 
     companion object {
         @JvmStatic
-        val instance: DownLoadHelper by lazy {
-            DownLoadHelper()
+        val instance: DownloadHelper by lazy {
+            DownloadHelper()
         }
     }
 

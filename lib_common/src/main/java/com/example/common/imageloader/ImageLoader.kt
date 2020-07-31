@@ -6,7 +6,6 @@ import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.RequestManager
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
-import com.bumptech.glide.request.FutureTarget
 import com.bumptech.glide.request.RequestOptions
 import com.example.common.BaseApplication
 import com.example.common.R
@@ -104,14 +103,20 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     override fun downloadImage(string: String?, width: Int, height: Int, requestListener: GlideRequestListener<File?>?) {
 //        //创建保存的文件目录
 //        val destFile = File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"))
+//        //下载对应的图片文件
+//        val srcFile: FutureTarget<File> = manager!!
+//            .asFile()
+//            .load(string)
+//            .listener(requestListener)
+//            .submit(width, height)
+//        //下载的文件从缓存目录拷贝到指定目录
+//        FileUtil.copyFile(srcFile.get(), destFile)
         //下载对应的图片文件
-        val srcFile: FutureTarget<File> = manager!!
+        manager!!
             .asFile()
             .load(string)
             .listener(requestListener)
             .submit(width, height)
-//        //下载的文件从缓存目录拷贝到指定目录
-//        FileUtil.copyFile(srcFile.get(), destFile)
     }
 
     override fun clearMemoryCache() {
