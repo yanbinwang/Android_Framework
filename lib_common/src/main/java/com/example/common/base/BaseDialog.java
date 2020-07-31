@@ -1,4 +1,4 @@
-package com.example.common.base.binding;
+package com.example.common.base;
 
 import android.app.Dialog;
 import android.content.Context;
