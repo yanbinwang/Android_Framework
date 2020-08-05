@@ -3,15 +3,12 @@ package com.example.testnew;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.base.BuildConfig;
 import com.example.common.BaseApplication;
 import com.example.common.constant.Constants;
 import com.example.common.utils.file.FileUtil;
-import com.example.base.BuildConfig;
 import com.example.testnew.activity.MainActivity;
 import com.zxy.recovery.core.Recovery;
-
-//import com.example.share.utils.ShareSDKUtil;
-
 
 /**
  * 如果想在整个应用中使用全局变量，在java中一般是使用静态变量，public类型；
@@ -91,8 +88,6 @@ public class MyApplication extends BaseApplication {
         Constants.APPLICATION_ID = FileUtil.getApplicationId(this);
         Constants.APPLICATION_NAME = FileUtil.getApplicationName(this);
         Constants.APPLICATION_FILE_PATH = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME;
-//        //分享工具类初始化
-//        ShareSDKUtil.getInstance();
     }
 
 }
