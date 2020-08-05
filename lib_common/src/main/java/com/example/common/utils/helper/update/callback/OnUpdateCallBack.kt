@@ -1,4 +1,4 @@
-package com.example.common.utils.helper.download.callback
+package com.example.common.utils.helper.update.callback
 
 import io.reactivex.disposables.Disposable
 
@@ -6,7 +6,7 @@ import io.reactivex.disposables.Disposable
  * Created by WangYanBin on 2020/7/29.
  * 下载回调,返回对应的下载事务，用于销毁防止内存泄漏
  */
-interface OnDownloadCallBack {
+interface OnUpdateCallBack {
 
     //开始下载
     fun onDownloadStart(disposable: Disposable?)
