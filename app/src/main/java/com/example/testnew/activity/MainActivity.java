@@ -107,6 +107,7 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                     @Override
                     protected void onComplete() {
                         hideDialog();
+                        showToast("下载完成");
                     }
                 });
                 break;
