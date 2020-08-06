@@ -1,4 +1,4 @@
-package com.example.common.utils.helper.update.callback
+package com.example.common.utils.helper.update
 
 import io.reactivex.disposables.Disposable
 
@@ -9,9 +9,9 @@ import io.reactivex.disposables.Disposable
 interface OnUpdateCallBack {
 
     //开始下载
-    fun onDownloadStart(disposable: Disposable?)
+    fun onStart(disposable: Disposable?)
 
     //完成下载
-    fun onDownloadComplete()
+    fun onComplete()
 
 }
