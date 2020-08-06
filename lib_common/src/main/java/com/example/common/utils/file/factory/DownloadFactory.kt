@@ -66,9 +66,15 @@ class DownloadFactory private constructor() {
                                         weakHandler.post { onDownloadListener.onDownloading(progress) }
                                     }
                                     fileOutputStream.flush()
-                                    weakHandler.post { onDownloadListener.onDownloadSuccess(file.path) }
+                                    weakHandler.post {
+                                        onDownloadListener.onDownloadSuccess(file.path)
+                                        onDownloadListener.onDownloadComplete()
+                                    }
                                 } catch (e: Exception) {
-                                    weakHandler.post { onDownloadListener.onDownloadFailed(e) }
+                                    weakHandler.post {
+                                        onDownloadListener.onDownloadFailed(e)
+                                        onDownloadListener.onDownloadComplete()
+                                    }
                                 } finally {
                                     try {
                                         inputStream?.close()
@@ -79,13 +85,15 @@ class DownloadFactory private constructor() {
                             }
                         }.start()
                     } else {
-                        weakHandler.post { onDownloadListener.onDownloadFailed(throwable) }
+                        weakHandler.post {
+                            onDownloadListener.onDownloadFailed(throwable)
+                            onDownloadListener.onDownloadComplete()
+                        }
                     }
                     onComplete()
                 }
 
                 override fun onComplete() {
-                    weakHandler.post { onDownloadListener.onDownloadComplete() }
                     if (!isDisposed) {
                         dispose()
                     }
