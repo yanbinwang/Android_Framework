@@ -35,8 +35,8 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     @Override
     public void initView() {
         super.initView();
-        presenter = createPresenter(MainPresenter.class);
         titleBuilder.setTitle("dfsdfsd").getDefault();
+        presenter = createPresenter(MainPresenter.class);
     }
 
     @Override
@@ -78,20 +78,19 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
 //                        hideDialog();
 //                    }
 //                });
+                PermissionHelper.with(context.get())
+                        .getPermissions(Permission.Group.STORAGE)
+                        .setPermissionCallBack(isGranted -> {
+                            if (isGranted) {
+                                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
 
-                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
+                                    @Override
+                                    protected void onStart() {
+                                        showDialog();
+                                    }
 
-                    @Override
-                    protected void onStart() {
-                        showDialog();
-                    }
-
-                    @Override
-                    protected void onNext(@Nullable File resource) {
-                        PermissionHelper.with(context.get())
-                                .getPermissions(Permission.Group.STORAGE)
-                                .setPermissionCallBack(isGranted -> {
-                                    if (isGranted) {
+                                    @Override
+                                    protected void onNext(@Nullable File resource) {
                                         if (null != resource) {
                                             try {
                                                 File destFile = new File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"), "阿花.jpg");
@@ -101,15 +100,15 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                                             }
                                         }
                                     }
-                                });
-                    }
 
-                    @Override
-                    protected void onComplete() {
-                        hideDialog();
-                        showToast("下载完成");
-                    }
-                });
+                                    @Override
+                                    protected void onComplete() {
+                                        hideDialog();
+                                        showToast("下载完成");
+                                    }
+                                });
+                            }
+                        });
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);
