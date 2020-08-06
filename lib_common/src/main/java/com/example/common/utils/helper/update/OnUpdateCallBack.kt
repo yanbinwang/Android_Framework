@@ -1,4 +1,4 @@
-package com.example.common.utils.helper.update.callback
+package com.example.common.utils.helper.update
 
 import io.reactivex.disposables.Disposable
 

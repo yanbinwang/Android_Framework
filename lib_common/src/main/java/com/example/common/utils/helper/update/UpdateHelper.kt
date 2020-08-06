@@ -4,7 +4,6 @@ import android.content.Context
 import com.example.common.constant.Constants
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.file.factory.DownloadFactory
-import com.example.common.utils.helper.update.callback.OnUpdateCallBack
 import com.example.common.utils.helper.permission.OnPermissionCallBack
 import com.example.common.utils.helper.permission.PermissionHelper
 import com.yanzhenjie.permission.runtime.Permission
