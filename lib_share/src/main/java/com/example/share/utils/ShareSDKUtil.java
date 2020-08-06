@@ -108,7 +108,7 @@ public class ShareSDKUtil {
         platform.setPlatformActionListener(new PlatformActionListener() {
             @Override
             public void onComplete(Platform platform, int i, HashMap<String, Object> hashMap) {
-                mActivity.get().runOnUiThread(() -> callback.onAuthorizeSuccess());
+                mActivity.get().runOnUiThread(callback::onAuthorizeSuccess);
             }
 
             @Override
