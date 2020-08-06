@@ -47,13 +47,13 @@ class UpdateHelper private constructor() {
                                 }
 
                                 override fun onDownloadComplete() {
-                                    onUpdateCallBack?.onDownloadComplete()
+                                    onUpdateCallBack?.onComplete()
                                 }
 
                             })
-                        onUpdateCallBack?.onDownloadStart(disposable)
+                        onUpdateCallBack?.onStart(disposable)
                     } else {
-                        onUpdateCallBack?.onDownloadComplete()
+                        onUpdateCallBack?.onComplete()
                     }
                 }
             })
