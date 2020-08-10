@@ -26,7 +26,7 @@ import java.util.List;
  * Created by WangYanBin on 2020/6/1.
  * 存储及获取应用配置
  */
-@SuppressLint({"MissingPermission", "HardwareIds"})
+@SuppressLint({"MissingPermission", "HardwareIds", "StaticFieldLeak"})
 public class ConfigHelper {
     private static MMKV mmkv;
     private static Context context;
@@ -75,7 +75,7 @@ public class ConfigHelper {
                     return null;
                 }
             } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {//当前使用无线网络
-                WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 //得到IPV4地址
                 return initIp(wifiInfo.getIpAddress());
