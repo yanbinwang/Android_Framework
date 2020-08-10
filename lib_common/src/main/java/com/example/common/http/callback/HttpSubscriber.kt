@@ -59,7 +59,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
     }
 
     override fun onComplete() {
-        if (!isDisposed) {
+        if (isDisposed) {
             dispose()
         }
     }

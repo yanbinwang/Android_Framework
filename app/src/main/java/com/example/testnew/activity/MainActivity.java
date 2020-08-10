@@ -8,7 +8,11 @@ import com.example.common.constant.Constants;
 import com.example.common.imageloader.ImageLoader;
 import com.example.common.imageloader.glide.callback.GlideRequestListener;
 import com.example.common.utils.file.FileUtil;
+import com.example.common.utils.file.callback.OnDownloadListener;
+import com.example.common.utils.file.factory.DownloadFactory;
 import com.example.common.utils.helper.permission.PermissionHelper;
+import com.example.common.utils.helper.update.OnUpdateCallBack;
+import com.example.common.utils.helper.update.UpdateHelper;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
@@ -19,6 +23,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
+
+import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -66,49 +72,72 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-//                DownLoadHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnDownloadCallBack() {
+                String filePath = Constants.APPLICATION_FILE_PATH + "/安装包";
+                String fileName = Constants.APPLICATION_NAME + ".apk";
+                DownloadFactory.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
+                    @Override
+                    public void onDownloadSuccess(@Nullable String path) {
+
+                    }
+
+                    @Override
+                    public void onDownloading(int progress) {
+                        binding.tvDownload.setText(String.valueOf(progress));
+                    }
+
+                    @Override
+                    public void onDownloadFailed(@Nullable Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onDownloadComplete() {
+
+                    }
+                });
+//                UpdateHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
 //                    @Override
-//                    public void onDownloadStart(@Nullable Disposable disposable) {
+//                    public void onStart(@Nullable Disposable disposable) {
 //                        showDialog();
 //                        addDisposable(disposable);
 //                    }
 //
 //                    @Override
-//                    public void onDownloadComplete() {
+//                    public void onComplete() {
 //                        hideDialog();
 //                    }
 //                });
-                PermissionHelper.with(context.get())
-                        .getPermissions(Permission.Group.STORAGE)
-                        .setPermissionCallBack(isGranted -> {
-                            if (isGranted) {
-                                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
-
-                                    @Override
-                                    protected void onStart() {
-                                        showDialog();
-                                    }
-
-                                    @Override
-                                    protected void onNext(@Nullable File resource) {
-                                        if (null != resource) {
-                                            try {
-                                                File destFile = new File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"), "阿花.jpg");
-                                                FileUtil.copyFile(resource, destFile);
-                                            } catch (IOException e) {
-                                                e.printStackTrace();
-                                            }
-                                        }
-                                    }
-
-                                    @Override
-                                    protected void onComplete() {
-                                        hideDialog();
-                                        showToast("下载完成");
-                                    }
-                                });
-                            }
-                        });
+//                PermissionHelper.with(context.get())
+//                        .getPermissions(Permission.Group.STORAGE)
+//                        .setPermissionCallBack(isGranted -> {
+//                            if (isGranted) {
+//                                ImageLoader.getInstance().downloadImage("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1596175269923&di=caba0ab23bba2258053fc19041c2568a&imgtype=0&src=http%3A%2F%2Fimg.juimg.com%2Ftuku%2Fyulantu%2F130506%2F240498-1305060IU666.jpg", binding.ivTest.getWidth(), binding.ivTest.getHeight(), new GlideRequestListener<File>() {
+//
+//                                    @Override
+//                                    protected void onStart() {
+//                                        showDialog();
+//                                    }
+//
+//                                    @Override
+//                                    protected void onNext(@Nullable File resource) {
+//                                        if (null != resource) {
+//                                            try {
+//                                                File destFile = new File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"), "阿花.jpg");
+//                                                FileUtil.copyFile(resource, destFile);
+//                                            } catch (IOException e) {
+//                                                e.printStackTrace();
+//                                            }
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    protected void onComplete() {
+//                                        hideDialog();
+//                                        showToast("下载完成");
+//                                    }
+//                                });
+//                            }
+//                        });
                 break;
             case R.id.btn_list:
                 navigation(ARouterPath.TestActivity);
