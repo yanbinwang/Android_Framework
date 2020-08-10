@@ -17,6 +17,7 @@ public class Constants {
     public static String APPLICATION_ID;//当前包名
     public static String APPLICATION_NAME;//当前应用名
     public static String APPLICATION_FILE_PATH;//默认文件保存路径，sd卡下的应用名文件夹
+    public static String SDCARD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();//sd卡的根路径mnt/sdcard
     //app内接口的一些默认配置字段
     public static final int ADAPTER_ITEM_VIEW_TYPE_HEAD = 1;
     public static final int ADAPTER_ITEM_VIEW_TYPE_BODY = 2;
@@ -27,7 +28,6 @@ public class Constants {
     public static final String PUSH_CHANNEL_NAME = "数牛金服";//推送渠道名
     public static final String LIMIT = "10";//取的页数
     public static final String WX_APP_ID = "wx92fdc4b6ab9647cd";//微信的appId
-    public static final String SDCARD_PATH = Environment.getExternalStorageDirectory().getAbsolutePath();//sd卡的根路径mnt/sdcard
     //MMKV存储字段
     public static final String KEY_USER_MODEL = "keyUserModel";//用户类json
     //系统广播
