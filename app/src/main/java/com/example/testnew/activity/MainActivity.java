@@ -4,27 +4,15 @@ import android.view.View;
 
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
-import com.example.common.constant.Constants;
 import com.example.common.imageloader.ImageLoader;
-import com.example.common.imageloader.glide.callback.GlideRequestListener;
-import com.example.common.utils.file.FileUtil;
-import com.example.common.utils.file.callback.OnDownloadListener;
-import com.example.common.utils.file.factory.DownloadFactory;
-import com.example.common.utils.helper.permission.PermissionHelper;
 import com.example.common.utils.helper.update.OnUpdateCallBack;
 import com.example.common.utils.helper.update.UpdateHelper;
 import com.example.testnew.R;
 import com.example.testnew.databinding.ActivityMainBinding;
 import com.example.testnew.presenter.MainPresenter;
 import com.example.testnew.presenter.contract.MainContract;
-import com.yanzhenjie.permission.runtime.Permission;
 
 import org.jetbrains.annotations.Nullable;
-
-import java.io.File;
-import java.io.IOException;
-
-import io.reactivex.disposables.Disposable;
 
 
 /**
@@ -72,10 +60,10 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-                UpdateHelper.getInstance().download(this,"https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
+                UpdateHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
                     @Override
                     public void onStart() {
-                       showToast("开始下载");
+                        showToast("开始下载");
                     }
 
                     @Override
