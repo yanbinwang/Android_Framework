@@ -1,6 +1,6 @@
 package com.example.common.utils.helper.update
 
-import com.example.common.BaseApplication
+import android.content.Context
 import com.example.common.constant.Constants
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.file.factory.DownloadFactory
@@ -24,8 +24,8 @@ class UpdateHelper private constructor() {
 
     //统一下载，进入app以及设置中的检测版本皆是一样的逻辑，弹框-检测权限-开启下载
     @JvmOverloads
-    fun download(downloadUrl: String, onUpdateCallBack: OnUpdateCallBack? = null) {
-        PermissionHelper.with(BaseApplication.getInstance().applicationContext)
+    fun download(context: Context, downloadUrl: String, onUpdateCallBack: OnUpdateCallBack? = null) {
+        PermissionHelper.with(context)
             .getPermissions(Permission.Group.STORAGE)
             .setPermissionCallBack(object : OnPermissionCallBack {
 

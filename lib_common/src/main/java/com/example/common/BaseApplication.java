@@ -1,8 +1,6 @@
 package com.example.common;
 
-import android.app.ActivityManager;
 import android.app.Application;
-import android.content.Context;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.example.base.utils.LogUtil;
@@ -14,7 +12,6 @@ import com.tencent.smtt.sdk.QbSdk;
 import com.yanzhenjie.album.Album;
 import com.yanzhenjie.album.AlbumConfig;
 
-import java.util.List;
 import java.util.Locale;
 
 import me.jessyan.autosize.AutoSizeConfig;
@@ -74,22 +71,6 @@ public class BaseApplication extends Application {
         ConfigHelper.initialize(this);
         //防止短时间内多次点击，弹出多个activity 或者 dialog ，等操作
         registerActivityLifecycleCallbacks(new ApplicationActivityLifecycleCallbacks());
-    }
-
-    //当前应用是否在前台
-    public boolean isAppOnForeground() {
-        ActivityManager activityManager = (ActivityManager) getSystemService(Context.ACTIVITY_SERVICE);
-        if (null != activityManager) {
-            List<ActivityManager.RunningTaskInfo> runningTaskInfos = activityManager.getRunningTasks(100);
-            String packageName = getPackageName();
-            //100表示取的最大的任务数，info.topActivity表示当前正在运行的Activity，info.baseActivity表系统后台有此进程在运行
-            for (ActivityManager.RunningTaskInfo info : runningTaskInfos) {
-                if (info.topActivity.getPackageName().equals(packageName) || info.baseActivity.getPackageName().equals(packageName)) {
-                    return true;
-                }
-            }
-        }
-        return false;
     }
 
 }
