@@ -61,34 +61,10 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-                String filePath = Constants.APPLICATION_FILE_PATH + "/安装包";
-                String fileName = Constants.APPLICATION_NAME + ".apk";
-                DownloadFactory.getInstance().download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, new OnDownloadListener() {
-                    @Override
-                    public void onDownloadSuccess(@Nullable String path) {
-
-                    }
-
-                    @Override
-                    public void onDownloading(int progress) {
-                        binding.tvDownload.setText(String.valueOf(progress));
-                    }
-
-                    @Override
-                    public void onDownloadFailed(@Nullable Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onDownloadComplete() {
-
-                    }
-                });
 //                UpdateHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
 //                    @Override
-//                    public void onStart(@Nullable Disposable disposable) {
+//                    public void onStart() {
 //                        showDialog();
-//                        addDisposable(disposable);
 //                    }
 //
 //                    @Override

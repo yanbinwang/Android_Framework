@@ -55,6 +55,9 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         } else {
             onFailed(throwable, "")
         }
+        //在一个正确运行的事件序列中,onCompleted() 和 onError() 有且只有一个，并且是事件序列中的最后一个
+        //onCompleted() 和 onError() 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
+        //手动在处理后回调一次 onComplete 销毁该次事务
         onComplete()
     }
 
