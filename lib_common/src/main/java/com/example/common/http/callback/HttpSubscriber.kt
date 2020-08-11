@@ -24,7 +24,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
             val responseBody = (throwable as HttpException).response()?.errorBody()
             if (null != responseBody) {
                 val baseModel = jsonToObj(responseBody.string(), ApiResponse::class.java)
-                doResult(baseModel as ApiResponse<T>?, throwable)
+                doResult(baseModel as? ApiResponse<T>?, throwable)
             } else {
                 doResult(null, throwable)
             }
