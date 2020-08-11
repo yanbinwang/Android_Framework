@@ -7,7 +7,6 @@ import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.handler.WeakHandler
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subscribers.ResourceSubscriber
 import okhttp3.ResponseBody
@@ -31,9 +30,9 @@ class DownloadFactory private constructor() {
         }
     }
 
-    fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener): Disposable {
+    fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         FileUtil.deleteDir(filePath)
-        return BaseSubscribe.getDownload(downloadUrl)
+        BaseSubscribe.getDownload(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
@@ -63,37 +62,27 @@ class DownloadFactory private constructor() {
                                         fileOutputStream.write(buf, 0, len)
                                         sum += len.toLong()
                                         val progress = (sum * 1.0f / total * 100).toInt()
-                                        weakHandler.post { onDownloadListener.onDownloading(progress) }
+                                        weakHandler.post { onDownloadListener?.onDownloading(progress) }
                                     }
                                     fileOutputStream.flush()
-                                    weakHandler.post {
-                                        onDownloadListener.onDownloadSuccess(file.path)
-                                        onComplete()
-                                    }
+                                    weakHandler.post { onDownloadListener?.onDownloadSuccess(file.path) }
                                 } catch (e: Exception) {
-                                    weakHandler.post {
-                                        onDownloadListener.onDownloadFailed(e)
-                                        onComplete()
-                                    }
+                                    weakHandler.post { onDownloadListener?.onDownloadFailed(e) }
                                 } finally {
-                                    try {
-                                        inputStream?.close()
-                                        fileOutputStream?.close()
-                                    } catch (ignored: IOException) {
-                                    }
+                                    inputStream?.close()
+                                    fileOutputStream?.close()
+                                    onComplete()
                                 }
                             }
                         }.start()
                     } else {
-                        weakHandler.post {
-                            onDownloadListener.onDownloadFailed(throwable)
-                            onComplete()
-                        }
+                        weakHandler.post { onDownloadListener?.onDownloadFailed(throwable) }
+                        onComplete()
                     }
                 }
 
                 override fun onComplete() {
-                    weakHandler.post { onDownloadListener.onDownloadComplete() }
+                    weakHandler.post { onDownloadListener?.onDownloadComplete() }
                     if (isDisposed) {
                         dispose()
                     }
