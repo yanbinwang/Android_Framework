@@ -61,17 +61,17 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.btn_download:
-//                UpdateHelper.getInstance().download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
-//                    @Override
-//                    public void onStart() {
-//                        showDialog();
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//                        hideDialog();
-//                    }
-//                });
+                UpdateHelper.getInstance().download(this,"https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", new OnUpdateCallBack() {
+                    @Override
+                    public void onStart() {
+                       showToast("开始下载");
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        showToast("完成下载");
+                    }
+                });
 //                PermissionHelper.with(context.get())
 //                        .getPermissions(Permission.Group.STORAGE)
 //                        .setPermissionCallBack(isGranted -> {
