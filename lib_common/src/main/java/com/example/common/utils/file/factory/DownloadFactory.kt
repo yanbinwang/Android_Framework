@@ -37,6 +37,11 @@ class DownloadFactory private constructor() {
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
+                override fun onStart() {
+                    super.onStart()
+                    weakHandler.post { onDownloadListener?.onStart() }
+                }
+
                 override fun onNext(responseBody: ResponseBody?) {
                     doResult(responseBody, null)
                 }
@@ -62,12 +67,12 @@ class DownloadFactory private constructor() {
                                     fileOutputStream.write(buf, 0, len)
                                     sum += len.toLong()
                                     val progress = (sum * 1.0f / total * 100).toInt()
-                                    weakHandler.post { onDownloadListener?.onDownloading(progress) }
+                                    weakHandler.post { onDownloadListener?.onLoading(progress) }
                                 }
                                 fileOutputStream.flush()
-                                weakHandler.post { onDownloadListener?.onDownloadSuccess(file.path) }
+                                weakHandler.post { onDownloadListener?.onSuccess(file.path) }
                             } catch (e: Exception) {
-                                weakHandler.post { onDownloadListener?.onDownloadFailed(e) }
+                                weakHandler.post { onDownloadListener?.onFailed(e) }
                             } finally {
                                 inputStream?.close()
                                 fileOutputStream?.close()
@@ -76,13 +81,13 @@ class DownloadFactory private constructor() {
                         }
                         executors.isShutdown
                     } else {
-                        weakHandler.post { onDownloadListener?.onDownloadFailed(throwable) }
+                        weakHandler.post { onDownloadListener?.onFailed(throwable) }
                         onComplete()
                     }
                 }
 
                 override fun onComplete() {
-                    weakHandler.post { onDownloadListener?.onDownloadComplete() }
+                    weakHandler.post { onDownloadListener?.onComplete() }
                     if (isDisposed) {
                         dispose()
                     }
