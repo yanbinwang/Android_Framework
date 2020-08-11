@@ -13,9 +13,12 @@ import com.example.common.BaseApplication
  * date: 2018/8/13.
  * 网路监测类
  */
-@SuppressLint("StaticFieldLeak","MissingPermission")
+@SuppressLint("StaticFieldLeak", "MissingPermission")
 object NetWorkUtil {
-    private var context: Context = BaseApplication.instance.applicationContext
+    //等效于懒加载，使用时取值，之后复用
+    private val context by lazy {
+        BaseApplication.instance.applicationContext
+    }
 
     //验证是否联网
     @JvmStatic
