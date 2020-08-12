@@ -108,4 +108,5 @@ public class MainActivity extends BaseTitleActivity<ActivityMainBinding> impleme
                 break;
         }
     }
+
 }
