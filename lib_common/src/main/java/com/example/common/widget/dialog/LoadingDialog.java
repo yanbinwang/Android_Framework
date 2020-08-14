@@ -18,6 +18,20 @@ public class LoadingDialog extends BaseDialog<ViewDialogLoadingBinding> {
         initialize();
     }
 
+    @Override
+    protected void initialize() {
+        super.initialize();
+        setOnDismissListener(dialog -> binding.progress.stopSpinning());
+    }
+
+    @Override
+    public void show() {
+        super.show();
+        if (!binding.progress.isSpinning()) {
+            binding.progress.spin();
+        }
+    }
+
     public void show(boolean flag) {
         setCancelable(flag);
         if (!isShowing()) {
