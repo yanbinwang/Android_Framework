@@ -15,8 +15,10 @@
 -->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/Album.MatchParent"
-    android:background="@color/albumPageLight">
+    android:background="@color/albumPageLight"
+    tools:viewBindingIgnore="true">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar_layout"
@@ -59,9 +61,9 @@
             android:id="@+id/btn_camera_image"
             style="@style/Album.Button.WrapContent"
             android:layout_marginTop="@dimen/album_dp_15"
+            android:drawableStart="@drawable/album_ic_image_camera_white"
             android:drawableLeft="@drawable/album_ic_image_camera_white"
             android:drawablePadding="@dimen/album_dp_6"
-            android:drawableStart="@drawable/album_ic_image_camera_white"
             android:gravity="center"
             android:text="@string/album_camera_image_capture"
             android:textColor="@color/albumFontLight" />
@@ -70,9 +72,9 @@
             android:id="@+id/btn_camera_video"
             style="@style/Album.Button.WrapContent"
             android:layout_marginTop="@dimen/album_dp_15"
+            android:drawableStart="@drawable/album_ic_video_camera_white"
             android:drawableLeft="@drawable/album_ic_video_camera_white"
             android:drawablePadding="@dimen/album_dp_6"
-            android:drawableStart="@drawable/album_ic_video_camera_white"
             android:gravity="center"
             android:text="@string/album_camera_video_capture"
             android:textColor="@color/albumFontLight" />
