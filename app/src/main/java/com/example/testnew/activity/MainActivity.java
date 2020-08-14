@@ -2,6 +2,7 @@ package com.example.testnew.activity;
 
 import android.view.View;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.example.common.base.BaseTitleActivity;
 import com.example.common.constant.ARouterPath;
 import com.example.common.imageloader.ImageLoader;
@@ -23,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
  * 判别标准即传入P层后处理得到的数据是否还需要丢回Activity做UI刷新的处理，如果不涉及则直接在P层做
  * 页面中的控件事件，如果只有一个直接写成匿名形式，如果多个复用（2个及以上）调用基类的onXXX方法批量注入写成全局形式
  */
+@Route(path = ARouterPath.MainActivity)
 public class MainActivity extends BaseTitleActivity<ActivityMainBinding> implements MainContract.View, View.OnClickListener {
     private MainPresenter presenter;
 
