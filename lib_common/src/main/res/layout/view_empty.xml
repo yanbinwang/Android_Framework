@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 当列表为空或者没有网络时显示 -->
 <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/srl_empty_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray_f6f8ff">
+    android:background="@color/gray_f6f8ff"
+    tools:viewBindingIgnore="true">
 
     <LinearLayout
         android:layout_width="match_parent"
