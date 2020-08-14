@@ -3,6 +3,7 @@ package com.example.common;
 import android.app.Application;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.base.BuildConfig;
 import com.example.base.utils.LogUtil;
 import com.example.common.base.proxy.ApplicationActivityLifecycleCallbacks;
 import com.example.common.imageloader.glide.callback.GlideAlbumLoader;
@@ -58,7 +59,7 @@ public class BaseApplication extends Application {
             }
         });
         //阿里路由跳转初始化
-        if (BuildConfig.DEBUG) {
+        if (BuildConfig.ISDEBUG) {
             //打印日志
             ARouter.openLog();
             ARouter.openDebug();

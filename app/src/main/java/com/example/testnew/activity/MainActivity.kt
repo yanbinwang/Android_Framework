@@ -5,10 +5,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.common.base.BaseTitleActivity
 import com.example.common.constant.ARouterPath
 import com.example.common.imageloader.ImageLoader
-import com.example.common.imageloader.ImageLoader.Companion.instance
 import com.example.common.utils.helper.update.OnUpdateCallBack
 import com.example.common.utils.helper.update.UpdateHelper
-import com.example.common.utils.helper.update.UpdateHelper.Companion.instance
 import com.example.testnew.R
 import com.example.testnew.databinding.ActivityMainBinding
 import com.example.testnew.presenter.MainPresenter
@@ -56,10 +54,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_download -> {
-                UpdateHelper.instance.download(
-                    this,
-                    "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk",
-                    object : OnUpdateCallBack {
+                UpdateHelper.instance.download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", object : OnUpdateCallBack {
+
                         override fun onStart() {
                             showToast("开始下载")
                         }
@@ -67,6 +63,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
                         override fun onComplete() {
                             showToast("完成下载")
                         }
+
                     })
 //                PermissionHelper.with(context.get())
 //                        .getPermissions(Permission.Group.STORAGE)
