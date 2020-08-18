@@ -15,12 +15,12 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.R;
+import com.example.base.utils.LogUtil;
+import com.example.base.utils.ToastUtil;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -33,8 +33,6 @@ import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.base.utils.LogUtil;
-import com.example.base.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -110,8 +108,6 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         statusBarBuilder = new StatusBarBuilder(this);
         loadingDialog = new LoadingDialog(this);
         rxManager = new RxManager();
-        statusBarBuilder.setStatusBarLightMode(true);
-        statusBarBuilder.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
     }
 
     @Override
