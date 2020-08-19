@@ -1,6 +1,5 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
-//apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion build_versions.compileSdkVersion
@@ -12,8 +11,6 @@ android {
         versionName build_versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
-//    viewBinding.enabled = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

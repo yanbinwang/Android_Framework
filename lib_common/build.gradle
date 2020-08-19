@@ -16,7 +16,6 @@ android {
             arguments {
                 arg("moduleName", project.getName())
             }
-            generateStubs = true
         }
     }
 
