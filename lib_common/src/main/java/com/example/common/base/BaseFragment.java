@@ -50,7 +50,6 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * 基础fragment的基类
  * 适用于fragmentmanager管理显示隐藏fragment
  */
-@SuppressWarnings("unchecked")
 public abstract class BaseFragment<VB extends ViewBinding> extends Fragment implements BaseImpl, BaseView {
     protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用

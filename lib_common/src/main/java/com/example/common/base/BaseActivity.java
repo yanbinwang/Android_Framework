@@ -51,7 +51,7 @@ import io.reactivex.rxjava3.disposables.Disposable;
  * date: 2018/7/26.
  * activity基类，包含了一些方法，全局广播等
  */
-@SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
+@SuppressWarnings("SourceLockedOrientationActivity")
 public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActivity implements BaseImpl, BaseView {
     protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用

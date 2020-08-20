@@ -21,7 +21,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
 
     override fun onError(throwable: Throwable?) {
         try {
-            val responseBody = (throwable as HttpException).response()?.errorBody()
+            val responseBody = (throwable as? HttpException)?.response()?.errorBody()
             if (null != responseBody) {
                 val baseModel = jsonToObj(responseBody.string(), ApiResponse::class.java)
                 doResult(baseModel as? ApiResponse<T>?, throwable)
