@@ -36,7 +36,7 @@ object Constants {
     const val PUSH_CHANNEL_NAME = "数牛金服" //推送渠道名
     const val LIMIT = "10" //取的页数
     const val WX_APP_ID = "wx92fdc4b6ab9647cd" //微信的appId
-    const val ADAPTER_ITEM_VIEW_TYPE_HEAD: Int = 1
+    const val ADAPTER_ITEM_VIEW_TYPE_HEAD = 1
     const val ADAPTER_ITEM_VIEW_TYPE_BODY = 2
     const val ADAPTER_ITEM_VIEW_TYPE_BOTTOM = 3
 
@@ -44,9 +44,9 @@ object Constants {
     const val KEY_USER_MODEL = "keyUserModel" //用户类json
 
     //系统广播
-    const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN" //用户登录
-    const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT" //用户注销
-    const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS";//分享成功
-    const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL";//分享取消
-    const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE";//分享失败
+    const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
+    const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
+    const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
+    const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
+    const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败
 }
