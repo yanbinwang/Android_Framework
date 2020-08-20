@@ -88,7 +88,7 @@ class DownloadFactory private constructor() {
 
                 override fun onComplete() {
                     weakHandler.post { onDownloadListener?.onComplete() }
-                    if (isDisposed) {
+                    if (!isDisposed) {
                         dispose()
                     }
                 }

@@ -15,6 +15,7 @@ import retrofit2.HttpException
  */
 abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     override fun onNext(apiResponse: ApiResponse<T>?) {
         doResult(apiResponse, null)
     }
@@ -55,20 +56,27 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         } else {
             onFailed(throwable, "")
         }
-        //在一个正确运行的事件序列中,onCompleted() 和 onError() 有且只有一个，并且是事件序列中的最后一个
-        //onCompleted() 和 onError() 二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
-        //手动在处理后回调一次 onComplete 销毁该次事务
+        //在一个正确运行的事件序列中,onComplete()和onError()有且只有一个，并且是事件序列中的最后一个
+        //onComplete()和onError()二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
+        //故手动在处理后回调一次onComplete()销毁该次事务
         onComplete()
     }
 
     override fun onComplete() {
-        if (isDisposed) {
+        if (!isDisposed) {
             dispose()
         }
     }
+    // </editor-fold>
 
+    /**
+     * 请求成功，直接回调对象
+     */
     protected abstract fun onSuccess(data: T?)
 
+    /**
+     * 请求失败，获取失败原因
+     */
     protected abstract fun onFailed(e: Throwable?, msg: String?)
 
 }
