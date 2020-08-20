@@ -22,7 +22,8 @@ import java.util.concurrent.Executors
 @SuppressLint("CheckResult")
 class DownloadFactory private constructor() {
     private val weakHandler = WeakHandler(Looper.getMainLooper())
-    private val executors = Executors.newSingleThreadExecutor();
+    private val executors = Executors.newSingleThreadExecutor()
+    private var complete = false//请求在完成并返回对象后又发起了线程下载，所以回调监听需要保证线程完成在回调
 
     companion object {
         @JvmStatic
@@ -39,6 +40,7 @@ class DownloadFactory private constructor() {
 
                 override fun onStart() {
                     super.onStart()
+                    complete = false
                     weakHandler.post { onDownloadListener?.onStart() }
                 }
 
@@ -76,18 +78,23 @@ class DownloadFactory private constructor() {
                             } finally {
                                 inputStream?.close()
                                 fileOutputStream?.close()
+                                complete = true
                                 onComplete()
                             }
                         }
                         executors.isShutdown
                     } else {
                         weakHandler.post { onDownloadListener?.onFailed(throwable) }
+                        complete = true
                         onComplete()
                     }
                 }
 
                 override fun onComplete() {
-                    weakHandler.post { onDownloadListener?.onComplete() }
+                    if (complete) {
+                        complete = false
+                        weakHandler.post { onDownloadListener?.onComplete() }
+                    }
                     if (!isDisposed) {
                         dispose()
                     }
