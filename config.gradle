@@ -91,7 +91,7 @@ ext.build_versions = build_versions
 
 //基础参数配置
 def build_config = [:]
-build_config.applicationId = "com.ow.testnew"//主appId（包名）
+build_config.applicationId = "com.example.testnew"//主appId（包名）
 build_config.LOCALHOST_DEBUG = "\"https://netcar.dev.yoogate.cn/\""//测试环境
 build_config.LOCALHOST_RELEASE = "\"https://netcar.yoogate.cn/\""//生产环境
 ext.build_config = build_config
@@ -104,7 +104,7 @@ static def addRepos(RepositoryHandler handler) {
     }
 
     handler.jcenter()
-    handler.maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
+//    handler.maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
     handler.maven { url 'https://jitpack.io' }
     handler.mavenCentral()
 }
