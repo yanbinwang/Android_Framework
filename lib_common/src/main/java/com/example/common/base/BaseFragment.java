@@ -20,6 +20,8 @@ import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.base.utils.LogUtil;
+import com.example.base.utils.ToastUtil;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -29,8 +31,6 @@ import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.base.utils.LogUtil;
-import com.example.base.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -42,7 +42,8 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+
 
 /**
  * Created by wyb on 2016/3/26.

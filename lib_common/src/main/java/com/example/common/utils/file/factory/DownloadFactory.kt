@@ -6,9 +6,9 @@ import com.example.common.subscribe.BaseSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.handler.WeakHandler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.ResourceSubscriber
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subscribers.ResourceSubscriber
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream

@@ -3,7 +3,7 @@ package com.example.common.base.bridge
 import android.content.Context
 import com.example.common.BaseApplication
 import com.example.common.bus.RxManager
-import io.reactivex.disposables.Disposable
+import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.ref.SoftReference
 
 /**

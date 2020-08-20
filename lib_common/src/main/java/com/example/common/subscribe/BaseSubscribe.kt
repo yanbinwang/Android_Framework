@@ -3,8 +3,9 @@ package com.example.common.subscribe
 import com.example.common.http.callback.ApiResponse
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.model.UploadModel
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 /**
  * author:wyb
@@ -15,7 +16,7 @@ object BaseSubscribe : BaseApi {
         RetrofitFactory.instance.create(BaseApi::class.java)
     }
 
-    override fun getDownload(downloadUrl: String): Flowable<okhttp3.ResponseBody> {
+    override fun getDownload(downloadUrl: String): Flowable<ResponseBody> {
         return baseApi.getDownload(downloadUrl)
     }
 

@@ -178,17 +178,6 @@
 -keep class com.google.gson.examples.android.model.** { *; }
 ##---------------End: proguard configuration for Gson  ----------
 
-#------------------------映射混淆开始------------------------#
-# keep annotated by NotProguard
--keep @com.bitnew.framework.annotation.ViewInject class * {*;}
--keep class * {
-@com.bitnew.framework.annotation.ViewInject <fields>;
-}
--keepclassmembers class * {
-@com.bitnew.framework.annotation.ViewInject <methods>;
-}
-#------------------------映射混淆结束------------------------#
-
 #------------------------百度地图混淆开始------------------------#
 #-libraryjars  ../XXX(此处为library名称)/src/main/jniLibs/armeabi/xxxxx.so
 #-libraryjars  libs/BaiduLBS_Android.jar

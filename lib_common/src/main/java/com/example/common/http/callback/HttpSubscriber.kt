@@ -7,7 +7,7 @@ import com.example.common.constant.ARouterPath
 import com.example.common.constant.Constants
 import com.example.common.utils.analysis.GsonUtil.jsonToObj
 import com.example.common.utils.helper.AccountHelper
-import io.reactivex.subscribers.ResourceSubscriber
+import io.reactivex.rxjava3.subscribers.ResourceSubscriber
 import retrofit2.HttpException
 
 /**

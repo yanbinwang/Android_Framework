@@ -2,7 +2,7 @@ package com.example.common.http.factory
 
 import com.example.common.BuildConfig
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -15,7 +15,7 @@ class RetrofitFactory private constructor() {
             .client(OkHttpFactory.instance.okHttpClient)
             .baseUrl(BuildConfig.LOCALHOST)
             .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
 
     companion object {

@@ -4,8 +4,8 @@ import com.example.common.http.HttpParams
 import com.example.common.http.callback.HttpSubscriber
 import com.example.common.subscribe.BaseSubscribe.getSendVerification
 import com.example.testnew.presenter.contract.MainContract
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 /**
  * Created by WangYanBin on 2020/6/30.

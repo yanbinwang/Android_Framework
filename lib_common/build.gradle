@@ -56,7 +56,7 @@ dependencies {
     //网络请求
     api deps.retrofit2.retrofit
     api deps.retrofit2.converter_gson
-    api deps.retrofit2.adapter_rxjava2
+    api deps.retrofit2.adapter_rxjava3
     //图片加载
     api deps.bumptech.glide
     api deps.bumptech.glide_okhttp3

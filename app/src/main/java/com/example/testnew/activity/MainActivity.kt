@@ -54,18 +54,18 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_download -> {
-                showDialog(true)
-//                UpdateHelper.instance.download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", object : OnUpdateCallBack {
-//
-//                        override fun onStart() {
-//                            showToast("开始下载")
-//                        }
-//
-//                        override fun onComplete() {
-//                            showToast("完成下载")
-//                        }
-//
-//                    })
+//                showDialog(true)
+                UpdateHelper.instance.download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", object : OnUpdateCallBack {
+
+                        override fun onStart() {
+                            showToast("开始下载")
+                        }
+
+                        override fun onComplete() {
+                            showToast("完成下载")
+                        }
+
+                    })
 //                PermissionHelper.with(context.get())
 //                        .getPermissions(Permission.Group.STORAGE)
 //                        .setPermissionCallBack(isGranted -> {

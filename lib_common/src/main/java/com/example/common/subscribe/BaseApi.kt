@@ -2,8 +2,9 @@ package com.example.common.subscribe
 
 import com.example.common.http.callback.ApiResponse
 import com.example.common.model.UploadModel
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 /**
@@ -14,7 +15,7 @@ interface BaseApi {
 
     @Streaming
     @GET
-    fun getDownload(@Url downloadUrl: String): Flowable<okhttp3.ResponseBody>
+    fun getDownload(@Url downloadUrl: String): Flowable<ResponseBody>
 
     @Multipart
     @Streaming
