@@ -4,13 +4,19 @@ import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.example.common.base.BaseTitleActivity
 import com.example.common.constant.ARouterPath
+import com.example.common.constant.Constants
 import com.example.common.imageloader.ImageLoader
+import com.example.common.utils.file.callback.OnDownloadListener
+import com.example.common.utils.file.factory.DownloadFactory
+import com.example.common.utils.helper.permission.OnPermissionCallBack
+import com.example.common.utils.helper.permission.PermissionHelper
 import com.example.common.utils.helper.update.OnUpdateCallBack
 import com.example.common.utils.helper.update.UpdateHelper
 import com.example.testnew.R
 import com.example.testnew.databinding.ActivityMainBinding
 import com.example.testnew.presenter.MainPresenter
 import com.example.testnew.presenter.contract.MainContract
+import com.yanzhenjie.permission.runtime.Permission
 
 /**
  * Created by WangYanBin on 2020/8/14.
@@ -54,18 +60,54 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_download -> {
-//                showDialog(true)
-                UpdateHelper.instance.download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", object : OnUpdateCallBack {
+                PermissionHelper.with(this)
+                    .getPermissions(Permission.Group.STORAGE)
+                    .setPermissionCallBack(object : OnPermissionCallBack {
 
-                        override fun onStart() {
-                            showToast("开始下载")
+                        override fun onPermissionListener(isGranted: Boolean) {
+                            if (isGranted) {
+                                val filePath = Constants.APPLICATION_FILE_PATH + "/安装包"
+                                val fileName = Constants.APPLICATION_NAME + ".apk"
+                                DownloadFactory.instance.download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, object :
+                                    OnDownloadListener {
+
+                                    override fun onStart() {
+                                        showDialog()
+                                    }
+
+                                    override fun onSuccess(path: String?) {
+
+                                    }
+
+                                    override fun onLoading(progress: Int) {
+                                        binding.tvDownload.text = progress.toString()
+                                    }
+
+                                    override fun onFailed(e: Throwable?) {
+
+                                    }
+
+                                    override fun onComplete() {
+                                        hideDialog()
+                                    }
+
+                                })
+                            }
                         }
-
-                        override fun onComplete() {
-                            showToast("完成下载")
-                        }
-
                     })
+
+//                showDialog(true)
+//                UpdateHelper.instance.download(this, "https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", object : OnUpdateCallBack {
+//
+//                        override fun onStart() {
+//                            showToast("开始下载")
+//                        }
+//
+//                        override fun onComplete() {
+//                            showToast("完成下载")
+//                        }
+//
+//                    })
 //                PermissionHelper.with(context.get())
 //                        .getPermissions(Permission.Group.STORAGE)
 //                        .setPermissionCallBack(isGranted -> {
