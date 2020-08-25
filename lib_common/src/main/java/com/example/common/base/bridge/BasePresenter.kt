@@ -1,10 +1,11 @@
 package com.example.common.base.bridge
 
+import android.app.Activity
 import android.content.Context
-import com.example.common.BaseApplication
 import com.example.common.bus.RxManager
 import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.ref.SoftReference
+import java.lang.ref.WeakReference
 
 /**
  * author: wyb
@@ -13,31 +14,42 @@ import java.lang.ref.SoftReference
  * 完成View和Presenter的关联性
  */
 abstract class BasePresenter<T : BaseView> {
-    private var view: SoftReference<T>? = null
-    private var rxManager: RxManager? = null
+    private var weakActivity: WeakReference<Activity>? = null
+    private var weakContext: WeakReference<Context>? = null
+    private var softView: SoftReference<T>? = null
+    private var rxManager = RxManager()
 
-    fun attachView(view: T?) {
-        this.view = SoftReference(view!!)
-        this.rxManager = RxManager()
+    // <editor-fold defaultstate="collapsed" desc="构造和内部方法">
+    fun initialize(activity: Activity?, context: Context?, view: T?) {
+        this.weakActivity = WeakReference(activity)
+        this.weakContext = WeakReference(context)
+        this.softView = SoftReference(view)
     }
 
     fun detachView() {
-        view?.clear()
-        rxManager?.clear()
+        weakActivity?.clear()
+        weakContext?.clear()
+        softView?.clear()
+        rxManager.clear()
     }
 
     protected fun addDisposable(disposable: Disposable?) {
         if (null != disposable) {
-            rxManager?.add(disposable)
+            rxManager.add(disposable)
         }
     }
 
     protected fun getView(): T {
-        return view?.get()!!
+        return softView?.get()!!
+    }
+
+    protected fun getActivity(): Activity {
+        return weakActivity?.get()!!
     }
 
     protected fun getContext(): Context {
-        return BaseApplication.instance.applicationContext
+        return weakContext?.get()!!
     }
+    // </editor-fold>
 
 }
