@@ -39,11 +39,11 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun getView() = softView?.get()!!
+    protected fun getView() = softView?.get()
 
-    protected fun getActivity() = weakActivity?.get()!!
+    protected fun getActivity() = weakActivity?.get()
 
-    protected fun getContext() = weakContext?.get()!!
+    protected fun getContext() = weakContext?.get()
     // </editor-fold>
 
 }
