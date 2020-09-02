@@ -532,8 +532,8 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 #------------------------sharesdk混淆结束------------------------
 -keep class com.example.common.bus.RxBusEvent{*;}
 -keep class com.example.common.base.page.PageParams{*;}
--keep class com.example.common.http.HttpParams{*;}
--keep class com.example.common.http.callback.ApiResponse{*;}
+-keep class com.example.common.http.repository.HttpParams{*;}
+-keep class com.example.common.http.repository.ApiResponse{*;}
 -keep class com.example.common.base.page.** {*;}
 -keep class com.example.common.model.** {*;}
 -keep class com.example.share.model.** {*;}

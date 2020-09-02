@@ -1,7 +1,7 @@
 package com.example.testnew.presenter
 
-import com.example.common.http.HttpParams
-import com.example.common.http.callback.HttpSubscriber
+import com.example.common.http.repository.HttpParams
+import com.example.common.http.repository.HttpSubscriber
 import com.example.common.subscribe.BaseSubscribe.getSendVerification
 import com.example.testnew.presenter.contract.MainContract
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

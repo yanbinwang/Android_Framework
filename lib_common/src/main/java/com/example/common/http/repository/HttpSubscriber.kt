@@ -1,4 +1,4 @@
-package com.example.common.http.callback
+package com.example.common.http.repository
 
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.common.bus.RxBus.Companion.instance
