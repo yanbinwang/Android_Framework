@@ -1,9 +1,15 @@
 package com.example.testnew.presenter
 
+import com.example.common.constant.Constants
 import com.example.common.http.repository.HttpParams
 import com.example.common.http.repository.HttpSubscriber
 import com.example.common.subscribe.CommonSubscribe.getSendVerificationApi
+import com.example.common.utils.file.callback.OnDownloadListener
+import com.example.common.utils.file.factory.DownloadFactory
+import com.example.common.utils.helper.permission.OnPermissionCallBack
+import com.example.common.utils.helper.permission.PermissionHelper
 import com.example.testnew.presenter.contract.MainContract
+import com.yanzhenjie.permission.runtime.Permission
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
 
@@ -37,45 +43,43 @@ class MainPresenter : MainContract.Presenter() {
 
                 })
         )
+    }
 
-//                addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
-//                    @Override
-//                    public void onNext(ResponseBody responseBody) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable t) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                }));
+    override fun getDownload() {
+        PermissionHelper.with(getContext())
+            .getPermissions(Permission.Group.STORAGE)
+            .setPermissionCallBack(object : OnPermissionCallBack {
 
-//        addDisposable(BaseSubscribe.INSTANCE.getVerification("dsfsd",new HttpParams().append("dsadsa","sddas").getParams())
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new HttpSubscriber<Object>() {
-//                    @Override
-//                    protected void onSuccess(Object data) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFailed(Throwable e, String msg) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFinish() {
-//
-//                    }
-//                }));
-//        view?.get()?.hideDialog()
+                override fun onPermissionListener(isGranted: Boolean) {
+                    if (isGranted) {
+                        val filePath = Constants.APPLICATION_FILE_PATH + "/安装包"
+                        val fileName = Constants.APPLICATION_NAME + ".apk"
+                        DownloadFactory.instance.download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, object :
+                            OnDownloadListener {
+
+                            override fun onStart() {
+                                getView()?.showDialog()
+                            }
+
+                            override fun onSuccess(path: String?) {
+
+                            }
+
+                            override fun onLoading(progress: Int) {
+                            }
+
+                            override fun onFailed(e: Throwable?) {
+
+                            }
+
+                            override fun onComplete() {
+                                getView()?.hideDialog()
+                            }
+
+                        })
+                    }
+                }
+            })
     }
 
 }

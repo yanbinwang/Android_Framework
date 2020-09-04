@@ -13,6 +13,8 @@ interface MainContract {
 
         abstract fun getUserInfo() //获取用户信息
 
+        abstract fun getDownload()
+
     }
 
     interface View : BaseView {
