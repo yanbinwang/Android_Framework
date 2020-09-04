@@ -41,9 +41,7 @@ class RxBusEvent {
     }
 
     //获取广播名
-    fun getAction(): String? {
-        return action
-    }
+    fun getAction() = action
 
     //获取默认布尔值
     fun getBooleanExtra(defaultValue: Boolean): Boolean? {
@@ -52,12 +50,10 @@ class RxBusEvent {
 
     //获取默认字符串值
     fun getStringExtra(): String? {
-        return if (args == null) null else args!!.getString(action)
+        return if (args == null) null else args?.getString(action)
     }
 
     //获取默认类值
-    fun getBundleExtras(): Bundle? {
-        return args
-    }
+    fun getBundleExtras() = args
 
 }
