@@ -22,16 +22,16 @@ class RxBusEvent {
         if (args == null) {
             args = Bundle()
         }
-        args!!.putBoolean(action, value)
+        args?.putBoolean(action, value)
     }
 
     //带字符串类型的广播
-    constructor(action: String, value: String?) {
+    constructor(action: String, value: String) {
         this.action = action
         if (args == null) {
             args = Bundle()
         }
-        args!!.putString(action, value)
+        args?.putString(action, value)
     }
 
     //带数据类的广播
@@ -41,13 +41,13 @@ class RxBusEvent {
     }
 
     //获取广播名
-    fun getAction(): String {
-        return action!!
+    fun getAction(): String? {
+        return action
     }
 
     //获取默认布尔值
-    fun getBooleanExtra(defaultValue: Boolean): Boolean {
-        return if (args == null) defaultValue else args!!.getBoolean(action, defaultValue)
+    fun getBooleanExtra(defaultValue: Boolean): Boolean? {
+        return if (args == null) defaultValue else args?.getBoolean(action, defaultValue)
     }
 
     //获取默认字符串值
@@ -56,8 +56,8 @@ class RxBusEvent {
     }
 
     //获取默认类值
-    fun getBundleExtras(): Bundle {
-        return args!!
+    fun getBundleExtras(): Bundle? {
+        return args
     }
 
 }
