@@ -16,20 +16,20 @@ object CommonSubscribe : CommonApi {
         RetrofitFactory.instance.create(CommonApi::class.java)
     }
 
-    override fun getDownload(downloadUrl: String): Flowable<ResponseBody> {
-        return commonApi.getDownload(downloadUrl)
+    override fun getDownloadApi(downloadUrl: String): Flowable<ResponseBody> {
+        return commonApi.getDownloadApi(downloadUrl)
     }
 
-    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
+    override fun getUploadFileApi(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return commonApi.getSendVerification(agent, map)
+    override fun getSendVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
+        return commonApi.getSendVerificationApi(agent, map)
     }
 
-    override fun getVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return commonApi.getVerification(agent, map)
+    override fun getVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
+        return commonApi.getVerificationApi(agent, map)
     }
 
 //    //上传图片接口

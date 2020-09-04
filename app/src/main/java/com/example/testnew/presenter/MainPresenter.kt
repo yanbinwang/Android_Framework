@@ -2,7 +2,7 @@ package com.example.testnew.presenter
 
 import com.example.common.http.repository.HttpParams
 import com.example.common.http.repository.HttpSubscriber
-import com.example.common.subscribe.CommonSubscribe.getSendVerification
+import com.example.common.subscribe.CommonSubscribe.getSendVerificationApi
 import com.example.testnew.presenter.contract.MainContract
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.schedulers.Schedulers
@@ -17,7 +17,7 @@ class MainPresenter : MainContract.Presenter() {
 //        getView().getUserInfoSuccess(Any())
 
         addDisposable(
-            getSendVerification("dsfdsfds", HttpParams().getParams())
+            getSendVerificationApi("dsfdsfds", HttpParams().getParams())
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : HttpSubscriber<Any>() {
 

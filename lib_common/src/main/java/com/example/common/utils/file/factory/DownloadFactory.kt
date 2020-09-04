@@ -34,7 +34,7 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         FileUtil.deleteDir(filePath)
-        CommonSubscribe.getDownload(downloadUrl)
+        CommonSubscribe.getDownloadApi(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
