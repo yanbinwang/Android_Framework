@@ -28,7 +28,7 @@ import com.example.common.base.page.PageParams;
 import com.example.common.base.proxy.SimpleTextWatcher;
 import com.example.common.bus.RxBus;
 import com.example.common.bus.RxBusEvent;
-import com.example.common.bus.RxManager;
+import com.example.common.bus.DisposableManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
@@ -57,7 +57,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
-    private RxManager rxManager;//事务管理器
+    private DisposableManager disposableManager;//事务管理器
     private BasePresenter presenter;//P层
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
@@ -65,7 +65,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected void addDisposable(Disposable disposable) {
         if (null != disposable) {
-            rxManager.add(disposable);
+            disposableManager.add(disposable);
         }
     }
 
@@ -108,7 +108,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         context = new WeakReference<>(this);
         statusBarBuilder = new StatusBarBuilder(this);
         loadingDialog = new LoadingDialog(this);
-        rxManager = new RxManager();
+        disposableManager = new DisposableManager();
     }
 
     @Override
@@ -144,7 +144,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 
     @Override
     public void openDecor(View view) {
-        closeDecor();
+        closeDecor(view);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -152,20 +152,16 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }, 200);
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.showSoftInput(view, 2);
-        }
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 2);
+
     }
 
     @Override
-    public void closeDecor() {
-        View decorView = getWindow().peekDecorView();
-        // 隐藏软键盘
-        if (decorView != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
-        }
+    public void closeDecor(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
@@ -240,7 +236,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        rxManager.clear();
+        disposableManager.clear();
         if (presenter != null) {
             presenter.detachView();
         }

@@ -28,6 +28,7 @@ public abstract class BasePopupWindow<VB extends ViewBinding> extends PopupWindo
     private WindowManager.LayoutParams layoutParams;
     private boolean dark;
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     public BasePopupWindow(Activity activity) {
         this(activity, false);
     }
@@ -59,7 +60,9 @@ public abstract class BasePopupWindow<VB extends ViewBinding> extends PopupWindo
             setDismissAttributes();
         }
     }
+    // </editor-fold>
 
+    // <editor-fold defaultstate="collapsed" desc="重写方法">
     @Override
     public void showAsDropDown(View anchor) {
         setShowAttributes();
@@ -99,5 +102,6 @@ public abstract class BasePopupWindow<VB extends ViewBinding> extends PopupWindo
             });
         }
     }
+    // </editor-fold>
 
 }

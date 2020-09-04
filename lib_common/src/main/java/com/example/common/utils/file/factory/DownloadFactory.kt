@@ -2,7 +2,7 @@ package com.example.common.utils.file.factory
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import com.example.common.subscribe.BaseSubscribe
+import com.example.common.subscribe.CommonSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.handler.WeakHandler
@@ -34,7 +34,7 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         FileUtil.deleteDir(filePath)
-        BaseSubscribe.getDownload(downloadUrl)
+        CommonSubscribe.getDownload(downloadUrl)
             .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 

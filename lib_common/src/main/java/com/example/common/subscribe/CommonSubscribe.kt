@@ -11,13 +11,13 @@ import okhttp3.ResponseBody
  * author:wyb
  * 通用接口类
  */
-object BaseSubscribe : BaseApi {
-    private val baseApi by lazy {
-        RetrofitFactory.instance.create(BaseApi::class.java)
+object CommonSubscribe : CommonApi {
+    private val commonApi by lazy {
+        RetrofitFactory.instance.create(CommonApi::class.java)
     }
 
     override fun getDownload(downloadUrl: String): Flowable<ResponseBody> {
-        return baseApi.getDownload(downloadUrl)
+        return commonApi.getDownload(downloadUrl)
     }
 
     override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
@@ -25,11 +25,11 @@ object BaseSubscribe : BaseApi {
     }
 
     override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return baseApi.getSendVerification(agent, map)
+        return commonApi.getSendVerification(agent, map)
     }
 
     override fun getVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return baseApi.getVerification(agent, map)
+        return commonApi.getVerification(agent, map)
     }
 
 //    //上传图片接口
