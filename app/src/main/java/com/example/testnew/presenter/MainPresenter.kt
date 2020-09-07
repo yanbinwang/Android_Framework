@@ -1,5 +1,6 @@
 package com.example.testnew.presenter
 
+import com.example.common.bus.RxSchedulers
 import com.example.common.constant.Constants
 import com.example.common.http.repository.HttpParams
 import com.example.common.http.repository.HttpSubscriber
@@ -24,7 +25,8 @@ class MainPresenter : MainContract.Presenter() {
 
         addDisposable(
             getSendVerificationApi("dsfdsfds", HttpParams().getParams())
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+                .compose(RxSchedulers.ioMain())
+//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : HttpSubscriber<Any>() {
 
                     override fun onStart() {
