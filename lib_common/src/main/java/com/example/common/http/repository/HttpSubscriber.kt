@@ -34,6 +34,12 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         }
     }
 
+    override fun onComplete() {
+        if (!isDisposed) {
+            dispose()
+        }
+    }
+
     private fun doResult(apiResponse: ApiResponse<T>?, throwable: Throwable?) {
         if (null != apiResponse) {
             val msg = apiResponse.msg
@@ -58,14 +64,8 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         }
         //在一个正确运行的事件序列中,onComplete()和onError()有且只有一个，并且是事件序列中的最后一个
         //onComplete()和onError()二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
-        //故手动在处理后回调一次onComplete()销毁该次事务
+        //故手动在处理后回调一次onComplete()销毁该次事务，保证onComplete()会被调用（用于项目中请求结束的一些操作）
         onComplete()
-    }
-
-    override fun onComplete() {
-        if (!isDisposed) {
-            dispose()
-        }
     }
     // </editor-fold>
 
