@@ -9,7 +9,7 @@ import io.reactivex.rxjava3.disposables.Disposable
  * date: 2019/7/30.
  * 事务管理器，用于添加和清除不同页面订阅的事务
  */
-class DisposableManager {
+class RxManager {
     private val compositeDisposable = CompositeDisposable()
 
     //单纯的Observables 和 Subscribers管理

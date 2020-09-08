@@ -11,7 +11,7 @@ import cn.sharesdk.wechat.friends.Wechat
 import cn.sharesdk.wechat.moments.WechatMoments
 import com.example.common.BaseApplication
 import com.example.common.bus.RxBus
-import com.example.common.bus.RxBusEvent
+import com.example.common.bus.RxEvent
 import com.example.common.constant.Constants
 import com.example.share.model.WeChatModel
 import com.example.share.utils.callback.OnShareListener
@@ -46,17 +46,17 @@ class ShareSDKUtil private constructor() {
 
             override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
                 //分享成功的回调
-                RxBus.instance.post(RxBusEvent(Constants.APP_SHARE_SUCCESS))
+                RxBus.instance.post(RxEvent(Constants.APP_SHARE_SUCCESS))
             }
 
             override fun onCancel(p0: Platform?, p1: Int) {
                 //取消分享的回调
-                RxBus.instance.post(RxBusEvent(Constants.APP_SHARE_CANCEL))
+                RxBus.instance.post(RxEvent(Constants.APP_SHARE_CANCEL))
             }
 
             override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
                 //失败的回调，arg:平台对象，arg1:表示当前的动作，arg2:异常信息
-                RxBus.instance.post(RxBusEvent(Constants.APP_SHARE_FAILURE))
+                RxBus.instance.post(RxEvent(Constants.APP_SHARE_FAILURE))
             }
         }
         platform.share(shareParams)

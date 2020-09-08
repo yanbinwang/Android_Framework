@@ -2,7 +2,7 @@ package com.example.common.base.bridge
 
 import android.app.Activity
 import android.content.Context
-import com.example.common.bus.DisposableManager
+import com.example.common.bus.RxManager
 import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
@@ -17,7 +17,7 @@ abstract class BasePresenter<T : BaseView> {
     private var weakActivity: WeakReference<Activity>? = null
     private var weakContext: WeakReference<Context>? = null
     private var softView: SoftReference<T>? = null
-    private var disposableManager = DisposableManager()
+    private var rxManager = RxManager()
 
     // <editor-fold defaultstate="collapsed" desc="构造和内部方法">
     fun initialize(activity: Activity?, context: Context?, view: T?) {
@@ -30,12 +30,12 @@ abstract class BasePresenter<T : BaseView> {
         weakActivity?.clear()
         weakContext?.clear()
         softView?.clear()
-        disposableManager.clear()
+        rxManager.clear()
     }
 
     protected fun addDisposable(disposable: Disposable?) {
         if (null != disposable) {
-            disposableManager.add(disposable)
+            rxManager.add(disposable)
         }
     }
 

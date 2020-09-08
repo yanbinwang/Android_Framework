@@ -2,7 +2,7 @@ package com.example.common.http.repository
 
 import com.alibaba.android.arouter.launcher.ARouter
 import com.example.common.bus.RxBus.Companion.instance
-import com.example.common.bus.RxBusEvent
+import com.example.common.bus.RxEvent
 import com.example.common.constant.ARouterPath
 import com.example.common.constant.Constants
 import com.example.common.utils.analysis.GsonUtil.jsonToObj
@@ -50,7 +50,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
                 //账号还没有登录，解密失败，重新获取
                 if (100005 == e || 100008 == e) {
                     AccountHelper.signOut()
-                    instance.post(RxBusEvent(Constants.APP_USER_LOGIN_OUT))
+                    instance.post(RxEvent(Constants.APP_USER_LOGIN_OUT))
                     ARouter.getInstance().build(ARouterPath.LoginActivity).navigation()
                 }
                 //账号被锁定--进入账号锁定页（其余页面不关闭）

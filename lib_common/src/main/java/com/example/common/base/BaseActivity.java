@@ -27,8 +27,8 @@ import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
 import com.example.common.base.proxy.SimpleTextWatcher;
 import com.example.common.bus.RxBus;
-import com.example.common.bus.RxBusEvent;
-import com.example.common.bus.DisposableManager;
+import com.example.common.bus.RxEvent;
+import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
@@ -57,7 +57,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     protected WeakReference<Activity> activity;//基类activity弱引用
     protected WeakReference<Context> context;//基类context弱引用
     protected StatusBarBuilder statusBarBuilder;//状态栏工具类
-    private DisposableManager disposableManager;//事务管理器
+    private RxManager rxManager;//事务管理器
     private BasePresenter presenter;//P层
     private LoadingDialog loadingDialog;//刷新球控件，相当于加载动画
     private final String TAG = getClass().getSimpleName().toLowerCase();//额外数据，查看log，观察当前activity是否被销毁
@@ -65,7 +65,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected void addDisposable(Disposable disposable) {
         if (null != disposable) {
-            disposableManager.add(disposable);
+            rxManager.add(disposable);
         }
     }
 
@@ -108,13 +108,13 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         context = new WeakReference<>(this);
         statusBarBuilder = new StatusBarBuilder(this);
         loadingDialog = new LoadingDialog(this);
-        disposableManager = new DisposableManager();
+        rxManager = new RxManager();
     }
 
     @Override
     public void initEvent() {
-        addDisposable(RxBus.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
-            String action = rxBusEvent.getAction();
+        addDisposable(RxBus.getInstance().toFlowable(RxEvent.class).subscribe(rxEvent -> {
+            String action = rxEvent.getAction();
             switch (action) {
                 //注销登出
                 case Constants.APP_USER_LOGIN_OUT:
@@ -236,7 +236,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        disposableManager.clear();
+        rxManager.clear();
         if (presenter != null) {
             presenter.detachView();
         }

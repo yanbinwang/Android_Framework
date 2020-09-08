@@ -5,9 +5,9 @@ import android.os.Bundle
 /**
  * author: wyb
  * date: 2018/4/16.
- * eventbus传递事件类
+ * rxjava传递事件类
  */
-class RxBusEvent {
+class RxEvent {
     private var action: String? = null //广播名称
     private var args: Bundle? = null //额外参数
 
