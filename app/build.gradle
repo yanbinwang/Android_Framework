@@ -1,5 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 //apply plugin: 'com.mob.sdk'
 
 android {
@@ -36,9 +38,9 @@ android {
         resConfigs "zh"
         //dex突破65535的限制
         multiDexEnabled true
-        javaCompileOptions {
-            annotationProcessorOptions {
-                arguments = [moduleName: project.getName()]
+        kapt {
+            arguments {
+                arg("AROUTER_MODULE_NAME", project.getName())
             }
         }
     }
@@ -91,13 +93,13 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //基础库
     implementation project(':lib_common')
 //    implementation project(':lib_share')
 //    implementation project(':module_quotation')
     //页面路由
     implementation deps.alibaba.arouter
-    annotationProcessor deps.alibaba.arouter_compiler
+    kapt deps.alibaba.arouter_compiler
 }

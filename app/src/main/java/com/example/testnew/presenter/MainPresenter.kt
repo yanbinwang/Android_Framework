@@ -1,11 +1,18 @@
 package com.example.testnew.presenter
 
-import com.example.common.http.HttpParams
-import com.example.common.http.callback.HttpSubscriber
-import com.example.common.subscribe.BaseSubscribe.getSendVerification
+import com.example.common.bus.RxSchedulers
+import com.example.common.constant.Constants
+import com.example.common.http.repository.HttpParams
+import com.example.common.http.repository.HttpSubscriber
+import com.example.common.subscribe.CommonSubscribe.getSendVerificationApi
+import com.example.common.utils.file.callback.OnDownloadListener
+import com.example.common.utils.file.factory.DownloadFactory
+import com.example.common.utils.helper.permission.OnPermissionCallBack
+import com.example.common.utils.helper.permission.PermissionHelper
 import com.example.testnew.presenter.contract.MainContract
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.yanzhenjie.permission.runtime.Permission
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
 
 /**
  * Created by WangYanBin on 2020/6/30.
@@ -17,13 +24,14 @@ class MainPresenter : MainContract.Presenter() {
 //        getView().getUserInfoSuccess(Any())
 
         addDisposable(
-            getSendVerification("dsfdsfds", HttpParams().getParams())
-                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+            getSendVerificationApi("dsfdsfds", HttpParams().getParams())
+                .compose(RxSchedulers.ioMain())
+//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : HttpSubscriber<Any>() {
 
                     override fun onStart() {
                         super.onStart()
-                        getView().log("开始")
+                        getView()?.log("开始")
                     }
 
                     override fun onSuccess(data: Any?) {}
@@ -32,50 +40,48 @@ class MainPresenter : MainContract.Presenter() {
 
                     override fun onComplete() {
                         super.onComplete()
-                        getView().log("结束")
+                        getView()?.log("结束")
                     }
 
                 })
         )
+    }
 
-//                addDisposable(BaseSubscribe.INSTANCE.download("dsfdsfds")
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new ResourceSubscriber<ResponseBody>() {
-//                    @Override
-//                    public void onNext(ResponseBody responseBody) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onError(Throwable t) {
-//
-//                    }
-//
-//                    @Override
-//                    public void onComplete() {
-//
-//                    }
-//                }));
+    override fun getDownload() {
+        PermissionHelper.with(getContext())
+            .getPermissions(Permission.Group.STORAGE)
+            .setPermissionCallBack(object : OnPermissionCallBack {
 
-//        addDisposable(BaseSubscribe.INSTANCE.getVerification("dsfsd",new HttpParams().append("dsadsa","sddas").getParams())
-//                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
-//                .subscribeWith(new HttpSubscriber<Object>() {
-//                    @Override
-//                    protected void onSuccess(Object data) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFailed(Throwable e, String msg) {
-//
-//                    }
-//
-//                    @Override
-//                    protected void onFinish() {
-//
-//                    }
-//                }));
-//        view?.get()?.hideDialog()
+                override fun onPermissionListener(isGranted: Boolean) {
+                    if (isGranted) {
+                        val filePath = Constants.APPLICATION_FILE_PATH + "/安装包"
+                        val fileName = Constants.APPLICATION_NAME + ".apk"
+                        DownloadFactory.instance.download("https://ucan.25pp.com/Wandoujia_web_seo_baidu_homepage.apk", filePath, fileName, object :
+                            OnDownloadListener {
+
+                            override fun onStart() {
+                                getView()?.showDialog()
+                            }
+
+                            override fun onSuccess(path: String?) {
+
+                            }
+
+                            override fun onLoading(progress: Int) {
+                            }
+
+                            override fun onFailed(e: Throwable?) {
+
+                            }
+
+                            override fun onComplete() {
+                                getView()?.hideDialog()
+                            }
+
+                        })
+                    }
+                }
+            })
     }
 
 }

@@ -178,17 +178,6 @@
 -keep class com.google.gson.examples.android.model.** { *; }
 ##---------------End: proguard configuration for Gson  ----------
 
-#------------------------映射混淆开始------------------------#
-# keep annotated by NotProguard
--keep @com.bitnew.framework.annotation.ViewInject class * {*;}
--keep class * {
-@com.bitnew.framework.annotation.ViewInject <fields>;
-}
--keepclassmembers class * {
-@com.bitnew.framework.annotation.ViewInject <methods>;
-}
-#------------------------映射混淆结束------------------------#
-
 #------------------------百度地图混淆开始------------------------#
 #-libraryjars  ../XXX(此处为library名称)/src/main/jniLibs/armeabi/xxxxx.so
 #-libraryjars  libs/BaiduLBS_Android.jar
@@ -541,10 +530,10 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 -dontwarn com.sina.**
 -dontwarn com.mob.**
 #------------------------sharesdk混淆结束------------------------
--keep class com.example.common.bus.RxBusEvent{*;}
+-keep class com.example.common.bus.RxEvent{*;}
 -keep class com.example.common.base.page.PageParams{*;}
--keep class com.example.common.http.HttpParams{*;}
--keep class com.example.common.http.callback.ApiResponse{*;}
+-keep class com.example.common.http.repository.HttpParams{*;}
+-keep class com.example.common.http.repository.ApiResponse{*;}
 -keep class com.example.common.base.page.** {*;}
 -keep class com.example.common.model.** {*;}
 -keep class com.example.share.model.** {*;}

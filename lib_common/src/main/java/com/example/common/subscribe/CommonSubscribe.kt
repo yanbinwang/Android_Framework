@@ -1,34 +1,35 @@
 package com.example.common.subscribe
 
-import com.example.common.http.callback.ApiResponse
+import com.example.common.http.repository.ApiResponse
 import com.example.common.http.factory.RetrofitFactory
 import com.example.common.model.UploadModel
-import io.reactivex.Flowable
+import io.reactivex.rxjava3.core.Flowable
 import okhttp3.MultipartBody
+import okhttp3.ResponseBody
 
 /**
  * author:wyb
  * 通用接口类
  */
-object BaseSubscribe : BaseApi {
-    private val baseApi by lazy {
-        RetrofitFactory.instance.create(BaseApi::class.java)
+object CommonSubscribe : CommonApi {
+    private val commonApi by lazy {
+        RetrofitFactory.instance.create(CommonApi::class.java)
     }
 
-    override fun getDownload(downloadUrl: String): Flowable<okhttp3.ResponseBody> {
-        return baseApi.getDownload(downloadUrl)
+    override fun getDownloadApi(downloadUrl: String): Flowable<ResponseBody> {
+        return commonApi.getDownloadApi(downloadUrl)
     }
 
-    override fun getUploadFile(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
+    override fun getUploadFileApi(agent: String, partList: List<MultipartBody.Part>): Flowable<ApiResponse<UploadModel>> {
         TODO("Not yet implemented")
     }
 
-    override fun getSendVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return baseApi.getSendVerification(agent, map)
+    override fun getSendVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
+        return commonApi.getSendVerificationApi(agent, map)
     }
 
-    override fun getVerification(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return baseApi.getVerification(agent, map)
+    override fun getVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
+        return commonApi.getVerificationApi(agent, map)
     }
 
 //    //上传图片接口

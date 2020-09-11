@@ -20,6 +20,8 @@ import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.example.base.utils.LogUtil;
+import com.example.base.utils.ToastUtil;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
@@ -29,8 +31,6 @@ import com.example.common.bus.RxManager;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.base.utils.LogUtil;
-import com.example.base.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -42,14 +42,14 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+
 
 /**
  * Created by wyb on 2016/3/26.
  * 基础fragment的基类
  * 适用于fragmentmanager管理显示隐藏fragment
  */
-@SuppressWarnings("unchecked")
 public abstract class BaseFragment<VB extends ViewBinding> extends Fragment implements BaseImpl, BaseView {
     protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用
@@ -71,7 +71,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
         if (presenter == null) {
             try {
                 presenter = pClass.newInstance();
-                presenter.attachView(this);
+                presenter.initialize(getActivity(), getContext(), this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -133,7 +133,7 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
 
     @Override
     public void openDecor(View view) {
-        closeDecor();
+        closeDecor(view);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -141,20 +141,14 @@ public abstract class BaseFragment<VB extends ViewBinding> extends Fragment impl
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }, 200);
-        if (view != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.showSoftInput(view, 2);
-        }
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 2);
     }
 
     @Override
-    public void closeDecor() {
-        View decorView = activity.get().getWindow().peekDecorView();
-        // 隐藏软键盘
-        if (decorView != null) {
-            InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
-        }
+    public void closeDecor(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) activity.get().getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

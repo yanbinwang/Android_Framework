@@ -7,6 +7,7 @@ import com.example.base.BuildConfig;
 import com.example.base.utils.LogUtil;
 import com.example.common.base.proxy.ApplicationActivityLifecycleCallbacks;
 import com.example.common.imageloader.glide.callback.GlideAlbumLoader;
+import com.example.common.utils.handler.CrashHandler;
 import com.example.common.utils.helper.ConfigHelper;
 import com.tencent.mmkv.MMKV;
 import com.tencent.smtt.sdk.QbSdk;
@@ -64,6 +65,8 @@ public class BaseApplication extends Application {
             ARouter.openLog();
             ARouter.openDebug();
         }
+        //异常捕获初始化
+        CrashHandler.getInstance();
         //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         ARouter.init(this);
         //腾讯读写mmkv初始化

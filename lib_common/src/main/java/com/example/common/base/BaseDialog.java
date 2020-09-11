@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 public abstract class BaseDialog<VB extends ViewBinding> extends Dialog {
     protected VB binding;
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
     public BaseDialog(@NonNull Context context) {
         super(context, R.style.appDialogStyle);
     }
@@ -66,5 +67,6 @@ public abstract class BaseDialog<VB extends ViewBinding> extends Dialog {
             }
         }
     }
+    // </editor-fold>
 
 }

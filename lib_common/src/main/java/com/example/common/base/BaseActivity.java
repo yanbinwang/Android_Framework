@@ -15,26 +15,24 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.content.ContextCompat;
 import androidx.viewbinding.ViewBinding;
 
 import com.alibaba.android.arouter.facade.Postcard;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.example.common.R;
+import com.example.base.utils.LogUtil;
+import com.example.base.utils.ToastUtil;
 import com.example.common.base.bridge.BaseImpl;
 import com.example.common.base.bridge.BasePresenter;
 import com.example.common.base.bridge.BaseView;
 import com.example.common.base.page.PageParams;
 import com.example.common.base.proxy.SimpleTextWatcher;
 import com.example.common.bus.RxBus;
-import com.example.common.bus.RxBusEvent;
+import com.example.common.bus.RxEvent;
 import com.example.common.bus.RxManager;
 import com.example.common.constant.Constants;
 import com.example.common.constant.Extras;
 import com.example.common.utils.builder.StatusBarBuilder;
 import com.example.common.widget.dialog.LoadingDialog;
-import com.example.base.utils.LogUtil;
-import com.example.base.utils.ToastUtil;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
@@ -45,14 +43,15 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import io.reactivex.disposables.Disposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+
 
 /**
  * author: wyb
  * date: 2018/7/26.
  * activity基类，包含了一些方法，全局广播等
  */
-@SuppressWarnings({"unchecked", "SourceLockedOrientationActivity"})
+@SuppressWarnings("SourceLockedOrientationActivity")
 public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActivity implements BaseImpl, BaseView {
     protected VB binding;
     protected WeakReference<Activity> activity;//基类activity弱引用
@@ -74,7 +73,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         if (presenter == null) {
             try {
                 presenter = pClass.newInstance();
-                presenter.attachView(this);
+                presenter.initialize(this, this, this);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -110,14 +109,12 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
         statusBarBuilder = new StatusBarBuilder(this);
         loadingDialog = new LoadingDialog(this);
         rxManager = new RxManager();
-        statusBarBuilder.setStatusBarLightMode(true);
-        statusBarBuilder.setStatusBarColor(ContextCompat.getColor(this, R.color.white));
     }
 
     @Override
     public void initEvent() {
-        addDisposable(RxBus.getInstance().toFlowable(RxBusEvent.class).subscribe(rxBusEvent -> {
-            String action = rxBusEvent.getAction();
+        addDisposable(RxBus.getInstance().toFlowable(RxEvent.class).subscribe(rxEvent -> {
+            String action = rxEvent.getAction();
             switch (action) {
                 //注销登出
                 case Constants.APP_USER_LOGIN_OUT:
@@ -147,7 +144,7 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
 
     @Override
     public void openDecor(View view) {
-        closeDecor();
+        closeDecor(view);
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
@@ -155,20 +152,16 @@ public abstract class BaseActivity<VB extends ViewBinding> extends AppCompatActi
                         InputMethodManager.HIDE_NOT_ALWAYS);
             }
         }, 200);
-        if (view != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.showSoftInput(view, 2);
-        }
+
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.showSoftInput(view, 2);
+
     }
 
     @Override
-    public void closeDecor() {
-        View decorView = getWindow().peekDecorView();
-        // 隐藏软键盘
-        if (decorView != null) {
-            InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            inputmanger.hideSoftInputFromWindow(decorView.getWindowToken(), 0);
-        }
+    public void closeDecor(View view) {
+        InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override

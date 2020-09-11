@@ -4,9 +4,10 @@ import androidx.lifecycle.LifecycleOwner
 import com.example.base.utils.CompressUtil
 import com.example.common.BaseApplication
 import com.example.common.utils.file.callback.OnUploadListener
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import java.util.*
 
@@ -43,12 +44,11 @@ class UploadFactory private constructor() {
             fileCompress = CompressUtil.degreeImage(context, fileCompress)!!
             val requestFile: RequestBody
             requestFile = if (file.name.endsWith(".png")) {
-                RequestBody.create(MediaType.parse("image/png"), fileCompress)
+                fileCompress.asRequestBody("image/png".toMediaTypeOrNull())
             } else {
-                RequestBody.create(MediaType.parse("image/jpeg"), fileCompress)
+                fileCompress.asRequestBody("image/jpeg".toMediaTypeOrNull())
             }
-            val filePart =
-                MultipartBody.Part.createFormData("file[]", fileCompress.name, requestFile)
+            val filePart = MultipartBody.Part.createFormData("file[]", fileCompress.name, requestFile)
             parts.add(filePart)
         }
 //        onFilesUploadListener?.onFilesUploadStart()

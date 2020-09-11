@@ -14,17 +14,17 @@ object ARouterPath {
     const val UnlockIPActivity = "/homepage/unlockIP" //锁定ip页
 //    const val WebViewActivity = "/homepage/webView" //全局网页
 //    const val ScanActivity = "/homepage/scan" //全局扫码页
-//    //assets模块
-//    const val AssetsDetailActivity = "/assets/assetsDetail" //钱包（资产）详情
-//    const val RechargeActivity = "/assets/recharge" //充币页
-//    const val CoinSearchActivity = "/assets/coinSearch" //选择货币页
-//    const val CoinAddressActivity = "/assets/coinAddress" //选择币种地址页
-//    const val CoinAddressSubmitActivity = "/assets/coinAddressSubmit" //添加货币地址页
-//    const val WithdrawalActivity = "/assets/withdrawal" //提现页
-//    const val RecordActivity = "/assets/record" //财务记录
-//    const val RecordDetailActivity = "/assets/recordDetail" //财务记录详情
-//    const val RedEnvelopesActivity = "/assets/redEnvelopes" //发红包
-//    const val RedEnvelopesRecordActivity = "/assets/redEnvelopesRecord" //红包记录
+////    //assets模块
+////    const val AssetsDetailActivity = "/assets/assetsDetail" //钱包（资产）详情
+////    const val RechargeActivity = "/assets/recharge" //充币页
+////    const val CoinSearchActivity = "/assets/coinSearch" //选择货币页
+////    const val CoinAddressActivity = "/assets/coinAddress" //选择币种地址页
+////    const val CoinAddressSubmitActivity = "/assets/coinAddressSubmit" //添加货币地址页
+////    const val WithdrawalActivity = "/assets/withdrawal" //提现页
+////    const val RecordActivity = "/assets/record" //财务记录
+////    const val RecordDetailActivity = "/assets/recordDetail" //财务记录详情
+////    const val RedEnvelopesActivity = "/assets/redEnvelopes" //发红包
+////    const val RedEnvelopesRecordActivity = "/assets/redEnvelopesRecord" //红包记录
     //account模块
     const val LoginActivity = "/account/login" //登录页
 //    const val RegisterActivity = "/account/register" //注册页

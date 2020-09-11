@@ -2,13 +2,14 @@ package com.example.common.utils.file.factory
 
 import android.annotation.SuppressLint
 import android.os.Looper
-import com.example.common.subscribe.BaseSubscribe
+import com.example.common.bus.RxSchedulers
+import com.example.common.subscribe.CommonSubscribe
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.handler.WeakHandler
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
-import io.reactivex.subscribers.ResourceSubscriber
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
+import io.reactivex.rxjava3.schedulers.Schedulers
+import io.reactivex.rxjava3.subscribers.ResourceSubscriber
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream
@@ -22,7 +23,8 @@ import java.util.concurrent.Executors
 @SuppressLint("CheckResult")
 class DownloadFactory private constructor() {
     private val weakHandler = WeakHandler(Looper.getMainLooper())
-    private val executors = Executors.newSingleThreadExecutor();
+    private val executors = Executors.newSingleThreadExecutor()
+    private var complete = false//请求在完成并返回对象后又发起了线程下载，所以回调监听需要保证线程完成在回调
 
     companion object {
         @JvmStatic
@@ -33,13 +35,15 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         FileUtil.deleteDir(filePath)
-        BaseSubscribe.getDownload(downloadUrl)
-            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        CommonSubscribe.getDownloadApi(downloadUrl)
+            .compose(RxSchedulers.ioMain())
+//            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
                 override fun onStart() {
                     super.onStart()
-                    weakHandler.post { onDownloadListener?.onStart() }
+                    complete = false
+                    onDownloadListener?.onStart()
                 }
 
                 override fun onNext(responseBody: ResponseBody?) {
@@ -76,19 +80,24 @@ class DownloadFactory private constructor() {
                             } finally {
                                 inputStream?.close()
                                 fileOutputStream?.close()
+                                complete = true
                                 onComplete()
                             }
                         }
                         executors.isShutdown
                     } else {
-                        weakHandler.post { onDownloadListener?.onFailed(throwable) }
+                        onDownloadListener?.onFailed(throwable)
+                        complete = true
                         onComplete()
                     }
                 }
 
                 override fun onComplete() {
-                    weakHandler.post { onDownloadListener?.onComplete() }
-                    if (isDisposed) {
+                    if (complete) {
+                        complete = false
+                        onDownloadListener?.onComplete()
+                    }
+                    if (!isDisposed) {
                         dispose()
                     }
                 }

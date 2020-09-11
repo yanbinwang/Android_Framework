@@ -2,7 +2,7 @@ package com.example.common.http.factory
 
 import com.example.common.BuildConfig
 import retrofit2.Retrofit
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
+import retrofit2.adapter.rxjava3.RxJava3CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 /**
@@ -11,12 +11,12 @@ import retrofit2.converter.gson.GsonConverterFactory
  * retrofit单例
  */
 class RetrofitFactory private constructor() {
-    private val retrofit: Retrofit = Retrofit.Builder()
-            .client(OkHttpFactory.instance.okHttpClient)
-            .baseUrl(BuildConfig.LOCALHOST)
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build()
+    private val retrofit = Retrofit.Builder()
+        .client(OkHttpFactory.instance.okHttpClient)
+        .baseUrl(BuildConfig.LOCALHOST)
+        .addConverterFactory(GsonConverterFactory.create())
+        .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
+        .build()
 
     companion object {
         @JvmStatic
@@ -29,11 +29,5 @@ class RetrofitFactory private constructor() {
     fun <T> create(service: Class<T>): T {
         return retrofit.create(service)
     }
-
-//    //发起一个请求
-//    @Synchronized
-//    fun <T> subscribeWith(flowable: Flowable<T>, resourceSubscriber: ResourceSubscriber<T>): Disposable {
-//        return flowable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribeWith(resourceSubscriber)
-//    }
 
 }
