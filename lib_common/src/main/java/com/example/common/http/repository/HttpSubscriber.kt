@@ -12,12 +12,13 @@ import retrofit2.HttpException
 
 /**
  * Created by WangYanBin on 2020/6/19.
+ * 项目中使用的网络请求回调对象
  */
 abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     override fun onNext(apiResponse: ApiResponse<T>?) {
-        doResult(apiResponse, null)
+        doResult(apiResponse)
     }
 
     override fun onError(throwable: Throwable?) {
@@ -32,6 +33,10 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         } catch (e: Exception) {
             doResult(null, e)
         }
+        //在一个正确运行的事件序列中,onComplete()和onError()有且只有一个，并且是事件序列中的最后一个
+        //onComplete()和onError()二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
+        //故手动在处理后回调一次onComplete()销毁该次事务，保证onComplete()会被调用（用于项目中请求结束的一些操作）
+        onComplete()
     }
 
     override fun onComplete() {
@@ -40,7 +45,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         }
     }
 
-    private fun doResult(apiResponse: ApiResponse<T>?, throwable: Throwable?) {
+    private fun doResult(apiResponse: ApiResponse<T>? = null, throwable: Throwable? = null) {
         if (null != apiResponse) {
             val msg = apiResponse.msg
             val e = apiResponse.e
@@ -62,10 +67,6 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
         } else {
             onFailed(throwable, "")
         }
-        //在一个正确运行的事件序列中,onComplete()和onError()有且只有一个，并且是事件序列中的最后一个
-        //onComplete()和onError()二者也是互斥的，即在队列中调用了其中一个，就不应该再调用另一个
-        //故手动在处理后回调一次onComplete()销毁该次事务，保证onComplete()会被调用（用于项目中请求结束的一些操作）
-        onComplete()
     }
     // </editor-fold>
 
