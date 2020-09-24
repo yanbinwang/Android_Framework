@@ -3,8 +3,10 @@ package com.example.common.utils.builder
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
+import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import com.example.common.R
+import com.example.common.constant.Constants
 import com.example.common.databinding.ViewTitleBarBinding
 import java.lang.ref.WeakReference
 
@@ -72,6 +74,19 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
     fun setTitleBackgroundColor(color: Int): TitleBuilder {
         statusBarBuilder.setStatusBarColor(color)
         binding.rlMain.setBackgroundColor(color)
+        return this
+    }
+
+    fun setTitleTransparent(isDark: Boolean): TitleBuilder {
+        binding.rlMain.setBackgroundColor(ContextCompat.getColor(weakActivity.get()!!, android.R.color.transparent))
+        val rl = binding.rlMain.layoutParams as RelativeLayout.LayoutParams
+        rl.topMargin = Constants.STATUS_BAR_HEIGHT
+        binding.rlMain.layoutParams = rl
+        if (isDark) {
+            statusBarBuilder.setTransparentDarkStatus()
+        } else {
+            statusBarBuilder.setTransparentStatus()
+        }
         return this
     }
 
