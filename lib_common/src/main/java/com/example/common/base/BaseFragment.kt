@@ -22,7 +22,6 @@ import com.example.common.base.page.PageParams
 import com.example.common.base.proxy.SimpleTextWatcher
 import com.example.common.bus.RxManager
 import com.example.common.constant.Extras
-import com.example.common.utils.builder.StatusBarBuilder
 import com.example.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
 import java.io.Serializable
@@ -40,10 +39,9 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
     protected lateinit var binding: VB
     protected val activity by lazy { WeakReference<Activity>(getActivity()) } //基类activity弱引用
     protected val context by lazy { WeakReference<Context>(getContext()) }//基类context弱引用
-    protected val statusBarBuilder by lazy { StatusBarBuilder(activity.get()!!) }//状态栏工具类
     private var presenter: BasePresenter<*>? = null//P层
     private val rxManager by lazy { RxManager() } //事务管理器
-    private val loadingDialog by lazy { LoadingDialog(context.get()) }//刷新球控件，相当于加载动画
+    private val loadingDialog by lazy { LoadingDialog(getContext()) }//刷新球控件，相当于加载动画
     private val TAG = javaClass.simpleName.toLowerCase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
