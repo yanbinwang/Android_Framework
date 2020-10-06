@@ -39,7 +39,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun getView() = softView?.get() as T
+    protected fun getView() = softView?.get() as? T
 
     protected fun getActivity() = weakActivity?.get()
 
