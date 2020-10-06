@@ -16,11 +16,11 @@ import java.lang.ref.WeakReference
 abstract class BasePresenter<T : BaseView> {
     private var weakActivity: WeakReference<Activity>? = null
     private var weakContext: WeakReference<Context>? = null
-    private var softView: SoftReference<T>? = null
+    private var softView: SoftReference<BaseView>? = null
     private var rxManager = RxManager()
 
     // <editor-fold defaultstate="collapsed" desc="构造和内部方法">
-    fun initialize(activity: Activity?, context: Context?, view: T?) {
+    fun initialize(activity: Activity?, context: Context?, view: BaseView?) {
         this.weakActivity = WeakReference(activity)
         this.weakContext = WeakReference(context)
         this.softView = SoftReference(view)
@@ -39,7 +39,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun getView() = softView?.get()
+    protected fun getView() = softView?.get() as T
 
     protected fun getActivity() = weakActivity?.get()
 

@@ -3,7 +3,6 @@ package com.example.share.widget.popupwindow;
 import android.app.Activity;
 import android.view.View;
 
-import com.example.common.base.BasePopupWindow;
 import com.example.share.R;
 import com.example.share.databinding.ViewPopupShareBinding;
 import com.example.share.model.WeChatModel;

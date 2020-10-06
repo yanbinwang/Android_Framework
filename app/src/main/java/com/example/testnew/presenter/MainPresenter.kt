@@ -31,7 +31,7 @@ class MainPresenter : MainContract.Presenter() {
 
                     override fun onStart() {
                         super.onStart()
-                        getView()?.log("开始")
+                        getView().log("开始")
                     }
 
                     override fun onSuccess(data: Any?) {}
@@ -40,7 +40,7 @@ class MainPresenter : MainContract.Presenter() {
 
                     override fun onComplete() {
                         super.onComplete()
-                        getView()?.log("结束")
+                        getView().log("结束")
                     }
 
                 })
@@ -60,7 +60,7 @@ class MainPresenter : MainContract.Presenter() {
                             OnDownloadListener {
 
                             override fun onStart() {
-                                getView()?.showDialog()
+                                getView().showDialog()
                             }
 
                             override fun onSuccess(path: String?) {
@@ -75,7 +75,7 @@ class MainPresenter : MainContract.Presenter() {
                             }
 
                             override fun onComplete() {
-                                getView()?.hideDialog()
+                                getView().hideDialog()
                             }
 
                         })
