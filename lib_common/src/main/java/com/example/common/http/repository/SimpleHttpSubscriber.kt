@@ -7,7 +7,7 @@ package com.example.common.http.repository
 abstract class SimpleHttpSubscriber<T> : ResourceSubscriber<T>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    override fun doResult(data: T?, throwable: Throwable?) {
+    override fun onResult(data: T?, throwable: Throwable?) {
         if (null != data) {
             onSuccess(data)
         } else {

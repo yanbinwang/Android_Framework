@@ -14,7 +14,7 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     override fun onNext(t: T) {
-        doResult(t)
+        onResult(t)
     }
 
     override fun onError(t: Throwable?) {
@@ -24,12 +24,12 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
                 val type = javaClass.genericSuperclass as ParameterizedType
                 val tClass: Class<T> = type.actualTypeArguments[0] as Class<T>
                 val tModel = GsonUtil.jsonToObj(responseBody.string(), tClass::class.java)
-                doResult(tModel as? T?, t)
+                onResult(tModel as? T?, t)
             } else {
-                doResult(null, t)
+                onResult(null, t)
             }
         } catch (e: Exception) {
-            doResult(null, e)
+            onResult(null, e)
         }
         onComplete()
     }
@@ -44,6 +44,6 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
     /**
      * 回调请求结果（onError中的值也转成对应泛型返回）
      */
-    protected abstract fun doResult(data: T? = null, throwable: Throwable? = null)
+    protected abstract fun onResult(data: T? = null, throwable: Throwable? = null)
 
 }
