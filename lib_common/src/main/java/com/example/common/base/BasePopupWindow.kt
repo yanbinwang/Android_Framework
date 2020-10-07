@@ -43,9 +43,9 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
         val type = javaClass.genericSuperclass
         if (type is ParameterizedType) {
             try {
-                val vbClass = (type as ParameterizedType).actualTypeArguments[0] as Class<VB>
-                val method = vbClass.getMethod("inflate", LayoutInflater::class.java)
-                binding = method.invoke(null, weakActivity!!.get()!!.layoutInflater) as VB
+                val vbClass = type.actualTypeArguments[0] as? Class<VB>
+                val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
+                binding = method?.invoke(null, weakActivity?.get()?.layoutInflater) as VB
             } catch (e: Exception) {
                 e.printStackTrace()
             }
