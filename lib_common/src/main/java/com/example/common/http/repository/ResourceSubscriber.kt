@@ -44,6 +44,6 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
     /**
      * 回调请求结果（onError中的值也转成对应泛型返回）
      */
-    protected abstract fun onResult(data: T? = null, throwable: Throwable? = null)
+    protected open fun onResult(data: T? = null, throwable: Throwable? = null) {}
 
 }
