@@ -7,7 +7,7 @@ package com.example.common.http.repository
 abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    override fun onResult(data: ApiResponse<T>?, throwable: Throwable?) {
+    final override fun onResult(data: ApiResponse<T>?, throwable: Throwable?) {
         if (null != data) {
             val msg = data.msg
             val e = data.e
@@ -35,11 +35,11 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
     /**
      * 请求成功，直接回调对象
      */
-    protected open fun onSuccess(data: T?){}
+    open fun onSuccess(data: T?) {}
 
     /**
      * 请求失败，获取失败原因
      */
-    protected open fun onFailed(e: Throwable?, msg: String?){}
+    open fun onFailed(e: Throwable?, msg: String?) {}
 
 }

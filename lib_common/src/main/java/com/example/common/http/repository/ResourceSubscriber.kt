@@ -13,11 +13,11 @@ import java.lang.reflect.ParameterizedType
 abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.ResourceSubscriber<T>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    override fun onNext(t: T) {
+    final override fun onNext(t: T) {
         onResult(t)
     }
 
-    override fun onError(t: Throwable?) {
+    final override fun onError(t: Throwable?) {
         try {
             val responseBody = (t as? HttpException)?.response()?.errorBody()
             if (null != responseBody) {
@@ -44,6 +44,6 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
     /**
      * 回调请求结果（onError中的值也转成对应泛型返回）
      */
-    protected open fun onResult(data: T? = null, throwable: Throwable? = null) {}
+    open fun onResult(data: T? = null, throwable: Throwable? = null) {}
 
 }
