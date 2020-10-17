@@ -15,7 +15,6 @@ import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
 
-
 /**
  * author: wyb
  * date: 2017/9/21.
@@ -69,7 +68,10 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
         if (!TextUtils.isEmpty(result)) {
             LogUtil.e(TAG, result) //给出错误的log提示
             //如果具备权限，写入本地
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED) {
                 try {
                     if (FileUtil.hasSDCard()) {
                         val logFile = File(

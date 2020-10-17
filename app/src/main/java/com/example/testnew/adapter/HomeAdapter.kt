@@ -26,7 +26,7 @@ class HomeAdapter(model: HomeModel) : BaseAdapter<HomeModel>(model) {
     }
 
     override fun getItemCount(): Int {
-        return if (null == getModel()) 0 else getModel()!!.list.size + 2
+        return if (null == t) 0 else t!!.list.size + 2
     }
 
     override fun getItemViewType(position: Int): Int {

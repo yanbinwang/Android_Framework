@@ -37,7 +37,8 @@ public class EmptyLayout extends ViewGroup {
     private ImageView ivEmpty;//内容
     private TextView tvEmpty;//文本
     private OnEmptyRefreshListener onEmptyRefreshListener;
-    public static String EMPTY_TXT = "没有数据", ERROR_TXT = "没有网络";//数据为空时的内容,数据加载失败的内容
+    private final String EMPTY_TXT = "没有数据";//数据为空时的内容
+    private final String ERROR_TXT = "没有网络";//数据加载失败的内容
 
     public EmptyLayout(Context context) {
         super(context);

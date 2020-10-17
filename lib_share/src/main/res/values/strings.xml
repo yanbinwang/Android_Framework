@@ -1,5 +1,0 @@
-<resources>
-    <!-- app内的view显示字段 -->
-    <string name="wechat_uninstalled_txt">您尚未安装微信</string>
-    <string name="wechat_share_failure_txt">微信分享失败</string>
-</resources>

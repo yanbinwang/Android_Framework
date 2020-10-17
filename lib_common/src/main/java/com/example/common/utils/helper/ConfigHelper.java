@@ -114,8 +114,8 @@ public class ConfigHelper {
                 }
                 return res1.toString();
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
