@@ -15,8 +15,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.common.R;
 import com.example.common.widget.xrecyclerview.refresh.XRefreshLayout;
-import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
-import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
+import com.example.common.widget.xrecyclerview.refresh.callback.OnXRefreshListener;
 
 /**
  * Created by android on 2017/8/7.
@@ -61,11 +60,11 @@ public class EmptyLayout extends ViewGroup {
         xEmptyRefresh = contextView.findViewById(R.id.x_empty_refresh);
         ivEmpty = contextView.findViewById(R.id.iv_empty);
         tvEmpty = contextView.findViewById(R.id.tv_empty);
-        xEmptyRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
+        xEmptyRefresh.setOnXRefreshListener(new OnXRefreshListener() {
 
             @Override
-            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
-//                super.onRefresh(refreshLayout);
+            public void onRefresh() {
+                super.onRefresh();
                 //进入加载中，并停止刷新动画
                 showLoading();
                 xEmptyRefresh.finishRefreshing();
@@ -73,7 +72,6 @@ public class EmptyLayout extends ViewGroup {
                     onEmptyRefreshListener.onRefreshListener();
                 }
             }
-
         });
         contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
         contextView.setOnClickListener(null);

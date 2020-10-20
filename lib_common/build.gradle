@@ -73,7 +73,6 @@ dependencies {
     api deps.rxandroid
     api deps.autosize
     api deps.mmkv
-    api deps.tkrefreshlayout
     api deps.recovery
     api deps.wechat
 }
