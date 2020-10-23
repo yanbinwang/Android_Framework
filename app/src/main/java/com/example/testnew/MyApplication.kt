@@ -90,6 +90,8 @@ class MyApplication : BaseApplication() {
         Constants.APPLICATION_ID = getApplicationId(this)
         Constants.APPLICATION_NAME = getApplicationName(this)
         Constants.APPLICATION_FILE_PATH = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME
+        Constants.VERSION_CODE = com.example.testnew.BuildConfig.VERSION_CODE
+        Constants.VERSION_NAME = com.example.testnew.BuildConfig.VERSION_NAME
     }
 
 }

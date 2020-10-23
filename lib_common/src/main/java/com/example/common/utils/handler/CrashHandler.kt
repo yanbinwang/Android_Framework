@@ -7,7 +7,6 @@ import android.text.TextUtils
 import androidx.core.app.ActivityCompat
 import com.example.base.utils.LogUtil
 import com.example.common.BaseApplication
-import com.example.common.BuildConfig
 import com.example.common.constant.Constants
 import com.example.common.utils.file.FileUtil
 import java.io.*
@@ -75,7 +74,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
                 try {
                     if (FileUtil.hasSDCard()) {
                         val logFile = File(
-                            FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + BuildConfig.VERSION_NAME + "_exception_" + SimpleDateFormat(
+                            FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + Constants.VERSION_NAME + "_exception_" + SimpleDateFormat(
                                 "yyyy_MM_dd_hh_mm_ss",
                                 Locale.getDefault()
                             ).format(Date()) + ".log"
