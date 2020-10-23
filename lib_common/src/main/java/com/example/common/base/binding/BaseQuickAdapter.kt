@@ -20,10 +20,10 @@ abstract class BaseQuickAdapter<T, VB : ViewBinding> : BaseAdapter<T> {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewBindingHolder {
         var binding: VB? = null
         val superclass = javaClass.genericSuperclass
-        val aClass = (superclass as ParameterizedType).actualTypeArguments[1] as Class<*>
+        val aClass = (superclass as ParameterizedType).actualTypeArguments[1] as? Class<*>
         try {
-            val method = aClass.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
-            binding = method.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
+            val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
+            binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
         } catch (e: Exception) {
             e.printStackTrace()
         }

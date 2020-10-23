@@ -40,7 +40,7 @@ class DownloadFactory private constructor() {
                     onDownloadListener?.onStart()
                 }
 
-                override fun doResult(data: ResponseBody?, throwable: Throwable?) {
+                override fun onResult(data: ResponseBody?, throwable: Throwable?) {
                     if (null != data) {
                         executors.execute {
                             var inputStream: InputStream? = null

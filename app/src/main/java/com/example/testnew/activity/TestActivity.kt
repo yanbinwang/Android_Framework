@@ -30,7 +30,7 @@ class TestActivity : BaseTitleActivity<ActivityTestBinding>() {
         for (i in 0..9) {
             list.add(TestListModel("标题$i", "内容$i", R.mipmap.ic_launcher_round))
         }
-        adapter.setList(list)
+        adapter.data = list
     }
 
 }

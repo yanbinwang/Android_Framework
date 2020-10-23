@@ -7,14 +7,12 @@ import android.text.TextUtils
 import androidx.core.app.ActivityCompat
 import com.example.base.utils.LogUtil
 import com.example.common.BaseApplication
-import com.example.common.BuildConfig
 import com.example.common.constant.Constants
 import com.example.common.utils.file.FileUtil
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.system.exitProcess
-
 
 /**
  * author: wyb
@@ -23,7 +21,7 @@ import kotlin.system.exitProcess
  */
 @SuppressLint("StaticFieldLeak")
 class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
-    private var context = BaseApplication.instance.applicationContext
+    private var context = BaseApplication.instance?.applicationContext!!
     private var mDefaultHandler = Thread.getDefaultUncaughtExceptionHandler()
     private val TAG = "CrashHandler" //文件name
 
@@ -69,11 +67,14 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
         if (!TextUtils.isEmpty(result)) {
             LogUtil.e(TAG, result) //给出错误的log提示
             //如果具备权限，写入本地
-            if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
+            if (ActivityCompat.checkSelfPermission(
+                    context,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) == PackageManager.PERMISSION_GRANTED) {
                 try {
                     if (FileUtil.hasSDCard()) {
                         val logFile = File(
-                            FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + BuildConfig.VERSION_NAME + "_exception_" + SimpleDateFormat(
+                            FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + Constants.VERSION_NAME + "_exception_" + SimpleDateFormat(
                                 "yyyy_MM_dd_hh_mm_ss",
                                 Locale.getDefault()
                             ).format(Date()) + ".log"

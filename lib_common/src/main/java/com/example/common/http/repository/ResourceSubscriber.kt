@@ -13,23 +13,23 @@ import java.lang.reflect.ParameterizedType
 abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.ResourceSubscriber<T>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
-    override fun onNext(t: T) {
-        doResult(t)
+    final override fun onNext(t: T) {
+        onResult(t)
     }
 
-    override fun onError(t: Throwable?) {
+    final override fun onError(t: Throwable?) {
         try {
             val responseBody = (t as? HttpException)?.response()?.errorBody()
             if (null != responseBody) {
                 val type = javaClass.genericSuperclass as ParameterizedType
                 val tClass: Class<T> = type.actualTypeArguments[0] as Class<T>
                 val tModel = GsonUtil.jsonToObj(responseBody.string(), tClass::class.java)
-                doResult(tModel as? T?, t)
+                onResult(tModel as? T?, t)
             } else {
-                doResult(null, t)
+                onResult(null, t)
             }
         } catch (e: Exception) {
-            doResult(null, e)
+            onResult(null, e)
         }
         onComplete()
     }
@@ -44,6 +44,6 @@ abstract class ResourceSubscriber<T> : io.reactivex.rxjava3.subscribers.Resource
     /**
      * 回调请求结果（onError中的值也转成对应泛型返回）
      */
-    protected abstract fun doResult(data: T? = null, throwable: Throwable? = null)
+    open fun onResult(data: T? = null, throwable: Throwable? = null) {}
 
 }
