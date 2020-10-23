@@ -1,15 +1,12 @@
 package com.example.common.utils.file.factory
 
-import android.annotation.SuppressLint
 import android.os.Looper
 import com.example.common.bus.RxSchedulers
-import com.example.common.subscribe.CommonSubscribe
+import com.example.common.http.repository.ResourceSubscriber
+import com.example.common.subscribe.CommonSubscribe.getDownloadApi
 import com.example.common.utils.file.FileUtil
 import com.example.common.utils.file.callback.OnDownloadListener
 import com.example.common.utils.handler.WeakHandler
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
-import io.reactivex.rxjava3.schedulers.Schedulers
-import io.reactivex.rxjava3.subscribers.ResourceSubscriber
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream
@@ -19,12 +16,12 @@ import java.util.concurrent.Executors
 /**
  * author: wyb
  * 下载单例
+ * url下载得到的是一个ResponseBody对象，对该对象还需开启异步线程进行下载和UI刷新
+ * 故下载的完成回调需要在线程池内外做判断
  */
-@SuppressLint("CheckResult")
 class DownloadFactory private constructor() {
     private val weakHandler = WeakHandler(Looper.getMainLooper())
     private val executors = Executors.newSingleThreadExecutor()
-    private var complete = false//请求在完成并返回对象后又发起了线程下载，所以回调监听需要保证线程完成在回调
 
     companion object {
         @JvmStatic
@@ -35,35 +32,24 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         FileUtil.deleteDir(filePath)
-        CommonSubscribe.getDownloadApi(downloadUrl)
-            .compose(RxSchedulers.ioMain())
-//            .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
+        getDownloadApi(downloadUrl).compose(RxSchedulers.ioMain())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
 
                 override fun onStart() {
                     super.onStart()
-                    complete = false
                     onDownloadListener?.onStart()
                 }
 
-                override fun onNext(responseBody: ResponseBody?) {
-                    doResult(responseBody, null)
-                }
-
-                override fun onError(t: Throwable?) {
-                    doResult(null, t)
-                }
-
-                private fun doResult(responseBody: ResponseBody?, throwable: Throwable?) {
-                    if (null != responseBody) {
+                override fun doResult(data: ResponseBody?, throwable: Throwable?) {
+                    if (null != data) {
                         executors.execute {
                             var inputStream: InputStream? = null
                             var fileOutputStream: FileOutputStream? = null
                             try {
                                 val file = File(FileUtil.isExistDir(filePath), fileName)
                                 val buf = ByteArray(2048)
-                                val total = responseBody.contentLength()
-                                inputStream = responseBody.byteStream()
+                                val total = data.contentLength()
+                                inputStream = data.byteStream()
                                 fileOutputStream = FileOutputStream(file)
                                 var len: Int
                                 var sum: Long = 0
@@ -80,25 +66,13 @@ class DownloadFactory private constructor() {
                             } finally {
                                 inputStream?.close()
                                 fileOutputStream?.close()
-                                complete = true
-                                onComplete()
+                                weakHandler.post { onDownloadListener?.onComplete() }
                             }
                         }
                         executors.isShutdown
                     } else {
                         onDownloadListener?.onFailed(throwable)
-                        complete = true
-                        onComplete()
-                    }
-                }
-
-                override fun onComplete() {
-                    if (complete) {
-                        complete = false
                         onDownloadListener?.onComplete()
-                    }
-                    if (!isDisposed) {
-                        dispose()
                     }
                 }
             })

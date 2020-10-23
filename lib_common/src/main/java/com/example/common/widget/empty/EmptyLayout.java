@@ -12,10 +12,11 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.example.common.R;
-
+import com.example.common.widget.xrecyclerview.refresh.XRefreshLayout;
+import com.lcodecore.tkrefreshlayout.RefreshListenerAdapter;
+import com.lcodecore.tkrefreshlayout.TwinklingRefreshLayout;
 
 /**
  * Created by android on 2017/8/7.
@@ -32,12 +33,11 @@ import com.example.common.R;
 @SuppressLint("InflateParams")
 public class EmptyLayout extends ViewGroup {
     private View contextView;
-    private SwipeRefreshLayout emptyRefresh;//外层刷新
+    private XRefreshLayout xEmptyRefresh;//外层刷新
     private ImageView ivEmpty;//内容
     private TextView tvEmpty;//文本
     private OnEmptyRefreshListener onEmptyRefreshListener;
-    public static String EMPTY_TXT = "没有数据";//数据为空时的内容
-    public static String ERROR_TXT = "没有网络";//数据加载失败的内容
+    public static String EMPTY_TXT = "没有数据", ERROR_TXT = "没有网络";//数据为空时的内容,数据加载失败的内容
 
     public EmptyLayout(Context context) {
         super(context);
@@ -55,19 +55,29 @@ public class EmptyLayout extends ViewGroup {
     }
 
     private void initialize() {
-        contextView = LayoutInflater.from(getContext()).inflate(R.layout.view_empty, null);
-        emptyRefresh = contextView.findViewById(R.id.srl_empty_refresh);
+        Context context = getContext();
+        contextView = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
+        xEmptyRefresh = contextView.findViewById(R.id.x_empty_refresh);
         ivEmpty = contextView.findViewById(R.id.iv_empty);
         tvEmpty = contextView.findViewById(R.id.tv_empty);
-        emptyRefresh.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.blue_2e60df));
-        emptyRefresh.setOnRefreshListener(() -> {
-            emptyRefresh.setRefreshing(false);
-            if (null != onEmptyRefreshListener) {
-                onEmptyRefreshListener.onRefreshListener();
+        xEmptyRefresh.setOnRefreshListener(new RefreshListenerAdapter() {
+
+            @Override
+            public void onRefresh(TwinklingRefreshLayout refreshLayout) {
+//                super.onRefresh(refreshLayout);
+                //进入加载中，并停止刷新动画
+                showLoading();
+                xEmptyRefresh.finishRefreshing();
+                if (null != onEmptyRefreshListener) {
+                    onEmptyRefreshListener.onRefreshListener();
+                }
             }
+
         });
         contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
         contextView.setOnClickListener(null);
+        setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
+        showLoading();
     }
 
     @Override
@@ -104,14 +114,14 @@ public class EmptyLayout extends ViewGroup {
 
     //当数据正在加载的时候显示（接口返回快速时会造成闪屏）
     public void showLoading() {
-        emptyRefresh.setVisibility(View.GONE);
+        xEmptyRefresh.setVisibility(View.GONE);
         ivEmpty.setVisibility(View.GONE);
         tvEmpty.setVisibility(View.GONE);
     }
 
     //当数据为空时(显示需要显示的图片，以及内容字)
     public void showEmpty() {
-        emptyRefresh.setVisibility(View.VISIBLE);
+        xEmptyRefresh.setVisibility(View.VISIBLE);
         ivEmpty.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         ivEmpty.setImageResource(R.mipmap.img_data_empty);
@@ -121,7 +131,7 @@ public class EmptyLayout extends ViewGroup {
 
     //当数据为空时(显示需要显示的图片，以及内容字)---传入图片-1：原图 0：不需要图片 default：传入的图片
     public void showEmpty(int resId, String emptyText) {
-        emptyRefresh.setVisibility(View.VISIBLE);
+        xEmptyRefresh.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         if (-1 == resId) {
             ivEmpty.setVisibility(View.VISIBLE);
@@ -142,7 +152,7 @@ public class EmptyLayout extends ViewGroup {
 
     //当数据错误时（没有网络）
     public void showError() {
-        emptyRefresh.setVisibility(View.VISIBLE);
+        xEmptyRefresh.setVisibility(View.VISIBLE);
         ivEmpty.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         ivEmpty.setImageResource(R.mipmap.img_net_err);
@@ -152,7 +162,7 @@ public class EmptyLayout extends ViewGroup {
 
     //设置背景颜色
     public void setBackgroundColor(int color) {
-        emptyRefresh.setBackgroundColor(color);
+        xEmptyRefresh.setBackgroundColor(color);
     }
 
     //设置点击

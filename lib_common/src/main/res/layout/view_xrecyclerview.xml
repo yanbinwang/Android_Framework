@@ -6,7 +6,7 @@
     tools:viewBindingIgnore="true">
 
     <com.example.common.widget.xrecyclerview.DetectionRecyclerView
-        android:id="@+id/rv_x"
+        android:id="@+id/d_rv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:overScrollMode="never" />
