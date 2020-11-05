@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import androidx.core.content.ContextCompat;
 
+import com.example.base.widget.SimpleViewGroup;
 import com.example.common.R;
 import com.example.common.widget.xrecyclerview.refresh.XRefreshLayout;
 import com.example.common.widget.xrecyclerview.refresh.callback.OnXRefreshListener;
@@ -30,7 +31,7 @@ import com.example.common.widget.xrecyclerview.refresh.callback.OnXRefreshListen
  * 3.空布局(没有数据的时候显示)
  */
 @SuppressLint("InflateParams")
-public class EmptyLayout extends ViewGroup {
+public class EmptyLayout extends SimpleViewGroup {
     private View contextView;
     private XRefreshLayout xEmptyRefresh;//外层刷新
     private ImageView ivEmpty;//内容
@@ -77,25 +78,6 @@ public class EmptyLayout extends ViewGroup {
         contextView.setOnClickListener(null);
         setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
         showLoading();
-    }
-
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View v = getChildAt(i);
-            v.measure(widthMeasureSpec, heightMeasureSpec);
-        }
-    }
-
-    @Override
-    protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View v = getChildAt(i);
-            v.layout(0, 0, r, b);
-        }
     }
 
     @Override
