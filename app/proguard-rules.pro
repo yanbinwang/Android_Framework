@@ -530,13 +530,13 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 -dontwarn com.sina.**
 -dontwarn com.mob.**
 #------------------------sharesdk混淆结束------------------------
--keep class com.example.common.bus.RxEvent{*;}
--keep class com.example.common.base.page.PageParams{*;}
--keep class com.example.common.http.repository.HttpParams{*;}
--keep class com.example.common.http.repository.ApiResponse{*;}
--keep class com.example.common.base.page.** {*;}
--keep class com.example.common.model.** {*;}
--keep class com.example.share.model.** {*;}
+-keep class com.dataqin.common.bus.RxEvent{*;}
+-keep class com.dataqin.common.base.page.PageParams{*;}
+-keep class com.dataqin.common.http.repository.HttpParams{*;}
+-keep class com.dataqin.common.http.repository.ApiResponse{*;}
+-keep class com.dataqin.common.base.page.** {*;}
+-keep class com.dataqin.common.model.** {*;}
+-keep class com.dataqin.share.model.** {*;}
 #-keep class com.example.homepage.bean.** {*;}
 #-keep class com.example.assets.bean.** {*;}
 #-keep class com.example.information.bean.** {*;}

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.testnew">
+    package="com.dataqin.testnew">
 
     <!-- 系统 -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name=".MyApplication"
+        android:name="com.dataqin.testnew.MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -40,7 +40,7 @@
             android:name="design_height_in_dp"
             android:value="1334" />
 
-        <activity android:name="com.example.testnew.activity.MainActivity">
+        <activity android:name="com.dataqin.testnew.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,12 +48,12 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.example.testnew.activity.TestActivity"/>
+        <activity android:name="com.dataqin.testnew.activity.TestActivity"/>
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.testnew.fileProvider"
+            android:authorities="com.dataqin.testnew.fileProvider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
