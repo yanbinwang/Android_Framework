@@ -132,8 +132,8 @@ public class SecurityUtil {
          +timestamp
         )
      */
-    private static String makeSign(int request, String timestamp) {
-        LogUtil.INSTANCE.e(TAG, " " + "\n头部未签名字段:\n"
+    private static String makeSign(String request, String timestamp) {
+        LogUtil.e(TAG, " " + "\n头部未签名字段:\n"
                 + "UUID:" + DeviceUuidFactory.getInstance().getUuid().toString() + "\n"
                 + "系统版本号:" + Build.VERSION.RELEASE + "\n"
                 + "加密code:" + code + "\n"
@@ -159,7 +159,7 @@ public class SecurityUtil {
     +APP版本_接口版本_接口编号+";"
     +md5
      */
-    public static String buildHeader(int request, String timestamp) {
+    public static String buildHeader(String request, String timestamp) {
         return DEV + "_" + Build.MANUFACTURER +"-"+ Build.MODEL + ";"
                 + Build.VERSION.RELEASE + ";"
                 + DeviceUuidFactory.getInstance().getUuid().toString() + ";"
@@ -171,7 +171,7 @@ public class SecurityUtil {
         Map<String, String> params = new HashMap<>(param);
         params = sortParams(params);
         String strParam = toStr(params);
-        LogUtil.INSTANCE.e(TAG, " " + "\n未签名字段:\n" + strParam + ";\n");
+        LogUtil.e(TAG, " " + "\n未签名字段:\n" + strParam + ";\n");
         return SecurityUtil.strToMD5(strParam);
     }
 
@@ -189,7 +189,7 @@ public class SecurityUtil {
 
     public static String doEncrypt(Map<String, String> param) {
         String beforeEncode = toStr(param);
-        LogUtil.INSTANCE.e(TAG, " " + "\n未加密字段:\n" + beforeEncode + ";\n");
+        LogUtil.e(TAG, " " + "\n未加密字段:\n" + beforeEncode + ";\n");
         String afterEncode = "";
         try {
             byte[] data = beforeEncode.getBytes();
@@ -213,12 +213,12 @@ public class SecurityUtil {
         strNeedSign = strNeedSign + "&sign=" + sign;
         try {
             String encStr = Base64Util.encode(RSAUtil.encryptByPublicKey(strNeedSign.getBytes(), strKey));
-            LogUtil.INSTANCE.e(TAG, " " + "\nWeb签名参数:\n" + encStr);
+            LogUtil.e(TAG, " " + "\nWeb签名参数:\n" + encStr);
             result = originalUrl + "&param=" + java.net.URLEncoder.encode(encStr, "utf-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LogUtil.INSTANCE.e(TAG, " " + "\nWeb签名后链接地址:\n" + result);
+        LogUtil.e(TAG, " " + "\nWeb签名后链接地址:\n" + result);
         return result;
     }
 

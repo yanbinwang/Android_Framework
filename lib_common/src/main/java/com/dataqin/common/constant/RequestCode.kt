@@ -5,8 +5,8 @@ package com.dataqin.common.constant
  * app内跳转回调编码
  */
 object RequestCode {
-
-    const val CODE_400 = 400 //生成RSA公私钥
+    //app请求编号
+    const val CODE_400 = "400" //生成RSA公私钥
 
 
     //app内页面跳转回调编号

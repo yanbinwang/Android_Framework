@@ -19,13 +19,14 @@ import retrofit2.Response;
  */
 public class BaseRequest {
 
+    //校验key
     public String proofPublicKey() {
         String timestamp = StringUtil.getTimeStamp();
         if (TextUtils.isEmpty(RSAKeyFactory.getInstance().getStrPublicKey())) {
             try {
                 //规避安卓系统对于请求阻塞的策略，在主线程中发起一个获取key的请求
                 StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
-                HttpParams params =  new HttpParams();
+                HttpParams params = new HttpParams();
                 params.setTimestamp(timestamp);
                 Call call = RetrofitFactory.getInstance().create(CommonApi.class).getPublicKeyApi(SecurityUtil.buildHeader(RequestCode.CODE_400, timestamp), new HttpParams().getSignParams());
                 //发起拿取key值的请求
@@ -41,6 +42,11 @@ public class BaseRequest {
             }
         }
         return timestamp;
+    }
+
+    //构建请求头部
+    public String buildHeader(String header, String timestamp) {
+        return SecurityUtil.buildHeader(header, timestamp);
     }
 
 }
