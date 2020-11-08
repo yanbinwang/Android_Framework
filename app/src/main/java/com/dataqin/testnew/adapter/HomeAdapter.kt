@@ -16,13 +16,18 @@ import com.dataqin.testnew.model.HomeModel
 class HomeAdapter(model: HomeModel) : BaseAdapter<HomeModel>(model) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewBindingHolder {
-        var holder: BaseViewBindingHolder? = null
-        when (viewType) {
-            Constants.ADAPTER_ITEM_VIEW_TYPE_HEAD -> holder = BaseViewBindingHolder(ItemHomeHeadBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            Constants.ADAPTER_ITEM_VIEW_TYPE_BODY -> holder = BaseViewBindingHolder(ItemHomeBodyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
-            Constants.ADAPTER_ITEM_VIEW_TYPE_BOTTOM -> holder = BaseViewBindingHolder(ItemHomeBottomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+//        var holder: BaseViewBindingHolder? = null
+//        when (viewType) {
+//            Constants.ADAPTER_ITEM_VIEW_TYPE_HEAD -> holder = BaseViewBindingHolder(ItemHomeHeadBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+//            Constants.ADAPTER_ITEM_VIEW_TYPE_BODY -> holder = BaseViewBindingHolder(ItemHomeBodyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+//            Constants.ADAPTER_ITEM_VIEW_TYPE_BOTTOM -> holder = BaseViewBindingHolder(ItemHomeBottomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+//        }
+//        return holder!!
+        return when (viewType) {
+            Constants.ADAPTER_ITEM_VIEW_TYPE_HEAD -> BaseViewBindingHolder(ItemHomeHeadBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            Constants.ADAPTER_ITEM_VIEW_TYPE_BODY ->  BaseViewBindingHolder(ItemHomeBodyBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+            else ->  BaseViewBindingHolder(ItemHomeBottomBinding.inflate(LayoutInflater.from(parent.context), parent, false))
         }
-        return holder!!
     }
 
     override fun getItemCount(): Int {
@@ -38,18 +43,20 @@ class HomeAdapter(model: HomeModel) : BaseAdapter<HomeModel>(model) {
     }
 
     override fun convert(holder: BaseViewBindingHolder, item: HomeModel?) {
-        when (holder.itemViewType) {
-            Constants.ADAPTER_ITEM_VIEW_TYPE_HEAD -> {
-                var headBinding: ItemHomeHeadBinding? = holder.getBinding()
-
-            }
-            Constants.ADAPTER_ITEM_VIEW_TYPE_BODY -> {
-                var bodyBinding: ItemHomeBodyBinding? = holder.getBinding()
-
-            }
-            Constants.ADAPTER_ITEM_VIEW_TYPE_BOTTOM -> {
-                var bottomBinding: ItemHomeBottomBinding? = holder.getBinding()
-
+        if (null != item) {
+            when (holder.itemViewType) {
+                Constants.ADAPTER_ITEM_VIEW_TYPE_HEAD -> {
+//                var headBinding: ItemHomeHeadBinding? = holder.getBinding()
+                    holder.getBinding<ItemHomeHeadBinding>().apply { }
+                }
+                Constants.ADAPTER_ITEM_VIEW_TYPE_BODY -> {
+//                var bodyBinding: ItemHomeBodyBinding? = holder.getBinding()
+                    holder.getBinding<ItemHomeBodyBinding>().apply { }
+                }
+                Constants.ADAPTER_ITEM_VIEW_TYPE_BOTTOM -> {
+//                var bottomBinding: ItemHomeBottomBinding? = holder.getBinding()
+                    holder.getBinding<ItemHomeBottomBinding>().apply { }
+                }
             }
         }
     }

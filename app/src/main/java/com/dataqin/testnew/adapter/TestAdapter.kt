@@ -12,10 +12,15 @@ class TestAdapter(list: MutableList<TestListModel>) : BaseQuickAdapter<TestListM
 
     override fun convert(holder: BaseViewBindingHolder, item: TestListModel?) {
         if (null != item) {
-            val binding: ItemTestBinding = holder.getBinding()
-            binding.ivImg.setBackgroundResource(item.avatar)
-            binding.tvTitle.text = item.title
-            binding.tvDescribe.text = item.describe
+//            val binding: ItemTestBinding = holder.getBinding()
+//            binding.ivImg.setBackgroundResource(item.avatar)
+//            binding.tvTitle.text = item.title
+//            binding.tvDescribe.text = item.describe
+            holder.getBinding<ItemTestBinding>().apply {
+                ivImg.setBackgroundResource(item.avatar)
+                tvTitle.text = item.title
+                tvDescribe.text = item.describe
+            }
         }
     }
 }

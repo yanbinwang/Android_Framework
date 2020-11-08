@@ -15,8 +15,8 @@ import java.util.*
  */
 @Route(path = ARouterPath.TestActivity)
 class TestActivity : BaseTitleActivity<ActivityTestBinding>() {
-    private var list = ArrayList<TestListModel>()
-    private var adapter = TestAdapter(list)
+    private val list by lazy { ArrayList<TestListModel>() }
+    private val adapter by lazy { TestAdapter(list) }
 
     override fun initView() {
         super.initView()
