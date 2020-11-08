@@ -22,7 +22,7 @@ class MainPresenter : MainContract.Presenter() {
 //        getView().getUserInfoSuccess(Any())
 
         addDisposable(
-            getSendVerificationApi("dsfdsfds", HttpParams().getParams())
+            getSendVerificationApi("dsfdsfds", HttpParams().signParams())
                 .compose(RxSchedulers.ioMain())
 //                .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread())
                 .subscribeWith(object : HttpSubscriber<Any>() {

@@ -28,7 +28,7 @@ public class BaseRequest {
                 StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().permitAll().build());
                 HttpParams params = new HttpParams();
                 params.setTimestamp(timestamp);
-                Call call = RetrofitFactory.getInstance().create(CommonApi.class).getPublicKeyApi(SecurityUtil.buildHeader(RequestCode.CODE_400, timestamp), new HttpParams().getSignParams());
+                Call call = RetrofitFactory.getInstance().create(CommonApi.class).getPublicKeyApi(SecurityUtil.buildHeader(RequestCode.CODE_400, timestamp), new HttpParams().signParams());
                 //发起拿取key值的请求
                 Response response = call.execute();
                 ApiResponse body = (ApiResponse) response.body();

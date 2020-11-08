@@ -19,8 +19,8 @@ class HttpParams {
         return this
     }
 
-    //获取参数加密
-    fun getSignParams(): Map<String, String> {
+    //参数加密
+    fun signParams(): Map<String, String> {
         map["timestamp"] = timestamp
         map["network"] = NetWorkUtil.getAPNType()
         map["sign"] = SecurityUtil.doSign(map)
