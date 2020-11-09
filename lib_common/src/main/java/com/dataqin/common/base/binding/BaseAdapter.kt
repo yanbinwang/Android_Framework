@@ -13,8 +13,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //数据类型为集合
     var data: MutableList<T> = ArrayList()
         set(value) {
-            itemType = BaseItemType.List
-            //设置集合类型不相同时自动替换
+            //设置集合类型不相同时替换
             if (value !== field) {
                 field.clear()
                 if (!value.isNullOrEmpty()) {
@@ -35,7 +34,6 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //数据类型为对象
     var t: T? = null
         set(value) {
-            itemType = BaseItemType.Model
             field = value
             notifyDataSetChanged()
         }
