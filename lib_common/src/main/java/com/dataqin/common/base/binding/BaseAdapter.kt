@@ -9,11 +9,11 @@ import com.dataqin.common.widget.xrecyclerview.callback.OnItemClickListener
  */
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //适配器类型-后续可扩展
-    private var itemType = ItemType.Model
+    private var itemType = BaseItemType.Model
     //数据类型为集合
     var data: MutableList<T> = ArrayList()
         set(value) {
-            itemType = ItemType.List
+            itemType = BaseItemType.List
             //设置集合类型不相同时自动替换
             if (value !== field) {
                 field.clear()
@@ -35,7 +35,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //数据类型为对象
     var t: T? = null
         set(value) {
-            itemType = ItemType.Model
+            itemType = BaseItemType.Model
             field = value
             notifyDataSetChanged()
         }
@@ -48,7 +48,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     constructor(model: T?) {
         if (t != null) {
             t = model
-            itemType = ItemType.Model
+            itemType = BaseItemType.Model
         }
     }
 
@@ -56,14 +56,14 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     constructor(list: MutableList<T>?) {
         if (list != null) {
             data = list
-            itemType = ItemType.List
+            itemType = BaseItemType.List
         }
     }
 
     override fun getItemCount(): Int {
         return when (itemType) {
-            ItemType.List -> data.size
-            ItemType.Model -> 0
+            BaseItemType.List -> data.size
+            BaseItemType.Model -> 0
         }
     }
 
@@ -71,8 +71,8 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
         holder.itemView.setOnClickListener { onItemClickListener?.setOnItemClickListener(position) }
         convert(
             holder, when (itemType) {
-                ItemType.List -> data[position]
-                ItemType.Model -> t
+                BaseItemType.List -> data[position]
+                BaseItemType.Model -> t
             }
         )
     }
