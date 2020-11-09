@@ -220,7 +220,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         val postcard = ARouter.getInstance().build(path)
         var code: Int? = null
         if (params != null) {
-            val map: Map<String, Any> = params.getParams()
+            val map: Map<String, Any> = params.map
             for (key in map.keys) {
                 val value = map[key]
                 val cls: Class<*> = value?.javaClass!!
