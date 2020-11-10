@@ -27,14 +27,13 @@ class UpdateHelper private constructor() {
     @JvmOverloads
     fun download(context: Context, downloadUrl: String, onUpdateCallBack: OnUpdateCallBack? = null) {
         PermissionHelper.with(context)
-            .getPermissions(Permission.Group.STORAGE)
-            .setPermissionCallBack(object : OnPermissionCallBack {
+                .setPermissionCallBack(object : OnPermissionCallBack {
 
-                override fun onPermissionListener(isGranted: Boolean) {
-                    if (isGranted) {
-                        val filePath = Constants.APPLICATION_FILE_PATH + "/安装包"
-                        val fileName = Constants.APPLICATION_NAME + ".apk"
-                        DownloadFactory.instance.download(downloadUrl, filePath, fileName, object : OnDownloadListener {
+                    override fun onPermissionListener(isGranted: Boolean) {
+                        if (isGranted) {
+                            val filePath = Constants.APPLICATION_FILE_PATH + "/安装包"
+                            val fileName = Constants.APPLICATION_NAME + ".apk"
+                            DownloadFactory.instance.download(downloadUrl, filePath, fileName, object : OnDownloadListener {
 
                                 override fun onStart() {
                                     onUpdateCallBack?.onStart()
@@ -57,11 +56,11 @@ class UpdateHelper private constructor() {
                                 }
 
                             })
-                    } else {
-                        onUpdateCallBack?.onComplete()
+                        } else {
+                            onUpdateCallBack?.onComplete()
+                        }
                     }
-                }
-            })
+                }).getPermissions(Permission.Group.STORAGE)
     }
 
 }
