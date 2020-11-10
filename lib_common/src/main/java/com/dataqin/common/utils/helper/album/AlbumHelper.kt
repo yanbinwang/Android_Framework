@@ -1,13 +1,13 @@
-package com.dataqin.common.imageloader.album
+package com.dataqin.common.utils.helper.album
 
 import android.app.Activity
 import androidx.core.content.ContextCompat
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.R
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.base.utils.ToastUtil
 import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.api.widget.Widget
 import com.yanzhenjie.durban.Controller
@@ -77,9 +77,7 @@ class AlbumHelper(activity: Activity) {
                                                     ) // 创建控制面板配置。
                                                     .requestCode(RequestCode.PHOTO_REQUEST).start()
                                         } else {
-                                            if (null != onAlbumListener) {
-                                                onAlbumListener!!.onAlbumListener(result)
-                                            }
+                                            onAlbumListener?.onAlbumListener(result)
                                         }
                                     }.start()
                         }
@@ -170,9 +168,7 @@ class AlbumHelper(activity: Activity) {
                                                     ) // 创建控制面板配置。
                                                     .requestCode(RequestCode.PHOTO_REQUEST).start()
                                         } else {
-                                            if (null != onAlbumListener) {
-                                                onAlbumListener!!.onAlbumListener(result[0].path)
-                                            }
+                                            onAlbumListener?.onAlbumListener(result[0].path)
                                         }
                                     }.start()
                         }
@@ -182,6 +178,18 @@ class AlbumHelper(activity: Activity) {
                         Permission.Group.STORAGE
                 )
         return this
+    }
+
+    //录像
+    fun toRecordVideo(duration: Long = Long.MAX_VALUE, bytes: Long = Long.MAX_VALUE) {
+        Album.camera(weakActivity.get())
+                .video() // Record Video.
+                .filePath(Constants.APPLICATION_FILE_PATH + "/录像")
+                .quality(1) // Video quality, [0, 1].
+                .limitDuration(duration) // The longest duration of the video is in milliseconds.
+                .limitBytes(bytes) // Maximum size of the video, in bytes.
+                .onResult { result -> onAlbumListener?.onAlbumListener(result) }
+                .start()
     }
 
     fun setAlbumCallBack(onAlbumListener: OnAlbumListener): AlbumHelper {
