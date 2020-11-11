@@ -1,4 +1,4 @@
-package com.dataqin.common.utils.helper.album
+package com.dataqin.common.imageloader.album
 
 /**
  * author: wyb

@@ -1,4 +1,4 @@
-package com.dataqin.common.utils.helper.album
+package com.dataqin.common.imageloader.album
 
 import android.app.Activity
 import androidx.core.content.ContextCompat
@@ -178,18 +178,6 @@ class AlbumHelper(activity: Activity) {
                         Permission.Group.STORAGE
                 )
         return this
-    }
-
-    //录像
-    fun toRecordVideo(duration: Long = Long.MAX_VALUE, bytes: Long = Long.MAX_VALUE) {
-        Album.camera(weakActivity.get())
-                .video() // Record Video.
-                .filePath(Constants.APPLICATION_FILE_PATH + "/录像")
-                .quality(1) // Video quality, [0, 1].
-                .limitDuration(duration) // The longest duration of the video is in milliseconds.
-                .limitBytes(bytes) // Maximum size of the video, in bytes.
-                .onResult { result -> onAlbumListener?.onAlbumListener(result) }
-                .start()
     }
 
     fun setAlbumCallBack(onAlbumListener: OnAlbumListener): AlbumHelper {
