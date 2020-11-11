@@ -11,6 +11,16 @@
         android:scaleType="centerCrop" />
 
     <Button
+        android:id="@+id/btn_camera"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="20dp"
+        android:background="@color/gray_9f9f9f"
+        android:text="相机"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+    <Button
         android:id="@+id/btn_list"
         android:layout_width="match_parent"
         android:layout_height="60dp"

@@ -48,7 +48,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.dataqin.testnew.activity.TestActivity"/>
+        <activity android:name="com.dataqin.testnew.activity.TestActivity" />
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider

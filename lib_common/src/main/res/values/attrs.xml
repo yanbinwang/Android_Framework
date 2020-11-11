@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- 两种样式的按钮 -->
+    <declare-styleable name="SelectImageView">
+        <attr name="normalRes" format="reference" />
+        <attr name="focusedRes" format="reference" />
+    </declare-styleable>
+
     <!-- 刷新球 -->
     <declare-styleable name="ProgressWheel">
         <attr name="matProg_progressIndeterminate" format="boolean" />

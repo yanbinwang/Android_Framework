@@ -5,6 +5,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.imageloader.ImageLoader
+import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -20,7 +22,8 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 页面中的控件事件，如果只有一个直接写成匿名形式，如果多个复用（2个及以上）调用基类的onXXX方法批量注入写成全局形式
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View, View.OnClickListener {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View,
+    View.OnClickListener {
     private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
@@ -30,7 +33,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnList, binding.btnDownload)
+        onClick(this, binding.btnCamera, binding.btnList, binding.btnDownload)
     }
 
     override fun initData() {
@@ -53,6 +56,16 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
 
     override fun onClick(v: View?) {
         when (v?.id) {
+            R.id.btn_camera -> {
+                PermissionHelper.with(this)
+                    .setPermissionCallBack(object : OnPermissionCallBack {
+                        override fun onPermissionListener(isGranted: Boolean) {
+                            if (isGranted) {
+                                navigation(ARouterPath.CameraActivity)
+                            }
+                        }
+                    }).getPermissions()
+            }
             R.id.btn_download -> presenter.getDownload()
             R.id.btn_list -> navigation(ARouterPath.TestActivity)
         }

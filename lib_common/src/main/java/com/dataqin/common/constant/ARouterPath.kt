@@ -7,9 +7,9 @@ package com.dataqin.common.constant
  */
 object ARouterPath {
     //main模块
-    const val StartActivity = "/app/start" //启动页
-    const val MainActivity = "/app/main" //首页
-    const val TestActivity = "/app/test"
+    const val StartActivity = "/app/StartActivity" //启动页
+    const val MainActivity = "/app/MainActivity" //首页
+    const val TestActivity = "/app/TestActivity"
     //homepage模块
     const val UnlockIPActivity = "/homepage/unlockIP" //锁定ip页
 //    const val WebViewActivity = "/homepage/webView" //全局网页
