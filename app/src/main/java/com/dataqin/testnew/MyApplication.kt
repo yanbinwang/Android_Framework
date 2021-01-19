@@ -4,9 +4,6 @@ import android.os.Looper
 import android.util.Log
 import com.dataqin.base.BuildConfig
 import com.dataqin.common.BaseApplication
-import com.dataqin.common.constant.Constants
-import com.dataqin.common.utils.file.FileUtil.getApplicationId
-import com.dataqin.common.utils.file.FileUtil.getApplicationName
 import com.dataqin.testnew.activity.MainActivity
 import com.zxy.recovery.core.Recovery
 
@@ -82,16 +79,6 @@ class MyApplication : BaseApplication() {
                 }
             }
         }
-//        //初始化推送
-//        NotificationUtil.getInstance();
-//        PushManager.getInstance().initialize(this, GetuiPushService.class);
-//        PushManager.getInstance().registerPushIntentService(this, GetuiIntentService.class);
-        //获取应用名。包名。默认保存文件路径
-        Constants.APPLICATION_ID = getApplicationId(this)
-        Constants.APPLICATION_NAME = getApplicationName(this)
-        Constants.APPLICATION_FILE_PATH = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME
-        Constants.VERSION_CODE = com.dataqin.testnew.BuildConfig.VERSION_CODE
-        Constants.VERSION_NAME = com.dataqin.testnew.BuildConfig.VERSION_NAME
     }
 
 }

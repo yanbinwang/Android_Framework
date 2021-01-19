@@ -5,8 +5,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.imageloader.ImageLoader
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -57,14 +55,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), MainContract.View
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_camera -> {
-                PermissionHelper.with(this)
-                    .setPermissionCallBack(object : OnPermissionCallBack {
-                        override fun onPermissionListener(isGranted: Boolean) {
-                            if (isGranted) {
-                                navigation(ARouterPath.CameraActivity)
-                            }
-                        }
-                    }).getPermissions()
             }
             R.id.btn_download -> presenter.getDownload()
             R.id.btn_list -> navigation(ARouterPath.TestActivity)

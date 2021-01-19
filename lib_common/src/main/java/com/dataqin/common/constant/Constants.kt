@@ -1,6 +1,7 @@
 package com.dataqin.common.constant
 
 import android.os.Environment
+import com.dataqin.common.BaseApplication
 
 /**
  * Created by wyb on 2017/3/7.
@@ -16,7 +17,7 @@ object Constants {
     var STATUS_BAR_HEIGHT = 0//导航栏高度
     //------gradle4.1.0开始，库中不提供VERSION_CODE和VERSION_NAME，在主app中获取，赋值给全局静态变量------
     @JvmField
-    var VERSION_CODE= 0//版本号
+    var VERSION_CODE: Long = 0//版本号
     @JvmField
     var VERSION_NAME: String? = null//版本名
     //------------
@@ -27,24 +28,18 @@ object Constants {
     @JvmField
     var DEVICE_ID: String? = null//当前手机设备id
     @JvmField
-    var APPLICATION_ID: String? = null//当前包名
-    @JvmField
-    var APPLICATION_NAME: String? = null//当前应用名
-    @JvmField
     var APPLICATION_FILE_PATH: String? = null//默认文件保存路径，sd卡下的应用名文件夹
     @JvmField
-    var SDCARD_PATH = Environment.getExternalStorageDirectory().absolutePath//sd卡的根路径mnt/sdcard
+    var SDCARD_PATH = BaseApplication.instance?.getExternalFilesDir(null)?.absolutePath//sd卡的根路径mnt/sdcard-访问这个目录不需要动态申请STORAGE权限
+    //    var SDCARD_PATH = Environment.getExternalStorageDirectory().absolutePath//sd卡的根路径mnt/sdcard
 
     //app内接口的一些默认配置字段
+    const val APPLICATION_ID = "com.sqkj.oea"//当前包名
+    const val APPLICATION_NAME = "简证"//当前应用名
     const val LOGIN_INTERCEPTOR_CODE = 1 //阿里路由登录全局拦截器编号
     const val PUSH_NOTIFY_ID = 0 //固定通知id
-    const val PUSH_CHANNEL_ID = "shuniuyun" //推送渠道id
-    const val PUSH_CHANNEL_NAME = "数牛金服" //推送渠道名
-    const val API_VER = "v1"
-    const val APP_VERSION = "10010"
-    const val DEV = "android"
-    const val LIMIT = "10" //取的页数
-    const val WX_APP_ID = "wx92fdc4b6ab9647cd" //微信的appId
+    const val PUSH_CHANNEL_ID = "dataqin" //推送渠道id
+    const val PUSH_CHANNEL_NAME = "数秦科技" //推送渠道名
     const val ADAPTER_ITEM_VIEW_TYPE_HEAD = 1
     const val ADAPTER_ITEM_VIEW_TYPE_BODY = 2
     const val ADAPTER_ITEM_VIEW_TYPE_BOTTOM = 3
