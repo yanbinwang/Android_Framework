@@ -1,14 +1,10 @@
 package com.dataqin.common.utils.file.factory
 
 import android.os.Looper
-import com.dataqin.common.http.factory.OkHttpFactory
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.file.callback.OnDownloadListener
 import com.dataqin.common.utils.handler.WeakHandler
-import okhttp3.Call
-import okhttp3.Callback
-import okhttp3.Request
-import okhttp3.Response
+import okhttp3.*
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
@@ -37,12 +33,12 @@ class CharactersFactory {
         val request: Request = Request.Builder()
             .url(downloadUrl)
             .build()
-        val call = OkHttpFactory.instance.okHttpClient.newCall(request)
+        val call = OkHttpClient.Builder().build().newCall(request)
         call.enqueue(object : Callback {
 
             override fun onResponse(call: Call, response: Response) {
-                if (null != response.body) {
-                    executors.execute {
+                executors.execute {
+                    if (null != response.body) {
                         var inputStream: InputStream? = null
                         var fileOutputStream: FileOutputStream? = null
                         try {
@@ -68,17 +64,21 @@ class CharactersFactory {
                             fileOutputStream?.close()
                             weakHandler.post { onDownloadListener?.onComplete() }
                         }
+                    } else {
+                        weakHandler.post {
+                            onDownloadListener?.onFailed(null)
+                            onDownloadListener?.onComplete()
+                        }
                     }
-                    executors.isShutdown
-                } else {
-                    onDownloadListener?.onFailed(null)
-                    onDownloadListener?.onComplete()
                 }
+                executors.isShutdown
             }
 
             override fun onFailure(call: Call, e: IOException) {
-                onDownloadListener?.onFailed(e)
-                onDownloadListener?.onComplete()
+                weakHandler.post {
+                    onDownloadListener?.onFailed(e)
+                    onDownloadListener?.onComplete()
+                }
             }
 
         })
