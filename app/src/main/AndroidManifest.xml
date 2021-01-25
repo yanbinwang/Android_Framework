@@ -41,7 +41,7 @@
             android:value="1334" />
 
         <activity
-            android:name="com.dataqin.testnew.activity.SplashActivity"
+            android:name=".activity.SplashActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/startTheme">
@@ -53,11 +53,11 @@
         </activity>
 
         <activity
-            android:name="com.dataqin.testnew.activity.MainActivity"
+            android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name="com.dataqin.testnew.activity.TestActivity"
+            android:name=".activity.TestActivity"
             android:screenOrientation="portrait" />
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
