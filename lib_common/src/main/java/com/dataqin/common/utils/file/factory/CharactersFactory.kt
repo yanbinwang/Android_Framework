@@ -30,9 +30,7 @@ class CharactersFactory {
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         onDownloadListener?.onStart()
         FileUtil.deleteDir(filePath)
-        val request: Request = Request.Builder()
-            .url(downloadUrl)
-            .build()
+        val request: Request = Request.Builder().url(downloadUrl).build()
         val call = OkHttpClient.Builder().build().newCall(request)
         call.enqueue(object : Callback {
 
@@ -65,10 +63,7 @@ class CharactersFactory {
                             weakHandler.post { onDownloadListener?.onComplete() }
                         }
                     } else {
-                        weakHandler.post {
-                            onDownloadListener?.onFailed(null)
-                            onDownloadListener?.onComplete()
-                        }
+                        onFailure(call, IOException())
                     }
                 }
                 executors.isShutdown
@@ -80,7 +75,7 @@ class CharactersFactory {
                     onDownloadListener?.onComplete()
                 }
             }
-
         })
     }
+
 }
