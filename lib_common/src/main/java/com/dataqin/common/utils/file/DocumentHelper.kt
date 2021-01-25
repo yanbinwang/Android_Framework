@@ -83,30 +83,28 @@ object DocumentHelper {
             //定义一个可读，可写的文件并且后缀名为.tmp的二进制文件
             //读取切片文件
             val mFile = File(a + "_" + index + ".tmp")
-            //如果不存在
-            if (!isFileExist(mFile)) {
-                val out = RandomAccessFile(mFile, "rw")
-                //申明具体每一文件的字节数组
-                val b = ByteArray(1024)
-                var n = 0
-                //从指定位置读取文件字节流
-                randomAccessFile.seek(begin)
-                //判断文件流读取的边界
-                while (randomAccessFile.read(b).also { n = it } != -1 && randomAccessFile.filePointer <= end) {
-                    //从指定每一份文件的范围，写入不同的文件
-                    out.write(b, 0, n)
-                }
-                //定义当前读取文件的指针
-                endPointer = randomAccessFile.filePointer
-                //关闭输入流
-                randomAccessFile.close()
-                //关闭输出流
-                out.close()
-            } else {
-                //说明具备之前的缓存文件，直接删除重新走一遍当前生成的逻辑
+            //存在文件则先删除，保证切片的文件是单独生成的
+            if (isFileExist(mFile)) {
                 FileUtil.deleteDirWithFile(mFile)
-                getWrite(file, index, begin, end)
             }
+            //不存在
+            val out = RandomAccessFile(mFile, "rw")
+            //申明具体每一文件的字节数组
+            val b = ByteArray(1024)
+            var n = 0
+            //从指定位置读取文件字节流
+            randomAccessFile.seek(begin)
+            //判断文件流读取的边界
+            while (randomAccessFile.read(b).also { n = it } != -1 && randomAccessFile.filePointer <= end) {
+                //从指定每一份文件的范围，写入不同的文件
+                out.write(b, 0, n)
+            }
+            //定义当前读取文件的指针
+            endPointer = randomAccessFile.filePointer
+            //关闭输入流
+            randomAccessFile.close()
+            //关闭输出流
+            out.close()
         }catch (e: Exception){
         }
         return FileTmpInfo(tmpPath, endPointer - 1024)
