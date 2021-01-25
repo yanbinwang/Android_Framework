@@ -40,7 +40,9 @@
             android:name="design_height_in_dp"
             android:value="1334" />
 
-        <activity android:name="com.dataqin.testnew.activity.MainActivity">
+        <activity
+            android:name="com.dataqin.testnew.activity.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -48,7 +50,9 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.dataqin.testnew.activity.TestActivity" />
+        <activity
+            android:name="com.dataqin.testnew.activity.TestActivity"
+            android:screenOrientation="portrait" />
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
