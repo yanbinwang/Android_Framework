@@ -2,7 +2,6 @@ package com.dataqin.common.base
 
 import android.app.Activity
 import android.content.Context
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -68,7 +67,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
         val type = javaClass.genericSuperclass
         if (type is ParameterizedType) {
             try {

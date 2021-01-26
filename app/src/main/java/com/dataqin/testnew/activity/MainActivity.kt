@@ -17,7 +17,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initView() {
         super.initView()
-        titleBuilder.hideBack()
+        titleBuilder.setTitle("CameraX").hideBack()
     }
 
     override fun initEvent() {
