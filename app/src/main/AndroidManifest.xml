@@ -19,7 +19,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.dataqin.testnew.MyApplication"
+        android:name=".MyApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -57,7 +57,8 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.ShotActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->

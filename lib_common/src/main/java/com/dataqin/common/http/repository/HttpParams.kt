@@ -1,6 +1,5 @@
 package com.dataqin.common.http.repository
 
-import com.dataqin.common.http.encryption.SecurityUtil
 import com.dataqin.common.utils.NetWorkUtil
 import java.util.*
 
@@ -19,19 +18,19 @@ class HttpParams {
         return this
     }
 
-    //参数加密
-    fun signParams(): Map<String, String> {
-        map["timestamp"] = timestamp
-        map["network"] = NetWorkUtil.getAPNType()
-        map["sign"] = SecurityUtil.doSign(map)
-        map = SecurityUtil.sortParams(map)
-        if (SecurityUtil.needEncrypt()) {
-            val param = SecurityUtil.doEncrypt(map)
-            map.clear()
-            map["param"] = param
-            map["timestamp"] = timestamp
-        }
-        return map
-    }
+//    //参数加密
+//    fun signParams(): Map<String, String> {
+//        map["timestamp"] = timestamp
+//        map["network"] = NetWorkUtil.getAPNType()
+//        map["sign"] = SecurityUtil.doSign(map)
+//        map = SecurityUtil.sortParams(map)
+//        if (SecurityUtil.needEncrypt()) {
+//            val param = SecurityUtil.doEncrypt(map)
+//            map.clear()
+//            map["param"] = param
+//            map["timestamp"] = timestamp
+//        }
+//        return map
+//    }
 
 }
