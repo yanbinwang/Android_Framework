@@ -18,7 +18,7 @@ import me.jessyan.autosize.AutoSizeConfig
  *  拍照
  */
 @Route(path = ARouterPath.ShotActivity)
-class ShotActivity : BaseActivity<ActivityShotBinding>(),View.OnClickListener {
+class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
 
     override fun initView() {
         super.initView()
@@ -40,11 +40,11 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(),View.OnClickListener {
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnShot, binding.btnShot)
+        onClick(this, binding.btnShot, binding.btnSwitch)
     }
 
     override fun onClick(v: View?) {
-        when(v?.id){
+        when (v?.id) {
             //拍照
             R.id.btn_shot -> CameraHelper.takePicture()
             //镜头翻转

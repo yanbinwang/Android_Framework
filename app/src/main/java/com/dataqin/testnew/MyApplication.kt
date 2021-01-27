@@ -48,11 +48,9 @@ class MyApplication : BaseApplication() {
                 .recoverStack(true)
                 .mainPage(MainActivity::class.java)
                 .recoverEnabled(true) //发布版本不跳转
-                //                .callback(new MyCrashCallback())
-                .silent(
-                    false,
-                    Recovery.SilentMode.RECOVER_ACTIVITY_STACK
-                ) //                .skip(TestActivity.class)
+//                .callback(new MyCrashCallback())
+                .silent(false, Recovery.SilentMode.RECOVER_ACTIVITY_STACK)
+//                .skip(TestActivity.class)
                 .init(this)
         } else {
             //当前若是发布包，接管系统loop，让用户感知不到程序闪退
@@ -61,20 +59,14 @@ class MyApplication : BaseApplication() {
                     Looper.loop()
                 } catch (e: Throwable) {
                     val stackTraceString = Log.getStackTraceString(e)
-                    if (e is NullPointerException) {
-                        println("AppCatch -$stackTraceString")
-                    } else if (e is IllegalStateException) {
-                        println("AppCatch -$stackTraceString")
-                    } else if (e is ArrayIndexOutOfBoundsException) {
-                        println("AppCatch -$stackTraceString")
-                    } else if (e is IndexOutOfBoundsException) {
-                        println("AppCatch -$stackTraceString")
-                    } else if (e is OutOfMemoryError) {
-                        println("AppCatch -$stackTraceString")
-                    } else if (e is NumberFormatException) {
-                        println("AppCatch -$stackTraceString")
-                    } else {
-                        throw e
+                    when (e) {
+                        is NullPointerException -> println("AppCatch -$stackTraceString")
+                        is IllegalStateException -> println("AppCatch -$stackTraceString")
+                        is ArrayIndexOutOfBoundsException -> println("AppCatch -$stackTraceString")
+                        is IndexOutOfBoundsException -> println("AppCatch -$stackTraceString")
+                        is OutOfMemoryError -> println("AppCatch -$stackTraceString")
+                        is NumberFormatException -> println("AppCatch -$stackTraceString")
+                        else -> throw e
                     }
                 }
             }

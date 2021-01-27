@@ -2,10 +2,6 @@ package com.dataqin.testnew.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.content.Context
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.net.Uri
 import android.os.Looper
 import android.view.WindowManager
 import androidx.camera.core.ImageCapture
@@ -30,8 +26,8 @@ import java.util.concurrent.Executors
 object CameraHelper {
     private var weakActivity: WeakReference<Activity>? = null
     private var cvFinder: CameraView? = null
-    private var shootMedia: MediaPlayer? = null
-    private var recordingMedia: MediaPlayer? = null
+//    private var shootMedia: MediaPlayer? = null
+//    private var recordingMedia: MediaPlayer? = null
     private val executors by lazy { Executors.newSingleThreadExecutor() }
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     var onCameraListener: OnCameraListener? = null
@@ -39,12 +35,12 @@ object CameraHelper {
 
     fun initialize(activity: Activity, lifecycleOwner: LifecycleOwner, cvFinder: CameraView, recording: Boolean = false) {
         activity.window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-        val audio = activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-        val volume = audio.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
-        if (volume != 0) {
-            shootMedia = MediaPlayer.create(activity, Uri.parse("file:///system/media/audio/ui/camera_click.ogg"))
-            recordingMedia = MediaPlayer.create(activity, Uri.parse("file:///system/media/audio/ui/camera_focus.ogg"))
-        }
+//        val audio = activity.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+//        val volume = audio.getStreamVolume(AudioManager.STREAM_NOTIFICATION)
+//        if (volume != 0) {
+//            shootMedia = MediaPlayer.create(activity, Uri.parse("file:///system/media/audio/ui/camera_click.ogg"))
+//            recordingMedia = MediaPlayer.create(activity, Uri.parse("file:///system/media/audio/ui/camera_focus.ogg"))
+//        }
         cvFinder.bindToLifecycle(lifecycleOwner)
         cvFinder.captureMode = if (recording) CameraView.CaptureMode.VIDEO else CameraView.CaptureMode.IMAGE
         this.weakActivity = WeakReference(activity)
@@ -53,7 +49,7 @@ object CameraHelper {
 
     //拍照
     fun takePicture() {
-        shootMedia?.start()
+//        shootMedia?.start()
         val filePath = Constants.APPLICATION_FILE_PATH + "/Photo"
         val fileName = DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS_FORMAT, System.currentTimeMillis()) + ".jpg"
         val pictureFile = File(FileUtil.isExistDir(filePath), fileName)
@@ -77,7 +73,7 @@ object CameraHelper {
         if (cvFinder?.isRecording == true) {
             return
         }
-        recordingMedia?.start()
+//        recordingMedia?.start()
         val filePath = Constants.APPLICATION_FILE_PATH + "/Video"
         val fileName = DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS_FORMAT, System.currentTimeMillis()) + ".mp4"
         val videoFile = File(FileUtil.isExistDir(filePath), fileName)
@@ -95,7 +91,7 @@ object CameraHelper {
 
     //停止录像
     fun stopRecording() {
-        shootMedia?.start()
+//        shootMedia?.start()
         cvFinder?.stopRecording()
         onVideoRecordListener?.onStopRecorder()
     }
