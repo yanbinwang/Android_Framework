@@ -1,17 +1,12 @@
 package com.dataqin.testnew.activity
 
 import android.view.View
-import android.widget.FrameLayout
-import androidx.camera.view.CameraView
-import androidx.camera.view.PreviewView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.common.constant.Constants
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityShotBinding
 import com.dataqin.testnew.utils.helper.CameraHelper
-import me.jessyan.autosize.AutoSizeConfig
 
 /**
  *  Created by wangyanbin
@@ -23,16 +18,17 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
-
 //        val layoutParams = binding.cvFinder.getChildAt(0).layoutParams as FrameLayout.LayoutParams
 //        layoutParams.height = Constants.SCREEN_HEIGHT
 //        binding.cvFinder.getChildAt(0).layoutParams = layoutParams
 
-        var previewView = binding.cvFinder.getChildAt(0) as PreviewView
+//        var previewView = binding.cvFinder.getChildAt(0) as PreviewView
 //        previewView.surfaceProvider
 //        previewView.setScaleType(PreviewView.ScaleType.FIT_CENTER)
 
-//        log("手机宽："+Constants.SCREEN_WIDTH+"\n手机高：" + Constants.SCREEN_HEIGHT+"\n相机宽：" + binding.cvFinder.getChildAt(0).measuredWidth + "\n相机高：" + binding.cvFinder.getChildAt(0).measuredHeight)
+//        previewView.post {
+//            log("手机宽："+Constants.SCREEN_WIDTH+"\n手机高：" + Constants.SCREEN_HEIGHT+"\n相机宽：" + binding.cvFinder.getChildAt(0).width + "\n相机高：" + binding.cvFinder.getChildAt(0).height)
+//        }
 
         //相机绑定页面生命周期
         CameraHelper.initialize(this, this, binding.cvFinder)
