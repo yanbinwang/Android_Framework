@@ -1,6 +1,8 @@
 package com.dataqin.testnew.activity
 
 import android.view.View
+import androidx.camera.view.CameraView
+import androidx.camera.view.PreviewView
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
@@ -22,13 +24,10 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
 //        layoutParams.height = Constants.SCREEN_HEIGHT
 //        binding.cvFinder.getChildAt(0).layoutParams = layoutParams
 
-//        var previewView = binding.cvFinder.getChildAt(0) as PreviewView
+//        val previewView = binding.cvFinder.getChildAt(0) as PreviewView
+//        previewView.getController().
 //        previewView.surfaceProvider
 //        previewView.setScaleType(PreviewView.ScaleType.FIT_CENTER)
-
-//        previewView.post {
-//            log("手机宽："+Constants.SCREEN_WIDTH+"\n手机高：" + Constants.SCREEN_HEIGHT+"\n相机宽：" + binding.cvFinder.getChildAt(0).width + "\n相机高：" + binding.cvFinder.getChildAt(0).height)
-//        }
 
         //相机绑定页面生命周期
         CameraHelper.initialize(this, this, binding.cvFinder)
