@@ -11,6 +11,7 @@ import com.dataqin.common.imageloader.glide.callback.GlideImpl
 import com.dataqin.common.imageloader.glide.callback.GlideModule
 import com.dataqin.common.imageloader.glide.callback.GlideRequestListener
 import com.dataqin.common.imageloader.glide.transform.CornerTransform
+import com.dataqin.common.imageloader.glide.transform.ZoomTransform
 import java.io.File
 
 /**
@@ -26,6 +27,15 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
         val instance: ImageLoader by lazy {
             ImageLoader()
         }
+    }
+
+    override fun displayZoomImage(view: ImageView, string: String?) {
+        manager
+            .asBitmap()
+            .load(string)
+            .placeholder(R.drawable.shape_loading_normal)
+            .dontAnimate()
+            .into(ZoomTransform(view))
     }
 
     override fun displayCoverImage(view: ImageView, string: String?) {
