@@ -1,39 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:padding="20mm"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_shot"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:padding="20mm">
+        android:layout_height="50mm"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="拍照"
+        android:textColor="@color/black"
+        android:textSize="16mm" />
 
-        <Button
-            android:id="@+id/btn_shot"
-            android:layout_width="match_parent"
-            android:layout_height="50mm"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="拍照"
-            android:textColor="@color/black"
-            android:textSize="16mm" />
-
-        <Button
-            android:id="@+id/btn_camera"
-            android:layout_width="match_parent"
-            android:layout_height="50mm"
-            android:layout_marginTop="20mm"
-            android:background="@color/white"
-            android:gravity="center"
-            android:text="录像"
-            android:textColor="@color/black"
-            android:textSize="16mm" />
-
-    </LinearLayout>
-
-    <com.dataqin.common.widget.empty.EmptyLayout
+    <Button
+        android:id="@+id/btn_camera"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="50mm"
+        android:layout_marginTop="20mm"
+        android:background="@color/white"
+        android:gravity="center"
+        android:text="录像"
+        android:textColor="@color/black"
+        android:textSize="16mm" />
 
-</RelativeLayout>
+</LinearLayout>
