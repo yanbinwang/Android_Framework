@@ -4,7 +4,7 @@ package com.dataqin.common.http.repository
  * Created by WangYanBin on 2020/6/19.
  * 项目中使用的网络请求回调对象
  */
-abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
+abstract class HttpSubscriber2<T> : ResourceSubscriber<ApiResponse<T>>() {
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     final override fun onResult(data: ApiResponse<T>?, throwable: Throwable?) {
@@ -24,7 +24,7 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
                 //                if (100002 == e) {
                 //                    ARouter.getInstance().build(ARouterPath.UnlockIPActivity).navigation()
                 //                }
-                onFailed(throwable, msg)
+                onFailed(throwable, msg, code)
             }
         } else {
             onFailed(throwable, "")
@@ -40,6 +40,6 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
     /**
      * 请求失败，获取失败原因
      */
-    open fun onFailed(e: Throwable?, msg: String?) {}
+    open fun onFailed(e: Throwable?, msg: String?, code: Int? = -1) {}
 
 }
