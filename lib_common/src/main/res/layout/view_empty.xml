@@ -1,36 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?><!-- 当列表为空或者没有网络时显示 -->
-<com.dataqin.common.widget.xrecyclerview.refresh.XRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/x_empty_refresh"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:direction="top"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:viewBindingIgnore="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/iv_empty"
+        android:layout_width="300mm"
+        android:layout_height="300mm"
+        android:layout_marginBottom="30mm"
+        tools:src="@mipmap/img_data_empty" />
+
+    <TextView
+        android:id="@+id/tv_empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:gravity="center"
-        android:orientation="vertical">
+        android:textColor="@color/blue_2e60df"
+        android:textSize="30mm"
+        android:textStyle="bold"
+        tools:text="没有数据" />
 
-        <ImageView
-            android:id="@+id/iv_empty"
-            android:layout_width="300mm"
-            android:layout_height="300mm"
-            android:layout_marginBottom="30mm"
-            android:visibility="gone" />
+    <TextView
+        android:id="@+id/tv_refresh"
+        android:layout_width="100mm"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20mm"
+        android:paddingVertical="5mm"
+        android:gravity="center"
+        android:textColor="@color/black"
+        android:background="@drawable/shape_empty_btn"
+        android:text="刷新"
+        android:textSize="18mm" />
 
-        <TextView
-            android:id="@+id/tv_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textColor="@color/blue_2e60df"
-            android:textSize="30mm"
-            android:textStyle="bold"
-            android:visibility="gone" />
-
-    </LinearLayout>
-
-</com.dataqin.common.widget.xrecyclerview.refresh.XRefreshLayout>
+</LinearLayout>
