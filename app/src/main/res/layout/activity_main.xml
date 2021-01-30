@@ -1,29 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/id_container"
     android:layout_width="match_parent"
-    android:padding="20mm"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/btn_shot"
-        android:layout_width="match_parent"
-        android:layout_height="50mm"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="拍照"
+        android:id="@+id/btn_show_known_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10mm"
+        android:onClick="showKnownTipView"
+        android:text="showKnownTip"
         android:textColor="@color/black"
-        android:textSize="16mm" />
+        android:textSize="32mm" />
 
     <Button
-        android:id="@+id/btn_camera"
-        android:layout_width="match_parent"
-        android:layout_height="50mm"
-        android:layout_marginTop="20mm"
-        android:background="@color/white"
-        android:gravity="center"
-        android:text="录像"
+        android:id="@+id/btn_show_next_known_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_show_known_tip"
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10mm"
+        android:onClick="showNextKnownTipView"
+        android:text="showNextKnownTip"
         android:textColor="@color/black"
-        android:textSize="16mm" />
+        android:textSize="32mm" />
 
-</LinearLayout>
+    <Button
+        android:id="@+id/btn_show_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10mm"
+        android:onClick="showTipView"
+        android:text="showTip"
+        android:textColor="@color/black"
+        android:textSize="32mm" />
+
+    <Button
+        android:id="@+id/btn_show_next_tip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btn_show_tip"
+        android:layout_alignParentRight="true"
+        android:layout_margin="10mm"
+        android:onClick="showNextTipView"
+        android:text="showNextTip"
+        android:textColor="@color/black"
+        android:textSize="32mm" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btn_show_next_known_tip"
+        android:entries="@array/entities" />
+
+    <Button
+        android:id="@+id/btn_light"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_marginTop="200mm"
+        android:text="高亮按钮"
+        android:textColor="@color/black"
+        android:textSize="32mm" />
+
+    <Button
+        android:id="@+id/btn_rightLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="290mm"
+        android:text="高亮按钮1"
+        android:textColor="@color/black"
+        android:textSize="32mm" />
+
+    <Button
+        android:id="@+id/btn_bottomLight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30mm"
+        android:layout_marginBottom="60mm"
+        android:text="高亮按钮2"
+        android:textColor="@color/black"
+        android:textSize="32mm" />
+
+</RelativeLayout>
