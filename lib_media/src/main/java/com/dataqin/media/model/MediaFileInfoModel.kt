@@ -12,7 +12,7 @@ class MediaFileInfoModel (
     var lastModified: Long = 0
 ) {
     override fun toString(): String {
-        return "BFileInfo{" +
+        return "MediaFileInfoModel{" +
                 "name=" + name +
                 ", path=" + path +
                 ", lastModified=" + lastModified +
