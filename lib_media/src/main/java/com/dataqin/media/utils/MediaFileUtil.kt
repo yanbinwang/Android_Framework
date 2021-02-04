@@ -27,11 +27,7 @@ object MediaFileUtil {
             LogUtil.e(TAG, "can not get sdcard!")
             return null
         }
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES
-            ), filePath
-        )
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filePath)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
@@ -85,31 +81,28 @@ object MediaFileUtil {
         var isEnableRecord = true
         //对本地存储空间做一次扫描检测
         val availableSize: Long = SdCardUtil.getSDAvailableSize(context)
-        LogUtil.e("sd availableSize: " + availableSize + "M")
+        LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
         if (availableSize < 1024) {
             var successCount = 0
-            LogUtil.e("剩余空间少于1G，开始删除文件!")
+            LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
             val path: String? = getMediaStorageDir(VIDEO_FILE_PATH)
             if (path != null) {
-                val fileFileInfoArrayList: ArrayList<MediaFileInfoModel>? = getListFilesByTime(
-                    path,
-                    TYPE_VIDEO
-                )
-                LogUtil.e("GetFiles: $fileFileInfoArrayList")
+                val fileFileInfoArrayList: ArrayList<MediaFileInfoModel>? = getListFilesByTime(path, TYPE_VIDEO)
+                LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
                 //删除最早的三个文件
                 if (fileFileInfoArrayList!!.size > 3) {
                     for (i in 0..2) {
                         val file = File(fileFileInfoArrayList[i].path)
                         if (file.exists()) {
                             val result = file.delete()
-                            LogUtil.e("recycleSdSpace: " + result + ",file: " + file.name)
+                            LogUtil.e(TAG,"recycleSdSpace: " + result + ",file: " + file.name)
                             successCount++
                         }
                     }
                 }
                 if (successCount < 2) {
                     isEnableRecord = false
-                    LogUtil.e("空间不足，无法开始录像!")
+                    LogUtil.e(TAG,"空间不足，无法开始录像!")
                 } else {
                     isEnableRecord = true
                 }
@@ -125,11 +118,7 @@ object MediaFileUtil {
             LogUtil.e(TAG, "can not get sdcard!")
             return null
         }
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(
-                Environment.DIRECTORY_PICTURES
-            ), filePath
-        )
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filePath)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
@@ -143,7 +132,7 @@ object MediaFileUtil {
     }
 
     private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileInfoModel>? {
-        val files: Array<File> = if (fileType == TYPE_PHOTO) {
+        val files = if (fileType == TYPE_PHOTO) {
             File(path).listFiles { file ->
                 val tmp = file.name.toLowerCase()
                 tmp.endsWith(".png") || tmp.endsWith(".jpg")
@@ -164,7 +153,7 @@ object MediaFileUtil {
             fileList.add(fileInfo)
         }
         //通过重写Comparator的实现类FileComparator来实现按文件创建时间排序。按时间从小到大排序
-        fileList.sortWith { file1, file2 -> if (file1!!.lastModified < file2!!.lastModified) -1 else 1 } //
+        fileList.sortWith { file1, file2 -> if (file1!!.lastModified < file2!!.lastModified) -1 else 1 }
         return fileList
     }
 
