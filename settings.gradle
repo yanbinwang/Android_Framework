@@ -1,4 +1,5 @@
 include ':app'
+include ':lib_media'
 include ':lib_common'
 include ':lib_base'
 rootProject.name = "Android_Framework"

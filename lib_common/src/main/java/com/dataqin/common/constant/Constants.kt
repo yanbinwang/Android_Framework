@@ -40,9 +40,10 @@ object Constants {
     const val PUSH_NOTIFY_ID = 0 //固定通知id
     const val PUSH_CHANNEL_ID = "dataqin" //推送渠道id
     const val PUSH_CHANNEL_NAME = "数秦科技" //推送渠道名
-    const val ADAPTER_ITEM_VIEW_TYPE_HEAD = 1
-    const val ADAPTER_ITEM_VIEW_TYPE_BODY = 2
-    const val ADAPTER_ITEM_VIEW_TYPE_BOTTOM = 3
+    const val CAMERA_FILE_PATH = "Photo"
+    const val VIDEO_FILE_PATH = "Video"
+    const val AUDIO_FILE_PATH = "Audio"
+    const val SCREEN_FILE_PATH = "Screen"
 
     //MMKV存储字段
     const val KEY_USER_MODEL = "keyUserModel" //用户类json

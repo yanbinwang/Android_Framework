@@ -5,7 +5,6 @@ ext.deps = [:]
 def versions = [:]
 versions.appcompat = "1.2.0"
 versions.recyclerview = "1.1.0"
-//versions.swiperefreshlayout = "1.1.0"
 //------------------------------------------------------------------------------------------
 versions.glide = "4.11.0"
 versions.glide_compiler = "4.11.0"
@@ -35,7 +34,6 @@ versions.wechat = "6.6.4"
 def androidx = [:]
 androidx.appcompat = "androidx.appcompat:appcompat:$versions.appcompat"
 androidx.recyclerview = "androidx.recyclerview:recyclerview:$versions.recyclerview"
-//androidx.swiperefreshlayout = "androidx.swiperefreshlayout:swiperefreshlayout:$versions.swiperefreshlayout"
 deps.androidx = androidx
 
 //图片加载glide
@@ -99,7 +97,6 @@ def addRepos(repositories) {
     repositories.google()
     repositories.jcenter()
     repositories.maven { url 'https://jitpack.io' }
-    //    handler.maven { url 'http://mvn.gt.igexin.com/nexus/content/repositories/releases/' }
     repositories.mavenCentral()
 }
 
