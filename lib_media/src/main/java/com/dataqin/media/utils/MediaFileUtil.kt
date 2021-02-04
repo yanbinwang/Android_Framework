@@ -87,10 +87,10 @@ object MediaFileUtil {
             LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
             val path: String? = getMediaStorageDir(VIDEO_FILE_PATH)
             if (path != null) {
-                val fileFileInfoArrayList: ArrayList<MediaFileInfoModel>? = getListFilesByTime(path, TYPE_VIDEO)
+                val fileFileInfoArrayList = getListFilesByTime(path, TYPE_VIDEO)
                 LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
                 //删除最早的三个文件
-                if (fileFileInfoArrayList!!.size > 3) {
+                if (fileFileInfoArrayList.size > 3) {
                     for (i in 0..2) {
                         val file = File(fileFileInfoArrayList[i].path)
                         if (file.exists()) {
@@ -131,7 +131,7 @@ object MediaFileUtil {
         return mediaStorageDir.path
     }
 
-    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileInfoModel>? {
+    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileInfoModel> {
         val files = if (fileType == TYPE_PHOTO) {
             File(path).listFiles { file ->
                 val tmp = file.name.toLowerCase()
