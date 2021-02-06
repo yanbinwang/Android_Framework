@@ -21,10 +21,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_create -> {
-                CertificateHelper.create(
-                    this,
-                    "嗷嘮啊啦啦啦啦大師傅似的",
-                    object : CertificateHelper.OnCertificateListener {
+                CertificateHelper.create(activity.get()!!, "嗷嘮啊啦啦啦啦大師傅似的", object : CertificateHelper.OnCertificateListener {
                         override fun onStart() {
                             showDialog()
                         }
