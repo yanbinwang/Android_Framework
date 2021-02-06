@@ -1,6 +1,5 @@
 package com.dataqin.testnew.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -18,7 +17,6 @@ import java.util.concurrent.Executors
  *  Created by wangyanbin
  *  生成证书类
  */
-@SuppressLint("InflateParams")
 object CertificateHelper {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private val executors by lazy { Executors.newSingleThreadExecutor() }
