@@ -23,9 +23,8 @@
 
         <ImageView
             android:id="@+id/iv_certificate"
-            android:layout_width="1080mm"
-            android:layout_height="1920mm"
-            android:scaleType="fitXY" />
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

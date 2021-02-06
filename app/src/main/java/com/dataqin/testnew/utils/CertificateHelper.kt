@@ -51,12 +51,14 @@ object CertificateHelper {
     private fun layoutView(activity: Activity, view: View) {
         val metric = DisplayMetrics()
         activity.windowManager.defaultDisplay.getMetrics(metric)
-        val width = metric.widthPixels //屏幕宽度（像素）
-        val height = metric.heightPixels //屏幕高度（像素）
+        val width = metric.widthPixels//屏幕宽度（像素）
+        val height = metric.heightPixels//屏幕高度（像素）
         //整个View的大小 参数是左上角 和右下角的坐标
         view.layout(0, 0, width, height)
+//        val measuredWidth: Int = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
+//        val measuredHeight: Int = View.MeasureSpec.makeMeasureSpec(10000, View.MeasureSpec.AT_MOST)
         val measuredWidth: Int = View.MeasureSpec.makeMeasureSpec(width, View.MeasureSpec.EXACTLY)
-        val measuredHeight: Int = View.MeasureSpec.makeMeasureSpec(10000, View.MeasureSpec.AT_MOST)
+        val measuredHeight: Int = View.MeasureSpec.makeMeasureSpec(height, View.MeasureSpec.EXACTLY)
         /**
          * 当measure完后，并不会实际改变View的尺寸，需要调用View.layout方法去进行布局
          * 按示例调用layout函数后，View的大小将会变成你想要设置成的大小
