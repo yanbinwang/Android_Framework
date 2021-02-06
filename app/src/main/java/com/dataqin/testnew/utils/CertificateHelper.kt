@@ -20,8 +20,8 @@ import java.util.concurrent.Executors
  */
 @SuppressLint("InflateParams")
 object CertificateHelper {
-    private val weakHandler = WeakHandler(Looper.getMainLooper())
-    private val executors = Executors.newSingleThreadExecutor()
+    private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
+    private val executors by lazy { Executors.newSingleThreadExecutor() }
 
     fun create(context: Context, result: String, onCertificateListener: OnCertificateListener?) {
         onCertificateListener?.onStart()
