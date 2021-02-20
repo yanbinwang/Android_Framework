@@ -128,9 +128,12 @@ public class CameraInterface {
                 focusAreas.add(new Camera.Area(rect, 1000));
                 parameters.setFocusAreas(focusAreas);
             }
-            getCamera().cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
-            getCamera().setParameters(parameters);
-            getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
+            try {
+                getCamera().cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
+                getCamera().setParameters(parameters);
+                getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
+            }catch (Exception ignored) {
+            }
         }
     }
 
