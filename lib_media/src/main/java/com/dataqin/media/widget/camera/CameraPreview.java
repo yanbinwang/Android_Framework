@@ -6,6 +6,9 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.dataqin.base.utils.LogUtil;
+import com.dataqin.common.bus.RxBus;
+import com.dataqin.common.bus.RxEvent;
+import com.dataqin.common.constant.Constants;
 
 /**
  * Created by wangyanbin
@@ -56,6 +59,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             }
         } catch (Exception e) {
             LogUtil.i(TAG, "Error starting camera preview: " + e.getMessage());
+            RxBus.getInstance().post(new RxEvent(Constants.APP_CAMERA_AUTO));
         }
     }
 
