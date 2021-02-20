@@ -51,6 +51,7 @@ object Constants {
     //系统广播
     const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
     const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
+    const val APP_CAMERA_AUTO = "com.bitnew.tech.APP_CAMERA_AUTO"//相机对焦
     const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
     const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
     const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败

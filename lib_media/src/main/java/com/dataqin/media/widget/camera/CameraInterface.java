@@ -12,6 +12,8 @@ import android.view.Surface;
 import android.widget.FrameLayout;
 
 import com.dataqin.base.utils.LogUtil;
+import com.dataqin.common.bus.RxBus;
+import com.dataqin.common.bus.RxEvent;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.media.model.CameraFileModel;
 import com.dataqin.media.utils.MediaFileUtil;
@@ -95,7 +97,7 @@ public class CameraInterface {
             params.setPreviewSize(previewWidth, previewHeight);
             //获得保存图片的大小
             params.setPictureSize(previewWidth, previewHeight);
-            mCamera.setParameters(params);//救命
+            mCamera.setParameters(params);
         } catch (Exception ignored) {
         }
         //预览旋转90度
@@ -132,7 +134,8 @@ public class CameraInterface {
                 getCamera().cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
                 getCamera().setParameters(parameters);
                 getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
-            }catch (Exception ignored) {
+            } catch (Exception ignored) {
+                RxBus.getInstance().post(new RxEvent(Constants.APP_SHARE_CANCEL));
             }
         }
     }
