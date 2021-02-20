@@ -124,7 +124,7 @@ public class CameraInterface {
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             LogUtil.i(TAG, "parameters.getMaxNumFocusAreas() : " + parameters.getMaxNumFocusAreas());
             if (parameters.getMaxNumFocusAreas() > 0) {
-                List<Camera.Area> focusAreas = new ArrayList<Camera.Area>();
+                List<Camera.Area> focusAreas = new ArrayList<>();
                 focusAreas.add(new Camera.Area(rect, 1000));
                 parameters.setFocusAreas(focusAreas);
             }
