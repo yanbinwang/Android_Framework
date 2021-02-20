@@ -158,6 +158,10 @@ public class CameraInterface {
         LogUtil.d(TAG, "getCameraInstance: " + c);
         return c;
     }
+
+    public void onDestroy(){
+        cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="拍照">
