@@ -20,8 +20,8 @@ import java.util.concurrent.Executors
  * 故下载的完成回调需要在线程池内外做判断
  */
 class DownloadFactory private constructor() {
-    private val weakHandler = WeakHandler(Looper.getMainLooper())
-    private val executors = Executors.newSingleThreadExecutor()
+    private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
+    private val executors by lazy { Executors.newSingleThreadExecutor() }
 
     companion object {
         @JvmStatic
