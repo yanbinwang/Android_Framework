@@ -135,7 +135,7 @@ public class CameraInterface {
                 getCamera().setParameters(parameters);
                 getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
             } catch (Exception ignored) {
-                RxBus.getInstance().post(new RxEvent(Constants.APP_SHARE_CANCEL));
+                RxBus.getInstance().post(new RxEvent(Constants.APP_CAMERA_AUTO));
             }
         }
     }
