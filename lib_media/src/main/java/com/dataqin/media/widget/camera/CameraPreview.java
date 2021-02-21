@@ -14,8 +14,8 @@ import com.dataqin.common.constant.Constants;
  * Created by wangyanbin
  * 相机容器
  */
-public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback{
-    private SurfaceHolder surfaceHolder;
+public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback {
+    private final SurfaceHolder surfaceHolder;
     private final String TAG = "CameraPreview";
 
     public CameraPreview(Context context) {
@@ -42,8 +42,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return;
         }
         try {
-            if (CameraInterface.getInstance().getCamera() != null)
+            if (CameraInterface.getInstance().getCamera() != null) {
                 CameraInterface.getInstance().getCamera().stopPreview();
+            }
         } catch (Exception ignored) {
         }
         startPreview(holder);

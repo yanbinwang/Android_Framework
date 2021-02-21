@@ -428,4 +428,5 @@ public class CameraInterface {
         this.onVideoRecordListener = onVideoRecordListener;
     }
     // </editor-fold>
+
 }
