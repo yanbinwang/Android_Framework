@@ -30,30 +30,30 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
         when (v?.id) {
             R.id.btn_create -> {
                 CertificateHelper.create(activity.get()!!, "嗷嘮啊啦啦啦啦大師傅似的", object : CertificateHelper.OnCertificateListener {
-                        override fun onStart() {
-                            showDialog()
-                        }
+                    override fun onStart() {
+                        showDialog()
+                    }
 
-                        override fun onResult(bitmap: Bitmap) {
-                            val mediaStorageDir = File(
-                                Environment.getExternalStoragePublicDirectory(
-                                    Environment.DIRECTORY_PICTURES
-                                ), Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
+                    override fun onResult(bitmap: Bitmap) {
+                        val mediaStorageDir = File(
+                            Environment.getExternalStoragePublicDirectory(
+                                Environment.DIRECTORY_PICTURES
+                            ), Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
+                        )
+                        val timeStamp =
+                            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+                                Date()
                             )
-                            val timeStamp =
-                                SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                    Date()
-                                )
-                            val path =
-                                File(mediaStorageDir.path + File.separator + timeStamp + ".jpg").path
-                            saveBitmapToSd(bitmap, path, 100)
-                            binding.ivCertificate.setImageBitmap(bitmap)
-                        }
+                        val path =
+                            File(mediaStorageDir.path + File.separator + timeStamp + ".jpg").path
+                        saveBitmapToSd(bitmap, path, 100)
+                        binding.ivCertificate.setImageBitmap(bitmap)
+                    }
 
-                        override fun onComplete() {
-                            hideDialog()
-                        }
-                    })
+                    override fun onComplete() {
+                        hideDialog()
+                    }
+                })
             }
         }
     }
