@@ -71,12 +71,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         if (type is ParameterizedType) {
             try {
                 val vbClass = type.actualTypeArguments[0] as? Class<VB>
-                val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
+                val method = vbClass?.getDeclaredMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, layoutInflater) as VB
-            } catch (e: java.lang.Exception) {
+                setContentView(binding.root)
+            } catch (e: Exception) {
                 e.printStackTrace()
             }
-            setContentView(binding.root)
         }
         initView()
         initEvent()

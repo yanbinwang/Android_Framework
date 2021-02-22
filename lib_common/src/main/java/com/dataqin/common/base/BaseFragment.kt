@@ -26,7 +26,6 @@ import com.dataqin.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
 import java.io.Serializable
 import java.lang.ref.WeakReference
-import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.ParameterizedType
 import java.util.*
 
@@ -70,11 +69,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
         try {
             val method = aClass.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
             binding = method.invoke(null, layoutInflater, container, false) as VB
-        } catch (e: NoSuchMethodException) {
-            e.printStackTrace()
-        } catch (e: IllegalAccessException) {
-            e.printStackTrace()
-        } catch (e: InvocationTargetException) {
+        } catch (e: Exception) {
             e.printStackTrace()
         }
         return binding.root
