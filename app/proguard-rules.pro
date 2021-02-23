@@ -530,6 +530,20 @@ rx.internal.util.atomic.LinkedQueueNode consumerNode;
 -dontwarn com.sina.**
 -dontwarn com.mob.**
 #------------------------sharesdk混淆结束------------------------
+
+#------------------------greendao混淆开始------------------------
+-keep class org.greenrobot.greendao.**{*;}
+-keep public interface org.greenrobot.greendao.**
+-keepclassmembers class * extends org.greenrobot.greendao.AbstractDao {
+public static java.lang.String TABLENAME;
+}
+-keep class **$Properties
+-keep class net.sqlcipher.database.**{*;}
+-keep public interface net.sqlcipher.database.**
+-dontwarn net.sqlcipher.database.**
+-dontwarn org.greenrobot.greendao.**
+#------------------------greendao混淆结束------------------------
+
 -keep class com.dataqin.common.bus.RxEvent{*;}
 -keep class com.dataqin.common.base.page.PageParams{*;}
 -keep class com.dataqin.common.http.repository.HttpParams{*;}

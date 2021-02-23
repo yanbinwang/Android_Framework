@@ -28,7 +28,7 @@ versions.rxandroid = "3.0.0"
 versions.autosize = "1.2.1"
 versions.mmkv = "1.2.2"
 versions.recovery = "1.0.0"
-versions.wechat = "6.6.4"
+versions.greendao = "3.3.0"
 
 //安卓x库
 def androidx = [:]
@@ -71,7 +71,7 @@ deps.rxandroid = "io.reactivex.rxjava3:rxandroid:$versions.rxandroid"//rxandroid
 deps.autosize = "me.jessyan:autosize:$versions.autosize"//今日头条布局兼容
 deps.mmkv = "com.tencent:mmkv-static:$versions.mmkv"//腾讯读写库
 deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
-deps.wechat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat"//微信
+deps.greendao = "org.greenrobot:greendao:$versions.greendao"//数据库
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
 
@@ -92,8 +92,18 @@ build_config.LOCALHOST_DEBUG = "\"https://netcar.dev.yoogate.cn/\""//测试环�
 build_config.LOCALHOST_RELEASE = "\"https://netcar.yoogate.cn/\""//生产环境
 ext.build_config = build_config
 
+//数据库参数配置
+def build_database = [:]
+build_database.schemaVersion = 1 // 数据库版本号（可同步app版本号）-写死不做改动！
+build_database.daoPackage = "com.dataqin.common.dao" //设置DaoMaster、DaoSession、Dao所在的包名
+build_database.targetGenDir = "src/main/java" //设置DaoMaster、DaoSession、Dao所在的目录
+ext.build_database = build_database
+
 //全局build配置
 def addRepos(repositories) {
+    repositories.flatDir {
+        dirs 'libs'
+    }
     repositories.google()
     repositories.jcenter()
     repositories.maven { url 'https://jitpack.io' }
