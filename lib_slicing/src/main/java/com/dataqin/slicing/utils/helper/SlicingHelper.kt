@@ -56,7 +56,7 @@ object SlicingHelper {
                 model.slicingJson = GsonUtil.objToJson(slicingList)
                 list = slicingList
             }
-            dao.insertOrReplaceInTx(model)
+            dao.insertOrReplace(model)
         }
         return list
     }
