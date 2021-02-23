@@ -54,8 +54,7 @@ object FileExecutors {
                             SlicingHelper.insert(dbModel)
 //                                RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //再执行分片，切片好后去上传
-                            SlicingHelper.insert(dbModel, true)
-                            slicingList = SlicingHelper.getSlicingList(sourcePath)
+                            slicingList = SlicingHelper.insert(dbModel, true)
                         } else {
                             //锁对应id的列表,拿取没传完的整体文件数，接口全走完后再解锁
                             SlicingHelper.updateSubmit(model!!, true)

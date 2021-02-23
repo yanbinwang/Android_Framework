@@ -41,7 +41,8 @@ object SlicingHelper {
 
     //插入对应数据
     @JvmStatic
-    fun insert(model: SlicingDBModel?, isSlicing: Boolean = false) {
+    fun insert(model: SlicingDBModel?, isSlicing: Boolean = false): MutableList<SlicingModel> {
+        var list = ArrayList<SlicingModel>()
         if (null != model) {
             if (isSlicing) {
                 //文件分割，插入前分割
@@ -53,9 +54,11 @@ object SlicingHelper {
                     slicingList.add(state)
                 }
                 model.slicingJson = GsonUtil.objToJson(slicingList)
+                list = slicingList
             }
             dao.insertOrReplaceInTx(model)
         }
+        return list
     }
 
     //全部切片完成上传，通常此时这条数据已经被删除不存在了
