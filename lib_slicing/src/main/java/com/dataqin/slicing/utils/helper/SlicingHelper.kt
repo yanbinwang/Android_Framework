@@ -113,6 +113,16 @@ object SlicingHelper {
 
     //获取切片集合
     @JvmStatic
+    fun getSlicingList(sourcePath: String): MutableList<SlicingModel> {
+        val model = query(sourcePath)
+        if(null != model){
+            return getSlicingList(model)
+        }
+        return ArrayList()
+    }
+
+    //获取切片集合
+    @JvmStatic
     fun getSlicingList(model: SlicingDBModel?): MutableList<SlicingModel> {
         var slicingList = ArrayList<SlicingModel>()
         if(null != model){
