@@ -12,8 +12,6 @@ import android.view.Surface;
 import android.widget.FrameLayout;
 
 import com.dataqin.base.utils.LogUtil;
-import com.dataqin.common.bus.RxBus;
-import com.dataqin.common.bus.RxEvent;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.media.model.CameraFileModel;
 import com.dataqin.media.utils.MediaFileUtil;
@@ -38,7 +36,7 @@ import static com.dataqin.common.constant.Constants.VIDEO_FILE_PATH;
  * Created by wangyanbin
  * 相机类
  */
-public class CameraInterface {
+public class CameraFactory {
     private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;//前置或后置摄像头
     private boolean isRecording = false;
     private boolean safeToTakePicture = true;
@@ -46,13 +44,13 @@ public class CameraInterface {
     private MediaRecorder mMediaRecorder;
     private OnCameraListener onCameraListener;
     private OnVideoRecordListener onVideoRecordListener;
-    private static CameraInterface instance;
+    private static CameraFactory instance;
     private static final String TAG = "CameraInterface";
 
     // <editor-fold defaultstate="collapsed" desc="基础方法">
-    public static synchronized CameraInterface getInstance() {
+    public static synchronized CameraFactory getInstance() {
         if (instance == null) {
-            instance = new CameraInterface();
+            instance = new CameraFactory();
         }
         return instance;
     }
@@ -122,7 +120,7 @@ public class CameraInterface {
         if (getCamera() != null) {
             //先获取当前相机的参数配置对象
             Camera.Parameters parameters = getCamera().getParameters();
-            //设置聚焦模式
+            //设置聚焦模式-部分手机不支持，所以之后的设置使用try.catch
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             LogUtil.i(TAG, "parameters.getMaxNumFocusAreas() : " + parameters.getMaxNumFocusAreas());
             if (parameters.getMaxNumFocusAreas() > 0) {
@@ -131,11 +129,10 @@ public class CameraInterface {
                 parameters.setFocusAreas(focusAreas);
             }
             try {
-                getCamera().cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
+                getCamera().cancelAutoFocus(); //先要取消掉进程中所有的聚焦功能
                 getCamera().setParameters(parameters);
                 getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
             } catch (Exception ignored) {
-                RxBus.getInstance().post(new RxEvent(Constants.APP_CAMERA_AUTO));
             }
         }
     }
