@@ -1,4 +1,4 @@
-package com.dataqin.media.utils
+package com.dataqin.media.utils.helper
 
 import android.media.MediaPlayer
 import java.io.IOException

@@ -1,4 +1,4 @@
-package com.dataqin.media.utils
+package com.dataqin.media.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -44,8 +44,8 @@ object GSYVideoHelper {
         GSYVideoType.disableMediaCodecTexture()
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
-        this.weakActivity = WeakReference(activity)
-        this.player = player
+        weakActivity = WeakReference(activity)
+        GSYVideoHelper.player = player
         imgCover = ImageView(weakActivity?.get())
         imgCover?.scaleType = ImageView.ScaleType.CENTER_CROP
         player.titleTextView.visibility = View.GONE

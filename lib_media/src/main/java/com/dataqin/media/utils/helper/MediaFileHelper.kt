@@ -1,4 +1,4 @@
-package com.dataqin.media.utils
+package com.dataqin.media.utils.helper
 
 import android.content.Context
 import android.os.Environment
@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.model.MediaFileInfoModel
+import com.dataqin.media.utils.SdCardUtil
 import java.io.File
 import java.math.BigDecimal
 import java.text.SimpleDateFormat

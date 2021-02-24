@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import com.dataqin.base.utils.LogUtil;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.media.model.CameraFileModel;
-import com.dataqin.media.utils.MediaFileHelper;
+import com.dataqin.media.utils.helper.MediaFileHelper;
 import com.dataqin.media.widget.camera.callback.OnCameraListener;
 import com.dataqin.media.widget.camera.callback.OnVideoRecordListener;
 
