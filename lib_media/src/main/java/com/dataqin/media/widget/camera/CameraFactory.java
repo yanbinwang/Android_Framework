@@ -14,7 +14,7 @@ import android.widget.FrameLayout;
 import com.dataqin.base.utils.LogUtil;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.media.model.CameraFileModel;
-import com.dataqin.media.utils.MediaFileUtil;
+import com.dataqin.media.utils.MediaFileHelper;
 import com.dataqin.media.widget.camera.callback.OnCameraListener;
 import com.dataqin.media.widget.camera.callback.OnVideoRecordListener;
 
@@ -173,7 +173,7 @@ public class CameraFactory {
     }
 
     private Camera.PictureCallback pictureCallback = (data, camera) -> {
-        File pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH);
+        File pictureFile = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH);
         safeToTakePicture = true;
         if (pictureFile == null) {
             LogUtil.e(TAG, "Error creating media file, check storage permissions");
@@ -232,7 +232,7 @@ public class CameraFactory {
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
-        String path = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
+        String path = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.setPreviewDisplay(surface);
         try {

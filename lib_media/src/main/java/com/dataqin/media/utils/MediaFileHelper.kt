@@ -15,7 +15,7 @@ import java.util.*
  *  Created by wangyanbin
  *  相机文件管理工具类
  */
-object MediaFileUtil {
+object MediaFileHelper {
     private const val TYPE_PHOTO = 0
     private const val TYPE_VIDEO = 1
     private const val TAG = "MediaFileUtil"
