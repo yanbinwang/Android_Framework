@@ -1,4 +1,4 @@
-package com.dataqin.common.utils.file
+package com.dataqin.slicing.utils
 
 import android.database.ContentObserver
 import android.database.Cursor
@@ -9,33 +9,32 @@ import com.dataqin.common.BaseApplication
 
 /**
  *  Created by wangyanbin
- *  监听产生文件，获取对应路径
+ *  监听系统图片数据库文件的产生，获取其路径
  */
-class ScanningObserver : ContentObserver(null) {
+class ImagesObserver : ContentObserver(null) {
     private var imageNum = 0
     private var context = BaseApplication.instance?.applicationContext!!
     private val TAG = "ScreenShotObserver"
 
     companion object {
         @JvmStatic
-        val INSTANCE: ScanningObserver by lazy {
-            ScanningObserver()
+        val instance: ImagesObserver by lazy {
+            ImagesObserver()
         }
     }
 
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
-        val columns = arrayOf(
-                MediaStore.MediaColumns.DATE_ADDED,
-                MediaStore.MediaColumns.DATA)
+        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA)
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    columns,
-                    null,
-                    null,
-                    MediaStore.MediaColumns.DATE_MODIFIED + " desc")
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                columns,
+                null,
+                null,
+                MediaStore.MediaColumns.DATE_MODIFIED + " desc"
+            )
             if (cursor == null) {
                 return
             }
@@ -56,6 +55,7 @@ class ScanningObserver : ContentObserver(null) {
                 BitmapFactory.decodeFile(filePath, options);
                 if (options.outWidth != -1) {
                     e(TAG, "发送生成图片的路径广播")
+//                    WeakHandler(Looper.getMainLooper()).post{}
                 }
             }
         } catch (e: Exception) {
@@ -73,7 +73,11 @@ class ScanningObserver : ContentObserver(null) {
 
     //注册监听
     fun register() {
-        context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
+        context.contentResolver.registerContentObserver(
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            true,
+            this
+        )
     }
 
     //注销监听
