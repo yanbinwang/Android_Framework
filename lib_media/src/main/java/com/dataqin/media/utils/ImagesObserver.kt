@@ -1,4 +1,4 @@
-package com.dataqin.slicing.utils
+package com.dataqin.media.utils
 
 import android.database.ContentObserver
 import android.database.Cursor
