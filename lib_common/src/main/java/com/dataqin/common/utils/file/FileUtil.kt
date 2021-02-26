@@ -1,6 +1,5 @@
 package com.dataqin.common.utils.file
 
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -16,7 +15,6 @@ import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
-import java.lang.ref.WeakReference
 import java.text.DecimalFormat
 import java.text.SimpleDateFormat
 import java.util.*
@@ -88,7 +86,7 @@ object FileUtil {
 
     //读取文件到文本（文本，找不到文件或读取错返回null）
     @JvmStatic
-    fun readText(filePath: String?): String? {
+    fun readText(filePath: String): String? {
         val f = File(filePath)
         if (f.exists()) {
             try {
@@ -108,9 +106,9 @@ object FileUtil {
 
     //获取文件大小
     @JvmStatic
-    fun getFileSize(file: File?): Long {
+    fun getFileSize(file: File): Long {
         var size: Long = 0
-        val fileList = file!!.listFiles()
+        val fileList = file.listFiles()
         for (mFile in fileList) {
             size = if (mFile.isDirectory) {
                 size + getFileSize(mFile)
@@ -123,24 +121,14 @@ object FileUtil {
 
     //转换文件大小格式
     @JvmStatic
-    fun formatFileSize(fileS: Long): String? {
+    fun formatFileSize(fileS: Long): String {
         val df = DecimalFormat("#.00")
-        val fileSizeString: String
-        fileSizeString = when {
-            fileS < 1024 -> {
-                df.format(fileS.toDouble()) + "B"
-            }
-            fileS < 1048576 -> {
-                df.format(fileS.toDouble() / 1024) + "K"
-            }
-            fileS < 1073741824 -> {
-                df.format(fileS.toDouble() / 1048576) + "M"
-            }
-            else -> {
-                df.format(fileS.toDouble() / 1073741824) + "G"
-            }
+        return when {
+            fileS < 1024 -> df.format(fileS.toDouble()) + "B"
+            fileS < 1048576 -> df.format(fileS.toDouble() / 1024) + "K"
+            fileS < 1073741824 -> df.format(fileS.toDouble() / 1048576) + "M"
+            else -> df.format(fileS.toDouble() / 1073741824) + "G"
         }
-        return fileSizeString
     }
 
     //将Bitmap缓存到本地
@@ -160,12 +148,12 @@ object FileUtil {
                 Locale.getDefault()
             ).format(Date()) + ".png"
             val fileOutputStream = FileOutputStream(screenImagePath)
-            bitmap!!.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
         } catch (ignored: java.lang.Exception) {
         } finally {
-            bitmap!!.recycle()
+            bitmap?.recycle()
         }
     }
 
@@ -173,32 +161,6 @@ object FileUtil {
     @JvmStatic
     fun hasSDCard(): Boolean {
         return Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-    }
-
-    //获取sdcard根目录
-    @JvmStatic
-    fun getSdCardPath(): String? {
-        return Environment.getExternalStorageDirectory().absolutePath
-    }
-
-    //获取当前app的应用程序名称
-    @JvmStatic
-    fun getApplicationName(context: Context): String? {
-        var packageManager: PackageManager? = null
-        var applicationInfo: ApplicationInfo?
-        try {
-            packageManager = context.applicationContext.packageManager
-            applicationInfo = packageManager.getApplicationInfo(context.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            applicationInfo = null
-        }
-        return packageManager!!.getApplicationLabel(applicationInfo) as String
-    }
-
-    //获取当前app的应用程序名称
-    @JvmStatic
-    fun getApplicationId(context: Context?): String? {
-        return context?.packageName
     }
 
     //是否安装了XXX
@@ -215,6 +177,32 @@ object FileUtil {
             }
         }
         return false
+    }
+
+    //获取sdcard根目录
+    @JvmStatic
+    fun getSdCardPath(): String? {
+        return Environment.getExternalStorageDirectory().absolutePath
+    }
+
+    //获取当前app的应用程序名称
+    @JvmStatic
+    fun getApplicationName(context: Context): String {
+        var packageManager: PackageManager? = null
+        var applicationInfo: ApplicationInfo?
+        try {
+            packageManager = context.applicationContext.packageManager
+            applicationInfo = packageManager.getApplicationInfo(context.packageName, 0)
+        } catch (e: PackageManager.NameNotFoundException) {
+            applicationInfo = null
+        }
+        return packageManager?.getApplicationLabel(applicationInfo) as String
+    }
+
+    //获取当前app的应用程序名称
+    @JvmStatic
+    fun getApplicationId(context: Context): String? {
+        return context.packageName
     }
 
     //获取app的图标
@@ -241,24 +229,16 @@ object FileUtil {
 
     //获取安装跳转的行为
     @JvmStatic
-    private fun getSetupApk(activity: Activity, apkFilePath: String): Intent? {
-        val mActivity = WeakReference(activity)
+    private fun getSetupApk(context: Context, apkFilePath: String): Intent {
         val intent = Intent(Intent.ACTION_VIEW)
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             val file = File(apkFilePath)
-            val contentUri = FileProvider.getUriForFile(
-                mActivity.get()!!,
-                Constants.APPLICATION_ID + ".fileProvider",
-                file
-            )
+            val contentUri = FileProvider.getUriForFile(context, Constants.APPLICATION_ID + ".fileProvider", file)
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
         } else {
-            intent.setDataAndType(
-                Uri.parse("file://$apkFilePath"),
-                "application/vnd.android.package-archive"
-            )
+            intent.setDataAndType(Uri.parse("file://$apkFilePath"), "application/vnd.android.package-archive")
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         return intent
