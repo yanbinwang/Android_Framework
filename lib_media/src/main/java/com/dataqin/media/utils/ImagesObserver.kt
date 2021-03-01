@@ -14,7 +14,7 @@ import com.dataqin.common.BaseApplication
 class ImagesObserver : ContentObserver(null) {
     private var imageNum = 0
     private var context = BaseApplication.instance?.applicationContext!!
-    private val TAG = "ScreenShotObserver"
+    private val TAG = "ImagesObserver"
 
     companion object {
         @JvmStatic
@@ -28,13 +28,7 @@ class ImagesObserver : ContentObserver(null) {
         val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA)
         var cursor: Cursor? = null
         try {
-            cursor = context.contentResolver.query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                columns,
-                null,
-                null,
-                MediaStore.MediaColumns.DATE_MODIFIED + " desc"
-            )
+            cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
             if (cursor == null) {
                 return
             }
@@ -73,11 +67,7 @@ class ImagesObserver : ContentObserver(null) {
 
     //注册监听
     fun register() {
-        context.contentResolver.registerContentObserver(
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            true,
-            this
-        )
+        context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
     }
 
     //注销监听

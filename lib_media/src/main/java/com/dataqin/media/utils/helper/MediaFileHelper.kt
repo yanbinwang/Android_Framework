@@ -6,7 +6,7 @@ import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.model.MediaFileInfoModel
-import com.dataqin.media.utils.SdCardUtil
+import com.dataqin.media.utils.SdcardUtil
 import java.io.File
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -81,7 +81,7 @@ object MediaFileHelper {
     fun spaceScanning(context: Context): Boolean {
         var isEnableRecord = true
         //对本地存储空间做一次扫描检测
-        val availableSize: Long = SdCardUtil.getSDAvailableSize(context)
+        val availableSize: Long = SdcardUtil.getSDAvailableSize(context)
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
         if (availableSize < 1024) {
             var successCount = 0

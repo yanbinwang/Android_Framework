@@ -54,7 +54,7 @@ import java.io.File;
  * 由于部分手机厂商没有遵循Google新的SD卡规范，所以在部分Android4.4手机上外置SD卡的根目录仍然有读写
  * 权限.所以只有在Android4.4以上手机，并且外置SD卡不可写的情况此属性才为<strong>false</strong>.
  */
-public class SdCardStateModel {
+public class SdcardStateModel {
     public int voldMinorIdx;
     public long totalSize;
     public long freeSize;
@@ -69,7 +69,7 @@ public class SdCardStateModel {
         vfat, exfat, ext4, fuse, sdcardfs, texfat
     }
 
-    public SdCardStateModel(String path, Format format, int voldMinorIdx, String excludePath) {
+    public SdcardStateModel(String path, Format format, int voldMinorIdx, String excludePath) {
         DiskStateModel stat = getDiskCapacity(path);
         if (stat != null) {
             this.freeSize = stat.getFree();
@@ -82,7 +82,7 @@ public class SdCardStateModel {
         this.excludePath = excludePath;
     }
 
-    public SdCardStateModel(String path, Format format, int voldMinorIdx) {
+    public SdcardStateModel(String path, Format format, int voldMinorIdx) {
         this(path, format, voldMinorIdx, "");
     }
 
