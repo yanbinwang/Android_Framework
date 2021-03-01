@@ -1,6 +1,9 @@
 package com.dataqin.media.utils.helper
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.Matrix
+import android.hardware.Camera
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
@@ -8,6 +11,9 @@ import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.model.MediaFileInfoModel
 import com.dataqin.media.utils.SdCardUtil
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,6 +52,64 @@ object MediaFileHelper {
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> File((mediaStorageDir.path + File.separator + timeStamp + ".wav"))
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> File((mediaStorageDir.path + File.separator + timeStamp + ".mp4"))
             else -> return null
+        }
+    }
+
+    //根据相机旋转旋转角度将图片进行旋转
+    fun rotateBitmap(bm: Bitmap, cameraId: Int, cameraOrientation: Int): Bitmap {
+        val matrix = Matrix()
+        val degree: Int = if (cameraOrientation > 325 || cameraOrientation <= 45) {
+            LogUtil.i(TAG, "Surface.ROTATION_0:$cameraOrientation")
+            if (cameraId == Camera.CameraInfo.CAMERA_FACING_BACK) 90 else -90
+        } else if (cameraOrientation in 46..135) {
+            LogUtil.i(TAG, " Surface.ROTATION_270:$cameraOrientation")
+            180
+        } else if (cameraOrientation in 136..224) {
+            LogUtil.i(TAG, "Surface.ROTATION_180:$cameraOrientation")
+            270
+        } else {
+            LogUtil.i(TAG, "Surface.ROTATION_90:$cameraOrientation")
+            0
+        }
+        matrix.setRotate(degree.toFloat())
+        var returnBm: Bitmap? = null
+        try {
+            //将原始图片按照旋转矩阵进行旋转，并得到新的图片
+            returnBm = Bitmap.createBitmap(bm, 0, 0, bm.width, bm.height, matrix, true)
+        } catch (e: OutOfMemoryError) {
+            LogUtil.e(TAG, "图片旋转操作失败!")
+        }
+        if (returnBm == null) {
+            returnBm = bm
+        }
+        if (bm != returnBm) {
+            bm.recycle()
+        }
+        return returnBm
+    }
+
+    //将bitmap存成文件
+    @JvmStatic
+    fun saveBitmapToSd(bitmap: Bitmap, path: String?, quality: Int): Boolean {
+        val f = File(path)
+        if (f.exists()) {
+            f.delete()
+        }
+        return try {
+            val out = FileOutputStream(f)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            out.flush()
+            out.close()
+            LogUtil.i(TAG, "图片已经保存!")
+            true
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            LogUtil.e(TAG, "图片保存失败!")
+            false
+        } catch (e: IOException) {
+            e.printStackTrace()
+            LogUtil.e(TAG, "图片保存失败!")
+            false
         }
     }
 

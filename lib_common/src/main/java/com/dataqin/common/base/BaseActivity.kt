@@ -169,7 +169,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                 view.isEnabled = false
                 Timer().schedule(object : TimerTask() {
                     override fun run() {
-                        view.isEnabled = true
+                        runOnUiThread { view.isEnabled = true }
                     }
                 }, second)
             }

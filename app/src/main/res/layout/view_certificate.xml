@@ -12,7 +12,7 @@
         android:layout_height="80mm"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:textColor="@color/red_ea5f39"
+        android:textColor="@color/red_ff001f"
         android:textSize="64mm"
         android:textStyle="bold"
         tools:text="颠三倒四" />

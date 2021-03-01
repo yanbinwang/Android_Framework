@@ -29,31 +29,32 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_create -> {
-                CertificateHelper.create(activity.get()!!, "嗷嘮啊啦啦啦啦大師傅似的", object : CertificateHelper.OnCertificateListener {
-                    override fun onStart() {
-                        showDialog()
-                    }
-
-                    override fun onResult(bitmap: Bitmap) {
-                        val mediaStorageDir = File(
-                            Environment.getExternalStoragePublicDirectory(
-                                Environment.DIRECTORY_PICTURES
-                            ), Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
-                        )
-                        val timeStamp =
-                            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
-                                Date()
-                            )
-                        val path =
-                            File(mediaStorageDir.path + File.separator + timeStamp + ".jpg").path
-                        saveBitmapToSd(bitmap, path, 100)
-                        binding.ivCertificate.setImageBitmap(bitmap)
-                    }
-
-                    override fun onComplete() {
-                        hideDialog()
-                    }
-                })
+                navigation(ARouterPath.ShotActivity)
+//                CertificateHelper.create(activity.get()!!, "嗷嘮啊啦啦啦啦大師傅似的", object : CertificateHelper.OnCertificateListener {
+//                    override fun onStart() {
+//                        showDialog()
+//                    }
+//
+//                    override fun onResult(bitmap: Bitmap) {
+//                        val mediaStorageDir = File(
+//                            Environment.getExternalStoragePublicDirectory(
+//                                Environment.DIRECTORY_PICTURES
+//                            ), Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
+//                        )
+//                        val timeStamp =
+//                            SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(
+//                                Date()
+//                            )
+//                        val path =
+//                            File(mediaStorageDir.path + File.separator + timeStamp + ".jpg").path
+//                        saveBitmapToSd(bitmap, path, 100)
+//                        binding.ivCertificate.setImageBitmap(bitmap)
+//                    }
+//
+//                    override fun onComplete() {
+//                        hideDialog()
+//                    }
+//                })
             }
         }
     }
