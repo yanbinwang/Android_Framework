@@ -10,7 +10,7 @@ object ARouterPath {
     const val ShotActivity = "/app/ShotActivity" //启动页
     const val MainActivity = "/app/MainActivity" //首页
     //homepage模块
-    const val UnlockIPActivity = "/homepage/unlockIP" //锁定ip页
+    const val TestActivity = "/homepage/TestActivity" //锁定ip页
     //    const val WebViewActivity = "/homepage/webView" //全局网页
 //    const val ScanActivity = "/homepage/scan" //全局扫码页
 ////    //assets模块

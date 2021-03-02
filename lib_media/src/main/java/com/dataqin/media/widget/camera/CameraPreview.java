@@ -6,9 +6,6 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import com.dataqin.base.utils.LogUtil;
-import com.dataqin.common.bus.RxBus;
-import com.dataqin.common.bus.RxEvent;
-import com.dataqin.common.constant.Constants;
 
 /**
  * Created by wangyanbin
@@ -31,7 +28,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     public void surfaceCreated(SurfaceHolder holder) {
         LogUtil.i(TAG, "surfaceCreated");
         //默认全屏的比例
-        CameraInterface.getInstance().initCamera();
+        CameraFactory.getInstance().initCamera();
         startPreview(holder);
     }
 
@@ -42,8 +39,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
             return;
         }
         try {
-            if (CameraInterface.getInstance().getCamera() != null) {
-                CameraInterface.getInstance().getCamera().stopPreview();
+            if (CameraFactory.getInstance().getCamera() != null) {
+                CameraFactory.getInstance().getCamera().stopPreview();
             }
         } catch (Exception ignored) {
         }
@@ -53,21 +50,20 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private void startPreview(SurfaceHolder holder) {
         LogUtil.i(TAG, "startPreview");
         try {
-            if (CameraInterface.getInstance().getCamera() != null) {
-                CameraInterface.getInstance().getCamera().setPreviewDisplay(holder);
-                CameraInterface.getInstance().getCamera().startPreview();
-                CameraInterface.getInstance().getCamera().cancelAutoFocus();
+            if (CameraFactory.getInstance().getCamera() != null) {
+                CameraFactory.getInstance().getCamera().setPreviewDisplay(holder);
+                CameraFactory.getInstance().getCamera().startPreview();
+                CameraFactory.getInstance().getCamera().cancelAutoFocus();
             }
         } catch (Exception e) {
             LogUtil.i(TAG, "Error starting camera preview: " + e.getMessage());
-            RxBus.getInstance().post(new RxEvent(Constants.APP_CAMERA_AUTO));
         }
     }
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         LogUtil.i(TAG, "surfaceDestroyed");
-        CameraInterface.getInstance().releaseCamera();
+        CameraFactory.getInstance().releaseCamera();
     }
 
 }

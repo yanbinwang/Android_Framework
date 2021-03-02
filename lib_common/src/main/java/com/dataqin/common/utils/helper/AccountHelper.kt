@@ -61,6 +61,16 @@ object AccountHelper {
         return userInfoBean
     }
 
+    @JvmStatic
+    fun getUserId(): String? {
+        var userId: String? = null
+        val model = getUserBean()
+        if (null != model) {
+            userId = model.userId
+        }
+        return userId
+    }
+
     //获取手机号
     @JvmStatic
     fun getMobile(): String? {

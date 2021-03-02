@@ -1,6 +1,7 @@
-package com.dataqin.common.utils.file
+package com.dataqin.slicing.utils.helper
 
 import android.text.TextUtils
+import com.dataqin.common.utils.file.FileUtil
 import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
@@ -48,12 +49,7 @@ object DocumentHelper {
                 splitList.add(tmpInfo.path!!)
             }
             if (length - offSet > 0) {
-                val tmpInfo: FileTmpInfo = getWrite(
-                    targetFile.absolutePath,
-                    count - 1,
-                    offSet,
-                    length
-                )
+                val tmpInfo: FileTmpInfo = getWrite(targetFile.absolutePath, count - 1, offSet, length)
                 splitList.add(tmpInfo.path!!)
             }
         } catch (e: IOException) {
@@ -73,7 +69,7 @@ object DocumentHelper {
     }
 
     @JvmStatic
-    fun getWrite(file: String, index: Int, begin: Long, end: Long) :FileTmpInfo{
+    fun getWrite(file: String, index: Int, begin: Long, end: Long) : FileTmpInfo {
         var endPointer = 0L
         val a: String = file.split(suffixName(File(file)).toRegex()).toTypedArray()[0]
         val tmpPath = ""

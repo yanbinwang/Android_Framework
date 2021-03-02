@@ -4,7 +4,6 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
@@ -12,7 +11,6 @@ import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.utils.CertificateHelper
-import kotlinx.android.synthetic.main.activity_main.view.*
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

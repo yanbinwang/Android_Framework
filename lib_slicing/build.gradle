@@ -36,6 +36,4 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //基础库
     api project(':lib_common')
-    api deps.player.gsy_player
-    api deps.player.gsy_exo
 }

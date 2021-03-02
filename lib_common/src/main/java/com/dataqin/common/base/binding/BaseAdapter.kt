@@ -20,12 +20,9 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
                     field.addAll(value)
                 }
             } else {
+                field.clear()
                 if (!value.isNullOrEmpty()) {
-                    val newList = ArrayList(value)
-                    field.clear()
-                    field.addAll(newList)
-                } else {
-                    field.clear()
+                    field.addAll(ArrayList(value))
                 }
             }
             notifyDataSetChanged()

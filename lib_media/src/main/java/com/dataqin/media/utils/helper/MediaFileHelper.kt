@@ -1,11 +1,12 @@
-package com.dataqin.media.utils
+package com.dataqin.media.utils.helper
 
 import android.content.Context
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
-import com.dataqin.media.model.MediaFileInfoModel
+import com.dataqin.media.model.MediaFileModel
+import com.dataqin.media.utils.SdcardUtil
 import java.io.File
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
@@ -15,7 +16,7 @@ import java.util.*
  *  Created by wangyanbin
  *  相机文件管理工具类
  */
-object MediaFileUtil {
+object MediaFileHelper {
     private const val TYPE_PHOTO = 0
     private const val TYPE_VIDEO = 1
     private const val TAG = "MediaFileUtil"
@@ -80,7 +81,7 @@ object MediaFileUtil {
     fun spaceScanning(context: Context): Boolean {
         var isEnableRecord = true
         //对本地存储空间做一次扫描检测
-        val availableSize: Long = SdCardUtil.getSDAvailableSize(context)
+        val availableSize: Long = SdcardUtil.getSDAvailableSize(context)
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
         if (availableSize < 1024) {
             var successCount = 0
@@ -131,7 +132,7 @@ object MediaFileUtil {
         return mediaStorageDir.path
     }
 
-    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileInfoModel> {
+    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileModel> {
         val files = if (fileType == TYPE_PHOTO) {
             File(path).listFiles { file ->
                 val tmp = file.name.toLowerCase()
@@ -143,10 +144,10 @@ object MediaFileUtil {
                 tmp.endsWith(".mp4")
             }
         }
-        val fileList = ArrayList<MediaFileInfoModel>() //将需要的子文件信息存入到FileInfo里面
+        val fileList = ArrayList<MediaFileModel>() //将需要的子文件信息存入到FileInfo里面
         for (i in files.indices) {
             val file = files[i]
-            val fileInfo = MediaFileInfoModel()
+            val fileInfo = MediaFileModel()
             fileInfo.name = file.name
             fileInfo.path = file.path
             fileInfo.lastModified = file.lastModified()

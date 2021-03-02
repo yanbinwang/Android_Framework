@@ -12,11 +12,9 @@ import android.view.Surface;
 import android.widget.FrameLayout;
 
 import com.dataqin.base.utils.LogUtil;
-import com.dataqin.common.bus.RxBus;
-import com.dataqin.common.bus.RxEvent;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.media.model.CameraFileModel;
-import com.dataqin.media.utils.MediaFileUtil;
+import com.dataqin.media.utils.helper.MediaFileHelper;
 import com.dataqin.media.widget.camera.callback.OnCameraListener;
 import com.dataqin.media.widget.camera.callback.OnVideoRecordListener;
 
@@ -38,21 +36,21 @@ import static com.dataqin.common.constant.Constants.VIDEO_FILE_PATH;
  * Created by wangyanbin
  * 相机类
  */
-public class CameraInterface {
+public class CameraFactory {
     private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;//前置或后置摄像头
     private boolean isRecording = false;
-    private boolean safeToTakePicture = true;
+    private boolean isSafe = true;
     private Camera mCamera;
     private MediaRecorder mMediaRecorder;
     private OnCameraListener onCameraListener;
     private OnVideoRecordListener onVideoRecordListener;
-    private static CameraInterface instance;
+    private static CameraFactory instance;
     private static final String TAG = "CameraInterface";
 
     // <editor-fold defaultstate="collapsed" desc="基础方法">
-    public static synchronized CameraInterface getInstance() {
+    public static synchronized CameraFactory getInstance() {
         if (instance == null) {
-            instance = new CameraInterface();
+            instance = new CameraFactory();
         }
         return instance;
     }
@@ -122,7 +120,7 @@ public class CameraInterface {
         if (getCamera() != null) {
             //先获取当前相机的参数配置对象
             Camera.Parameters parameters = getCamera().getParameters();
-            //设置聚焦模式
+            //设置聚焦模式-部分手机不支持，所以之后的设置使用try.catch
             parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
             LogUtil.i(TAG, "parameters.getMaxNumFocusAreas() : " + parameters.getMaxNumFocusAreas());
             if (parameters.getMaxNumFocusAreas() > 0) {
@@ -131,11 +129,10 @@ public class CameraInterface {
                 parameters.setFocusAreas(focusAreas);
             }
             try {
-                getCamera().cancelAutoFocus(); // 先要取消掉进程中所有的聚焦功能
+                getCamera().cancelAutoFocus(); //先要取消掉进程中所有的聚焦功能
                 getCamera().setParameters(parameters);
                 getCamera().autoFocus((success, camera) -> LogUtil.i(TAG, "autoFocusCallback success:" + success));
             } catch (Exception ignored) {
-                RxBus.getInstance().post(new RxEvent(Constants.APP_CAMERA_AUTO));
             }
         }
     }
@@ -169,15 +166,15 @@ public class CameraInterface {
 
     // <editor-fold defaultstate="collapsed" desc="拍照">
     public void takePicture() {
-        if (mCamera != null && safeToTakePicture) {
-            safeToTakePicture = false;
+        if (mCamera != null && isSafe) {
+            isSafe = false;
             mCamera.takePicture(null, null, pictureCallback);
         }
     }
 
     private Camera.PictureCallback pictureCallback = (data, camera) -> {
-        File pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH);
-        safeToTakePicture = true;
+        File pictureFile = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH);
+        isSafe = true;
         if (pictureFile == null) {
             LogUtil.e(TAG, "Error creating media file, check storage permissions");
             onTakePictureFail(data);
@@ -229,13 +226,13 @@ public class CameraInterface {
     }
 
     private CameraFileModel prepareVideoRecorder(Surface surface) {
-        mMediaRecorder = new MediaRecorder();
+        String path = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
         mCamera.unlock();
+        mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(mCamera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
-        String path = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.setPreviewDisplay(surface);
         try {
@@ -302,7 +299,7 @@ public class CameraInterface {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="手势操作">
-    public void switchCamera() {
+    public void toggleCamera() {
         if (getCamera() != null) {
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(cameraId, cameraInfo);

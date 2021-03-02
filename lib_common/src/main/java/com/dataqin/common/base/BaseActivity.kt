@@ -116,10 +116,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         closeDecor(view)
         Timer().schedule(object : TimerTask() {
             override fun run() {
-                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
-                    0,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                )
+                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
             }
         }, 200)
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
