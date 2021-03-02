@@ -8,6 +8,7 @@ package com.dataqin.common.constant
 object ARouterPath {
     //main模块
     const val ShotActivity = "/app/ShotActivity" //启动页
+    const val VideoTapeActivity = "/app/VideoTapeActivity"
     const val MainActivity = "/app/MainActivity" //首页
     //homepage模块
     const val TestActivity = "/homepage/TestActivity" //锁定ip页

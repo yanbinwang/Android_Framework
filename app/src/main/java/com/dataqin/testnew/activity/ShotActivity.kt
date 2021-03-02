@@ -10,6 +10,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
+import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.media.utils.helper.MediaFileHelper
 import com.dataqin.media.widget.camera.CameraFactory
 import com.dataqin.media.widget.camera.CameraPreview
@@ -61,7 +62,8 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
                         hideDialog()
                         binding.ivTake.isEnabled = true
                         binding.ivSwitch.isEnabled = true
-                        binding.ivShowImg.visibility = View.VISIBLE
+                        GONE(binding.ivTake, binding.ivSwitch)
+                        VISIBLE(binding.ivShowImg)
                     }
                 } else {
                     onTakePictureFail(null)
@@ -73,7 +75,7 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
                 showToast("操作失败,请重试")
                 binding.ivTake.isEnabled = true
                 binding.ivSwitch.isEnabled = true
-                binding.ivShowImg.visibility = View.GONE
+                GONE(binding.ivShowImg)
             }
         })
         orientationListener = object : OrientationEventListener(this) {
@@ -102,6 +104,16 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
                 binding.flCameraPreview.removeAllViews()
                 binding.flCameraPreview.addView(cameraPreview)
             }
+        }
+    }
+
+    override fun finish() {
+        if (binding.ivShowImg.visibility == View.VISIBLE) {
+            FileUtil.deleteDir(filePath)
+            GONE(binding.ivShowImg)
+            VISIBLE(binding.ivTake, binding.ivSwitch)
+        } else {
+            super.finish()
         }
     }
 
