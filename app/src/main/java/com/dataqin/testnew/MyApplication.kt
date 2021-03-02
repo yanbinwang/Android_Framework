@@ -31,6 +31,7 @@ class MyApplication : BaseApplication() {
         super.onCreate()
         instance = this
         initialize()
+
     }
 
     //初始化一些第三方控件和单例工具类等
