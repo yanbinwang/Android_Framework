@@ -39,7 +39,7 @@ import static com.dataqin.common.constant.Constants.VIDEO_FILE_PATH;
 public class CameraFactory {
     private int cameraId = Camera.CameraInfo.CAMERA_FACING_BACK;//前置或后置摄像头
     private boolean isRecording = false;
-    private boolean safeToTakePicture = true;
+    private boolean isSafe = true;
     private Camera mCamera;
     private MediaRecorder mMediaRecorder;
     private OnCameraListener onCameraListener;
@@ -166,15 +166,15 @@ public class CameraFactory {
 
     // <editor-fold defaultstate="collapsed" desc="拍照">
     public void takePicture() {
-        if (mCamera != null && safeToTakePicture) {
-            safeToTakePicture = false;
+        if (mCamera != null && isSafe) {
+            isSafe = false;
             mCamera.takePicture(null, null, pictureCallback);
         }
     }
 
     private Camera.PictureCallback pictureCallback = (data, camera) -> {
         File pictureFile = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH);
-        safeToTakePicture = true;
+        isSafe = true;
         if (pictureFile == null) {
             LogUtil.e(TAG, "Error creating media file, check storage permissions");
             onTakePictureFail(data);
@@ -226,13 +226,13 @@ public class CameraFactory {
     }
 
     private CameraFileModel prepareVideoRecorder(Surface surface) {
-        mMediaRecorder = new MediaRecorder();
+        String path = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
         mCamera.unlock();
+        mMediaRecorder = new MediaRecorder();
         mMediaRecorder.setCamera(mCamera);
         mMediaRecorder.setAudioSource(MediaRecorder.AudioSource.CAMCORDER);
         mMediaRecorder.setVideoSource(MediaRecorder.VideoSource.CAMERA);
         mMediaRecorder.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_480P));
-        String path = MediaFileHelper.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH).toString();
         mMediaRecorder.setOutputFile(path);
         mMediaRecorder.setPreviewDisplay(surface);
         try {
@@ -299,7 +299,7 @@ public class CameraFactory {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="手势操作">
-    public void switchCamera() {
+    public void toggleCamera() {
         if (getCamera() != null) {
             Camera.CameraInfo cameraInfo = new Camera.CameraInfo();
             Camera.getCameraInfo(cameraId, cameraInfo);

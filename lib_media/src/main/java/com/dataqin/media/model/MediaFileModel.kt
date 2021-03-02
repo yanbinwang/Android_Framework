@@ -6,7 +6,7 @@ import java.util.*
  *  Created by wangyanbin
  *  文件信息类
  */
-class MediaFileInfoModel (
+class MediaFileModel (
     var name: String? = null,
     var path: String? = null,
     var lastModified: Long = 0

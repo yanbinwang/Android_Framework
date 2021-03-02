@@ -5,7 +5,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
-import com.dataqin.media.model.MediaFileInfoModel
+import com.dataqin.media.model.MediaFileModel
 import com.dataqin.media.utils.SdcardUtil
 import java.io.File
 import java.math.BigDecimal
@@ -132,7 +132,7 @@ object MediaFileHelper {
         return mediaStorageDir.path
     }
 
-    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileInfoModel> {
+    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileModel> {
         val files = if (fileType == TYPE_PHOTO) {
             File(path).listFiles { file ->
                 val tmp = file.name.toLowerCase()
@@ -144,10 +144,10 @@ object MediaFileHelper {
                 tmp.endsWith(".mp4")
             }
         }
-        val fileList = ArrayList<MediaFileInfoModel>() //将需要的子文件信息存入到FileInfo里面
+        val fileList = ArrayList<MediaFileModel>() //将需要的子文件信息存入到FileInfo里面
         for (i in files.indices) {
             val file = files[i]
-            val fileInfo = MediaFileInfoModel()
+            val fileInfo = MediaFileModel()
             fileInfo.name = file.name
             fileInfo.path = file.path
             fileInfo.lastModified = file.lastModified()

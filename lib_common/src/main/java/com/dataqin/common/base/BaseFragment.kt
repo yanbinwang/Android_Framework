@@ -157,7 +157,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
                 view.isEnabled = false
                 Timer().schedule(object : TimerTask() {
                     override fun run() {
-                        view.isEnabled = true
+                        activity.get()?.runOnUiThread { view.isEnabled = true }
                     }
                 }, second)
             }
