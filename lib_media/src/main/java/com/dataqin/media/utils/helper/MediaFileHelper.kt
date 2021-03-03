@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
-import com.dataqin.media.model.MediaFileModel
 import com.dataqin.media.utils.SdcardUtil
 import java.io.File
 import java.io.FileNotFoundException
@@ -79,56 +78,10 @@ object MediaFileHelper {
         return (teraByteResult.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB")
     }
 
-    //获取文件存储文件夹
-    @JvmStatic
-    fun getMediaStorageDir(filePath: String?): String? {
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
-            LogUtil.e(TAG, "can not get sdcard!")
-            return null
-        }
-        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filePath)
-        if (!mediaStorageDir.exists()) {
-            LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
-            if (!mediaStorageDir.mkdirs()) {
-                LogUtil.e(TAG, "failed to create directory")
-                return null
-            }
-        } else {
-            LogUtil.i(TAG, "mkdirs,文件夹已存在： " + mediaStorageDir.path)
-        }
-        return mediaStorageDir.path
-    }
-
-    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileModel> {
-        val files = if (fileType == TYPE_PHOTO) {
-            File(path).listFiles { file ->
-                val tmp = file.name.toLowerCase()
-                tmp.endsWith(".png") || tmp.endsWith(".jpg")
-            }
-        } else {
-            File(path).listFiles { file ->
-                val tmp = file.name.toLowerCase()
-                tmp.endsWith(".mp4")
-            }
-        }
-        val fileList = ArrayList<MediaFileModel>() //将需要的子文件信息存入到FileInfo里面
-        for (i in files.indices) {
-            val file = files[i]
-            val fileInfo = MediaFileModel()
-            fileInfo.name = file.name
-            fileInfo.path = file.path
-            fileInfo.lastModified = file.lastModified()
-            fileList.add(fileInfo)
-        }
-        //通过重写Comparator的实现类FileComparator来实现按文件创建时间排序。按时间从小到大排序
-        fileList.sortWith { file1, file2 -> if (file1!!.lastModified < file2!!.lastModified) -1 else 1 }
-        return fileList
-    }
-
-    //扫描磁盘空间
-    @JvmStatic
-    fun scanDisk(context: Context): Boolean {
-        return scanDisk(context,1024)
+//    //扫描磁盘空间
+//    @JvmStatic
+//    fun scanDisk(context: Context): Boolean {
+//        return scanDisk(context,1024)
 //        var isEnableRecord = true
 //        //对本地存储空间做一次扫描检测
 //        val availableSize = SdcardUtil.getSDAvailableSize(context)
@@ -160,11 +113,57 @@ object MediaFileHelper {
 //            }
 //        }
 //        return isEnableRecord
-    }
+//    }
+//
+//    //获取文件存储文件夹
+//    @JvmStatic
+//    fun getMediaStorageDir(filePath: String?): String? {
+//        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+//            LogUtil.e(TAG, "can not get sdcard!")
+//            return null
+//        }
+//        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), filePath)
+//        if (!mediaStorageDir.exists()) {
+//            LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
+//            if (!mediaStorageDir.mkdirs()) {
+//                LogUtil.e(TAG, "failed to create directory")
+//                return null
+//            }
+//        } else {
+//            LogUtil.i(TAG, "mkdirs,文件夹已存在： " + mediaStorageDir.path)
+//        }
+//        return mediaStorageDir.path
+//    }
+//
+//    private fun getListFilesByTime(path: String?, fileType: Int): ArrayList<MediaFileModel> {
+//        val files = if (fileType == TYPE_PHOTO) {
+//            File(path).listFiles { file ->
+//                val tmp = file.name.toLowerCase()
+//                tmp.endsWith(".png") || tmp.endsWith(".jpg")
+//            }
+//        } else {
+//            File(path).listFiles { file ->
+//                val tmp = file.name.toLowerCase()
+//                tmp.endsWith(".mp4")
+//            }
+//        }
+//        val fileList = ArrayList<MediaFileModel>() //将需要的子文件信息存入到FileInfo里面
+//        for (i in files.indices) {
+//            val file = files[i]
+//            val fileInfo = MediaFileModel()
+//            fileInfo.name = file.name
+//            fileInfo.path = file.path
+//            fileInfo.lastModified = file.lastModified()
+//            fileList.add(fileInfo)
+//        }
+//        //通过重写Comparator的实现类FileComparator来实现按文件创建时间排序。按时间从小到大排序
+//        fileList.sortWith { file1, file2 -> if (file1!!.lastModified < file2!!.lastModified) -1 else 1 }
+//        return fileList
+//    }
 
     //传入指定大小的文件长度，扫描sd卡空间是否足够
     @JvmStatic
-    fun scanDisk(context: Context, space: Long = 0): Boolean {
+    fun scanDisk(context: Context, space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSDAvailableSize(context)
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
