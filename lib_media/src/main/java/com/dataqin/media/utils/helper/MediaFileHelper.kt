@@ -5,7 +5,6 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
-import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.model.MediaFileModel
 import com.dataqin.media.utils.SdcardUtil
 import java.io.File
@@ -128,38 +127,48 @@ object MediaFileHelper {
 
     //扫描磁盘空间
     @JvmStatic
-    fun spaceScanning(context: Context): Boolean {
-        var isEnableRecord = true
+    fun scanDisk(context: Context): Boolean {
+        return scanDisk(context,1024)
+//        var isEnableRecord = true
+//        //对本地存储空间做一次扫描检测
+//        val availableSize = SdcardUtil.getSDAvailableSize(context)
+//        LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
+//        if (availableSize < 1024) {
+//            var successCount = 0
+//            LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
+//            val path = getMediaStorageDir(VIDEO_FILE_PATH)
+//            if (path != null) {
+//                val fileFileInfoArrayList = getListFilesByTime(path, TYPE_VIDEO)
+//                LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
+//                //删除最早的三个文件
+//                if (fileFileInfoArrayList.size > 3) {
+//                    for (i in 0..2) {
+//                        val file = File(fileFileInfoArrayList[i].path)
+//                        if (file.exists()) {
+//                            val result = file.delete()
+//                            LogUtil.e(TAG,"recycleSdSpace: " + result + ",file: " + file.name)
+//                            successCount++
+//                        }
+//                    }
+//                }
+//                if (successCount < 2) {
+//                    isEnableRecord = false
+//                    LogUtil.e(TAG,"空间不足，无法开始录像!")
+//                } else {
+//                    isEnableRecord = true
+//                }
+//            }
+//        }
+//        return isEnableRecord
+    }
+
+    //传入指定大小的文件长度，扫描sd卡空间是否足够
+    @JvmStatic
+    fun scanDisk(context: Context, space: Long = 0): Boolean {
         //对本地存储空间做一次扫描检测
-        val availableSize: Long = SdcardUtil.getSDAvailableSize(context)
+        val availableSize = SdcardUtil.getSDAvailableSize(context)
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
-        if (availableSize < 1024) {
-            var successCount = 0
-            LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
-            val path: String? = getMediaStorageDir(VIDEO_FILE_PATH)
-            if (path != null) {
-                val fileFileInfoArrayList = getListFilesByTime(path, TYPE_VIDEO)
-                LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
-                //删除最早的三个文件
-                if (fileFileInfoArrayList.size > 3) {
-                    for (i in 0..2) {
-                        val file = File(fileFileInfoArrayList[i].path)
-                        if (file.exists()) {
-                            val result = file.delete()
-                            LogUtil.e(TAG,"recycleSdSpace: " + result + ",file: " + file.name)
-                            successCount++
-                        }
-                    }
-                }
-                if (successCount < 2) {
-                    isEnableRecord = false
-                    LogUtil.e(TAG,"空间不足，无法开始录像!")
-                } else {
-                    isEnableRecord = true
-                }
-            }
-        }
-        return isEnableRecord
+        return availableSize < space
     }
 
     //将bitmap存成文件
