@@ -99,8 +99,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //基础库
-//    implementation project(':lib_media')
-    implementation project(':lib_common')
+    implementation project(':lib_media')
+//    implementation project(':lib_common')
 //    implementation project(':lib_share')
 //    implementation project(':module_quotation')
     //页面路由

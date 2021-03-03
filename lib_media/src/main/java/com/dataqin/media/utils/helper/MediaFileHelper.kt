@@ -1,6 +1,7 @@
 package com.dataqin.media.utils.helper
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
@@ -8,6 +9,9 @@ import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.model.MediaFileModel
 import com.dataqin.media.utils.SdcardUtil
 import java.io.File
+import java.io.FileNotFoundException
+import java.io.FileOutputStream
+import java.io.IOException
 import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
@@ -76,42 +80,6 @@ object MediaFileHelper {
         return (teraByteResult.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB")
     }
 
-    //扫描磁盘空间
-    @JvmStatic
-    fun spaceScanning(context: Context): Boolean {
-        var isEnableRecord = true
-        //对本地存储空间做一次扫描检测
-        val availableSize: Long = SdcardUtil.getSDAvailableSize(context)
-        LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
-        if (availableSize < 1024) {
-            var successCount = 0
-            LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
-            val path: String? = getMediaStorageDir(VIDEO_FILE_PATH)
-            if (path != null) {
-                val fileFileInfoArrayList = getListFilesByTime(path, TYPE_VIDEO)
-                LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
-                //删除最早的三个文件
-                if (fileFileInfoArrayList.size > 3) {
-                    for (i in 0..2) {
-                        val file = File(fileFileInfoArrayList[i].path)
-                        if (file.exists()) {
-                            val result = file.delete()
-                            LogUtil.e(TAG,"recycleSdSpace: " + result + ",file: " + file.name)
-                            successCount++
-                        }
-                    }
-                }
-                if (successCount < 2) {
-                    isEnableRecord = false
-                    LogUtil.e(TAG,"空间不足，无法开始录像!")
-                } else {
-                    isEnableRecord = true
-                }
-            }
-        }
-        return isEnableRecord
-    }
-
     //获取文件存储文件夹
     @JvmStatic
     fun getMediaStorageDir(filePath: String?): String? {
@@ -156,6 +124,67 @@ object MediaFileHelper {
         //通过重写Comparator的实现类FileComparator来实现按文件创建时间排序。按时间从小到大排序
         fileList.sortWith { file1, file2 -> if (file1!!.lastModified < file2!!.lastModified) -1 else 1 }
         return fileList
+    }
+
+    //扫描磁盘空间
+    @JvmStatic
+    fun spaceScanning(context: Context): Boolean {
+        var isEnableRecord = true
+        //对本地存储空间做一次扫描检测
+        val availableSize: Long = SdcardUtil.getSDAvailableSize(context)
+        LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
+        if (availableSize < 1024) {
+            var successCount = 0
+            LogUtil.e(TAG,"剩余空间少于1G，开始删除文件!")
+            val path: String? = getMediaStorageDir(VIDEO_FILE_PATH)
+            if (path != null) {
+                val fileFileInfoArrayList = getListFilesByTime(path, TYPE_VIDEO)
+                LogUtil.e(TAG,"GetFiles: $fileFileInfoArrayList")
+                //删除最早的三个文件
+                if (fileFileInfoArrayList.size > 3) {
+                    for (i in 0..2) {
+                        val file = File(fileFileInfoArrayList[i].path)
+                        if (file.exists()) {
+                            val result = file.delete()
+                            LogUtil.e(TAG,"recycleSdSpace: " + result + ",file: " + file.name)
+                            successCount++
+                        }
+                    }
+                }
+                if (successCount < 2) {
+                    isEnableRecord = false
+                    LogUtil.e(TAG,"空间不足，无法开始录像!")
+                } else {
+                    isEnableRecord = true
+                }
+            }
+        }
+        return isEnableRecord
+    }
+
+    //将bitmap存成文件
+    @JvmStatic
+    fun saveBitmapToSd(bitmap: Bitmap, path: String?, quality: Int): Boolean {
+        val f = File(path)
+        if (f.exists()) {
+            f.delete()
+        }
+        return try {
+            val out = FileOutputStream(f)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
+            out.flush()
+            out.close()
+            LogUtil.i(TAG, "图片已经保存!")
+            true
+        } catch (e: FileNotFoundException) {
+            e.printStackTrace()
+            LogUtil.e(TAG, "图片保存失败!")
+            false
+        } catch (e: IOException) {
+            e.printStackTrace()
+            LogUtil.e(TAG, "图片保存失败!")
+            false
+        }
     }
 
 }
