@@ -69,7 +69,7 @@ object DocumentHelper {
     }
 
     @JvmStatic
-    fun getWrite(file: String, index: Int, begin: Long, end: Long) : FileTmpInfo {
+    fun getWrite(file: String, index: Int, begin: Long, end: Long): FileTmpInfo {
         var endPointer = 0L
         val a: String = file.split(suffixName(File(file)).toRegex()).toTypedArray()[0]
         val tmpPath = ""
@@ -101,7 +101,7 @@ object DocumentHelper {
             randomAccessFile.close()
             //关闭输出流
             out.close()
-        }catch (e: Exception){
+        } catch (e: Exception) {
         }
         return FileTmpInfo(tmpPath, endPointer - 1024)
     }
@@ -111,7 +111,7 @@ object DocumentHelper {
      * file 指定文件
      */
     @JvmStatic
-    fun suffixName(file: File) : String{
+    fun suffixName(file: File): String {
         val fileName = file.name
         return fileName.substring(fileName.lastIndexOf("."), fileName.length)
     }
@@ -131,7 +131,7 @@ object DocumentHelper {
      * cutSize    分割文件的大小
      */
     @JvmStatic
-    fun getMergeFile(fileName: String, targetFile: File, cutSize: Long){
+    fun getMergeFile(fileName: String, targetFile: File, cutSize: Long) {
         val tempCount = if (targetFile.length() % cutSize == 0L) (targetFile.length() / cutSize).toInt() else (targetFile.length() / cutSize + 1).toInt()
         //文件名
         val a = targetFile.absolutePath.split(suffixName(targetFile).toRegex()).toTypedArray()[0]
