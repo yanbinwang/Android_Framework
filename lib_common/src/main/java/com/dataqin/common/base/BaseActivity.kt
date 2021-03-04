@@ -19,7 +19,6 @@ import com.dataqin.common.base.bridge.BaseView
 import com.dataqin.common.base.page.PageParams
 import com.dataqin.common.base.proxy.SimpleTextWatcher
 import com.dataqin.common.bus.RxBus.Companion.instance
-import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.bus.RxManager
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
@@ -88,8 +87,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     }
 
     override fun initEvent() {
-        addDisposable(instance.toFlowable().subscribe { rxEvent: RxEvent ->
-            when (rxEvent.getAction()) {
+        addDisposable(instance.toFlowable {
+            when (it.getAction()) {
                 Constants.APP_USER_LOGIN_OUT -> if ("mainactivity" != TAG) {
                     finish()
                 }

@@ -31,20 +31,20 @@ class RxBus private constructor() {
         return mBus.ofType(tClass)
     }
 
-    fun toFlowable(): Flowable<RxEvent> {
-        return toFlowable(RxEvent::class.java)
+    fun <T> toDefaultFlowable(eventType: Class<T>, act: Consumer<T>): Disposable {
+        return mBus.ofType(eventType).compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }.subscribe(act)
     }
 
-//    fun toFlowable(): Flowable<Any> {
-//        return mBus
-//    }
+    fun toFlowable(): Flowable<Any> {
+        return mBus
+    }
+
+    fun toFlowable(consumer: Consumer<RxEvent>): Disposable {
+        return toFlowable(RxEvent::class.java).subscribe(consumer)
+    }
 
     fun hasSubscribers(): Boolean {
         return mBus.hasSubscribers()
-    }
-
-    fun <T> toDefaultFlowable(eventType: Class<T>, act: Consumer<T>): Disposable {
-        return mBus.ofType(eventType).compose { upstream -> upstream.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()) }.subscribe(act)
     }
 
 }
