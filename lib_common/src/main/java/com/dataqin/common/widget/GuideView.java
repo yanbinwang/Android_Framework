@@ -23,6 +23,52 @@ import com.dataqin.common.R;
  * Created by wangyanbin
  * 引导遮罩
  * https://github.com/qiushi123/GuideView-master
+ *
+ *  guideView = GuideView.Builder
+ *  .newInstance(this)
+ *  .setTargetView(menu)//设置目标
+ *  .setCustomGuideView(iv)
+ *  .setDirction(GuideView.Direction.LEFT_BOTTOM)
+ *  .setShape(GuideView.MyShape.CIRCULAR)   // 设置圆形显示区域，
+ *  .setBgColor(getResources().getColor(R.color.shadow))
+ *  .setOnclickListener(new GuideView.OnClickCallback() {
+ *      @Override
+ *      public void onClickedGuideView() {
+ *          guideView.hide();
+ *          guideView2.show();
+ *      }
+ *  }).build();
+ *
+ *  guideView2 = GuideView.Builder
+ *  .newInstance(this)
+ *  .setTargetView(btnTest)
+ *  .setCustomGuideView(tv)
+ *  .setDirction(GuideView.Direction.LEFT_BOTTOM)
+ *  .setShape(GuideView.MyShape.ELLIPSE)   // 设置椭圆形显示区域，
+ *  .setBgColor(getResources().getColor(R.color.shadow))
+ *  .setOnclickListener(new GuideView.OnClickCallback() {
+ *      @Override
+ *      public void onClickedGuideView() {
+ *          guideView2.hide();
+ *          guideView3.show();
+ *      }
+ *  }).build();
+ *
+ *  guideView3 = GuideView.Builder
+ *  .newInstance(this)
+ *  .setTargetView(btnTest2)
+ *  .setCustomGuideView(tv2)
+ *  .setDirction(GuideView.Direction.LEFT_BOTTOM)
+ *  .setShape(GuideView.MyShape.RECTANGULAR)   // 设置矩形显示区域，
+ *  .setRadius(80)          // 设置圆形或矩形透明区域半径，默认是targetView的显示矩形的半径，如果是矩形，这里是设置矩形圆角大小
+ *  .setBgColor(getResources().getColor(R.color.shadow))
+ *  .setOnclickListener(new GuideView.OnClickCallback() {
+ *      @Override
+ *      public void onClickedGuideView() {
+ *          guideView3.hide();
+ *          guideView.show();
+ *      }
+ *  }).build();
  */
 @SuppressLint("ApplySharedPref")
 public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener {
