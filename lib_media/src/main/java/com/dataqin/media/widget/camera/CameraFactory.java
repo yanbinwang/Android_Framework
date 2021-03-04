@@ -45,7 +45,7 @@ public class CameraFactory {
     private OnCameraListener onCameraListener;
     private OnVideoRecordListener onVideoRecordListener;
     private static CameraFactory instance;
-    private static final String TAG = "CameraInterface";
+    private static final String TAG = "CameraFactory";
 
     // <editor-fold defaultstate="collapsed" desc="基础方法">
     public static synchronized CameraFactory getInstance() {
