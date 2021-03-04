@@ -54,18 +54,9 @@ public class XRecyclerView extends SimpleViewGroup {
         mTypedArray.recycle();
     }
 
-    //当view被手机绘制好的时候各个view方法的初始化
-    @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        draw();
-    }
-
     @Override
     public void draw() {
-        if (getChildCount() <= 0) {
-            initRefreshType(refreshType);
-        }
+        initRefreshType(refreshType);
     }
 
     private void initRefreshType(int refreshType) {
@@ -77,7 +68,6 @@ public class XRecyclerView extends SimpleViewGroup {
                 dRv = view.findViewById(R.id.d_rv);
                 if (0 != emptyType) {
                     el = new EmptyLayout(getContext());
-
                     dRv.setEmptyView(el.setListView(dRv));
                     dRv.setHasFixedSize(true);
                     dRv.setItemAnimator(new DefaultItemAnimator());

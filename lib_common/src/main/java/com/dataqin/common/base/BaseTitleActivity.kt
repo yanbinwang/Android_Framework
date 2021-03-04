@@ -9,6 +9,7 @@ import com.dataqin.common.widget.empty.EmptyLayout
 /**
  * Created by WangYanBin on 2020/6/10.
  * 带标题的基类，将整一个xml插入容器
+ * 带标题的详情页一般带有EmptyView，当子页面调取方法时添加
  */
 abstract class BaseTitleActivity<VB : ViewBinding> : BaseActivity<VB>() {
     private val baseBinding by lazy { ActivityBaseBinding.inflate(layoutInflater) }

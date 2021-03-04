@@ -73,16 +73,8 @@ public class EmptyLayout extends SimpleViewGroup {
     }
 
     @Override
-    protected void onFinishInflate() {
-        super.onFinishInflate();
-        draw();
-    }
-
-    @Override
     public void draw() {
-        if (getChildCount() <= 0) {
-            addView(contextView);
-        }
+        addView(contextView);
     }
 
     //设置列表所需的emptyview
