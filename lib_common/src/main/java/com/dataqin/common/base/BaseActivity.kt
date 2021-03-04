@@ -88,9 +88,8 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     }
 
     override fun initEvent() {
-        addDisposable(instance.toFlowable(RxEvent::class.java).subscribe { rxEvent: RxEvent ->
-            val action = rxEvent.getAction()
-            when (action) {
+        addDisposable(instance.toFlowable().subscribe { rxEvent: RxEvent ->
+            when (rxEvent.getAction()) {
                 Constants.APP_USER_LOGIN_OUT -> if ("mainactivity" != TAG) {
                     finish()
                 }

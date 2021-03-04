@@ -31,9 +31,13 @@ class RxBus private constructor() {
         return mBus.ofType(tClass)
     }
 
-    fun toFlowable(): Flowable<Any> {
-        return mBus
+    fun toFlowable(): Flowable<RxEvent> {
+        return toFlowable(RxEvent::class.java)
     }
+
+//    fun toFlowable(): Flowable<Any> {
+//        return mBus
+//    }
 
     fun hasSubscribers(): Boolean {
         return mBus.hasSubscribers()
