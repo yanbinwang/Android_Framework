@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.LinearLayout;
 
-import com.dataqin.common.R;
 import com.dataqin.common.base.BaseDialog;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.common.databinding.ViewDialogHighLightBinding;
@@ -19,7 +18,7 @@ import java.util.List;
 public class HighLightDialog extends BaseDialog<ViewDialogHighLightBinding> {
 
     public HighLightDialog(Context context) {
-        super(context, R.style.dialogStyle);
+        super(context);
         initialize();
     }
 
@@ -34,8 +33,14 @@ public class HighLightDialog extends BaseDialog<ViewDialogHighLightBinding> {
     //正着来，倒着加，点击隐藏
     public void setParams(List<Integer> ids) {
         for (int i = ids.size() - 1; i >= 0; i--) {
+            int index = i;
             View view = LayoutInflater.from(getContext()).inflate(ids.get(i), null);
-            view.setOnClickListener(v -> view.setVisibility(View.GONE));
+            view.setOnClickListener(v -> {
+                view.setVisibility(View.GONE);
+                if (index == ids.size() - 1) {
+                    hide();
+                }
+            });
             binding.rlContainer.addView(view);
         }
     }
