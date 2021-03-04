@@ -75,10 +75,10 @@ public class EmptyLayout extends SimpleViewGroup {
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        addView(contextView);
+        draw();
     }
 
-    //代码new的时候，并不会执行onFinishInflate，需手动添加布局
+    @Override
     public void draw() {
         if (getChildCount() <= 0) {
             addView(contextView);

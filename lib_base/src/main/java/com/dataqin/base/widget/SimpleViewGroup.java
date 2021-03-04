@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 /**
  * 自定义控件继承viewgroup需要清除边距，使用当前类做处理
  */
-public class SimpleViewGroup extends ViewGroup {
+public abstract class SimpleViewGroup extends ViewGroup {
 
     public SimpleViewGroup(Context context) {
         super(context);
@@ -44,5 +44,7 @@ public class SimpleViewGroup extends ViewGroup {
             v.layout(0, 0, r, b);
         }
     }
+
+    public abstract void draw();
 
 }
