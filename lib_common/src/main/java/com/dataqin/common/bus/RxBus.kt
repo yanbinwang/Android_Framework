@@ -14,7 +14,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers
  * 全局刷新工具
  */
 class RxBus private constructor() {
-    private val mBus: FlowableProcessor<Any> = PublishProcessor.create<Any>().toSerialized()
+    private val mBus: FlowableProcessor<Any> by lazy { PublishProcessor.create<Any>().toSerialized() }
 
     companion object {
         @JvmStatic
@@ -31,9 +31,13 @@ class RxBus private constructor() {
         return mBus.ofType(tClass)
     }
 
-    fun toFlowable(): Flowable<Any> {
-        return mBus
+    fun toFlowable(): Flowable<RxEvent> {
+        return toFlowable(RxEvent::class.java)
     }
+
+//    fun toFlowable(): Flowable<Any> {
+//        return mBus
+//    }
 
     fun hasSubscribers(): Boolean {
         return mBus.hasSubscribers()
