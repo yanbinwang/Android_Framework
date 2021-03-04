@@ -456,7 +456,7 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
             return instance;
         }
 
-        public Builder setDirction(Direction dir) {
+        public Builder setDirection(Direction dir) {
             guiderView.setDirection(dir);
             return instance;
         }
