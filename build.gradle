@@ -4,7 +4,7 @@ buildscript {
     apply from: 'config.gradle'
     addRepos(repositories)
     ext.gradle_version = '4.1.2'
-    ext.kotlin_version = '1.4.30'
+    ext.kotlin_version = '1.4.31'
     ext.greendao_version = '3.3.0'
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
