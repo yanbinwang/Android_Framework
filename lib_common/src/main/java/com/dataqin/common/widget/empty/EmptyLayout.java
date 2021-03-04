@@ -78,6 +78,13 @@ public class EmptyLayout extends SimpleViewGroup {
         addView(contextView);
     }
 
+    //代码new的时候，并不会执行onFinishInflate，需手动添加布局
+    public void draw() {
+        if (getChildCount() <= 0) {
+            addView(contextView);
+        }
+    }
+
     //设置列表所需的emptyview
     public View setListView(View listView) {
         removeView(contextView);
