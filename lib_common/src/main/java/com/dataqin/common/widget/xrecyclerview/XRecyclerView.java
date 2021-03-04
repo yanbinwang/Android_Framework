@@ -141,8 +141,12 @@ public class XRecyclerView extends SimpleViewGroup {
         }
     }
 
+    public void hideEmpty() {
+        setEmptyVisibility(View.GONE);
+    }
+
     //类型1的时候才会显示
-    public void setVisibilityEmptyView(int visibility) {
+    public void setEmptyVisibility(int visibility) {
         if (refreshType == 1 && 0 != emptyType) {
             el.setVisibility(visibility);
         }
