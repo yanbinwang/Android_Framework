@@ -1,5 +1,6 @@
 package com.dataqin.common.widget;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +9,6 @@ import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,104 +16,52 @@ import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
 
+import com.dataqin.base.utils.LogUtil;
 import com.dataqin.common.R;
-
-import java.util.List;
 
 /**
  * Created by wangyanbin
  * 引导遮罩
  * https://github.com/qiushi123/GuideView-master
  */
-public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener{
-    private final String TAG = getClass().getSimpleName();
-    private Context mContent;
-    private List<View> mViews;
+@SuppressLint("ApplySharedPref")
+public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlobalLayoutListener {
     private boolean first = true;
-    /**
-     * targetView前缀。SHOW_GUIDE_PREFIX + targetView.getId()作为保存在SP文件的key。
-     */
-    private static final String SHOW_GUIDE_PREFIX = "show_guide_on_view_";
-    /**
-     * GuideView 偏移量
-     */
-    private int offsetX, offsetY;
-    /**
-     * targetView 的外切圆半径
-     */
-    private int radius;
-    /**
-     * 需要显示提示信息的View
-     */
-    private View targetView;
-    /**
-     * 自定义View
-     */
-    private View customGuideView;
-    /**
-     * 透明圆形画笔
-     */
-    private Paint mCirclePaint;
-    /**
-     * 背景色画笔
-     */
-    private Paint mBackgroundPaint;
-    /**
-     * targetView是否已测量
-     */
-    private boolean isMeasured;
-    /**
-     * targetView圆心
-     */
-    private int[] center;
-    /**
-     * 绘图层叠模式
-     */
-    private PorterDuffXfermode porterDuffXfermode;
-    /**
-     * 绘制前景bitmap
-     */
-    private Bitmap bitmap;
-    /**
-     * 背景色和透明度，格式 #aarrggbb
-     */
-    private int backgroundColor;
-    /**
-     * Canvas,绘制bitmap
-     */
-    private Canvas temp;
-    /**
-     * 相对于targetView的位置.在target的那个方向
-     */
-    private Direction direction;
-
-    /**
-     * 形状
-     */
-    private MyShape myShape;
-    /**
-     * targetView左上角坐标
-     */
-    private int[] location;
     private boolean onClickExit;
+    private boolean isMeasured;//targetView是否已测量
+    private int offsetX, offsetY;//GuideView 偏移量
+    private int radius;//targetView 的外切圆半径
+    private int backgroundColor;//背景色和透明度，格式 #aarrggbb
+    private int[] center;//targetView圆心
+    private int[] location;//targetView左上角坐标
+    private View targetView;//需要显示提示信息的View
+    private View customGuideView;//自定义View
+    private Paint mCirclePaint;//透明圆形画笔
+    private PorterDuffXfermode porterDuffXfermode;//绘图层叠模式
+    private Bitmap bitmap;//绘制前景bitmap
     private OnClickCallback onclickListener;
-    private RelativeLayout guideViewLayout;
+    private Canvas temp;//Canvas,绘制bitmap
+    private Direction direction;//相对于targetView的位置.在target的那个方向
+    private MyShape myShape;//形状
+    private final Context mContent;
+    private final String TAG = getClass().getSimpleName();
+    private static final String SHOW_GUIDE_PREFIX = "show_guide_on_view_";//targetView前缀。SHOW_GUIDE_PREFIX + targetView.getId()作为保存在SP文件的key。
+
+    public GuideView(Context context) {
+        super(context);
+        this.mContent = context;
+    }
 
     public void restoreState() {
-        Log.v(TAG, "restoreState");
+        LogUtil.v(TAG, "restoreState");
         offsetX = offsetY = 0;
         radius = 0;
         mCirclePaint = null;
-        mBackgroundPaint = null;
         isMeasured = false;
         center = null;
         porterDuffXfermode = null;
         bitmap = null;
-        needDraw = true;
-        //        backgroundColor = Color.parseColor("#00000000");
         temp = null;
-        //        direction = null;
-
     }
 
     public int[] getLocation() {
@@ -122,12 +70,6 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
 
     public void setLocation(int[] location) {
         this.location = location;
-    }
-
-    public GuideView(Context context) {
-        super(context);
-        this.mContent = context;
-        init();
     }
 
     public int getRadius() {
@@ -171,13 +113,6 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
 
     public void setTargetView(View targetView) {
         this.targetView = targetView;
-        //        restoreState();
-        if (!first) {
-            //            guideViewLayout.removeAllViews();
-        }
-    }
-
-    private void init() {
     }
 
     public void showOnce() {
@@ -205,7 +140,7 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
     }
 
     public void hide() {
-        Log.v(TAG, "hide");
+        LogUtil.v(TAG, "hide");
         if (customGuideView != null) {
             targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             this.removeAllViews();
@@ -215,7 +150,7 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
     }
 
     public void show() {
-        Log.v(TAG, "show");
+        LogUtil.v(TAG, "show");
         if (hasShown())
             return;
 
@@ -234,25 +169,15 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
      * 在屏幕窗口，添加蒙层，蒙层绘制总背景和透明圆形，圆形下边绘制说明文字
      */
     private void createGuideView() {
-        Log.v(TAG, "createGuideView");
-
-        // 添加到蒙层
-        //        if (guideViewLayout == null) {
-        //            guideViewLayout = new RelativeLayout(mContent);
-        //        }
-
+        LogUtil.v(TAG, "createGuideView");
         // Tips布局参数
         LayoutParams guideViewParams;
         guideViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         guideViewParams.setMargins(0, center[1] + radius + 10, 0, 0);
-
         if (customGuideView != null) {
-
-            //            LayoutParams guideViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (direction != null) {
                 int width = this.getWidth();
                 int height = this.getHeight();
-
                 int left = center[0] - radius;
                 int right = center[0] + radius;
                 int top = center[1] - radius;
@@ -293,9 +218,6 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
                 guideViewParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 guideViewParams.setMargins(offsetX, offsetY, -offsetX, -offsetY);
             }
-
-            //            guideViewLayout.addView(customGuideView);
-
             this.addView(customGuideView, guideViewParams);
         }
     }
@@ -324,55 +246,42 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
             int[] size = getTargetViewSize();
             int x = size[0];
             int y = size[1];
-
             return (int) (Math.sqrt(x * x + y * y) / 2);
         }
         return -1;
     }
 
-    boolean needDraw = true;
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.v(TAG, "onDraw");
-
+        LogUtil.v(TAG, "onDraw");
         if (!isMeasured)
             return;
-
         if (targetView == null)
             return;
-
-        //        if (!needDraw) return;
-
         drawBackground(canvas);
-
     }
 
     private void drawBackground(Canvas canvas) {
-        Log.v(TAG, "drawBackground");
-        needDraw = false;
+        LogUtil.v(TAG, "drawBackground");
         // 先绘制bitmap，再将bitmap绘制到屏幕
         bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
         temp = new Canvas(bitmap);
-
         // 背景画笔
         Paint bgPaint = new Paint();
         if (backgroundColor != 0)
             bgPaint.setColor(backgroundColor);
         else
             bgPaint.setColor(getResources().getColor(R.color.shadow));
-
         // 绘制屏幕背景
         temp.drawRect(0, 0, temp.getWidth(), temp.getHeight(), bgPaint);
-
         // targetView 的透明圆形画笔
         if (mCirclePaint == null)
             mCirclePaint = new Paint();
         porterDuffXfermode = new PorterDuffXfermode(PorterDuff.Mode.SRC_OUT);// 或者CLEAR
         mCirclePaint.setXfermode(porterDuffXfermode);
         mCirclePaint.setAntiAlias(true);
-
         if (myShape != null) {
             RectF oval = new RectF();
             switch (myShape) {
@@ -399,7 +308,6 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
         } else {
             temp.drawCircle(center[0], center[1], radius, mCirclePaint);//绘制圆形
         }
-
         // 绘制到屏幕
         canvas.drawBitmap(bitmap, 0, 0, bgPaint);
         bitmap.recycle();
@@ -415,15 +323,12 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
 
     private void setClickInfo() {
         final boolean exit = onClickExit;
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onclickListener != null) {
-                    onclickListener.onClickedGuideView();
-                }
-                if (exit) {
-                    hide();
-                }
+        setOnClickListener(v -> {
+            if (onclickListener != null) {
+                onclickListener.onClickedGuideView();
+            }
+            if (exit) {
+                hide();
             }
         });
     }
@@ -477,10 +382,11 @@ public class GuideView extends RelativeLayout implements ViewTreeObserver.OnGlob
         void onClickedGuideView();
     }
 
+    @SuppressLint("StaticFieldLeak")
     public static class Builder {
-        static GuideView guiderView;
-        static Builder instance = new Builder();
-        Context mContext;
+        private static GuideView guiderView;
+        private static Builder instance = new Builder();
+        private Context mContext;
 
         private Builder() {
         }
