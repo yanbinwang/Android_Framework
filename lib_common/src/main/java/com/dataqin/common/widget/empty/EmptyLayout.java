@@ -74,7 +74,9 @@ public class EmptyLayout extends SimpleViewGroup {
 
     @Override
     public void draw() {
-        addView(contextView);
+        if (getChildCount() <= 0) {
+            addView(contextView);
+        }
     }
 
     //设置列表所需的emptyview
