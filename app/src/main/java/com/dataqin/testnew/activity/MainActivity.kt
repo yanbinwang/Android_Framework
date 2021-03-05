@@ -13,10 +13,6 @@ import com.dataqin.testnew.databinding.ActivityMainBinding
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
 
-    override fun initView() {
-        super.initView()
-    }
-
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_create -> {
