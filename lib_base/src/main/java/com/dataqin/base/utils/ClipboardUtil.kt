@@ -12,10 +12,14 @@ object ClipboardUtil {
     @JvmStatic
     fun putTextIntoClip(context: Context, label: String, text: String) {
         val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-        //创建ClipData对象
-        val clipData = ClipData.newPlainText(label, text)
         //添加ClipData对象到剪切板中
-        clipboardManager.primaryClip = clipData
+        clipboardManager.setPrimaryClip(ClipData.newPlainText(label, text))
+        if (clipboardManager.hasPrimaryClip()) {
+            clipboardManager.primaryClip?.getItemAt(0)?.text
+        }
+//        //创建ClipData对象
+//        val clipData = ClipData.newPlainText(label, text)
+//        clipboardManager.primaryClip = clipData
     }
 
     @JvmStatic

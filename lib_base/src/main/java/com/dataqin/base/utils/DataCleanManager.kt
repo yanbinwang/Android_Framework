@@ -61,9 +61,7 @@ object DataCleanManager {
     @JvmStatic
     fun cleanExternalCache(context: Context) {
         if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            deleteFilesByDirectory(
-                context.externalCacheDir
-            )
+            deleteFilesByDirectory(context.externalCacheDir!!)
         }
     }
 
