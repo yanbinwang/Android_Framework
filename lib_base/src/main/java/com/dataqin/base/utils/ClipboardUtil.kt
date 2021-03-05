@@ -35,7 +35,7 @@ object ClipboardUtil {
         //        //获取 text
         //        String text = clipData.getItemAt(0).getText().toString();
         //获取 text
-        return clipData!!.getItemAt(0).text.toString()
+        return clipData?.getItemAt(0)?.text.toString()
     }
 
 }
