@@ -29,17 +29,44 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
         super.initView()
 
         //https://github.com/huburt-Hu/NewbieGuide
+//        NewbieGuide.with(this)//传入activity
+//            .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
+//            .addGuidePage(GuidePage.newInstance()
+//                    .setLayoutRes(R.layout.view_guide_step_1)
+//                    .addHighLightWithOptions(
+//                        binding.btnCreate2, HighlightOptions.Builder()
+//                            .setOnClickListener {
+//                                showToast("highlight click")
+//                            }.build()))
+//            .alwaysShow(true)
+//            .show()//显示引导层
+
+
         NewbieGuide.with(this)//传入activity
             .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
-            .addGuidePage(GuidePage.newInstance()
+            .addGuidePage(
+                GuidePage.newInstance()
                     .setLayoutRes(R.layout.view_guide_step_1)
+                    .addHighLightWithOptions(
+                        binding.btnCreate, HighlightOptions.Builder()
+                            .setOnClickListener {
+                                showToast("highlight click")
+                            }.build()
+                    )
+            )
+            .addGuidePage(
+                GuidePage.newInstance()
+                    .setLayoutRes(R.layout.view_guide_step_2)
                     .addHighLightWithOptions(
                         binding.btnCreate2, HighlightOptions.Builder()
                             .setOnClickListener {
-                                showToast("highlight click")
-                            }.build()))
+                                showToast("highlight click2")
+
+                            }.build()
+                    )
+            )
             .alwaysShow(true)
-            .show()//显示引导层
+            .show()
     }
 
     override fun onClick(v: View?) {
