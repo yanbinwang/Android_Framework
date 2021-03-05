@@ -86,4 +86,5 @@ dependencies {
     api deps.mmkv
     api deps.recovery
     api deps.greendao
+    api deps.guide
 }
