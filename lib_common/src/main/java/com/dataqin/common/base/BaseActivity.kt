@@ -2,6 +2,7 @@ package com.dataqin.common.base
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -25,6 +26,7 @@ import com.dataqin.common.constant.Extras
 import com.dataqin.common.utils.builder.StatusBarBuilder
 import com.dataqin.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
+import me.jessyan.autosize.AutoSizeCompat
 import java.io.Serializable
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -114,7 +116,10 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         closeDecor(view)
         Timer().schedule(object : TimerTask() {
             override fun run() {
-                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
+                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
+                    0,
+                    InputMethodManager.HIDE_NOT_ALWAYS
+                )
             }
         }, 200)
         val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
@@ -203,6 +208,12 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         }
         log("onDestroy...")
     }
+
+    override fun getResources(): Resources {
+        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
+        AutoSizeCompat.autoConvertDensity(super.getResources(), 750f, true)
+        return super.getResources()
+    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
@@ -249,9 +260,15 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                     cls == String::class.java -> postcard.withString(key, value as String?)
                     cls == Int::class.javaPrimitiveType -> postcard.withInt(key, value as Int)
                     cls == Long::class.javaPrimitiveType -> postcard.withLong(key, value as Long)
-                    cls == Boolean::class.javaPrimitiveType -> postcard.withBoolean(key, value as Boolean)
+                    cls == Boolean::class.javaPrimitiveType -> postcard.withBoolean(
+                        key,
+                        value as Boolean
+                    )
                     cls == Float::class.javaPrimitiveType -> postcard.withFloat(key, value as Float)
-                    cls == Double::class.javaPrimitiveType -> postcard.withDouble(key, value as Double)
+                    cls == Double::class.javaPrimitiveType -> postcard.withDouble(
+                        key,
+                        value as Double
+                    )
                     cls == CharArray::class.java -> postcard.withCharArray(key, value as CharArray?)
                     cls == Bundle::class.java -> postcard.withBundle(key, value as Bundle?)
                     else -> throw RuntimeException("不支持参数类型" + ": " + cls.simpleName)
