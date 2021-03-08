@@ -2,6 +2,7 @@ package com.dataqin.common.base
 
 import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.dataqin.common.base.page.PageHandler
 import com.dataqin.common.databinding.ActivityBaseBinding
 import com.dataqin.common.utils.builder.TitleBuilder
 import com.dataqin.common.widget.empty.EmptyLayout
@@ -35,6 +36,11 @@ abstract class BaseTitleActivity<VB : ViewBinding> : BaseActivity<VB>() {
     protected fun showError() {
         initialize()
         emptyLayout.showError()
+    }
+
+    protected fun setEmptyState(msg: String?, resId: Int = -1, emptyText: String = "") {
+        initialize()
+        PageHandler.setEmptyState(emptyLayout, msg, resId, emptyText)
     }
 
     protected fun hideEmpty() {
