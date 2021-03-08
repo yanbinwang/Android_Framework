@@ -13,10 +13,12 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
 import com.dataqin.common.utils.helper.GenerateHelper
+import com.dataqin.common.utils.helper.GuideHelper
 import com.dataqin.media.utils.helper.MediaFileHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.databinding.ViewCertificateBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -29,44 +31,42 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
         super.initView()
 
         //https://github.com/huburt-Hu/NewbieGuide
+        GuideHelper.show(this, "guide",
+            GuidePage.newInstance()
+                .setLayoutRes(R.layout.view_guide_step_1)
+                .addHighLight(binding.btnCreate),
+            GuidePage.newInstance()
+                .setLayoutRes(R.layout.view_guide_step_2)
+                .addHighLight(binding.btnCreate2)
+        )
+
 //        NewbieGuide.with(this)//传入activity
 //            .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
-//            .addGuidePage(GuidePage.newInstance()
+//            .addGuidePage(
+//                GuidePage.newInstance()
 //                    .setLayoutRes(R.layout.view_guide_step_1)
+////                    .addHighLightWithOptions(
+////                        binding.btnCreate, HighlightOptions.Builder()
+////                            .setOnClickListener {
+////                                showToast("highlight click")
+////                            }.build()
+////                    )
+//                    .addHighLight(binding.btnCreate)
+//                    .addHighLight(binding.btnCreate2)
+//            )
+//            .addGuidePage(
+//                GuidePage.newInstance()
+//                    .setLayoutRes(R.layout.view_guide_step_2)
 //                    .addHighLightWithOptions(
 //                        binding.btnCreate2, HighlightOptions.Builder()
 //                            .setOnClickListener {
-//                                showToast("highlight click")
-//                            }.build()))
+//                                showToast("highlight click2")
+//
+//                            }.build()
+//                    )
+//            )
 //            .alwaysShow(true)
-//            .show()//显示引导层
-
-
-        NewbieGuide.with(this)//传入activity
-            .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
-            .addGuidePage(
-                GuidePage.newInstance()
-                    .setLayoutRes(R.layout.view_guide_step_1)
-                    .addHighLightWithOptions(
-                        binding.btnCreate, HighlightOptions.Builder()
-                            .setOnClickListener {
-                                showToast("highlight click")
-                            }.build()
-                    )
-            )
-            .addGuidePage(
-                GuidePage.newInstance()
-                    .setLayoutRes(R.layout.view_guide_step_2)
-                    .addHighLightWithOptions(
-                        binding.btnCreate2, HighlightOptions.Builder()
-                            .setOnClickListener {
-                                showToast("highlight click2")
-
-                            }.build()
-                    )
-            )
-            .alwaysShow(true)
-            .show()
+//            .show()
     }
 
     override fun onClick(v: View?) {
