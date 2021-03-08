@@ -61,7 +61,7 @@ object ConfigHelper {
     //遮罩引导
     fun showGuide(activity: Activity, label: String, vararg pages: GuidePage) {
         if (!obtainBehavior(label)) {
-            storageBehavior(label,true)
+            storageBehavior(label, true)
             val weakActivity = WeakReference(activity)
             val builder = NewbieGuide.with(weakActivity.get())//传入activity
                 .setLabel(label)//设置引导层标示，用于区分不同引导层，必传！否则报错
@@ -74,12 +74,12 @@ object ConfigHelper {
     }
 
     //获取当前标签的行为-是否第一次启动，是否进入引导页等，针对用户的行为在用户类中单独管理
-    fun obtainBehavior(label: String):Boolean{
+    fun obtainBehavior(label: String): Boolean {
         return mmkv.decodeBool(label, false)
     }
 
     //存储当前想标签行为
-    fun storageBehavior(label: String,value:Boolean):Boolean{
+    fun storageBehavior(label: String, value: Boolean): Boolean {
         return mmkv.encode(label, value)
     }
 
@@ -96,8 +96,7 @@ object ConfigHelper {
 
     //获取当前设备ip地址
     private fun getIp(): String? {
-        val networkInfo =
-            (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+        val networkInfo = (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
             //当前使用2G/3G/4G网络
             if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
@@ -118,8 +117,7 @@ object ConfigHelper {
                 }
                 //当前使用无线网络
             } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
-                val wifiManager =
-                    context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val wifiManager = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
                 //得到IPV4地址
                 return initIp(wifiInfo.ipAddress)
@@ -139,8 +137,7 @@ object ConfigHelper {
     //获取当前设备的mac地址
     private fun getMac(): String? {
         try {
-            val all: List<NetworkInterface> =
-                Collections.list(NetworkInterface.getNetworkInterfaces())
+            val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
             for (nif in all) {
                 if (!nif.name.equals("wlan0", ignoreCase = true)) continue
                 val macBytes = nif.hardwareAddress ?: return null
