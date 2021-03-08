@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.app.hubert.guide.model.GuidePage
-import com.dataqin.common.base.BaseActivity
+import com.dataqin.common.base.BaseTitleActivity
+import com.dataqin.common.base.page.PageHandler
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.common.utils.helper.GenerateHelper
+import com.dataqin.common.widget.empty.EmptyLayout
 import com.dataqin.media.utils.helper.MediaFileHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -22,13 +24,18 @@ import com.dataqin.testnew.databinding.ViewCertificateBinding
  * Created by WangYanBin
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener {
 
     override fun initView() {
         super.initView()
 
+        PageHandler.initialize(EmptyLayout(this), baseBinding.flBaseContainer)
+
+        PageHandler.showError()
+
         //https://github.com/huburt-Hu/NewbieGuide
-        ConfigHelper.show(this, "guide",
+        ConfigHelper.showGuide(
+            this, "guide",
             GuidePage.newInstance()
                 .setLayoutRes(R.layout.view_guide_step_1)
                 .addHighLight(binding.btnCreate),
