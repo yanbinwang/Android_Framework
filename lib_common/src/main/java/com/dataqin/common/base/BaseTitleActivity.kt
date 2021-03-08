@@ -12,7 +12,7 @@ import com.dataqin.common.utils.builder.TitleBuilder
  * 带标题的详情页一般带有EmptyView，当子页面调取方法时添加
  */
 abstract class BaseTitleActivity<VB : ViewBinding> : BaseActivity<VB>() {
-    private val baseBinding by lazy { ActivityBaseBinding.inflate(layoutInflater) }
+    protected val baseBinding by lazy { ActivityBaseBinding.inflate(layoutInflater) }
     protected val titleBuilder by lazy { TitleBuilder(this, baseBinding.titleContainer) } //标题栏
     protected val emptyLayout by lazy { PageHandler.getEmpty(baseBinding.flBaseContainer) }
 
