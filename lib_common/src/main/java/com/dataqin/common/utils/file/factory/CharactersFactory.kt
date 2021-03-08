@@ -2,7 +2,7 @@ package com.dataqin.common.utils.file.factory
 
 import android.os.Looper
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.common.utils.file.callback.OnDownloadListener
+import com.dataqin.common.utils.file.factory.callback.OnDownloadListener
 import com.dataqin.common.utils.handler.WeakHandler
 import okhttp3.*
 import java.io.File

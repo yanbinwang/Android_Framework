@@ -1,6 +1,5 @@
 package com.dataqin.common.widget.dialog;
 
-
 import android.content.Context;
 import android.text.TextUtils;
 
@@ -9,7 +8,6 @@ import androidx.appcompat.app.AlertDialog;
 
 import com.dataqin.common.R;
 import com.dataqin.common.widget.dialog.callback.OnDialogListener;
-
 
 /**
  * author: wyb
