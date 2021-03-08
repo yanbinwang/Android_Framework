@@ -13,7 +13,6 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.common.utils.helper.GenerateHelper
-import com.dataqin.common.widget.empty.EmptyLayout
 import com.dataqin.media.utils.helper.MediaFileHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -29,7 +28,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
 
-        PageHandler.initialize(EmptyLayout(this), baseBinding.flBaseContainer)
+        PageHandler.initialize(baseBinding.flBaseContainer)
 
         PageHandler.showError()
 

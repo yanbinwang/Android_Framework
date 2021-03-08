@@ -26,11 +26,11 @@ object PageHandler {
      * 详情页
      */
     @JvmStatic
-    fun initialize(emptyLayout: EmptyLayout, container: ViewGroup? = null) {
-        this.emptyLayout = emptyLayout
-        if (null != container && container.childCount <= 1) {
-            emptyLayout.draw()
-            emptyLayout.showLoading()
+    fun initialize(container: ViewGroup) {
+        this.emptyLayout = EmptyLayout(container.context)
+        if (container.childCount <= 1) {
+            emptyLayout?.draw()
+            emptyLayout?.showLoading()
             container.addView(emptyLayout)
         }
     }
@@ -98,6 +98,11 @@ object PageHandler {
             str = context.getString(R.string.label_response_err)
         }
         mackToastSHORT(if (!isNetworkAvailable()) context.getString(R.string.label_response_net_err) else str!!, context)
+    }
+
+    @JvmStatic
+    fun hideEmpty() {
+        emptyLayout?.visibility = View.GONE
     }
 
     @JvmStatic
