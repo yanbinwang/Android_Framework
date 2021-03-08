@@ -5,20 +5,17 @@ import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.view.LayoutInflater
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.app.hubert.guide.NewbieGuide
 import com.app.hubert.guide.model.GuidePage
-import com.app.hubert.guide.model.HighlightOptions
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
+import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.common.utils.helper.GenerateHelper
-import com.dataqin.common.utils.helper.GuideHelper
 import com.dataqin.media.utils.helper.MediaFileHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.databinding.ViewCertificateBinding
-import kotlinx.android.synthetic.main.activity_main.*
 
 
 /**
@@ -31,7 +28,7 @@ class MainActivity : BaseActivity<ActivityMainBinding>(), View.OnClickListener {
         super.initView()
 
         //https://github.com/huburt-Hu/NewbieGuide
-        GuideHelper.show(this, "guide",
+        ConfigHelper.show(this, "guide",
             GuidePage.newInstance()
                 .setLayoutRes(R.layout.view_guide_step_1)
                 .addHighLight(binding.btnCreate),
