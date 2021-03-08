@@ -5,6 +5,8 @@ import androidx.viewbinding.ViewBinding
 import com.dataqin.common.base.page.PageHandler
 import com.dataqin.common.databinding.ActivityBaseBinding
 import com.dataqin.common.utils.builder.TitleBuilder
+import com.dataqin.common.widget.empty.EmptyLayout
+import com.dataqin.common.widget.xrecyclerview.XRecyclerView
 
 /**
  * Created by WangYanBin on 2020/6/10.
@@ -14,18 +16,12 @@ import com.dataqin.common.utils.builder.TitleBuilder
 abstract class BaseTitleActivity<VB : ViewBinding> : BaseActivity<VB>() {
     protected val baseBinding by lazy { ActivityBaseBinding.inflate(layoutInflater) }
     protected val titleBuilder by lazy { TitleBuilder(this, baseBinding.titleContainer) } //标题栏
-    protected val emptyLayout by lazy { PageHandler.getEmpty(baseBinding.flBaseContainer) }
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     override fun setContentView(view: View?) {
         baseBinding.flBaseContainer.addView(binding.root)
         super.setContentView(baseBinding.root)
     }
-
-//    override fun initView() {
-//        super.initView()
-//        emptyLayout?.showLoading()
-//    }
     // </editor-fold>
 
 }

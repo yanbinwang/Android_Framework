@@ -61,7 +61,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_create -> {
-                emptyLayout?.showError()
 //                val certificateBinding = ViewCertificateBinding.inflate(LayoutInflater.from(this))
 //                certificateBinding.tvContext.text = "嗷嘮啊啦啦啦啦大師傅似的"
 //                GenerateHelper.create(

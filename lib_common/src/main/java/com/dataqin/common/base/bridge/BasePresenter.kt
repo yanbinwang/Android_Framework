@@ -2,7 +2,9 @@ package com.dataqin.common.base.bridge
 
 import android.app.Activity
 import android.content.Context
+import android.view.View
 import com.dataqin.common.bus.RxManager
+import com.dataqin.common.widget.empty.EmptyLayout
 import io.reactivex.rxjava3.disposables.Disposable
 import java.lang.ref.SoftReference
 import java.lang.ref.WeakReference
@@ -17,6 +19,7 @@ abstract class BasePresenter<T : BaseView> {
     private var weakActivity: WeakReference<Activity>? = null
     private var weakContext: WeakReference<Context>? = null
     private var softView: SoftReference<BaseView>? = null
+    private var emptyLayout: EmptyLayout? = null
     private var rxManager = RxManager()
 
     // <editor-fold defaultstate="collapsed" desc="构造和内部方法">
@@ -37,6 +40,19 @@ abstract class BasePresenter<T : BaseView> {
         if (null != disposable) {
             rxManager.add(disposable)
         }
+    }
+
+    protected fun addEmptyLayout(emptyLayout: EmptyLayout?) {
+        this.emptyLayout = emptyLayout
+        showEmptyLayout()
+    }
+
+    protected fun showEmptyLayout() {
+        emptyLayout?.showLoading()
+    }
+
+    protected fun hideEmptyLayout() {
+        emptyLayout?.visibility = View.GONE
     }
 
     protected fun getView() = softView?.get() as? T

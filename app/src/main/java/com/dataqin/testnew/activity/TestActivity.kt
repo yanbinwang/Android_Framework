@@ -15,6 +15,5 @@ class TestActivity :BaseTitleActivity<ActivityTestBinding>(){
 
     override fun initView() {
         super.initView()
-        emptyLayout?.showEmpty()
     }
 }
