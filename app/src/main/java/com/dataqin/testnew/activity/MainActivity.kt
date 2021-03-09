@@ -41,7 +41,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 ////                            }.build()
 ////                    )
 //                    .addHighLight(binding.btnCreate)
-//                    .addHighLight(binding.btnCreate2)
 //            )
 //            .addGuidePage(
 //                GuidePage.newInstance()
