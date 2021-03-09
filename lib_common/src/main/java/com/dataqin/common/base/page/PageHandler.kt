@@ -18,21 +18,20 @@ import com.dataqin.common.widget.xrecyclerview.XRecyclerView
  */
 @SuppressLint("StaticFieldLeak")
 object PageHandler {
-
     /**
      * 详情页调取方法
      */
     @JvmStatic
-    fun setEmptyState(container: ViewGroup, msg: String?) {
-        setEmptyState(container, msg, -1, null)
+    fun setState(container: ViewGroup, msg: String?) {
+        setState(container, msg, -1, null)
     }
 
     @JvmStatic
-    fun setEmptyState(container: ViewGroup, msg: String?, imgRes: Int, emptyText: String?) {
+    fun setState(container: ViewGroup, msg: String?, imgRes: Int, emptyText: String?) {
         val emptyLayout = if (container is EmptyLayout) {
             container
         } else {
-            getEmpty(container)
+            getEmptyView(container)
         }
         doResponse(msg)
         emptyLayout.visibility = View.VISIBLE
@@ -47,13 +46,13 @@ object PageHandler {
      * 列表页调取方法
      */
     @JvmStatic
-    fun setListEmptyState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int) {
-        setListEmptyState(xRecyclerView, refresh, msg, length, -1, null)
+    fun setState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int) {
+        setState(xRecyclerView, refresh, msg, length, -1, null)
     }
 
     @JvmStatic
-    fun setListEmptyState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int, imgRes: Int, emptyText: String?) {
-        val emptyLayout = getListEmpty(xRecyclerView)
+    fun setState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int, imgRes: Int, emptyText: String?) {
+        val emptyLayout = getEmptyView(xRecyclerView)
         xRecyclerView.finishRefreshing()
         //区分此次刷新是否成功
         if (refresh) {
@@ -63,7 +62,7 @@ object PageHandler {
                 doResponse(msg)
                 return
             }
-            setEmptyState(xRecyclerView, msg, imgRes, emptyText)
+            setState(emptyLayout, msg, imgRes, emptyText)
         }
     }
 
@@ -71,7 +70,7 @@ object PageHandler {
      * 详情页
      */
     @JvmStatic
-    fun getEmpty(container: ViewGroup): EmptyLayout {
+    fun getEmptyView(container: ViewGroup): EmptyLayout {
         val emptyLayout: EmptyLayout?
         if (container.childCount <= 1) {
             emptyLayout = EmptyLayout(container.context)
@@ -88,7 +87,7 @@ object PageHandler {
      * 列表页
      */
     @JvmStatic
-    fun getListEmpty(xRecyclerView: XRecyclerView): EmptyLayout {
+    fun getEmptyView(xRecyclerView: XRecyclerView): EmptyLayout {
         return xRecyclerView.emptyView
     }
 
