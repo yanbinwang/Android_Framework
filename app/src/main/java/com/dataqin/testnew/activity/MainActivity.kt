@@ -28,6 +28,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 .addHighLight(binding.btnCreate2)
         )
 
+
 //        NewbieGuide.with(this)//传入activity
 //            .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
 //            .addGuidePage(
