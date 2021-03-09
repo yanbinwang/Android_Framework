@@ -33,12 +33,12 @@ abstract class BasePresenter<T : BaseView> {
         this.softView = SoftReference(view)
     }
 
-    fun addEmptyView(container: ViewGroup) {
+    fun setEmptyView(container: ViewGroup) {
         this.softEmpty = SoftReference(PageHandler.getEmptyView(container))
         showEmptyView()
     }
 
-    fun addEmptyView(xRecyclerView: XRecyclerView) {
+    fun setEmptyView(xRecyclerView: XRecyclerView) {
         this.softEmpty = SoftReference(PageHandler.getEmptyView(xRecyclerView))
         this.softRecycler = SoftReference(xRecyclerView)
         showEmptyView()
