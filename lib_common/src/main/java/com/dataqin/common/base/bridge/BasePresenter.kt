@@ -19,12 +19,12 @@ import java.lang.ref.WeakReference
  * 完成View和Presenter的关联性
  */
 abstract class BasePresenter<T : BaseView> {
-    private var weakActivity: WeakReference<Activity>? = null
-    private var weakContext: WeakReference<Context>? = null
-    private var softView: SoftReference<BaseView>? = null
-    private var softEmpty: SoftReference<EmptyLayout>? = null
-    private var softRecycler: SoftReference<XRecyclerView>? = null
-    private var rxManager = RxManager()
+    private var weakActivity: WeakReference<Activity>? = null//引用的activity
+    private var weakContext: WeakReference<Context>? = null//引用的context
+    private var softView: SoftReference<BaseView>? = null//基础UI操作
+    private var softEmpty: SoftReference<EmptyLayout>? = null//遮罩UI
+    private var softRecycler: SoftReference<XRecyclerView>? = null//列表UI
+    private var rxManager = RxManager()//请求管理器
 
     // <editor-fold defaultstate="collapsed" desc="构造和内部方法">
     fun initialize(activity: Activity?, context: Context?, view: BaseView?) {
@@ -33,13 +33,13 @@ abstract class BasePresenter<T : BaseView> {
         this.softView = SoftReference(view)
     }
 
-    fun addEmptyView(container: ViewGroup) {
-        this.softEmpty = SoftReference(PageHandler.getEmpty(container))
+    fun setEmptyView(container: ViewGroup) {
+        this.softEmpty = SoftReference(PageHandler.getEmptyView(container))
         showEmptyView()
     }
 
-    fun addEmptyView(xRecyclerView: XRecyclerView) {
-        this.softEmpty = SoftReference(PageHandler.getListEmpty(xRecyclerView))
+    fun setEmptyView(xRecyclerView: XRecyclerView) {
+        this.softEmpty = SoftReference(PageHandler.getEmptyView(xRecyclerView))
         this.softRecycler = SoftReference(xRecyclerView)
         showEmptyView()
     }

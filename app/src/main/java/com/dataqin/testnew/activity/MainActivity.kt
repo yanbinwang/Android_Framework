@@ -9,7 +9,6 @@ import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 
-
 /**
  * Created by WangYanBin
  */
