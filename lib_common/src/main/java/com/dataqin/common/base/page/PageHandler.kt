@@ -29,11 +29,11 @@ object PageHandler {
     fun setEmptyState(container: ViewGroup, msg: String?, imgRes: Int, emptyText: String?) {
         val emptyLayout = getEmpty(container)
         doResponse(msg)
-        emptyLayout?.visibility = View.VISIBLE
+        emptyLayout.visibility = View.VISIBLE
         if (!isNetworkAvailable()) {
-            emptyLayout?.showError()
+            emptyLayout.showError()
         } else {
-            emptyLayout?.showEmpty(imgRes, emptyText)
+            emptyLayout.showEmpty(imgRes, emptyText)
         }
     }
 
@@ -49,7 +49,7 @@ object PageHandler {
         xRecyclerView.finishRefreshing()
         //区分此次刷新是否成功
         if (refresh) {
-            emptyLayout?.visibility = View.GONE
+            emptyLayout.visibility = View.GONE
         } else {
             if (length > 0) {
                 doResponse(msg)
@@ -62,13 +62,15 @@ object PageHandler {
     /**
      * 详情页
      */
-    fun getEmpty(container: ViewGroup): EmptyLayout? {
+    fun getEmpty(container: ViewGroup): EmptyLayout {
         var emptyLayout: EmptyLayout? = null
         if (container.childCount <= 1) {
             emptyLayout = EmptyLayout(container.context)
             emptyLayout.draw()
             emptyLayout.showLoading()
             container.addView(emptyLayout)
+        } else {
+            emptyLayout = container.getChildAt(1) as EmptyLayout
         }
         return emptyLayout
     }
@@ -76,7 +78,7 @@ object PageHandler {
     /**
      * 列表页
      */
-    fun getListEmpty(xRecyclerView: XRecyclerView): EmptyLayout? {
+    fun getListEmpty(xRecyclerView: XRecyclerView): EmptyLayout {
         return xRecyclerView.emptyView
     }
 
