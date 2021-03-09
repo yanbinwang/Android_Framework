@@ -33,6 +33,17 @@ abstract class BasePresenter<T : BaseView> {
         this.softView = SoftReference(view)
     }
 
+    fun addEmptyView(container: ViewGroup) {
+        this.softEmpty = SoftReference(PageHandler.getEmpty(container))
+        showEmptyView()
+    }
+
+    fun addEmptyView(xRecyclerView: XRecyclerView) {
+        this.softEmpty = SoftReference(PageHandler.getListEmpty(xRecyclerView))
+        this.softRecycler = SoftReference(xRecyclerView)
+        showEmptyView()
+    }
+
     fun detachView() {
         weakActivity?.clear()
         weakContext?.clear()
@@ -46,17 +57,6 @@ abstract class BasePresenter<T : BaseView> {
         if (null != disposable) {
             rxManager.add(disposable)
         }
-    }
-
-    protected fun addEmptyView(container: ViewGroup) {
-        this.softEmpty = SoftReference(PageHandler.getEmpty(container))
-        showEmptyView()
-    }
-
-    protected fun addEmptyView(xRecyclerView: XRecyclerView) {
-        this.softEmpty = SoftReference(PageHandler.getListEmpty(xRecyclerView))
-        this.softRecycler = SoftReference(xRecyclerView)
-        showEmptyView()
     }
 
     protected fun showEmptyView() {
