@@ -27,7 +27,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 .setLayoutRes(R.layout.view_guide_step_2)
                 .addHighLight(binding.btnCreate2)
         )
-
 //        NewbieGuide.with(this)//传入activity
 //            .setLabel("guide1")//设置引导层标示，用于区分不同引导层，必传！否则报错
 //            .addGuidePage(
