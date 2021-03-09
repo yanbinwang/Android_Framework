@@ -76,8 +76,8 @@ object GSYVideoHelper {
             val gsyVideoOption = GSYVideoOptionBuilder()
             gsyVideoOption
                 .setIsTouchWiget(false)
-                .setRotateViewAuto(false)
-                .setLockLand(false)
+                .setRotateViewAuto(true)
+                .setLockLand(true)
                 .setAutoFullWithSize(false)
                 .setShowFullAnimation(false)
                 .setNeedLockFull(true)
@@ -122,6 +122,7 @@ object GSYVideoHelper {
 
     //写在系统的onDestroy之后
     fun onDestroy() {
+        onPause()
         player?.currentPlayer?.release()
         orientationUtils?.releaseListener()
     }
