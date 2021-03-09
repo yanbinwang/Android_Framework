@@ -27,7 +27,11 @@ object PageHandler {
     }
 
     fun setEmptyState(container: ViewGroup, msg: String?, imgRes: Int, emptyText: String?) {
-        val emptyLayout = getEmpty(container)
+        val emptyLayout = if (container is EmptyLayout) {
+            container
+        } else {
+            getEmpty(container)
+        }
         doResponse(msg)
         emptyLayout.visibility = View.VISIBLE
         if (!isNetworkAvailable()) {
@@ -63,7 +67,7 @@ object PageHandler {
      * 详情页
      */
     fun getEmpty(container: ViewGroup): EmptyLayout {
-        var emptyLayout: EmptyLayout? = null
+        val emptyLayout: EmptyLayout?
         if (container.childCount <= 1) {
             emptyLayout = EmptyLayout(container.context)
             emptyLayout.draw()
@@ -91,7 +95,10 @@ object PageHandler {
         if (TextUtils.isEmpty(str)) {
             str = context.getString(R.string.label_response_err)
         }
-        mackToastSHORT(if (!isNetworkAvailable()) context.getString(R.string.label_response_net_err) else str!!, context)
+        mackToastSHORT(
+            if (!isNetworkAvailable()) context.getString(R.string.label_response_net_err) else str!!,
+            context
+        )
     }
 
 //    @JvmStatic
