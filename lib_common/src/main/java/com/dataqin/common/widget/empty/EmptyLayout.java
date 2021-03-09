@@ -35,8 +35,8 @@ public class EmptyLayout extends SimpleViewGroup {
     private TextView tvEmpty;//文本
     private TextView tvRefresh;//刷新
     private OnEmptyRefreshListener onEmptyRefreshListener;
-    private final String EMPTY_TXT = "没有数据";//数据为空时的内容
-    private final String ERROR_TXT = "没有网络";//数据加载失败的内容
+    private static final String EMPTY_TXT = "没有数据";//数据为空时的内容
+    private static final String ERROR_TXT = "没有网络";//数据加载失败的内容
 
     public EmptyLayout(Context context) {
         super(context);
@@ -109,11 +109,7 @@ public class EmptyLayout extends SimpleViewGroup {
             ivEmpty.setImageResource(resId);
         }
         tvEmpty.setVisibility(View.VISIBLE);
-        if (TextUtils.isEmpty(emptyText)) {
-            tvEmpty.setText(EMPTY_TXT);
-        } else {
-            tvEmpty.setText(emptyText);
-        }
+        tvEmpty.setText(TextUtils.isEmpty(emptyText) ? EMPTY_TXT : emptyText);
         tvRefresh.setVisibility(View.VISIBLE);
     }
 
