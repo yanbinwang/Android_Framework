@@ -62,13 +62,9 @@ class SdcardStateModel {
     var rootPath: String? = null
     var excludePath: String? = null//排除路径，某些手机会将扩展卡挂载在sdcard下面
     var name: String? = null
-    var format: Format? = null
+    var format: SdcardFormat? = null
 
-    enum class Format {
-        vfat, exfat, ext4, fuse, sdcardfs, texfat
-    }
-
-    constructor(path: String, format: Format, voldMinorIdx: Int, excludePath: String = "") {
+    constructor(path: String, format: SdcardFormat, voldMinorIdx: Int, excludePath: String = "") {
         val stat = getDiskCapacity(path)
         if (stat != null) {
             this.freeSize = stat.free
@@ -81,8 +77,8 @@ class SdcardStateModel {
         this.excludePath = excludePath
     }
 
-    private fun checkCaseSensitive(format: Format): Boolean {
-        return format != Format.vfat && format != Format.exfat
+    private fun checkCaseSensitive(format: SdcardFormat): Boolean {
+        return format != SdcardFormat.vfat && format != SdcardFormat.exfat
     }
 
     private fun setUpExcludePath(excludePath: String) {

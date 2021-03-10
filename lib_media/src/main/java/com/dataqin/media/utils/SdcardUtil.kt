@@ -5,6 +5,7 @@ import android.os.Environment
 import android.text.TextUtils
 import androidx.core.content.ContextCompat
 import com.dataqin.base.utils.LogUtil.d
+import com.dataqin.media.model.SdcardFormat
 import com.dataqin.media.model.SdcardStateModel
 import java.io.BufferedReader
 import java.io.File
@@ -173,7 +174,7 @@ object SdcardUtil {
                     continue
                 }
                 val format = findSDCardFormat(cols) ?: continue
-                val minorIdx = if (SdcardStateModel.Format.vfat === format || SdcardStateModel.Format.exfat === format || SdcardStateModel.Format.texfat === format) findVoldDevNodeMinorIndex(cols) else -100
+                val minorIdx = if (SdcardFormat.vfat === format || SdcardFormat.exfat === format || SdcardFormat.texfat === format) findVoldDevNodeMinorIndex(cols) else -100
                 val stat = SdcardStateModel(path!!, format, minorIdx, "")
                 d(TAG, "path--------1-------$path")
                 if (!compareData(list, stat.totalSize)) {
@@ -293,10 +294,10 @@ object SdcardUtil {
     }
 
     //根据mount信息解析sdcard分区格式
-    private fun findSDCardFormat(mountInfo: Array<String>): SdcardStateModel.Format? {
+    private fun findSDCardFormat(mountInfo: Array<String>): SdcardFormat? {
         var formatMinLength = 0
         var formatMaxLength = 0
-        for (format in SdcardStateModel.Format.values()) {
+        for (format in SdcardFormat.values()) {
             val len = format.toString().length
             if (len > formatMaxLength) {
                 formatMaxLength = len
@@ -308,7 +309,7 @@ object SdcardUtil {
             if (col.length < formatMinLength || col.length > formatMaxLength) {
                 continue
             }
-            for (format in SdcardStateModel.Format.values()) {
+            for (format in SdcardFormat.values()) {
                 if (format.toString() == col) {
                     return format
                 }
