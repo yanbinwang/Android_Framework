@@ -19,8 +19,8 @@ import java.util.*
  *  相机文件管理工具类
  */
 object MediaFileHelper {
-    private const val TYPE_PHOTO = 0
-    private const val TYPE_VIDEO = 1
+//    private const val TYPE_PHOTO = 0
+//    private const val TYPE_VIDEO = 1
     private const val TAG = "MediaFileUtil"
 
     //获取对应文件类型的存储地址

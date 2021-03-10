@@ -106,4 +106,6 @@ dependencies {
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
+
+    implementation 'com.otaliastudios:cameraview:2.7.0'
 }
