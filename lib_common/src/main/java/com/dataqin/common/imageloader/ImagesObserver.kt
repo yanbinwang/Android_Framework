@@ -1,4 +1,4 @@
-package com.dataqin.media.utils
+package com.dataqin.common.imageloader
 
 import android.database.ContentObserver
 import android.database.Cursor
