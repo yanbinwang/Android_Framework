@@ -8,8 +8,12 @@ import java.io.File
  */
 interface OnTakePictureListener {
 
+    fun onStart()
+
     fun onSuccess(pictureFile: File)
 
     fun onFailed()
+
+    fun onComplete()
 
 }

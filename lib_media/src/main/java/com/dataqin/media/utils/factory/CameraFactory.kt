@@ -50,25 +50,30 @@ class CameraFactory private constructor() {
         cvFinder.preview = Preview.GL_SURFACE//绘制相机的装载控件
         cvFinder.facing = Facing.BACK//打开时镜头默认后置
         cvFinder.flash = Flash.AUTO//闪光灯自动
-//        cvFinder.mode = mode//拍照模式还是录像模式
     }
 
-    //镜头翻转
+    /**
+     * 镜头翻转
+     */
     fun toggleCamera() {
         cvFinder?.toggleFacing()
     }
 
-    //拍照
-    fun takePicture() {
-        cvFinder?.takePicture()
+    /**
+     * 拍照/抓拍
+     */
+    fun takePicture(isSnapshot: Boolean = false) {
+        onTakePictureListener?.onStart()
+        if (isSnapshot) {
+            cvFinder?.takePictureSnapshot()
+        } else {
+            cvFinder?.takePicture()
+        }
         cvFinder?.addCameraListener(object : CameraListener() {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(
-                    MEDIA_TYPE_IMAGE,
-                    Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
-                )
+                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH)
                 if (null != pictureFile) {
                     result.toFile(pictureFile) { file ->
                         if (null != file) {
@@ -80,24 +85,22 @@ class CameraFactory private constructor() {
                 } else {
                     onTakePictureListener?.onFailed()
                 }
+                onTakePictureListener?.onComplete()
             }
         })
     }
 
-    //开始录像
+    /**
+     * 开始录像
+     */
     fun startRecorder() {
-        val videoFile = MediaFileUtil.getOutputMediaFile(
-            MEDIA_TYPE_VIDEO,
-            Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH
-        )
+        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH)
         if (null != videoFile) {
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {
-
                 override fun onVideoTaken(result: VideoResult) {
                     super.onVideoTaken(result)
                     onVideoRecordListener?.onRecorderTaken(result.file.path)
-                    onVideoRecordListener?.onStopRecorder()
                 }
 
                 override fun onVideoRecordingStart() {
@@ -105,46 +108,22 @@ class CameraFactory private constructor() {
                     onVideoRecordListener?.onStartRecorder()
                 }
 
-//                //onVideoRecordingEnd比onVideoTaken先调取
-//                override fun onVideoRecordingEnd() {
-//                    super.onVideoRecordingEnd()
-//                }
+                //onVideoRecordingEnd比onVideoTaken先调取
+                override fun onVideoRecordingEnd() {
+                    super.onVideoRecordingEnd()
+                    onVideoRecordListener?.onStopRecorder()
+                }
             })
         } else {
             onVideoRecordListener?.onStopRecorder()
         }
     }
 
-    //停止录像
+    /**
+     * 停止录像
+     */
     fun stopRecorder() {
         cvFinder?.stopVideo()
-    }
-
-    //截屏-抓拍
-    fun screenshot() {
-        cvFinder?.takePictureSnapshot()
-        cvFinder?.addCameraListener(object : CameraListener() {
-
-            override fun onPictureTaken(result: PictureResult) {
-                super.onPictureTaken(result)
-                //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(
-                    MEDIA_TYPE_IMAGE,
-                    Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
-                )
-                if (null != pictureFile) {
-                    result.toFile(pictureFile) { file ->
-                        if (null != file) {
-                            onTakePictureListener?.onSuccess(file)
-                        } else {
-                            onTakePictureListener?.onFailed()
-                        }
-                    }
-                } else {
-                    onTakePictureListener?.onFailed()
-                }
-            }
-        })
     }
 
 }

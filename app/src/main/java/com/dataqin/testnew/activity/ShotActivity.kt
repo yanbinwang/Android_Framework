@@ -28,12 +28,20 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
         onClick(this, binding.btnShot, binding.btnSwitch)
 
         CameraFactory.instance.onTakePictureListener = object : OnTakePictureListener {
+            override fun onStart() {
+                showDialog()
+            }
+
             override fun onSuccess(pictureFile: File) {
                 showToast("拍摄完成\n状态：成功\n地址：" + pictureFile.path)
             }
 
             override fun onFailed() {
                 showToast("拍摄完成\n状态：失败")
+            }
+
+            override fun onComplete() {
+                hideDialog()
             }
         }
     }
