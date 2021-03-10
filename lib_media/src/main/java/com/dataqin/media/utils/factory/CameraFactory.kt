@@ -122,7 +122,7 @@ class CameraFactory private constructor() {
                     onVideoRecordListener?.onStartRecorder()
                 }
 
-//                //onVideoRecordingEnd比onVideoTaken先调取,文件此时可能还在存储，可处理UI的复位
+//                //onVideoRecordingEnd比onVideoTaken先调取,文件此时可能还在存储
 //                override fun onVideoRecordingEnd() {
 //                    super.onVideoRecordingEnd()
 //                    onVideoRecordListener?.onStopRecorder()
