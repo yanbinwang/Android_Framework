@@ -43,6 +43,8 @@ object ConfigHelper {
         Constants.SCREEN_WIDTH = metric.widthPixels
         //屏幕高度（像素）
         Constants.SCREEN_HEIGHT = metric.heightPixels
+        //屏幕比值 (dp)
+        Constants.SCREEN_DENSITY = metric.densityDpi
         //获取手机的导航栏高度
         Constants.STATUS_BAR_HEIGHT = context!!.resources.getDimensionPixelSize(context!!.resources.getIdentifier("status_bar_height", "dimen", "android"))
         //获取手机的网络ip

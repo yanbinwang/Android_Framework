@@ -1,6 +1,5 @@
 package com.dataqin.common.constant
 
-import android.os.Environment
 import com.dataqin.common.BaseApplication
 
 /**
@@ -13,6 +12,8 @@ object Constants {
     var SCREEN_WIDTH = 0//手机宽度
     @JvmField
     var SCREEN_HEIGHT = 0//手机高度
+    @JvmField
+    var SCREEN_DENSITY = 0//手机比值
     @JvmField
     var STATUS_BAR_HEIGHT = 0//导航栏高度
     //------gradle4.1.0开始，库中不提供VERSION_CODE和VERSION_NAME，在主app中获取，赋值给全局静态变量------
@@ -51,6 +52,8 @@ object Constants {
     //系统广播
     const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
     const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
+    const val APP_SCREEN_FILE_CREATE = "com.bitnew.oes.APP_SCREEN_FILE_CREATE"//录频文件创建
+
     const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
     const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
     const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败
