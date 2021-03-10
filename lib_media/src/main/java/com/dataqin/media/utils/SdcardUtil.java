@@ -48,7 +48,7 @@ public class SdcardUtil {
     public static long getInnerSDAvailableSize(Context context) {
         ArrayList<SdcardStateModel> sdcardStateModelList = getSdCardStateModels(context);
         if (sdcardStateModelList.size() > 0) {
-            return sdcardStateModelList.get(0).freeSize / 1024 / 1024;
+            return sdcardStateModelList.get(0).getFreeSize() / 1024 / 1024;
         } else {
             return 0;
         }
@@ -63,7 +63,7 @@ public class SdcardUtil {
         ArrayList<SdcardStateModel> sdcardStateModelList = getSdCardStateModels(context);
         if (sdcardStateModelList.size() > 0) {
             SdcardStateModel SdCardStateModel = sdcardStateModelList.get(0);
-            return (SdCardStateModel.totalSize - SdCardStateModel.freeSize) / 1024 / 1024;
+            return (SdCardStateModel.getTotalSize() - SdCardStateModel.getFreeSize()) / 1024 / 1024;
         } else {
             return 0;
         }
@@ -77,7 +77,7 @@ public class SdcardUtil {
     public static long getSDAvailableSize(Context context) {
         ArrayList<SdcardStateModel> sdcardStateModelList = getSdCardStateModels(context);
         if (sdcardStateModelList.size() > 0) {
-            return sdcardStateModelList.get(sdcardStateModelList.size() - 1).freeSize / 1024 / 1024;
+            return sdcardStateModelList.get(sdcardStateModelList.size() - 1).getFreeSize() / 1024 / 1024;
         } else {
             return 0;
         }
@@ -92,7 +92,7 @@ public class SdcardUtil {
         ArrayList<SdcardStateModel> sdcardStateModelList = getSdCardStateModels(context);
         if (sdcardStateModelList.size() > 0) {
             SdcardStateModel SdCardStateModel = sdcardStateModelList.get(sdcardStateModelList.size() - 1);
-            return (SdCardStateModel.totalSize - SdCardStateModel.freeSize) / 1024 / 1024;
+            return (SdCardStateModel.getTotalSize() - SdCardStateModel.getFreeSize()) / 1024 / 1024;
         } else {
             return 0;
         }
@@ -153,8 +153,8 @@ public class SdcardUtil {
      */
     public static String getShowSDPath(SdcardStateModel stat) {
         String showPath = "";
-        String path = stat.rootPath;
-        if (Build.VERSION.SDK_INT >= 19 && !stat.canWrite) {
+        String path = stat.getRootPath();
+        if (Build.VERSION.SDK_INT >= 19 && !stat.getCanWrite()) {
             int index = path.indexOf("Android/data/");
             if (index != -1) {
                 showPath = path.substring(index);
@@ -197,23 +197,23 @@ public class SdcardUtil {
                 }
 
                 int minorIdx = (SdcardStateModel.Format.vfat == format || SdcardStateModel.Format.exfat == format || SdcardStateModel.Format.texfat == format) ? findVoldDevNodeMinorIndex(cols) : -100;
-                SdcardStateModel stat = new SdcardStateModel(path, format, minorIdx);
+                SdcardStateModel stat = new SdcardStateModel(path, format, minorIdx,"");
                 LogUtil.d(TAG, "path--------1-------" + path);
-                if (!compareData(list, stat.totalSize)) {
+                if (!compareData(list, stat.getTotalSize())) {
                     continue;
                 }
 
                 // 4.4以上版本修改trootPath路径，因为4.4及以上版本不支持往外置SD卡根目录写权限
                 if (Build.VERSION.SDK_INT >= 19) {
                     if (!sdCardCanWrite(path)) {
-                        stat.canWrite = false;
+                        stat.setCanWrite(false);
                         File[] filePath = ContextCompat.getExternalFilesDirs(
                                 context, null);
                         if (filePath != null) {
                             for (File f : filePath) {
                                 if (f != null) {
                                     if (f.getAbsolutePath().startsWith(path)) {
-                                        stat.rootPath = f.getAbsolutePath();
+                                        stat.setRootPath(f.getAbsolutePath());
                                         LogUtil.d(TAG, "path--------if-------" + path);
                                         list.add(stat);
                                         break;
@@ -238,11 +238,11 @@ public class SdcardUtil {
         list = sortSDCardList(list);
         for (int idx = 0, size = list.size(); idx < size; idx++) {
             if (idx == 0) {
-                list.get(0).name = (size == 1) ? DIR_SINGLE_SDCARD_NAME : DIR_SDCARD_NAME;
+                list.get(0).setName((size == 1) ? DIR_SINGLE_SDCARD_NAME : DIR_SDCARD_NAME);
             } else if (idx == 1) {
-                list.get(1).name = DIR_EXT_SDCARD_NAME;
+                list.get(1).setName(DIR_EXT_SDCARD_NAME);
             } else {
-                list.get(idx).name = DIR_EXT_SDCARD_NAME + idx;
+                list.get(idx).setName(DIR_EXT_SDCARD_NAME + idx);
             }
         }
         return list;
@@ -356,7 +356,7 @@ public class SdcardUtil {
         //排除内置或外置重复路径
         if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).totalSize == capacity) {
+                if (list.get(i).getTotalSize() == capacity) {
                     LogUtil.d(TAG, "duplicate-------------------------");
                     return false;
                 }
@@ -404,13 +404,13 @@ public class SdcardUtil {
         for (SdcardStateModel stat : list) {
             if (minIdx == 0) {
                 resultList.add(stat);
-                minIdx = stat.voldMinorIdx;
+                minIdx = stat.getVoldMinorIdx();
                 continue;
             }
 
-            if (stat.voldMinorIdx < minIdx || isInnerSdcard(stat.rootPath, stat.totalSize)) {
+            if (stat.getVoldMinorIdx() < minIdx || isInnerSdcard(stat.getRootPath(), stat.getTotalSize())) {
                 resultList.add(0, stat);
-                minIdx = stat.voldMinorIdx;
+                minIdx = stat.getVoldMinorIdx();
             } else {
                 resultList.add(stat);
             }
