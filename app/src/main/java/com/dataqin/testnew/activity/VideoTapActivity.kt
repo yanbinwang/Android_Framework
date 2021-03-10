@@ -35,17 +35,14 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
                 showToast("开始录制")
             }
 
-            override fun onRecorderTaken(path: String) {
+            override fun onStopRecorder(path: String?) {
                 if (!TextUtils.isEmpty(path)) {
-                    showToast("录制状态：成功\n地址：$path")
+                    showToast("结束录制\n状态：成功\n地址：$path")
                 } else {
-                    showToast("录制状态：失败")
+                    showToast("结束录制\n状态：失败")
                 }
             }
 
-            override fun onStopRecorder() {
-                showToast("结束录制")
-            }
         }
         CameraFactory.instance.onTakePictureListener = object : OnTakePictureListener {
             override fun onStart() {

@@ -8,8 +8,6 @@ interface OnVideoRecordListener {
 
     fun onStartRecorder()
 
-    fun onRecorderTaken(path: String)
-
-    fun onStopRecorder()
+    fun onStopRecorder(path: String?)
 
 }

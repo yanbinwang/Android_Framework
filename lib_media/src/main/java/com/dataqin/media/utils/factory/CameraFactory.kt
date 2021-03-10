@@ -53,6 +53,13 @@ class CameraFactory private constructor() {
     }
 
     /**
+     * 复位
+     */
+    fun reset() {
+        cvFinder?.zoom = 0f
+    }
+
+    /**
      * 镜头翻转
      */
     fun toggleCamera() {
@@ -73,7 +80,10 @@ class CameraFactory private constructor() {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH)
+                val pictureFile = MediaFileUtil.getOutputMediaFile(
+                    MEDIA_TYPE_IMAGE,
+                    Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
+                )
                 if (null != pictureFile) {
                     result.toFile(pictureFile) { file ->
                         if (null != file) {
@@ -94,13 +104,17 @@ class CameraFactory private constructor() {
      * 开始录像
      */
     fun startRecorder() {
-        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH)
+        val videoFile = MediaFileUtil.getOutputMediaFile(
+            MEDIA_TYPE_VIDEO,
+            Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH
+        )
         if (null != videoFile) {
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {
+                //正式完成录制的回调，获取路径
                 override fun onVideoTaken(result: VideoResult) {
                     super.onVideoTaken(result)
-                    onVideoRecordListener?.onRecorderTaken(result.file.path)
+                    onVideoRecordListener?.onStopRecorder(result.file.path)
                 }
 
                 override fun onVideoRecordingStart() {
@@ -108,14 +122,14 @@ class CameraFactory private constructor() {
                     onVideoRecordListener?.onStartRecorder()
                 }
 
-                //onVideoRecordingEnd比onVideoTaken先调取
-                override fun onVideoRecordingEnd() {
-                    super.onVideoRecordingEnd()
-                    onVideoRecordListener?.onStopRecorder()
-                }
+//                //onVideoRecordingEnd比onVideoTaken先调取,文件此时可能还在存储，可处理UI的复位
+//                override fun onVideoRecordingEnd() {
+//                    super.onVideoRecordingEnd()
+//                    onVideoRecordListener?.onStopRecorder()
+//                }
             })
         } else {
-            onVideoRecordListener?.onStopRecorder()
+            onVideoRecordListener?.onStopRecorder(null)
         }
     }
 
