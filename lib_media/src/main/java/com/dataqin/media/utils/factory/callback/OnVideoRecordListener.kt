@@ -1,4 +1,4 @@
-package com.dataqin.media.widget.camera.callback
+package com.dataqin.media.utils.factory.callback
 
 /**
  *  Created by wangyanbin
@@ -6,7 +6,9 @@ package com.dataqin.media.widget.camera.callback
  */
 interface OnVideoRecordListener {
 
-    fun onStartRecorder(path: String?)
+    fun onStartRecorder()
+
+    fun onRecorderTaken(path: String)
 
     fun onStopRecorder()
 

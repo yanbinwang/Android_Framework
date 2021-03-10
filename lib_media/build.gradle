@@ -38,4 +38,5 @@ dependencies {
     api project(':lib_common')
     api deps.player.gsy_player
     api deps.player.gsy_exo
+    api deps.cameraview
 }

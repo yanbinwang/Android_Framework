@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.helper
+package com.dataqin.media.utils.factory
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -21,22 +21,29 @@ import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
- *  播放器工具类
+ *  视频播放器工具类
  */
 @SuppressLint("StaticFieldLeak")
-object GSYVideoHelper {
+class GSYVideoFactory private constructor(){
     private var retryNum = 0
     private var weakActivity: WeakReference<Activity>? = null
     private var imgCover: ImageView? = null
     private var player: StandardGSYVideoPlayer? = null
     private var orientationUtils: OrientationUtils? = null
 
+    companion object {
+        @JvmStatic
+        val instance: GSYVideoFactory by lazy {
+            GSYVideoFactory()
+        }
+    }
+
     /**
      * activity-视频对应页面
      * player-视频对应播放器
      * fullScreen-是否全屏（默认不全屏）
      */
-    fun initialize(activity: Activity, player: StandardGSYVideoPlayer, fullScreen: Boolean = false) {
+    fun initialize(activity: Activity, standardGSYVideoPlayer: StandardGSYVideoPlayer, fullScreen: Boolean = false) {
 //        GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)//是否平铺屏幕
 //        GSYVideoType.enableMediaCodecTexture()
         GSYVideoType.setRenderType(GSYVideoType.SUFRACE)//底层渲染
@@ -45,23 +52,23 @@ object GSYVideoHelper {
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
         weakActivity = WeakReference(activity)
-        GSYVideoHelper.player = player
+        player = standardGSYVideoPlayer
         imgCover = ImageView(weakActivity?.get())
         imgCover?.scaleType = ImageView.ScaleType.CENTER_CROP
-        player.titleTextView.visibility = View.GONE
-        player.backButton.visibility = View.GONE
-        player.thumbImageView = imgCover
+        player?.titleTextView?.visibility = View.GONE
+        player?.backButton?.visibility = View.GONE
+        player?.thumbImageView = imgCover
         if (!fullScreen) {
-            player.fullscreenButton.visibility = View.GONE
+            player?.fullscreenButton?.visibility = View.GONE
         } else {
             //外部辅助的旋转，帮助全屏
             orientationUtils = OrientationUtils(weakActivity?.get(), player)
             //初始化不打开外部的旋转
             orientationUtils?.isEnable = false
-            player.fullscreenButton.setOnClickListener { //直接横屏
+            player?.fullscreenButton?.setOnClickListener { //直接横屏
                 orientationUtils?.resolveByClick()
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
-                player.startWindowFullscreen(weakActivity?.get(), true, true)
+                player?.startWindowFullscreen(weakActivity?.get(), true, true)
             }
         }
     }

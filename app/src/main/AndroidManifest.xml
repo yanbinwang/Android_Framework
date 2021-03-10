@@ -58,7 +58,12 @@
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.ShotActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.VideoTapActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
 

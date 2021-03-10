@@ -7,19 +7,23 @@
     android:padding="20mm">
 
     <Button
-        android:id="@+id/btn_create"
+        android:id="@+id/btn_shot"
         android:layout_width="match_parent"
         android:layout_height="80mm"
-        android:onClick="onClick"
-        android:text="生成证书"
+        android:text="拍照"
         android:background="@color/black"
         android:textColor="@color/white"
         android:textSize="32mm" />
 
-    <ImageView
-        android:id="@+id/iv_certificate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/btn_video_tap"
+        android:layout_width="match_parent"
+        android:layout_height="80mm"
+        android:layout_marginTop="20mm"
+        android:text="录像"
+        android:background="@color/black"
+        android:textColor="@color/white"
+        android:textSize="32mm" />
 
     <Button
         android:id="@+id/btn_create2"
