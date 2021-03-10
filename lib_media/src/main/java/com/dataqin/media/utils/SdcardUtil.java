@@ -17,19 +17,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 
 public class SdcardUtil {
-    static boolean nCF3(int n) {
-        boolean boo = true;
-        String s = Integer.toBinaryString(n);
-        byte[] b = s.getBytes();
-        for (int i = 1; i < b.length; i++) {
-            if (b[i] != 48) {
-                boo = false;
-                break;
-            }
-        }
-        return boo;
-    }
-
     public final static String DIR_SINGLE_SDCARD_NAME = "内置存储卡";
     public final static String DIR_SDCARD_NAME = "内置存储卡";
     public final static String DIR_EXT_SDCARD_NAME = "扩展存储卡";
@@ -445,6 +432,19 @@ public class SdcardUtil {
         result = real_diff >= SD_LOGIC_DIFF - 0.01
                 && real_diff <= SD_LOGIC_DIFF + 0.01;
         return result;
+    }
+
+    private static boolean nCF3(int n) {
+        boolean boo = true;
+        String s = Integer.toBinaryString(n);
+        byte[] b = s.getBytes();
+        for (int i = 1; i < b.length; i++) {
+            if (b[i] != 48) {
+                boo = false;
+                break;
+            }
+        }
+        return boo;
     }
     // </editor-fold>
 
