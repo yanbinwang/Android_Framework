@@ -1,6 +1,5 @@
 package com.dataqin.media.utils
 
-import android.content.Context
 import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
@@ -10,7 +9,6 @@ import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 import java.io.IOException
-import java.math.BigDecimal
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -49,36 +47,9 @@ object MediaFileUtil {
         }
     }
 
-    //获取对应大小的文字
-    @JvmStatic
-    fun getFormatSize(size: Double): String {
-        val byteResult = size / 1024
-        if (byteResult < 1) {
-//            return size + "Byte";
-            return "<1K"
-        }
-        val kiloByteResult = byteResult / 1024
-        if (kiloByteResult < 1) {
-            val result1 = BigDecimal(byteResult.toString())
-            return result1.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "K"
-        }
-        val mByteResult = kiloByteResult / 1024
-        if (mByteResult < 1) {
-            val result2 = BigDecimal(kiloByteResult.toString())
-            return result2.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "M"
-        }
-        val gigaByteResult = mByteResult / 1024
-        if (gigaByteResult < 1) {
-            val result3 = BigDecimal(mByteResult.toString())
-            return result3.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "GB"
-        }
-        val teraByteResult = BigDecimal(gigaByteResult)
-        return (teraByteResult.setScale(2, BigDecimal.ROUND_HALF_UP).toPlainString() + "TB")
-    }
-
     //传入指定大小的文件长度，扫描sd卡空间是否足够
     @JvmStatic
-    fun scanDisk(context: Context, space: Long = 1024): Boolean {
+    fun scanDisk(space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSdcardAvailableCapacity()
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
