@@ -2,6 +2,7 @@ package com.dataqin.common.utils
 
 import android.os.CountDownTimer
 import android.os.Looper
+import com.dataqin.common.http.factory.OkHttpFactory
 import com.dataqin.common.utils.handler.WeakHandler
 import java.util.*
 
@@ -10,11 +11,18 @@ import java.util.*
  *  时间工具类
  *  默认1秒，分计数和倒计时
  */
-object TaskUtil {
+class TaskFactory private constructor(){
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
     private var countDownTimer: CountDownTimer? = null
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
+
+    companion object {
+        @JvmStatic
+        val instance: TaskFactory by lazy {
+            TaskFactory()
+        }
+    }
 
     /**
      * 计时-开始
