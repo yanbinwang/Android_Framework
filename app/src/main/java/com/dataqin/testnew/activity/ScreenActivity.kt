@@ -1,15 +1,13 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
-import android.media.projection.MediaProjectionManager
 import android.view.KeyEvent
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.media.service.ScreenRecordService
+import com.dataqin.media.utils.factory.ScreenFactory
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScreenBinding
 
@@ -24,6 +22,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
+        ScreenFactory.instance.initialize(this)
     }
 
     override fun initEvent() {
@@ -33,14 +32,10 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> {
-                val mediaProjectionManager = getSystemService(MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-                val permissionIntent = mediaProjectionManager.createScreenCaptureIntent()
-                startActivityForResult(permissionIntent, RequestCode.SERVICE_REQUEST)
-            }
+            R.id.btn_start -> ScreenFactory.instance.startScreen()
             R.id.btn_end -> {
                 showToast("结束录屏")
-                stopService(Intent(this, ScreenRecordService::class.java))
+                ScreenFactory.instance.stopScreen()
             }
         }
     }
@@ -50,12 +45,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
         if (requestCode == RequestCode.SERVICE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 showToast("开始录屏")
-                stopService(Intent(this, ScreenRecordService::class.java))//先停止，提高稳定性
-                val service = Intent(this, ScreenRecordService::class.java)
-                service.putExtra(Extras.RESULT_CODE, resultCode)
-                service.putExtra(Extras.BUNDLE_BEAN, data)
-                startService(service)
-                moveTaskToBack(true)
+                ScreenFactory.instance.startScreenResult(resultCode, data)
             } else {
                 //傻逼用户自己取消
                 showToast("取消录屏")
@@ -73,7 +63,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
 
     override fun onDestroy() {
         super.onDestroy()
-        stopService(Intent(this, ScreenRecordService::class.java))
+        ScreenFactory.instance.stopScreen()
     }
 
 }

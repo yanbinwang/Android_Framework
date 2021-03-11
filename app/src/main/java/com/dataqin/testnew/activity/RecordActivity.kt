@@ -5,6 +5,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.media.utils.factory.RecorderFactory
+import com.dataqin.media.utils.factory.callback.OnRecorderListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityRecordBinding
 
@@ -24,25 +25,21 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
         super.initEvent()
         onClick(this, binding.btnStart, binding.btnEnd, binding.btnPlay)
 
-//        RecorderFactory.instance.onRecorderListener = object : OnRecorderListener {
-//            override fun onStartRecord(path: String) {
-//            }
-//
-//            override fun onStopRecord() {
-//            }
-//        }
+        RecorderFactory.instance.onRecorderListener = object : OnRecorderListener {
+            override fun onStartRecord(path: String) {
+                showToast("开始录音")
+            }
+
+            override fun onStopRecord() {
+                showToast("结束录音")
+            }
+        }
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> {
-                showToast("开始录音")
-                RecorderFactory.instance.startRecord()
-            }
-            R.id.btn_end -> {
-                showToast("结束录音")
-                RecorderFactory.instance.stopRecord()
-            }
+            R.id.btn_start -> RecorderFactory.instance.startRecord()
+            R.id.btn_end -> RecorderFactory.instance.stopRecord()
             R.id.btn_play -> {
 //                showToast("播放")
 //                RecorderFactory.instance.setDataSource("")-放网络播放链接
