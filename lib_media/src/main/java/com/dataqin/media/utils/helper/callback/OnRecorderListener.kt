@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.factory.callback
+package com.dataqin.media.utils.helper.callback
 
 /**
  *  Created by wangyanbin

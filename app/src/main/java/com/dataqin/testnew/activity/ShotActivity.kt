@@ -6,8 +6,8 @@ import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityShotBinding
-import com.dataqin.media.utils.factory.CameraFactory
-import com.dataqin.media.utils.factory.callback.OnTakePictureListener
+import com.dataqin.media.utils.helper.CameraHelper
+import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import java.io.File
 
 /**
@@ -20,14 +20,14 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
-        CameraFactory.instance.initialize(this, binding.camera)
+        CameraHelper.initialize(this, binding.camera)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnShot, binding.btnSwitch)
 
-        CameraFactory.instance.onTakePictureListener = object : OnTakePictureListener {
+        CameraHelper.onTakePictureListener = object : OnTakePictureListener {
             override fun onStart() {
                 showDialog()
             }
@@ -48,8 +48,8 @@ class ShotActivity : BaseActivity<ActivityShotBinding>(), View.OnClickListener {
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> CameraFactory.instance.takePicture()
-            R.id.btn_switch -> CameraFactory.instance.toggleCamera()
+            R.id.btn_shot -> CameraHelper.takePicture()
+            R.id.btn_switch -> CameraHelper.toggleCamera()
         }
     }
 

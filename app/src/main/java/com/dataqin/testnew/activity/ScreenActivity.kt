@@ -7,7 +7,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.media.utils.factory.ScreenFactory
+import com.dataqin.media.utils.helper.ScreenHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScreenBinding
 
@@ -22,7 +22,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
-        ScreenFactory.instance.initialize(this)
+        ScreenHelper.initialize(this)
     }
 
     override fun initEvent() {
@@ -32,10 +32,10 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> ScreenFactory.instance.startScreen()
+            R.id.btn_start -> ScreenHelper.startScreen()
             R.id.btn_end -> {
                 showToast("结束录屏")
-                ScreenFactory.instance.stopScreen()
+                ScreenHelper.stopScreen()
             }
         }
     }
@@ -45,7 +45,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
         if (requestCode == RequestCode.SERVICE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 showToast("开始录屏")
-                ScreenFactory.instance.startScreenResult(resultCode, data)
+                ScreenHelper.startScreenResult(resultCode, data)
             } else {
                 //傻逼用户自己取消
                 showToast("取消录屏")
@@ -63,7 +63,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
 
     override fun onDestroy() {
         super.onDestroy()
-        ScreenFactory.instance.stopScreen()
+        ScreenHelper.stopScreen()
     }
 
 }

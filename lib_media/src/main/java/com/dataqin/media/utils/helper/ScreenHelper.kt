@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.factory
+package com.dataqin.media.utils.helper
 
 import android.app.Activity
 import android.content.Intent
@@ -13,16 +13,10 @@ import java.lang.ref.WeakReference
  *  Created by wangyanbin
  *  录屏工具类
  */
-class ScreenFactory {
+object ScreenHelper {
     private var weakActivity: WeakReference<Activity>? = null
 
-    companion object {
-        @JvmStatic
-        val instance: ScreenFactory by lazy {
-            ScreenFactory()
-        }
-    }
-
+    @JvmStatic
     fun initialize(activity: Activity) {
         weakActivity = WeakReference(activity)
     }
@@ -30,6 +24,7 @@ class ScreenFactory {
     /**
      * 开始录屏
      */
+    @JvmStatic
     fun startScreen() {
         val mediaProjectionManager = weakActivity?.get()?.getSystemService(AppCompatActivity.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val permissionIntent = mediaProjectionManager.createScreenCaptureIntent()
@@ -39,6 +34,7 @@ class ScreenFactory {
     /**
      * 处理回调
      */
+    @JvmStatic
     fun startScreenResult(resultCode: Int, data: Intent?) {
         stopScreen()
         val service = Intent(weakActivity?.get()!!, ScreenRecordService::class.java)
@@ -51,6 +47,7 @@ class ScreenFactory {
     /**
      * 结束录屏
      */
+    @JvmStatic
     fun stopScreen() {
         weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ScreenRecordService::class.java))//先停止，提高稳定性
     }

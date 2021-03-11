@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.factory
+package com.dataqin.media.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -25,25 +25,19 @@ import java.lang.ref.WeakReference
  *  默认-开锁可随屏幕翻转角度
  */
 @SuppressLint("StaticFieldLeak")
-class GSYVideoFactory private constructor(){
+object GSYVideoHelper{
     private var retryNum = 0
     private var weakActivity: WeakReference<Activity>? = null
     private var imgCover: ImageView? = null
     private var player: StandardGSYVideoPlayer? = null
     private var orientationUtils: OrientationUtils? = null
 
-    companion object {
-        @JvmStatic
-        val instance: GSYVideoFactory by lazy {
-            GSYVideoFactory()
-        }
-    }
-
     /**
      * activity-视频对应页面
      * player-视频对应播放器
      * fullScreen-是否全屏（默认不全屏）
      */
+    @JvmStatic
     fun initialize(activity: Activity, standardGSYVideoPlayer: StandardGSYVideoPlayer, fullScreen: Boolean = false) {
 //        GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)//是否平铺屏幕
 //        GSYVideoType.enableMediaCodecTexture()
@@ -77,6 +71,7 @@ class GSYVideoFactory private constructor(){
     /**
      * 设置播放路径
      */
+    @JvmStatic
     fun setUrl(url: String) {
         retryNum = 0
         //加载图片
@@ -118,6 +113,7 @@ class GSYVideoFactory private constructor(){
     /**
      * 全屏时写，写在系统的onBackPressed之前
      */
+    @JvmStatic
     fun onBackPressed(): Boolean {
         orientationUtils?.backToProtVideo()
         return GSYVideoManager.backFromWindowFull(weakActivity?.get())
@@ -126,6 +122,7 @@ class GSYVideoFactory private constructor(){
     /**
      * 写在系统的onPause之前
      */
+    @JvmStatic
     fun onPause() {
         player?.currentPlayer?.onVideoPause()
     }
@@ -133,6 +130,7 @@ class GSYVideoFactory private constructor(){
     /**
      * 写在系统的onResume之前
      */
+    @JvmStatic
     fun onResume() {
         player?.currentPlayer?.onVideoResume(false)
     }
@@ -140,6 +138,7 @@ class GSYVideoFactory private constructor(){
     /**
      * 写在系统的onDestroy之后
      */
+    @JvmStatic
     fun onDestroy() {
         onPause()
         player?.currentPlayer?.release()

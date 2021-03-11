@@ -4,8 +4,8 @@ import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.media.utils.factory.RecorderFactory
-import com.dataqin.media.utils.factory.callback.OnRecorderListener
+import com.dataqin.media.utils.helper.RecorderHelper
+import com.dataqin.media.utils.helper.callback.OnRecorderListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityRecordBinding
 
@@ -25,7 +25,7 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
         super.initEvent()
         onClick(this, binding.btnStart, binding.btnEnd, binding.btnPlay)
 
-        RecorderFactory.instance.onRecorderListener = object : OnRecorderListener {
+        RecorderHelper.onRecorderListener = object : OnRecorderListener {
             override fun onStartRecord(path: String) {
                 showToast("开始录音")
             }
@@ -38,8 +38,8 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> RecorderFactory.instance.startRecord()
-            R.id.btn_end -> RecorderFactory.instance.stopRecord()
+            R.id.btn_start -> RecorderHelper.startRecord()
+            R.id.btn_end -> RecorderHelper.stopRecord()
             R.id.btn_play -> {
 //                showToast("播放")
 //                RecorderFactory.instance.setDataSource("")-放网络播放链接
@@ -50,7 +50,7 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
 
     override fun onDestroy() {
         super.onDestroy()
-        RecorderFactory.instance.onDestroy()
+        RecorderHelper.onDestroy()
     }
 
 }

@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.factory
+package com.dataqin.media.utils.helper
 
 import android.media.MediaPlayer
 import android.media.MediaRecorder
@@ -7,28 +7,22 @@ import android.provider.MediaStore
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.AUDIO_FILE_PATH
 import com.dataqin.media.utils.MediaFileUtil
-import com.dataqin.media.utils.factory.callback.OnRecorderListener
+import com.dataqin.media.utils.helper.callback.OnRecorderListener
 import java.io.IOException
 
 /**
  *  Created by wangyanbin
  *  音频工具类
  */
-class RecorderFactory private constructor() {
+object RecorderHelper  {
     private val mediaPlayer by lazy { MediaPlayer() }
     private var mediaRecorder: MediaRecorder? = null
     var onRecorderListener: OnRecorderListener? = null
 
-    companion object {
-        @JvmStatic
-        val instance: RecorderFactory by lazy {
-            RecorderFactory()
-        }
-    }
-
     /**
      * 开始录音
      */
+    @JvmStatic
     fun startRecord() {
         var filePath = ""
         try {
@@ -58,6 +52,7 @@ class RecorderFactory private constructor() {
     /**
      * 停止录音
      */
+    @JvmStatic
     fun stopRecord() {
         try {
             mediaRecorder?.stop()
@@ -70,6 +65,7 @@ class RecorderFactory private constructor() {
     /**
      * 设置播放的音频地址
      */
+    @JvmStatic
     fun setDataSource(path: String) {
         try {
             mediaPlayer.setDataSource(path)
@@ -82,6 +78,7 @@ class RecorderFactory private constructor() {
     /**
      * 当前音频是否正在播放
      */
+    @JvmStatic
     fun isPlaying(): Boolean {
         return mediaPlayer.isPlaying
     }
@@ -89,6 +86,7 @@ class RecorderFactory private constructor() {
     /**
      * 开始播放
      */
+    @JvmStatic
     fun onStart() {
         if (isPlaying()) return
         mediaPlayer.start()
@@ -97,6 +95,7 @@ class RecorderFactory private constructor() {
     /**
      * 停止播放
      */
+    @JvmStatic
     fun onPause() {
         if (!isPlaying()) return
         mediaPlayer.pause()
@@ -105,6 +104,7 @@ class RecorderFactory private constructor() {
     /**
      * 销毁-释放资源
      */
+    @JvmStatic
     fun onDestroy() {
         try {
             mediaPlayer.stop()

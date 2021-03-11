@@ -5,9 +5,9 @@ import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.media.utils.factory.CameraFactory
-import com.dataqin.media.utils.factory.callback.OnTakePictureListener
-import com.dataqin.media.utils.factory.callback.OnVideoRecordListener
+import com.dataqin.media.utils.helper.CameraHelper
+import com.dataqin.media.utils.helper.callback.OnTakePictureListener
+import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityVideoTapBinding
 import java.io.File
@@ -22,14 +22,14 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
-        CameraFactory.instance.initialize(this, binding.camera)
+        CameraHelper.initialize(this, binding.camera)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnStart, binding.btnStop, binding.btnCatch, binding.btnSwitch)
 
-        CameraFactory.instance.onVideoRecordListener = object : OnVideoRecordListener {
+        CameraHelper.onVideoRecordListener = object : OnVideoRecordListener {
 
             override fun onStartRecorder() {
                 showToast("开始录制")
@@ -44,7 +44,7 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
             }
 
         }
-        CameraFactory.instance.onTakePictureListener = object : OnTakePictureListener {
+        CameraHelper.onTakePictureListener = object : OnTakePictureListener {
             override fun onStart() {
                 showDialog()
             }
@@ -65,10 +65,10 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> CameraFactory.instance.startRecorder()
-            R.id.btn_stop -> CameraFactory.instance.stopRecorder()
-            R.id.btn_catch -> CameraFactory.instance.takePicture(true)
-            R.id.btn_switch -> CameraFactory.instance.toggleCamera()
+            R.id.btn_start -> CameraHelper.startRecorder()
+            R.id.btn_stop -> CameraHelper.stopRecorder()
+            R.id.btn_catch -> CameraHelper.takePicture(true)
+            R.id.btn_switch -> CameraHelper.toggleCamera()
         }
     }
 

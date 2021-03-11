@@ -6,6 +6,7 @@ import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import com.dataqin.common.utils.helper.TaskHelper
 
 /**
  *  Created by wangyanbin
@@ -45,7 +46,7 @@ object MethodUtil {
      * 倒计时
      */
     fun countDown(text: TextView, second: Long) {
-        TaskFactory.instance.countDown(second, object : TaskFactory.OnCountDownListener {
+        TaskHelper.countDown(second, object : TaskHelper.OnCountDownListener {
             override fun onTick(second: Long) {
                 text.isEnabled = false
                 text.text = "已发送 $second S"
@@ -62,7 +63,7 @@ object MethodUtil {
      * 计时-销毁
      */
     fun destroy() {
-        TaskFactory.instance.destroy()
+        TaskHelper.destroy()
     }
 
 }

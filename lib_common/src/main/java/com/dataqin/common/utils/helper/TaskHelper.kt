@@ -1,8 +1,7 @@
-package com.dataqin.common.utils
+package com.dataqin.common.utils.helper
 
 import android.os.CountDownTimer
 import android.os.Looper
-import com.dataqin.common.http.factory.OkHttpFactory
 import com.dataqin.common.utils.handler.WeakHandler
 import java.util.*
 
@@ -11,22 +10,16 @@ import java.util.*
  *  时间工具类
  *  默认1秒，分计数和倒计时
  */
-class TaskFactory private constructor(){
+object TaskHelper {
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
     private var countDownTimer: CountDownTimer? = null
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
-    companion object {
-        @JvmStatic
-        val instance: TaskFactory by lazy {
-            TaskFactory()
-        }
-    }
-
     /**
      * 计时-开始
      */
+    @JvmStatic
     fun startTask(millisecond: Long = 1000, onCountDownListener: OnCountUpListener?) {
         if (timer == null) {
             timer = Timer()
@@ -44,6 +37,7 @@ class TaskFactory private constructor(){
     /**
      * 计时-结束
      */
+    @JvmStatic
     fun stopTask() {
         timerTask?.cancel()
         timer?.cancel()
@@ -56,6 +50,7 @@ class TaskFactory private constructor(){
      * 倒计时
      * second-秒
      */
+    @JvmStatic
     fun countDown(second: Long, onCountDownListener: OnCountDownListener?) {
         if (null == countDownTimer) {
             countDownTimer = object : CountDownTimer(second * 1000, 1000) {
@@ -70,7 +65,10 @@ class TaskFactory private constructor(){
         }
     }
 
-    //页面销毁时调取
+    /**
+     * 页面销毁时调取
+     */
+    @JvmStatic
     fun destroy() {
         stopTask()
         countDownTimer?.cancel()

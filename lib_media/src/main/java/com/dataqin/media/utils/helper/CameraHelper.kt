@@ -1,4 +1,4 @@
-package com.dataqin.media.utils.factory
+package com.dataqin.media.utils.helper
 
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
@@ -7,8 +7,8 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
 import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.utils.MediaFileUtil
-import com.dataqin.media.utils.factory.callback.OnTakePictureListener
-import com.dataqin.media.utils.factory.callback.OnVideoRecordListener
+import com.dataqin.media.utils.helper.callback.OnTakePictureListener
+import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
 import com.otaliastudios.cameraview.CameraListener
 import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
@@ -20,17 +20,10 @@ import com.otaliastudios.cameraview.controls.*
  *  相机帮助类
  *  https://github.com/natario1/CameraView
  */
-class CameraFactory private constructor() {
+object CameraHelper {
     private var cvFinder: CameraView? = null
     var onTakePictureListener: OnTakePictureListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
-
-    companion object {
-        @JvmStatic
-        val instance: CameraFactory by lazy {
-            CameraFactory()
-        }
-    }
 
     /**
      *  相机初始化
@@ -39,6 +32,7 @@ class CameraFactory private constructor() {
      *  如果需要制定模式
      *  app:cameraMode="picture|video"
      */
+    @JvmStatic
     fun initialize(owner: LifecycleOwner, cvFinder: CameraView) {
         this.cvFinder = cvFinder
         cvFinder.setLifecycleOwner(owner)
@@ -55,6 +49,7 @@ class CameraFactory private constructor() {
     /**
      * 复位
      */
+    @JvmStatic
     fun reset() {
         cvFinder?.zoom = 0f
     }
@@ -62,6 +57,7 @@ class CameraFactory private constructor() {
     /**
      * 镜头翻转
      */
+    @JvmStatic
     fun toggleCamera() {
         cvFinder?.toggleFacing()
     }
@@ -69,6 +65,7 @@ class CameraFactory private constructor() {
     /**
      * 拍照/抓拍
      */
+    @JvmStatic
     fun takePicture(isSnapshot: Boolean = false) {
         onTakePictureListener?.onStart()
         if (isSnapshot) {
@@ -103,6 +100,7 @@ class CameraFactory private constructor() {
     /**
      * 开始录像
      */
+    @JvmStatic
     fun startRecorder() {
         val videoFile = MediaFileUtil.getOutputMediaFile(
             MEDIA_TYPE_VIDEO,
@@ -136,6 +134,7 @@ class CameraFactory private constructor() {
     /**
      * 停止录像
      */
+    @JvmStatic
     fun stopRecorder() {
         cvFinder?.stopVideo()
     }
