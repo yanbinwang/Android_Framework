@@ -36,14 +36,12 @@
         android:textSize="32mm" />
 
     <Button
-        android:id="@+id/btn_create2"
-        android:layout_width="400mm"
+        android:id="@+id/btn_screen"
+        android:layout_width="match_parent"
         android:layout_height="80mm"
-        android:layout_marginTop="50mm"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onClick"
-        android:text="展示2"
-        android:background="@color/red_e76161"
+        android:layout_marginTop="20mm"
+        android:text="录像"
+        android:background="@color/black"
         android:textColor="@color/white"
         android:textSize="32mm" />
 

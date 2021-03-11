@@ -5,7 +5,6 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.media.utils.factory.RecorderFactory
-import com.dataqin.media.utils.factory.callback.OnRecorderListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityRecordBinding
 
@@ -15,7 +14,6 @@ import com.dataqin.testnew.databinding.ActivityRecordBinding
  */
 @Route(path = ARouterPath.RecordActivity)
 class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListener {
-    private var filePath = ""
 
     override fun initView() {
         super.initView()
@@ -26,14 +24,13 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
         super.initEvent()
         onClick(this, binding.btnStart, binding.btnEnd, binding.btnPlay)
 
-        RecorderFactory.instance.onRecorderListener = object : OnRecorderListener {
-            override fun onStartRecord(path: String) {
-                filePath = path
-            }
-
-            override fun onStopRecord() {
-            }
-        }
+//        RecorderFactory.instance.onRecorderListener = object : OnRecorderListener {
+//            override fun onStartRecord(path: String) {
+//            }
+//
+//            override fun onStopRecord() {
+//            }
+//        }
     }
 
     override fun onClick(v: View?) {
@@ -47,9 +44,9 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
                 RecorderFactory.instance.stopRecord()
             }
             R.id.btn_play -> {
-                showToast("播放")
-                RecorderFactory.instance.setDataSource(filePath)
-                RecorderFactory.instance.onStart()
+//                showToast("播放")
+//                RecorderFactory.instance.setDataSource("")-放网络播放链接
+//                RecorderFactory.instance.onStart()
             }
         }
     }

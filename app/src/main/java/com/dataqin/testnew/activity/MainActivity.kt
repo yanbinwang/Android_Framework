@@ -22,7 +22,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord)
+        onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
     }
 
     private fun pageTesting(index: Int) {
@@ -33,6 +33,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                         0 -> navigation(ARouterPath.ShotActivity)
                         1 -> navigation(ARouterPath.VideoTapActivity)
                         2 -> navigation(ARouterPath.RecordActivity)
+                        3 -> navigation(ARouterPath.ScreenActivity)
                     }
                 }
             }
@@ -44,6 +45,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_shot -> pageTesting(0)
             R.id.btn_video_tap -> pageTesting(1)
             R.id.btn_record -> pageTesting(2)
+            R.id.btn_screen -> pageTesting(3)
         }
     }
 

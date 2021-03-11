@@ -48,8 +48,8 @@ class ScreenRecordService : Service() {
             val builder = NotificationCompat.Builder(this, packageName)
             //id不为0即可，该方法表示将服务设置为前台服务
             startForeground(1, builder.build())
-            stopForeground(true)//关闭录屏的图标-可注释
         }
+        stopForeground(true)//关闭录屏的图标-可注释
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

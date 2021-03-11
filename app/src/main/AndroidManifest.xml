@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -71,6 +72,16 @@
             android:name=".activity.RecordActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ScreenActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="com.dataqin.media.service.ScreenRecordService"
+            android:enabled="true"
+            android:exported="false" />
 
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
