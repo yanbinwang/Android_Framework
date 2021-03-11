@@ -32,7 +32,8 @@ object DocumentHelper {
     fun getSplitFile(targetFile: File, cutSize: Long): MutableList<String> {
         val splitList = ArrayList<String>()
         //计算切割文件大小
-        val count = if (targetFile.length() % cutSize == 0L) (targetFile.length() / cutSize).toInt() else (targetFile.length() / cutSize + 1).toInt()
+        val count =
+            if (targetFile.length() % cutSize == 0L) (targetFile.length() / cutSize).toInt() else (targetFile.length() / cutSize + 1).toInt()
         var raf: RandomAccessFile? = null
         try {
             //获取目标文件 预分配文件所占的空间 在磁盘中创建一个指定大小的文件   r 是只读
@@ -46,11 +47,11 @@ object DocumentHelper {
                 val end = (i + 1) * maxSize
                 val tmpInfo: FileTmpInfo = getWrite(targetFile.absolutePath, i, begin, end)
                 offSet = tmpInfo.fileSize
-                splitList.add(tmpInfo.path!!)
+                splitList.add(tmpInfo.path ?: "")
             }
             if (length - offSet > 0) {
                 val tmpInfo: FileTmpInfo = getWrite(targetFile.absolutePath, count - 1, offSet, length)
-                splitList.add(tmpInfo.path!!)
+                splitList.add(tmpInfo.path ?: "")
             }
         } catch (e: IOException) {
         } finally {
@@ -87,11 +88,13 @@ object DocumentHelper {
             val out = RandomAccessFile(mFile, "rw")
             //申明具体每一文件的字节数组
             val b = ByteArray(1024)
-            var n = 0
+            var n: Int
             //从指定位置读取文件字节流
             randomAccessFile.seek(begin)
             //判断文件流读取的边界
-            while (randomAccessFile.read(b).also { n = it } != -1 && randomAccessFile.filePointer <= end) {
+            while (randomAccessFile.read(b)
+                    .also { n = it } != -1 && randomAccessFile.filePointer <= end
+            ) {
                 //从指定每一份文件的范围，写入不同的文件
                 out.write(b, 0, n)
             }
@@ -145,7 +148,7 @@ object DocumentHelper {
                 val mFile = File(a + "_" + i + ".tmp")
                 val reader = RandomAccessFile(mFile, "r")
                 val b = ByteArray(1024)
-                var n = 0
+                var n: Int
                 //先读后写
                 while (reader.read(b).also { n = it } != -1) { //读
                     raf.write(b, 0, n) //写
@@ -156,7 +159,7 @@ object DocumentHelper {
         } catch (e: Exception) {
         } finally {
             try {
-                raf!!.close()
+                raf?.close()
             } catch (e: IOException) {
                 e.printStackTrace()
             }
@@ -164,7 +167,7 @@ object DocumentHelper {
     }
 
     @JvmStatic
-    fun getSignatureFile(file: File?): String? {
+    fun getSignatureFile(file: File): String? {
         val digest: MessageDigest
         val fileInputStream: FileInputStream
         val buffer = ByteArray(1024)
@@ -176,8 +179,7 @@ object DocumentHelper {
                 digest.update(buffer, 0, len)
             }
             fileInputStream.close()
-        } catch (e: java.lang.Exception) {
-            e.printStackTrace()
+        } catch (e: Exception) {
             return null
         }
         val bigInt = BigInteger(1, digest.digest())
