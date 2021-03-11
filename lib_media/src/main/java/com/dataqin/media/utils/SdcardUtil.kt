@@ -155,7 +155,7 @@ object SdcardUtil {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="sd卡详细的对象获取">
-    fun getSdCardStateModels(context: Context?): ArrayList<SdcardStateModel> {
+    fun getSdCardStateModels(context: Context): ArrayList<SdcardStateModel> {
         var list = ArrayList<SdcardStateModel>()
         try {
             val process = Runtime.getRuntime().exec("mount")
@@ -183,7 +183,7 @@ object SdcardUtil {
 
                 if (!sdCardCanWrite(path)) {
                     stat.canWrite = false
-                    val filePath = ContextCompat.getExternalFilesDirs(context!!, null)
+                    val filePath = ContextCompat.getExternalFilesDirs(context, null)
                     for (f in filePath) {
                         if (f != null) {
                             if (f.absolutePath.startsWith(path)) {
@@ -355,9 +355,7 @@ object SdcardUtil {
             return null
         }
         val voldInfo = mountInfo[0]
-        return if (TextUtils.isEmpty(voldInfo)) {
-            null
-        } else voldInfo.replaceFirst("/dev/block/vold/".toRegex(), "")
+        return if (TextUtils.isEmpty(voldInfo)) { null } else voldInfo.replaceFirst("/dev/block/vold/".toRegex(), "")
     }
 
     //根据设备挂载次序排序SDCard

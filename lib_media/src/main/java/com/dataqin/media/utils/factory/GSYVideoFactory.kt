@@ -22,6 +22,7 @@ import java.lang.ref.WeakReference
 /**
  *  Created by wangyanbin
  *  视频播放器工具类
+ *  默认-开锁可随屏幕翻转角度
  */
 @SuppressLint("StaticFieldLeak")
 class GSYVideoFactory private constructor(){
@@ -73,6 +74,9 @@ class GSYVideoFactory private constructor(){
         }
     }
 
+    /**
+     * 设置播放路径
+     */
     fun setUrl(url: String) {
         retryNum = 0
         //加载图片
@@ -111,23 +115,31 @@ class GSYVideoFactory private constructor(){
         }
     }
 
-    //全屏时写，写在系统的onBackPressed之前
+    /**
+     * 全屏时写，写在系统的onBackPressed之前
+     */
     fun onBackPressed(): Boolean {
         orientationUtils?.backToProtVideo()
         return GSYVideoManager.backFromWindowFull(weakActivity?.get())
     }
 
-    //写在系统的onPause之前
+    /**
+     * 写在系统的onPause之前
+     */
     fun onPause() {
         player?.currentPlayer?.onVideoPause()
     }
 
-    //写在系统的onResume之前
+    /**
+     * 写在系统的onResume之前
+     */
     fun onResume() {
         player?.currentPlayer?.onVideoResume(false)
     }
 
-    //写在系统的onDestroy之后
+    /**
+     * 写在系统的onDestroy之后
+     */
     fun onDestroy() {
         onPause()
         player?.currentPlayer?.release()

@@ -26,7 +26,9 @@ class RecorderFactory private constructor() {
         }
     }
 
-    //开始录音
+    /**
+     * 开始录音
+     */
     fun startRecord() {
         var filePath = ""
         try {
@@ -53,7 +55,9 @@ class RecorderFactory private constructor() {
         }
     }
 
-    //停止录音
+    /**
+     * 停止录音
+     */
     fun stopRecord() {
         try {
             mediaRecorder?.stop()
@@ -63,6 +67,9 @@ class RecorderFactory private constructor() {
         }
     }
 
+    /**
+     * 设置播放的音频地址
+     */
     fun setDataSource(path: String) {
         try {
             mediaPlayer.setDataSource(path)
@@ -72,20 +79,32 @@ class RecorderFactory private constructor() {
         }
     }
 
+    /**
+     * 当前音频是否正在播放
+     */
     fun isPlaying(): Boolean {
         return mediaPlayer.isPlaying
     }
 
+    /**
+     * 开始播放
+     */
     fun onStart() {
         if (isPlaying()) return
         mediaPlayer.start()
     }
 
+    /**
+     * 停止播放
+     */
     fun onPause() {
         if (!isPlaying()) return
         mediaPlayer.pause()
     }
 
+    /**
+     * 销毁-释放资源
+     */
     fun onDestroy() {
         try {
             mediaPlayer.stop()
