@@ -1,5 +1,9 @@
 package com.dataqin.testnew.activity
 
+import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.text.TextUtils
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -28,7 +32,6 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnStart, binding.btnStop, binding.btnCatch, binding.btnSwitch)
-
         CameraHelper.onVideoRecordListener = object : OnVideoRecordListener {
 
             override fun onStartRecorder() {

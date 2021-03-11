@@ -1,5 +1,10 @@
 package com.dataqin.media.utils.helper
 
+import android.app.Activity
+import android.content.Context
+import android.media.AudioManager
+import android.media.MediaPlayer
+import android.net.Uri
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
@@ -14,6 +19,7 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.*
+import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
@@ -77,10 +83,7 @@ object CameraHelper {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(
-                    MEDIA_TYPE_IMAGE,
-                    Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH
-                )
+                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH)
                 if (null != pictureFile) {
                     result.toFile(pictureFile) { file ->
                         if (null != file) {
@@ -101,12 +104,20 @@ object CameraHelper {
      * 开始录像
      */
     @JvmStatic
-    fun startRecorder() {
+    fun startRecorder(weakActivity: WeakReference<Activity>? = null) {
         val videoFile = MediaFileUtil.getOutputMediaFile(
             MEDIA_TYPE_VIDEO,
             Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH
         )
         if (null != videoFile) {
+            try {
+                //设置一下声音
+                if ((weakActivity?.get()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
+                    val recordingMedia = MediaPlayer.create(weakActivity.get(), Uri.parse("file:///system/media/audio/ui/camera_focus.ogg"))
+                    recordingMedia?.start()
+                }
+            } catch (e: Exception) {
+            }
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {
                 //正式完成录制的回调，获取路径
