@@ -5,6 +5,7 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
+import com.dataqin.common.utils.file.SdcardUtil
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -79,7 +80,7 @@ object MediaFileUtil {
     @JvmStatic
     fun scanDisk(context: Context, space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
-        val availableSize = SdcardUtil.getSDAvailableSize(context)
+        val availableSize = SdcardUtil.getSdcardAvailableCapacity()
         LogUtil.e(TAG,"sd availableSize: " + availableSize + "M")
         return availableSize < space
     }

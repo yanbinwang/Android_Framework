@@ -9,7 +9,6 @@ import android.graphics.Canvas
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import androidx.core.content.FileProvider
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
@@ -157,12 +156,6 @@ object FileUtil {
         }
     }
 
-    //判断sd卡是否存在
-    @JvmStatic
-    fun hasSDCard(): Boolean {
-        return Environment.MEDIA_MOUNTED == Environment.getExternalStorageState()
-    }
-
     //是否安装了XXX
     @JvmStatic
     fun isAvailable(context: Context, packageName: String): Boolean {
@@ -177,12 +170,6 @@ object FileUtil {
             }
         }
         return false
-    }
-
-    //获取sdcard根目录
-    @JvmStatic
-    fun getSdCardPath(): String? {
-        return Environment.getExternalStorageDirectory().absolutePath
     }
 
     //获取当前app的应用程序名称

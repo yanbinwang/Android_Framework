@@ -9,6 +9,7 @@ import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.common.utils.file.SdcardUtil
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -69,7 +70,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
             //如果具备权限，写入本地
             if (ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED) {
                 try {
-                    if (FileUtil.hasSDCard()) {
+                    if (SdcardUtil.hasSdcard()) {
                         val logFile = File(FileUtil.createCacheDir() + File.separator + Constants.APPLICATION_NAME + "_v" + Constants.VERSION_NAME + "_exception_" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".log")
                         logFile.createNewFile() //6.0+的系统需要写入权限才能生成对应文件
                         val bufferedWriter = BufferedWriter(FileWriter(logFile, true))
