@@ -52,7 +52,7 @@ object TaskUtil {
         if (null == countDownTimer) {
             countDownTimer = object : CountDownTimer(second * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    onCountDownListener?.onTick(millisUntilFinished)
+                    onCountDownListener?.onTick(millisUntilFinished / 1000)
                 }
 
                 override fun onFinish() {
@@ -77,7 +77,7 @@ object TaskUtil {
 
     interface OnCountDownListener {
 
-        fun onTick(millisecond: Long)//返回毫秒
+        fun onTick(second: Long)//返回秒
 
         fun onFinish()
 

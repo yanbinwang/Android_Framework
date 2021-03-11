@@ -17,7 +17,7 @@ object MethodUtil {
     /**
      * 密码是否可见
      */
-    fun changeVisibility(isDisplay: Boolean, editText: EditText, imageView: ImageView): Boolean {
+    fun passwordDisplay(isDisplay: Boolean, editText: EditText, imageView: ImageView): Boolean {
         if (!isDisplay) {
             // display password text, for example "123456"
             editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
@@ -46,9 +46,9 @@ object MethodUtil {
      */
     fun countDown(text: TextView, second: Long) {
         TaskUtil.countDown(second, object : TaskUtil.OnCountDownListener {
-            override fun onTick(millisecond: Long) {
+            override fun onTick(second: Long) {
                 text.isEnabled = false
-                text.text = "已发送 " + (millisecond / 1000) + " S"
+                text.text = "已发送 $second S"
             }
 
             override fun onFinish() {
