@@ -10,6 +10,7 @@ object ARouterPath {
     const val MainActivity = "/app/MainActivity" //首页
     const val ShotActivity = "/app/ShotActivity"
     const val VideoTapActivity = "/app/VideoTapActivity"
+    const val RecordActivity = "/app/RecordActivity"
     //homepage模块
 //    const val ShotActivity = "/app/ShotActivity" //锁定ip页
     //    const val WebViewActivity = "/homepage/webView" //全局网页
