@@ -32,8 +32,7 @@ object DocumentHelper {
     fun getSplitFile(targetFile: File, cutSize: Long): MutableList<String> {
         val splitList = ArrayList<String>()
         //计算切割文件大小
-        val count =
-            if (targetFile.length() % cutSize == 0L) (targetFile.length() / cutSize).toInt() else (targetFile.length() / cutSize + 1).toInt()
+        val count = if (targetFile.length() % cutSize == 0L) (targetFile.length() / cutSize).toInt() else (targetFile.length() / cutSize + 1).toInt()
         var raf: RandomAccessFile? = null
         try {
             //获取目标文件 预分配文件所占的空间 在磁盘中创建一个指定大小的文件   r 是只读
