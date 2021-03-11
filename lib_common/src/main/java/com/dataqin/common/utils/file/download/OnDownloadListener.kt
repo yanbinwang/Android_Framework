@@ -1,4 +1,4 @@
-package com.dataqin.common.utils.file.factory.callback
+package com.dataqin.common.utils.file.download
 
 /**
  * Created by WangYanBin on 2020/6/1.
