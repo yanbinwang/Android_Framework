@@ -45,7 +45,7 @@ object MethodUtil {
      * 倒计时
      */
     fun countDown(text: TextView, second: Long) {
-        TimerUtil.countDown(second, object : TimerUtil.OnCountDownListener {
+        TaskUtil.countDown(second, object : TaskUtil.OnCountDownListener {
             override fun onTick(millisecond: Long) {
                 text.isEnabled = false
                 text.text = "已发送 " + (millisecond / 1000) + " S"
@@ -62,7 +62,7 @@ object MethodUtil {
      * 计时-销毁
      */
     fun destroy() {
-        TimerUtil.destroy()
+        TaskUtil.destroy()
     }
 
 }

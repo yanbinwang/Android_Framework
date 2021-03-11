@@ -10,7 +10,7 @@ import java.util.*
  *  时间工具类
  *  默认1秒，分计数和倒计时
  */
-object TimerUtil {
+object TaskUtil {
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
     private var countDownTimer: CountDownTimer? = null
