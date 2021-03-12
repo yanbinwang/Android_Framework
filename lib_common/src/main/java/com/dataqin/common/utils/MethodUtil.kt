@@ -46,7 +46,7 @@ object MethodUtil {
      * 倒计时
      */
     fun countDown(text: TextView, second: Long) {
-        TaskHelper.countDown(second, object : TaskHelper.OnCountDownListener {
+        TaskHelper.startCountDown(second, object : TaskHelper.OnCountDownListener {
             override fun onTick(second: Long) {
                 text.isEnabled = false
                 text.text = "已发送 $second S"

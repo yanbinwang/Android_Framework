@@ -45,13 +45,12 @@ object TaskHelper {
         timer = null
     }
 
-
     /**
-     * 倒计时
+     * 倒计时-开始
      * second-秒
      */
     @JvmStatic
-    fun countDown(second: Long, onCountDownListener: OnCountDownListener?) {
+    fun startCountDown(second: Long, onCountDownListener: OnCountDownListener?) {
         if (null == countDownTimer) {
             countDownTimer = object : CountDownTimer(second * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -63,6 +62,16 @@ object TaskHelper {
                 }
             }
         }
+        countDownTimer?.start()
+    }
+
+    /**
+     * 倒计时-结束
+     */
+    @JvmStatic
+    fun stopCountDown() {
+        countDownTimer?.cancel()
+        countDownTimer = null
     }
 
     /**
@@ -71,8 +80,7 @@ object TaskHelper {
     @JvmStatic
     fun destroy() {
         stopTask()
-        countDownTimer?.cancel()
-        countDownTimer = null
+        stopCountDown()
     }
 
     interface OnCountUpListener {
