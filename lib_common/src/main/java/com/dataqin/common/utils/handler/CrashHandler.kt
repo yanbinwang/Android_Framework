@@ -88,7 +88,7 @@ class CrashHandler private constructor() : Thread.UncaughtExceptionHandler {
     private fun getThrowableInfo(ex: Throwable): String {
         val writer = StringWriter()
         val printWriter = PrintWriter(writer)
-        ex.printStackTrace(printWriter) // 写入错误信息
+        ex.printStackTrace(printWriter) //写入错误信息
         var cause: Throwable? = ex.cause
         while (null != cause) {
             cause.printStackTrace(printWriter)
