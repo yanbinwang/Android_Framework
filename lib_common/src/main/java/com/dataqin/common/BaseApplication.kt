@@ -59,7 +59,7 @@ open class BaseApplication : Application() {
 
             override fun onCoreInitFinished() {}
         })
-        //阿里路由跳转初始化
+        //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         if (BuildConfig.ISDEBUG) {
             //打印日志
             ARouter.openLog()
@@ -68,7 +68,7 @@ open class BaseApplication : Application() {
             //异常捕获初始化
             CrashHandler.instance
         }
-        //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        //阿里路由跳转初始化
         ARouter.init(this)
         //腾讯读写mmkv初始化
         MMKV.initialize(this)
