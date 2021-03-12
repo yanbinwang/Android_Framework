@@ -25,9 +25,7 @@ object TaskHelper {
             timer = Timer()
             timerTask = object : TimerTask() {
                 override fun run() {
-                    weakHandler.post {
-                        onCountDownListener?.run()
-                    }
+                    weakHandler.post { onCountDownListener?.run() }
                 }
             }
             timer?.schedule(timerTask, millisecond, millisecond) //1s后执行timer，之后每隔1s执行一次
