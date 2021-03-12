@@ -133,24 +133,42 @@ object FileUtil {
     //将Bitmap缓存到本地-待修整
     @JvmStatic
     fun saveBitmap(bitmap: Bitmap?) {
-        val screenImagePath: String
-        //输出
+//        val screenImagePath: String
+//        //输出
+//        try {
+//            val rootDir = Constants.APPLICATION_FILE_PATH + "/截屏"
+//            val downloadFile = File(rootDir)
+//            if (!downloadFile.mkdirs()) {
+//                //需要权限
+//                downloadFile.createNewFile()
+//            }
+//            screenImagePath = "$rootDir/screen_capture" + SimpleDateFormat(
+//                "yyyy_MM_dd_hh_mm_ss",
+//                Locale.getDefault()
+//            ).format(Date()) + ".png"
+//            val fileOutputStream = FileOutputStream(screenImagePath)
+//            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
+//            fileOutputStream.flush()
+//            fileOutputStream.close()
+//        } catch (ignored: java.lang.Exception) {
+//        } finally {
+//            bitmap?.recycle()
+//        }
+        val filePath: String
         try {
-            val rootDir = Constants.APPLICATION_FILE_PATH + "/截屏"
-            val downloadFile = File(rootDir)
-            if (!downloadFile.mkdirs()) {
-                //需要权限
-                downloadFile.createNewFile()
+            //输出
+            val rootDir = Constants.APPLICATION_FILE_PATH + "/下载图片"
+            val saveFile = File(rootDir)
+            //需要权限
+            if (!saveFile.mkdirs()) {
+                saveFile.createNewFile()
             }
-            screenImagePath = "$rootDir/screen_capture" + SimpleDateFormat(
-                "yyyy_MM_dd_hh_mm_ss",
-                Locale.getDefault()
-            ).format(Date()) + ".png"
-            val fileOutputStream = FileOutputStream(screenImagePath)
+            filePath = "$rootDir/" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".jpg"
+            val fileOutputStream = FileOutputStream(filePath)
             bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
             fileOutputStream.flush()
             fileOutputStream.close()
-        } catch (ignored: java.lang.Exception) {
+        } catch (ignored: Exception) {
         } finally {
             bitmap?.recycle()
         }
