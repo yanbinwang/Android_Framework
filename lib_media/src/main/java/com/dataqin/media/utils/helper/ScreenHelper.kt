@@ -23,6 +23,7 @@ object ScreenHelper {
 
     /**
      * 开始录屏
+     * 尝试唤起手机录屏弹窗，会在onActivityResult中回调结果
      */
     @JvmStatic
     fun startScreen() {
@@ -32,7 +33,7 @@ object ScreenHelper {
     }
 
     /**
-     * 处理回调
+     * 处理录屏的回调
      */
     @JvmStatic
     fun startScreenResult(resultCode: Int, data: Intent?) {
