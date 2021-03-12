@@ -37,14 +37,14 @@ object FileUtil {
     //复制文件
     @JvmStatic
     @Throws(IOException::class)
-    fun copyFile(srcFile: String?, destFile: String?) {
+    fun copyFile(srcFile: String, destFile: String) {
         copyFile(File(srcFile), File(destFile))
     }
 
     @JvmStatic
     @Throws(IOException::class)
-    fun copyFile(srcFile: File?, destFile: File?) {
-        if (!destFile!!.exists()) {
+    fun copyFile(srcFile: File, destFile: File) {
+        if (!destFile.exists()) {
             destFile.createNewFile()
         }
 
@@ -66,16 +66,16 @@ object FileUtil {
     fun deleteDirWithFile(dir: File?) {
         if (dir == null || !dir.exists() || !dir.isDirectory) return
         for (file in dir.listFiles()) {
-            if (file.isFile) file.delete() // 删除所有文件
-            else if (file.isDirectory) deleteDirWithFile(file) // 递规的方式删除文件夹
+            if (file.isFile) file.delete() //删除所有文件
+            else if (file.isDirectory) deleteDirWithFile(file) //递规的方式删除文件夹
         }
-        dir.delete() // 删除目录本身
+        dir.delete() //删除目录本身
     }
 
     //判断下载目录是否存在
     @JvmStatic
     @Throws(IOException::class)
-    fun isExistDir(filePath: String?): String? {
+    fun isExistDir(filePath: String): String? {
         val downloadFile = File(filePath)
         if (!downloadFile.mkdirs()) {
             downloadFile.createNewFile()
@@ -130,7 +130,7 @@ object FileUtil {
         }
     }
 
-    //将Bitmap缓存到本地
+    //将Bitmap缓存到本地-待修整
     @JvmStatic
     fun saveBitmap(bitmap: Bitmap?) {
         val screenImagePath: String
@@ -156,7 +156,7 @@ object FileUtil {
         }
     }
 
-    //是否安装了XXX
+    //是否安装了XXX应用
     @JvmStatic
     fun isAvailable(context: Context, packageName: String): Boolean {
         val packageManager = context.packageManager
@@ -188,7 +188,7 @@ object FileUtil {
 
     //获取当前app的应用程序名称
     @JvmStatic
-    fun getApplicationId(context: Context): String? {
+    fun getApplicationId(context: Context): String {
         return context.packageName
     }
 
@@ -198,18 +198,14 @@ object FileUtil {
         try {
             val drawable = context.packageManager.getApplicationIcon(Constants.APPLICATION_ID)
             val bitmap = SoftReference(
-                Bitmap.createBitmap(
-                    drawable.intrinsicWidth,
-                    drawable.intrinsicHeight,
-                    if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565
-                )
+                Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565)
             )
             val canvas = Canvas(bitmap.get()!!)
             //canvas.setBitmap(bitmap);
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             drawable.draw(canvas)
             return bitmap.get()
-        } catch (ignored: java.lang.Exception) {
+        } catch (ignored: Exception) {
         }
         return null
     }
