@@ -1,8 +1,7 @@
-package com.dataqin.common.utils.file
+package com.dataqin.base.utils
 
 import android.os.Environment
 import android.os.StatFs
-
 
 /**
  *  Created by wangyanbin

@@ -16,13 +16,13 @@ object CompressUtil {
     private const val defaultLength = 512
 
     @JvmStatic
-    fun compressImg(image: Bitmap?): ByteArrayOutputStream? {
+    fun compressImg(image: Bitmap): ByteArrayOutputStream {
         return compressImg(image, defaultLength)
     }
 
     @JvmStatic
-    fun compressImg(bitmap: Bitmap?, length: Int): ByteArrayOutputStream? {
-        var bitmap = bitmap!!
+    fun compressImg(image: Bitmap, length: Int): ByteArrayOutputStream {
+        var bitmap = image
         bitmap = compressImgBySize(bitmap)!!
         val byteArrayOutputStream = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream)
@@ -37,8 +37,8 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun compressImgBySize(bitmap: Bitmap?): Bitmap? {
-        var bitmap = bitmap!!
+    fun compressImgBySize(image: Bitmap): Bitmap? {
+        var bitmap = image
         var size = 1f
         val width = bitmap.width
         val height = bitmap.height
@@ -58,20 +58,19 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun scale(context: Context?, mFile: File?): File? {
+    fun scale(context: Context, mFile: File): File {
         val fileMaxSize = 100 * 1024.toLong()
         return scale(context, mFile, fileMaxSize)
     }
 
     @JvmStatic
-    fun scale(context: Context?, mFile: File?, fileMaxSize: Long): File? {
-        val fileSize = mFile!!.length()
+    fun scale(context: Context, mFile: File, fileMaxSize: Long): File {
+        val fileSize = mFile.length()
         var scaleSize = 1f
         return if (fileSize >= fileMaxSize) {
             try {
                 val options = BitmapFactory.Options()
                 options.inJustDecodeBounds = true
-                var bitmap: Bitmap?
                 val width = options.outWidth
                 val height = options.outHeight
                 if (width > 720) {
@@ -81,23 +80,19 @@ object CompressUtil {
                 }
                 options.inJustDecodeBounds = false
                 options.inSampleSize = (scaleSize + 0.5).toInt()
-                bitmap = BitmapFactory.decodeFile(mFile.path, options)
-                bitmap = compressImgBySize(bitmap)
-                val fTemp = File(
-                    context!!.applicationContext.externalCacheDir,
-                    System.currentTimeMillis().toString() + "img.jpg"
-                )
-                val fileOutputStream: FileOutputStream
-                fileOutputStream = try {
+                var bitmap: Bitmap? = BitmapFactory.decodeFile(mFile.path, options)
+                bitmap = compressImgBySize(bitmap!!)
+                val fTemp = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
+                val fileOutputStream = try {
                     FileOutputStream(fTemp)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
                     return mFile
                 }
-                bitmap!!.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
+                bitmap?.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream)
                 fileOutputStream.flush()
                 fileOutputStream.close()
-                bitmap.recycle()
+                bitmap?.recycle()
                 fTemp
             } catch (e: IOException) {
                 e.printStackTrace()
@@ -109,8 +104,8 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun scale(context: Context?, bitmap: Bitmap?): Bitmap? {
-        var bitmap = bitmap!!
+    fun scale(context: Context, image: Bitmap): Bitmap {
+        var bitmap = image
         val fileSize: Long = getBitmapSize(bitmap).toLong()
         var scaleSize = 1f
         val fileMaxSize = 100 * 1024.toLong()
@@ -128,12 +123,8 @@ object CompressUtil {
                 options.inJustDecodeBounds = false
                 options.inSampleSize = (scaleSize + 0.5).toInt()
                 bitmap = compressImgBySize(bitmap)!!
-                val file = File(
-                    context!!.applicationContext.externalCacheDir,
-                    System.currentTimeMillis().toString() + "img.jpg"
-                )
-                val fileOutputStream: FileOutputStream
-                fileOutputStream = try {
+                val file = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
+                val fileOutputStream = try {
                     FileOutputStream(file)
                 } catch (e: FileNotFoundException) {
                     e.printStackTrace()
@@ -152,8 +143,8 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun getBitmapSize(bitmap: Bitmap?): Int {
-        return bitmap!!.allocationByteCount
+    fun getBitmapSize(bitmap: Bitmap): Int {
+        return bitmap.allocationByteCount
     }
 
     @Throws(IOException::class)
@@ -169,7 +160,7 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun degreeImage(context: Context, mFile: File): File? {
+    fun degreeImage(context: Context, mFile: File): File {
         val degree = readImageDegree(mFile.path)
         var bitmap: Bitmap
         return if (degree != 0) {
@@ -177,19 +168,8 @@ object CompressUtil {
             val matrix = Matrix()
             matrix.postRotate(degree.toFloat())
             bitmap = BitmapFactory.decodeFile(mFile.path)
-            bitmap = Bitmap.createBitmap(
-                bitmap,
-                0,
-                0,
-                bitmap.width,
-                bitmap.height,
-                matrix,
-                true
-            )
-            val fTemp = File(
-                context.applicationContext.externalCacheDir,
-                System.currentTimeMillis().toString() + "img.jpg"
-            )
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+            val fTemp = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
             val fileOutputStream: FileOutputStream
             try {
                 fileOutputStream = FileOutputStream(fTemp)

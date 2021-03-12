@@ -4,7 +4,7 @@ import android.graphics.Bitmap
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil
-import com.dataqin.common.utils.file.SdcardUtil
+import com.dataqin.base.utils.SdcardUtil
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream

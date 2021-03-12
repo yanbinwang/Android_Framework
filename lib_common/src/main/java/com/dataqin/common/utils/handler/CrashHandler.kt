@@ -9,7 +9,7 @@ import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.common.utils.file.SdcardUtil
+import com.dataqin.base.utils.SdcardUtil
 import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
