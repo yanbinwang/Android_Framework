@@ -1,4 +1,4 @@
-package com.dataqin.testnew.utils
+package com.dataqin.common.utils.helper
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -19,10 +19,10 @@ object FragmentHelper {
 
     @JvmStatic
     fun initialize(activity: AppCompatActivity, containerViewId: Int, tagList: Array<String>, fragmentList: ArrayList<Fragment>, isDark: Boolean = true, tabNum: Int = 0) {
-        this.weakActivity = WeakReference(activity)
-        this.containerViewId = containerViewId
-        this.tagList = tagList.toList() as ArrayList<String>
-        this.fragmentList = fragmentList
+        weakActivity = WeakReference(activity)
+        FragmentHelper.containerViewId = containerViewId
+        FragmentHelper.tagList = tagList.toList() as ArrayList<String>
+        FragmentHelper.fragmentList = fragmentList
         //默认选中下标以及导航栏颜色
         StatusBarBuilder(activity).setTransparent(isDark)
         showFragment(tabNum, true)
