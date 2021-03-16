@@ -26,10 +26,7 @@ object RecorderHelper  {
     fun startRecord() {
         var filePath = ""
         try {
-            val destDir = MediaFileUtil.getOutputMediaFile(
-                MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO,
-                Constants.APPLICATION_NAME + "/" + AUDIO_FILE_PATH
-            )
+            val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO, Constants.APPLICATION_NAME + "/" + AUDIO_FILE_PATH)
             filePath = destDir.toString()
             mediaRecorder = MediaRecorder()
             mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)//设置麦克风
