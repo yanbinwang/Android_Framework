@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
+import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.handler.WeakHandler
 import kotlin.math.abs
@@ -18,7 +19,6 @@ import kotlin.math.abs
  */
 @SuppressLint("StaticFieldLeak", "WrongConstant", "ClickableViewAccessibility")
 object FloatWindowHelper {
-    private var context: Context? = null
     private var windowManager: WindowManager? = null
     private var layoutParams: WindowManager.LayoutParams? = null
     private var windowsView: View? = null
@@ -26,9 +26,8 @@ object FloatWindowHelper {
     private var downY = 0
 
     @JvmStatic
-    fun initialize(context: Context, windowManager: WindowManager, windowsView: View) {
-        this.context = context
-        this.windowManager = windowManager
+    fun initialize(windowsView: View) {
+        this.windowManager = BaseApplication.instance!!.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         this.windowsView = windowsView
         layoutParams = WindowManager.LayoutParams()
         //设置类型
@@ -38,8 +37,8 @@ object FloatWindowHelper {
             layoutParams?.type = WindowManager.LayoutParams.TYPE_PHONE
         }
         //设置行为选项
-        layoutParams?.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-//        layoutParams?.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+//        layoutParams?.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        layoutParams?.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE//不屏蔽返回键
         //设置悬浮窗的显示位置
         layoutParams?.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
         //如果悬浮窗图片为透明图片，需要设置该参数为PixelFormat.RGBA_8888
@@ -50,7 +49,7 @@ object FloatWindowHelper {
         layoutParams?.height = WindowManager.LayoutParams.WRAP_CONTENT
         regTouch()
         //设置悬浮窗的布局/加载显示悬浮窗
-        windowManager.addView(windowsView, layoutParams)
+        windowManager?.addView(windowsView, layoutParams)
     }
 
     private fun regTouch() {
@@ -73,7 +72,7 @@ object FloatWindowHelper {
                         val disY = (event.rawY - lastY).toInt()
                         layoutParams!!.x += disX
                         layoutParams!!.y += disY
-                        windowManager?.updateViewLayout(windowsView, layoutParams)
+                        update()
                         lastX = event.rawX.toInt()
                         lastY = event.rawY.toInt()
                     }
@@ -108,7 +107,7 @@ object FloatWindowHelper {
             0 -> layoutParams?.x = Constants.SCREEN_WIDTH
             1 -> layoutParams?.x = 0
         }
-        windowManager?.updateViewLayout(windowsView, layoutParams)
+        update()
         false
     }
 
@@ -117,7 +116,7 @@ object FloatWindowHelper {
     }
 
     fun update() {
-//        windowManager?.updateViewLayout(windowsView, layoutParams)
+        windowManager?.updateViewLayout(windowsView, layoutParams)
     }
 
     @JvmStatic

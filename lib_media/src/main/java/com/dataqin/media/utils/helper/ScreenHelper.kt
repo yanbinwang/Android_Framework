@@ -109,7 +109,7 @@ object ScreenHelper {
                     FloatWindowHelper.update()
                 }
             })
-            FloatWindowHelper.initialize(weakActivity?.get()!!, weakActivity?.get()!!.windowManager, view)
+            FloatWindowHelper.initialize(view)
         }
         val service = Intent(weakActivity?.get()!!, ScreenRecordService::class.java)
         service.putExtra(Extras.RESULT_CODE, resultCode)
