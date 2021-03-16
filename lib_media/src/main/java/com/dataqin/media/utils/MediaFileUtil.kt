@@ -39,9 +39,13 @@ object MediaFileUtil {
 
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
         return when (type) {
+            //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> File(mediaStorageDir.path + File.separator + timeStamp + ".jpg")
+            //录像
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> File((mediaStorageDir.path + File.separator + timeStamp + ".mp4"))
+            //录音
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> File((mediaStorageDir.path + File.separator + timeStamp + ".wav"))
+            //录屏
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> File((mediaStorageDir.path + File.separator + timeStamp + ".mp4"))
             else -> return null
         }
@@ -59,15 +63,15 @@ object MediaFileUtil {
     //将bitmap存成文件
     @JvmStatic
     fun saveBitmapToSd(bitmap: Bitmap, path: String?, quality: Int): Boolean {
-        val f = File(path)
-        if (f.exists()) {
-            f.delete()
+        val file = File(path)
+        if (file.exists()) {
+            file.delete()
         }
         return try {
-            val out = FileOutputStream(f)
-            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
-            out.flush()
-            out.close()
+            val fileOutputStream = FileOutputStream(file)
+            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream)
+            fileOutputStream.flush()
+            fileOutputStream.close()
             LogUtil.i(TAG, "图片已经保存!")
             true
         } catch (e: FileNotFoundException) {

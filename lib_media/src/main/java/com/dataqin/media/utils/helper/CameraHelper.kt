@@ -105,10 +105,7 @@ object CameraHelper {
      */
     @JvmStatic
     fun startRecorder(weakActivity: WeakReference<Activity>? = null) {
-        val videoFile = MediaFileUtil.getOutputMediaFile(
-            MEDIA_TYPE_VIDEO,
-            Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH
-        )
+        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH)
         if (null != videoFile) {
             try {
                 //设置一下声音
