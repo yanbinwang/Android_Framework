@@ -78,7 +78,11 @@ class ScreenRecordService : Service() {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                setVideoEncodingBitRate(MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) * MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT))
+                setVideoEncodingBitRate(
+                    MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) * MobileSizeUtil.getHeight(
+                        Constants.SCREEN_HEIGHT
+                    )
+                )
             } else {
                 setVideoEncodingBitRate(Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
             }
@@ -86,7 +90,10 @@ class ScreenRecordService : Service() {
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             //高版本手机分辨率会有问题
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                setVideoSize(MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH), MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT))
+                setVideoSize(
+                    MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH),
+                    MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT)
+                )
             } else {
                 setVideoSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT)
             }

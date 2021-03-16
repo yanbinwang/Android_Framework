@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tv_count"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="100mm"
+    android:background="@drawable/shape_black_timer_bg"
+    android:drawableStart="@drawable/shape_black_timer_dra"
+    android:drawablePadding="12mm"
+    android:gravity="center"
+    android:paddingHorizontal="20mm"
+    android:paddingVertical="8mm"
+    android:text="00:00:00"
+    android:textColor="@color/white"
+    android:textSize="18mm" />
