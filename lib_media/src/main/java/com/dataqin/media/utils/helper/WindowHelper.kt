@@ -15,6 +15,7 @@ import android.view.WindowManager
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.handler.WeakHandler
+import java.lang.Math.abs
 import java.lang.ref.WeakReference
 
 /**
@@ -36,6 +37,7 @@ object WindowHelper {
         update()
         false
     }
+    var onWindowClickListener: OnWindowClickListener? = null
 
     @JvmStatic
     fun initialize(view: View, move: Boolean = false) {
@@ -47,7 +49,7 @@ object WindowHelper {
             layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE
         }
         //设置行为选项
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
         //设置悬浮窗的显示位置
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
         //如果悬浮窗图片为透明图片，需要设置该参数为PixelFormat.RGBA_8888
@@ -84,22 +86,22 @@ object WindowHelper {
                         val disY = (event.rawY - lastY).toInt()
                         layoutParams.x += disX
                         layoutParams.y += disY
-                        update()
                         lastX = event.rawX.toInt()
                         lastY = event.rawY.toInt()
+                        update()
                     }
                     //抬起 事件
                     MotionEvent.ACTION_UP -> {
                         val x = event.rawX.toInt()
-//                        val y = event.rawY.toInt()
-//                        var upX = x - downX
-//                        var upY = y - downY
-//                        upX = abs(upX)
-//                        upY = abs(upY)
-//                        if (upX < 20 && upY < 20) {
-//                            //点击进入指定页面
-//                            onClick()
-//                        }
+                        val y = event.rawY.toInt()
+                        var upX = x - downX
+                        var upY = y - downY
+                        upX = abs(upX)
+                        upY = abs(upY)
+                        if (upX < 20 && upY < 20) {
+                            //点击进入指定页面
+                            onWindowClickListener?.onClick()
+                        }
                         if (x > Constants.SCREEN_WIDTH / 2) {
                             //放手后移到右边
                             touchHandler.sendEmptyMessage(0)
@@ -113,10 +115,6 @@ object WindowHelper {
             }
         })
     }
-
-//    private fun onClick() {
-//        //
-//    }
 
     @JvmStatic
     fun checkFloatWindowPermission(activity: Activity): Boolean {
@@ -159,6 +157,12 @@ object WindowHelper {
     @JvmStatic
     fun onDestroy() {
         windowManager.removeView(windowsView)
+    }
+
+    interface OnWindowClickListener {
+
+        fun onClick()
+
     }
 
 }
