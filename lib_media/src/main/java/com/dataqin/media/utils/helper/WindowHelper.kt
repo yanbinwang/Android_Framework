@@ -13,8 +13,6 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import com.dataqin.common.BaseApplication
-import com.dataqin.common.constant.Constants
-import com.dataqin.common.utils.handler.WeakHandler
 import java.lang.Math.abs
 import java.lang.ref.WeakReference
 
@@ -29,14 +27,14 @@ object WindowHelper {
     private var windowsView: View? = null
     private val windowManager by lazy { BaseApplication.instance?.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
     private val layoutParams by lazy { WindowManager.LayoutParams() }
-    private val touchHandler = WeakHandler { msg ->
-        when (msg.what) {
-            0 -> layoutParams.x = Constants.SCREEN_WIDTH
-            1 -> layoutParams.x = 0
-        }
-        update()
-        false
-    }
+//    private val touchHandler = WeakHandler { msg ->
+//        when (msg.what) {
+//            0 -> layoutParams.x = Constants.SCREEN_WIDTH
+//            1 -> layoutParams.x = 0
+//        }
+//        update()
+//        false
+//    }
     var onWindowClickListener: OnWindowClickListener? = null
 
     @JvmStatic
@@ -102,13 +100,13 @@ object WindowHelper {
                             //点击进入指定页面
                             onWindowClickListener?.onClick()
                         }
-                        if (x > Constants.SCREEN_WIDTH / 2) {
-                            //放手后移到右边
-                            touchHandler.sendEmptyMessage(0)
-                        } else {
-                            //移到左边
-                            touchHandler.sendEmptyMessage(1)
-                        }
+//                        if (x > Constants.SCREEN_WIDTH / 2) {
+//                            //放手后移到右边
+//                            touchHandler.sendEmptyMessage(0)
+//                        } else {
+//                            //移到左边
+//                            touchHandler.sendEmptyMessage(1)
+//                        }
                     }
                 }
                 return true
