@@ -8,7 +8,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.media.utils.helper.FloatWindowHelper
+import com.dataqin.media.utils.helper.WindowHelper
 import com.dataqin.media.utils.helper.ScreenHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScreenBinding
@@ -75,7 +75,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
     override fun onDestroy() {
         super.onDestroy()
         ScreenHelper.stopScreen()
-        FloatWindowHelper.onDestroy()
+        WindowHelper.onDestroy()
     }
 
 }
