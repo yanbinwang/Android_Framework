@@ -27,14 +27,6 @@ object WindowHelper {
     private var windowsView: View? = null
     private val windowManager by lazy { BaseApplication.instance?.getSystemService(Context.WINDOW_SERVICE) as WindowManager }
     private val layoutParams by lazy { WindowManager.LayoutParams() }
-//    private val touchHandler = WeakHandler { msg ->
-//        when (msg.what) {
-//            0 -> layoutParams.x = Constants.SCREEN_WIDTH
-//            1 -> layoutParams.x = 0
-//        }
-//        update()
-//        false
-//    }
     var onWindowClickListener: OnWindowClickListener? = null
 
     @JvmStatic
@@ -56,15 +48,13 @@ object WindowHelper {
         layoutParams.width = WindowManager.LayoutParams.WRAP_CONTENT
         //设置悬浮窗的高度
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-        if (move) {
-            regTouch()
-        }
+        regTouch(move)
         //设置悬浮窗的布局/加载显示悬浮窗
         windowManager.addView(windowsView, layoutParams)
     }
 
     //配置悬浮窗的移动
-    private fun regTouch() {
+    private fun regTouch(move: Boolean = false) {
         windowsView?.setOnTouchListener(object : View.OnTouchListener {
             private var lastX = 0
             private var lastY = 0
@@ -86,7 +76,7 @@ object WindowHelper {
                         layoutParams.y += disY
                         lastX = event.rawX.toInt()
                         lastY = event.rawY.toInt()
-                        update()
+                        if (move) update()
                     }
                     //抬起 事件
                     MotionEvent.ACTION_UP -> {
@@ -96,17 +86,10 @@ object WindowHelper {
                         var upY = y - downY
                         upX = abs(upX)
                         upY = abs(upY)
+                        //点击进入指定页面
                         if (upX < 20 && upY < 20) {
-                            //点击进入指定页面
                             onWindowClickListener?.onClick()
                         }
-//                        if (x > Constants.SCREEN_WIDTH / 2) {
-//                            //放手后移到右边
-//                            touchHandler.sendEmptyMessage(0)
-//                        } else {
-//                            //移到左边
-//                            touchHandler.sendEmptyMessage(1)
-//                        }
                     }
                 }
                 return true
@@ -120,8 +103,7 @@ object WindowHelper {
         return when {
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> Settings.canDrawOverlays(weakActivity.get())
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> getAppOps(activity)
-            //4.4以下一般都可以直接添加悬浮窗
-            else -> true
+            else -> true//4.4以下一般都可以直接添加悬浮窗
         }
     }
 
