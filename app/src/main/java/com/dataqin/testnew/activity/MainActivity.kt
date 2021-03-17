@@ -24,8 +24,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 
-        val view = LayoutInflater.from(this).inflate(com.dataqin.media.R.layout.view_timer_window, null)
-        view.findViewById<TextView>(com.dataqin.media.R.id.tv_count).setOnClickListener {
+        val view = LayoutInflater.from(this).inflate(R.layout.view_timer_window, null)
+        view.findViewById<TextView>(R.id.tv_count).setOnClickListener {
             showToast(
                 "~!!!"
             )
