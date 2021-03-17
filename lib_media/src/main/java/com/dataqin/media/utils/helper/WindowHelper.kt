@@ -13,8 +13,8 @@ import android.view.MotionEvent
 import android.view.View
 import android.view.WindowManager
 import com.dataqin.common.BaseApplication
-import java.lang.Math.abs
 import java.lang.ref.WeakReference
+import kotlin.math.abs
 
 /**
  *  Created by wangyanbin
