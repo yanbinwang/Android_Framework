@@ -47,8 +47,7 @@ object WindowHelper {
             layoutParams.type = WindowManager.LayoutParams.TYPE_PHONE
         }
         //设置行为选项
-//        layoutParams?.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE//不屏蔽返回键
+        layoutParams.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
         //设置悬浮窗的显示位置
         layoutParams.gravity = Gravity.CENTER_HORIZONTAL or Gravity.TOP
         //如果悬浮窗图片为透明图片，需要设置该参数为PixelFormat.RGBA_8888
@@ -92,9 +91,9 @@ object WindowHelper {
                     //抬起 事件
                     MotionEvent.ACTION_UP -> {
                         val x = event.rawX.toInt()
-                        val y = event.rawY.toInt()
-                        var upX = x - downX
-                        var upY = y - downY
+//                        val y = event.rawY.toInt()
+//                        var upX = x - downX
+//                        var upY = y - downY
 //                        upX = abs(upX)
 //                        upY = abs(upY)
 //                        if (upX < 20 && upY < 20) {

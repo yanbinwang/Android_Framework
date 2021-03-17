@@ -72,8 +72,7 @@ object ScreenHelper {
             TimeTaskHelper.startTask(1000, object : TimeTaskHelper.OnCountUpListener {
                 override fun run() {
                     timerCount++
-                    view.findViewById<TextView>(R.id.tv_count).text =
-                        StringUtil.getSecondFormat(timerCount.toLong())
+                    view.findViewById<TextView>(R.id.tv_count).text = StringUtil.getSecondFormat(timerCount.toLong())
                     WindowHelper.update()
                 }
             })

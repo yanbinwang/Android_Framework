@@ -2,11 +2,14 @@ package com.dataqin.testnew.activity
 
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.TextView
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
+import com.dataqin.media.utils.helper.ScreenHelper
 import com.dataqin.media.utils.helper.WindowHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -22,7 +25,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         titleBuilder.setTitle("控制台").hideBack()
 
         val view = LayoutInflater.from(this).inflate(com.dataqin.media.R.layout.view_timer_window, null)
-        WindowHelper.initialize(view)
+        view.findViewById<TextView>(com.dataqin.media.R.id.tv_count).setOnClickListener {
+            showToast(
+                "~!!!"
+            )
+        }
+        WindowHelper.initialize(view,true)
     }
 
     override fun initEvent() {
