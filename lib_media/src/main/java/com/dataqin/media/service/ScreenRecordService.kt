@@ -106,11 +106,10 @@ class ScreenRecordService : Service() {
     }
 
     private fun createVirtualDisplay(): VirtualDisplay? {
-        return if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-            mediaProjection?.createVirtualDisplay("mediaProjection", MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH), MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT), Constants.SCREEN_DENSITY, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder?.surface, null, null)
-        } else {
-            mediaProjection?.createVirtualDisplay("mediaProjection", Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT, Constants.SCREEN_DENSITY, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder?.surface, null, null)
-        }
+        return mediaProjection?.createVirtualDisplay("mediaProjection",
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT,
+            Constants.SCREEN_DENSITY, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder?.surface, null, null)
     }
 
     override fun onBind(intent: Intent?): IBinder? {
