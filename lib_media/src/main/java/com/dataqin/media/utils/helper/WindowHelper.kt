@@ -119,6 +119,7 @@ object WindowHelper {
 //        //
 //    }
 
+    @JvmStatic
     fun checkFloatWindowPermission(activity: Activity): Boolean {
         val weakActivity = WeakReference(activity)
         return when {
@@ -151,6 +152,7 @@ object WindowHelper {
         return false
     }
 
+    @JvmStatic
     fun update() {
         windowManager.updateViewLayout(windowsView, layoutParams)
     }
