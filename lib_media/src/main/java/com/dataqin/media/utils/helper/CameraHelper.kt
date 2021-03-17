@@ -104,14 +104,14 @@ object CameraHelper {
      * 开始录像
      */
     @JvmStatic
-    fun startRecorder(weakActivity: WeakReference<Activity>? = null) {
+    fun startRecorder(activity: Activity? = null) {
+        val weakActivity = WeakReference(activity)
         val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH)
         if (null != videoFile) {
             try {
                 //设置一下声音
-                if ((weakActivity?.get()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
-                    val recordingMedia = MediaPlayer.create(weakActivity.get(), Uri.parse("file:///system/media/audio/ui/camera_focus.ogg"))
-                    recordingMedia?.start()
+                if ((weakActivity.get()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
+                    MediaPlayer.create(weakActivity.get(), Uri.parse("file:///system/media/audio/ui/camera_focus.ogg")).start()
                 }
             } catch (e: Exception) {
             }
