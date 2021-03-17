@@ -21,8 +21,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 
-        val view = LayoutInflater.from(this).inflate(R.layout.view_timer_window, null)
-        WindowHelper.initialize(view,true)
+        WindowHelper.initialize(LayoutInflater.from(this).inflate(R.layout.view_timer_window, null),true)
         WindowHelper.onWindowClickListener = object :WindowHelper.OnWindowClickListener{
             override fun onClick() {
                 showToast("~!!!")
