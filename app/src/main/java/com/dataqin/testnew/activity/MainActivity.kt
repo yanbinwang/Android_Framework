@@ -7,6 +7,8 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.base.utils.SdcardUtil
+import com.dataqin.common.imageloader.album.AlbumHelper
+import com.dataqin.common.imageloader.album.OnAlbumListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 
@@ -44,7 +46,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> pageTesting(0)
+            R.id.btn_shot -> AlbumHelper.with(this).setAlbumCallBack(object :OnAlbumListener{
+                override fun onAlbumListener(albumPath: String?) {
+                    TODO("Not yet implemented")
+                }
+            }).toAlbum(true,false)
             R.id.btn_video_tap -> pageTesting(1)
             R.id.btn_record -> pageTesting(2)
             R.id.btn_screen -> pageTesting(3)

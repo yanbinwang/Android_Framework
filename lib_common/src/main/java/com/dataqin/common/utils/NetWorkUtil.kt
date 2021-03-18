@@ -50,7 +50,7 @@ object NetWorkUtil {
     //判断当前网络环境是否为wifi
     @JvmStatic
     fun isWifi(): Boolean {
-        return connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
+        return connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI
     }
 
     //获取网络状态

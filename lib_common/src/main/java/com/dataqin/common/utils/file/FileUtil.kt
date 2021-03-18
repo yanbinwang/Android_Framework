@@ -2,8 +2,6 @@ package com.dataqin.common.utils.file
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.ApplicationInfo
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PixelFormat
@@ -188,26 +186,6 @@ object FileUtil {
             }
         }
         return false
-    }
-
-    //获取当前app的应用程序名称
-    @JvmStatic
-    fun getApplicationName(context: Context): String {
-        var packageManager: PackageManager? = null
-        var applicationInfo: ApplicationInfo?
-        try {
-            packageManager = context.applicationContext.packageManager
-            applicationInfo = packageManager.getApplicationInfo(context.packageName, 0)
-        } catch (e: PackageManager.NameNotFoundException) {
-            applicationInfo = null
-        }
-        return packageManager?.getApplicationLabel(applicationInfo) as String
-    }
-
-    //获取当前app的应用程序名称
-    @JvmStatic
-    fun getApplicationId(context: Context): String {
-        return context.packageName
     }
 
     //获取app的图标
