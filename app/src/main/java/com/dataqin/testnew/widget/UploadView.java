@@ -73,14 +73,14 @@ public class UploadView extends SimpleViewGroup {
         ivUpload.setVisibility(View.GONE);
         pbTips.setVisibility(View.VISIBLE);
         rlContainer.setVisibility(View.VISIBLE);
+        pbTips.setProgress(0);
         startLoading();
     }
 
     //加载完成
     public void onComplete(String url) {
         ivUpload.setVisibility(View.VISIBLE);
-        pbTips.setVisibility(View.GONE);
-        rlContainer.setVisibility(View.VISIBLE);
+        rlContainer.setVisibility(View.GONE);
         stopLoading();
         ImageLoader.getInstance().displayImage(ivUpload, url);
     }
