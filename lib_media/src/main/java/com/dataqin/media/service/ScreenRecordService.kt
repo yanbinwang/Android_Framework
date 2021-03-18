@@ -77,19 +77,13 @@ class ScreenRecordService : Service() {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                setVideoEncodingBitRate(MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) * MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT))
-            } else {
-                setVideoEncodingBitRate(Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
-            }
+            setVideoEncodingBitRate(if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) * MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
             setVideoEncoder(MediaRecorder.VideoEncoder.H264)
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             //高版本手机分辨率会有问题
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) {
-                setVideoSize(MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH), MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT))
-            } else {
-                setVideoSize(Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT)
-            }
+            setVideoSize(
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT)
             setVideoFrameRate(60)
             try {
                 //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
