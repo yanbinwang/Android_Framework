@@ -27,7 +27,7 @@ class AlbumHelper(activity: Activity) {
     private var onAlbumListener: OnAlbumListener? = null //单选回调监听
 
     //跳转至相机
-    fun toCamera(isTailor: Boolean): AlbumHelper {
+    fun toCamera(isTailor: Boolean = false): AlbumHelper {
         PermissionHelper.with(weakActivity.get())
                 .setPermissionCallBack(object : OnPermissionCallBack {
                     override fun onPermissionListener(isGranted: Boolean) {
@@ -77,7 +77,7 @@ class AlbumHelper(activity: Activity) {
     }
 
     //跳转至相册
-    fun toAlbum(isCamera: Boolean, isTailor: Boolean): AlbumHelper {
+    fun toAlbum(isCamera: Boolean = true, isTailor: Boolean = false): AlbumHelper {
         PermissionHelper.with(weakActivity.get())
                 .setPermissionCallBack(object : OnPermissionCallBack {
                     override fun onPermissionListener(isGranted: Boolean) {
