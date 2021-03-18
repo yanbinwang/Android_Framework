@@ -3,14 +3,13 @@ package com.dataqin.common.bus
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.disposables.Disposable
 
-
 /**
  * author: wyb
  * date: 2019/7/30.
  * 事务管理器，用于添加和清除不同页面订阅的事务
  */
 class RxManager {
-    private val compositeDisposable = CompositeDisposable()
+    private val compositeDisposable by lazy { CompositeDisposable() }
 
     //单纯的Observables 和 Subscribers管理
     fun add(disposable: Disposable) {
