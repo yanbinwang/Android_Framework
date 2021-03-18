@@ -10,10 +10,8 @@ import android.widget.RelativeLayout;
 
 import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.common.imageloader.ImageLoader;
-import com.dataqin.common.imageloader.album.AlbumHelper;
 import com.dataqin.common.utils.helper.TimeTaskHelper;
 import com.dataqin.testnew.R;
-import com.yanzhenjie.album.Album;
 
 /**
  * Created by wangyanbin
@@ -49,11 +47,7 @@ public class UploadView extends SimpleViewGroup {
         ivUpload = view.findViewById(R.id.iv_upload);
         rlContainer = view.findViewById(R.id.rl_container);
         pbTips = view.findViewById(R.id.pb_tips);
-        setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-            }
-        });
+        onNormal();
     }
 
     @Override
@@ -61,40 +55,54 @@ public class UploadView extends SimpleViewGroup {
         if (detectionInflate()) addView(view);
     }
 
-    public void onStart() {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        stopLoading();
+    }
+
+    //默认常态
+    public void onNormal() {
         ivUpload.setVisibility(View.GONE);
         pbTips.setVisibility(View.GONE);
         rlContainer.setVisibility(View.VISIBLE);
     }
 
+    //加载中
     public void onLoading() {
         ivUpload.setVisibility(View.GONE);
         pbTips.setVisibility(View.VISIBLE);
         rlContainer.setVisibility(View.VISIBLE);
-        start();
+        startLoading();
     }
 
+    //加载完成
     public void onComplete(String url) {
         ivUpload.setVisibility(View.VISIBLE);
         pbTips.setVisibility(View.GONE);
         rlContainer.setVisibility(View.VISIBLE);
-        stop();
+        stopLoading();
         ImageLoader.getInstance().displayImage(ivUpload, url);
     }
 
-    private void start() {
+    private void startLoading() {
         TimeTaskHelper.startTask(1000, () -> {
             int progress = pbTips.getProgress();
             if (progress <= 100) {
                 pbTips.setProgress(progress + upProgress);
             } else {
-                stop();
+                stopLoading();
             }
         });
     }
 
-    private void stop() {
+    private void stopLoading() {
         TimeTaskHelper.stopTask();
+    }
+
+    //小贴士背景
+    public void setTips(int resId) {
+        ivTips.setImageResource(resId);
     }
 
 }
