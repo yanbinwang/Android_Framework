@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/layer_shadow"
+    android:padding="2mm">
+
+    <ImageView
+        android:id="@+id/iv_upload"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:scaleType="centerCrop" />
+
+    <RelativeLayout
+        android:id="@+id/rl_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:background="@color/white">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="168mm"
+                android:layout_height="112mm">
+
+                <ImageView
+                    android:id="@+id/iv_tips"
+                    android:layout_width="137mm"
+                    android:layout_height="87mm"
+                    android:layout_centerInParent="true"
+                    tools:src="@mipmap/img_id_card" />
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@mipmap/img_camera" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_tips"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="27mm"
+                android:textColor="@color/grey_c5cad5"
+                android:textSize="14mm"
+                tools:text="拍摄身份证国徽面" />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_tips"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6mm"
+            android:layout_alignParentBottom="true"
+            android:max="100"
+            android:progressDrawable="@drawable/bg_upload_progress"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+</RelativeLayout>
