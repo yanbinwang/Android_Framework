@@ -58,7 +58,7 @@ public class UploadView extends SimpleViewGroup {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        stopLoading();
+        stopTask();
     }
 
     //默认常态
@@ -74,29 +74,29 @@ public class UploadView extends SimpleViewGroup {
         pbTips.setVisibility(View.VISIBLE);
         rlContainer.setVisibility(View.VISIBLE);
         pbTips.setProgress(0);
-        startLoading();
+        startTask();
     }
 
     //加载完成
     public void onComplete(String url) {
         ivUpload.setVisibility(View.VISIBLE);
         rlContainer.setVisibility(View.GONE);
-        stopLoading();
+        stopTask();
         ImageLoader.getInstance().displayImage(ivUpload, url);
     }
 
-    private void startLoading() {
+    private void startTask() {
         TimeTaskHelper.startTask(1000, () -> {
             int progress = pbTips.getProgress();
             if (progress <= 100) {
                 pbTips.setProgress(progress + upProgress);
             } else {
-                stopLoading();
+                stopTask();
             }
         });
     }
 
-    private void stopLoading() {
+    private void stopTask() {
         TimeTaskHelper.stopTask();
     }
 
