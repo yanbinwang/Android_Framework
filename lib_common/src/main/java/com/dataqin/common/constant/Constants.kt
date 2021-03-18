@@ -27,8 +27,6 @@ object Constants {
     @JvmField
     var MAC: String? = null//当前手机mac地址
     @JvmField
-    var DEVICE_ID: String? = null//当前手机设备id
-    @JvmField
     var APPLICATION_FILE_PATH: String? = null//默认文件保存路径，sd卡下的应用名文件夹
     @JvmField
     var SDCARD_PATH = BaseApplication.instance?.getExternalFilesDir(null)?.absolutePath//sd卡的根路径mnt/sdcard-访问这个目录不需要动态申请STORAGE权限

@@ -9,7 +9,6 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.SystemClock
-import android.telephony.TelephonyManager
 import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
@@ -51,8 +50,6 @@ object ConfigHelper {
         Constants.IP = getIp()
         //获取手机的Mac地址
         Constants.MAC = getMac()
-        //获取手机的DeviceId
-        Constants.DEVICE_ID = getDeviceId()
         //版本名，版本号
         Constants.VERSION_CODE = getAppVersionCode()
         Constants.VERSION_NAME = getAppVersionName()
@@ -156,15 +153,6 @@ object ConfigHelper {
             e.printStackTrace()
         }
         return null
-    }
-
-    //获取当前设备的id
-    private fun getDeviceId(): String? {
-        return try {
-            (context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).deviceId
-        } catch (e: SecurityException) {
-            null
-        }
     }
 
     //获取当前app version code
