@@ -5,11 +5,9 @@ buildscript {
     addRepos(repositories)
     ext.gradle_version = '4.1.2'
     ext.kotlin_version = '1.4.31'
-    ext.greendao_version = '3.3.0'
     dependencies {
         classpath "com.android.tools.build:gradle:$gradle_version"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "org.greenrobot:greendao-gradle-plugin:$greendao_version"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }

@@ -31,8 +31,6 @@ versions.rxandroid = "3.0.0"
 versions.autosize = "1.2.1"
 versions.mmkv = "1.2.2"
 versions.recovery = "1.0.0"
-versions.greendao = "3.3.0"
-versions.cameraview = "2.7.0"
 versions.guide = "v2.4.0"
 
 //安卓x库
@@ -82,8 +80,6 @@ deps.rxandroid = "io.reactivex.rxjava3:rxandroid:$versions.rxandroid"//rxandroid
 deps.autosize = "me.jessyan:autosize:$versions.autosize"//今日头条布局兼容
 deps.mmkv = "com.tencent:mmkv-static:$versions.mmkv"//腾讯读写库
 deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
-deps.greendao = "org.greenrobot:greendao:$versions.greendao"//数据库
-deps.cameraview = "com.otaliastudios:cameraview:$versions.cameraview"//相机库
 deps.guide = "com.github.huburt-Hu:NewbieGuide:$versions.guide"//遮罩引导
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
