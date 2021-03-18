@@ -5,8 +5,6 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
-import com.dataqin.common.utils.helper.TimeTaskHelper
 
 /**
  *  Created by wangyanbin
@@ -42,28 +40,28 @@ object MethodUtil {
         return !isDisplay
     }
 
-    /**
-     * 倒计时
-     */
-    fun countDown(text: TextView, second: Long) {
-        TimeTaskHelper.startCountDown(second, object : TimeTaskHelper.OnCountDownListener {
-            override fun onTick(second: Long) {
-                text.isEnabled = false
-                text.text = "已发送 $second S"
-            }
-
-            override fun onFinish() {
-                text.isEnabled = true
-                text.text = "重发验证码"
-            }
-        })
-    }
-
-    /**
-     * 计时-销毁
-     */
-    fun destroy() {
-        TimeTaskHelper.destroy()
-    }
+//    /**
+//     * 倒计时
+//     */
+//    fun countDown(text: TextView, second: Long) {
+//        TimeTaskHelper.startCountDown(second, object : TimeTaskHelper.OnCountDownListener {
+//            override fun onTick(second: Long) {
+//                text.isEnabled = false
+//                text.text = "已发送 $second S"
+//            }
+//
+//            override fun onFinish() {
+//                text.isEnabled = true
+//                text.text = "重发验证码"
+//            }
+//        })
+//    }
+//
+//    /**
+//     * 计时-销毁
+//     */
+//    fun destroy() {
+//        TimeTaskHelper.destroy()
+//    }
 
 }
