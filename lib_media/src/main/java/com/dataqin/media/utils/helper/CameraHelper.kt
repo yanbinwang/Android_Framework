@@ -41,15 +41,17 @@ object CameraHelper {
     @JvmStatic
     fun initialize(owner: LifecycleOwner, cvFinder: CameraView) {
         this.cvFinder = cvFinder
-        cvFinder.setLifecycleOwner(owner)
-        cvFinder.setExperimental(true)//拍照快门声
-        cvFinder.keepScreenOn = true//是否保持屏幕高亮
-        cvFinder.playSounds = true//录像是否录制声音
-        cvFinder.audio = Audio.ON//录制开启声音
-        cvFinder.engine = Engine.CAMERA2//相机底层类型
-        cvFinder.preview = Preview.GL_SURFACE//绘制相机的装载控件
-        cvFinder.facing = Facing.BACK//打开时镜头默认后置
-        cvFinder.flash = Flash.AUTO//闪光灯自动
+        cvFinder.apply {
+            setLifecycleOwner(owner)
+            setExperimental(true)//拍照快门声
+            keepScreenOn = true//是否保持屏幕高亮
+            playSounds = true//录像是否录制声音
+            audio = Audio.ON//录制开启声音
+            engine = Engine.CAMERA2//相机底层类型
+            preview = Preview.GL_SURFACE//绘制相机的装载控件
+            facing = Facing.BACK//打开时镜头默认后置
+            flash = Flash.AUTO//闪光灯自动
+        }
     }
 
     /**
