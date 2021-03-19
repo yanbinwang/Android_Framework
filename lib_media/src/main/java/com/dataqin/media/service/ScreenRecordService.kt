@@ -19,7 +19,8 @@ import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.media.utils.MediaFileUtil
-import com.dataqin.media.utils.MobileSizeUtil
+import com.dataqin.media.utils.MobileSizeUtil.getHeight
+import com.dataqin.media.utils.MobileSizeUtil.getWidth
 
 /**
  *  Created by wangyanbin
@@ -77,13 +78,13 @@ class ScreenRecordService : Service() {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setVideoEncodingBitRate(if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) * MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
+            setVideoEncodingBitRate(if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getWidth(Constants.SCREEN_WIDTH) * getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
             setVideoEncoder(MediaRecorder.VideoEncoder.H264)
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             //高版本手机分辨率会有问题
             setVideoSize(
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
-                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT)
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
+                if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT)
             setVideoFrameRate(60)
             try {
                 //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
@@ -101,8 +102,8 @@ class ScreenRecordService : Service() {
 
     private fun createVirtualDisplay(): VirtualDisplay? {
         return mediaProjection?.createVirtualDisplay("mediaProjection",
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) MobileSizeUtil.getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT,
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getWidth(Constants.SCREEN_WIDTH) else Constants.SCREEN_WIDTH,
+            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_HEIGHT,
             Constants.SCREEN_DENSITY, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder?.surface, null, null)
     }
 
