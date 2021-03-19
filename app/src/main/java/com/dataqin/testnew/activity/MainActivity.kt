@@ -11,6 +11,8 @@ import com.dataqin.testnew.databinding.ActivityMainBinding
 
 /**
  * Created by WangYanBin
+ * 拍照，录像，录音，录屏，在产生文件时如果过大都是需要有过度动画的
+ * 需要书写一个dialog全屏拦截用户手势，保证文件的产生
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener {
