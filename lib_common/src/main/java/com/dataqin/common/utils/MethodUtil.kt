@@ -1,6 +1,6 @@
 package com.dataqin.common.utils
 
-import android.annotation.SuppressLint
+import android.text.InputFilter
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
@@ -10,15 +10,14 @@ import android.widget.ImageView
  *  Created by wangyanbin
  *  按钮，控件行为工具类
  */
-@SuppressLint("SetTextI18n")
 object MethodUtil {
 
     /**
-     * 密码是否可见
+     * EditText输入密码是否可见(显隐)
      */
-    fun passwordDisplay(isDisplay: Boolean, editText: EditText, imageView: ImageView): Boolean {
+    fun inputTransformation(isDisplay: Boolean, editText: EditText, imageView: ImageView): Boolean {
         if (!isDisplay) {
-            // display password text, for example "123456"
+            //display password text, for example "123456"
             editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
             try {
                 editText.setSelection(editText.text.length)
@@ -27,7 +26,7 @@ object MethodUtil {
             }
 //            imageView.setBackgroundResource(R.mipmap.ic_text_show)
         } else {
-            // hide password, display "."
+            //hide password, display "."
             editText.transformationMethod = PasswordTransformationMethod.getInstance()
             try {
                 editText.setSelection(editText.text.length)
@@ -40,28 +39,14 @@ object MethodUtil {
         return !isDisplay
     }
 
-//    /**
-//     * 倒计时
-//     */
-//    fun countDown(text: TextView, second: Long) {
-//        TimeTaskHelper.startCountDown(second, object : TimeTaskHelper.OnCountDownListener {
-//            override fun onTick(second: Long) {
-//                text.isEnabled = false
-//                text.text = "已发送 $second S"
-//            }
-//
-//            override fun onFinish() {
-//                text.isEnabled = true
-//                text.text = "重发验证码"
-//            }
-//        })
-//    }
-//
-//    /**
-//     * 计时-销毁
-//     */
-//    fun destroy() {
-//        TimeTaskHelper.destroy()
-//    }
+    /**
+     * EditText输入金额小数限制
+     */
+    fun decimalFilter(editText: EditText, decimalPoint: Int = 2){
+        val decimalInputFilter = DecimalInputFilter()
+        decimalInputFilter.decimalPoint = decimalPoint
+        val filters = arrayOf<InputFilter>(decimalInputFilter)
+        editText.filters = filters
+    }
 
 }

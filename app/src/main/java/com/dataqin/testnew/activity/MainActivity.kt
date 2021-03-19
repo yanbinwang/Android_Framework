@@ -6,7 +6,6 @@ import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.base.utils.SdcardUtil
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 
@@ -19,7 +18,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
-        showToast(SdcardUtil.getSdcardTotalCapacity().toString())
     }
 
     override fun initEvent() {
