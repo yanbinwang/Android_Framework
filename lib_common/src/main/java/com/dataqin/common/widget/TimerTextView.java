@@ -32,7 +32,7 @@ public class TimerTextView extends TextView {
     }
 
     public void countDown() {
-        countDown(1000);
+        countDown(60);
     }
 
     public void countDown(long second) {
