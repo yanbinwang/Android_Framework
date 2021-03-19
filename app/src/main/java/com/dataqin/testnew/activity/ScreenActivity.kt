@@ -11,6 +11,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.GSYVideoHelper
 import com.dataqin.media.utils.helper.ScreenHelper
 import com.dataqin.testnew.R
@@ -56,8 +57,13 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_start -> {
-                ScreenHelper.startScreen()
-                binding.btnEnd.isEnabled = true
+                //预留1G的存储空间
+                if (MediaFileUtil.scanDisk()) {
+                    ScreenHelper.startScreen()
+                    binding.btnEnd.isEnabled = true
+                } else {
+                    showToast("磁盘空间不足")
+                }
             }
             R.id.btn_end -> {
                 showDialog()
