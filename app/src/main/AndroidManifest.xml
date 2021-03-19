@@ -58,31 +58,6 @@
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
 
-        <activity
-            android:name=".activity.ShotActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.VideoTapActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.RecordActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <activity
-            android:name=".activity.ScreenActivity"
-            android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait" />
-
-        <service
-            android:name="com.dataqin.media.service.ScreenRecordService"
-            android:enabled="true"
-            android:exported="false" />
-
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"

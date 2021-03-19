@@ -10,7 +10,6 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
-import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
@@ -23,16 +22,6 @@ import java.util.*
  * 文件管理工具类
  */
 object FileUtil {
-
-    //创建日志和缓存目录
-    @JvmStatic
-    fun createCacheDir(): String? {
-        val file = File(BaseApplication.instance?.externalCacheDir.toString() + File.separator + "log")
-        if (!file.exists()) {
-            file.mkdir()
-        }
-        return file.path
-    }
 
     //复制文件
     @JvmStatic
@@ -55,8 +44,8 @@ object FileUtil {
         }
     }
 
-    @JvmStatic
     //删除本地路径下的所有文件
+    @JvmStatic
     fun deleteDir(filePath: String?) {
         val dir = File(filePath)
         deleteDirWithFile(dir)

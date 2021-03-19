@@ -1,4 +1,4 @@
-package com.dataqin.common.utils.handler
+package com.dataqin.base.utils
 
 import android.os.Handler
 import android.os.Looper

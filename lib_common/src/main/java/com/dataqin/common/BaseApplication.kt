@@ -5,10 +5,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
 import com.dataqin.base.utils.LogUtil.d
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
-import com.dataqin.common.dao.DaoMaster
-import com.dataqin.common.dao.DaoSession
 import com.dataqin.common.imageloader.glide.callback.GlideAlbumLoader
-import com.dataqin.common.utils.handler.CrashHandler
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
@@ -17,14 +14,12 @@ import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.AlbumConfig
 import me.jessyan.autosize.AutoSizeConfig
 import me.jessyan.autosize.unit.Subunits
-import org.greenrobot.greendao.database.Database
 import java.util.*
 
 /**
  * Created by WangYanBin on 2020/8/14.
  */
 open class BaseApplication : Application() {
-    var daoSession: DaoSession? = null
 
     companion object {
         @JvmField
@@ -64,9 +59,6 @@ open class BaseApplication : Application() {
             //打印日志
             ARouter.openLog()
             ARouter.openDebug()
-        } else {
-            //异常捕获初始化
-            CrashHandler.instance
         }
         //阿里路由跳转初始化
         ARouter.init(this)
@@ -76,11 +68,6 @@ open class BaseApplication : Application() {
         ConfigHelper.initialize(this)
         //防止短时间内多次点击，弹出多个activity 或者 dialog ，等操作
         registerActivityLifecycleCallbacks(ApplicationActivityLifecycleCallbacks())
-        //数据库初始化
-        val openHelper = DaoMaster.DevOpenHelper(this, "oes.db", null)
-        val db: Database = openHelper.readableDb
-        val daoMaster = DaoMaster(db)
-        daoSession = daoMaster.newSession()
     }
 
 }

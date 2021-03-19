@@ -1,4 +1,4 @@
-package com.dataqin.common.utils
+package com.dataqin.base.utils
 
 import android.text.InputFilter
 import android.text.Spanned

@@ -21,9 +21,6 @@ versions.album = "2.1.3"
 versions.durban = "1.0.1"
 versions.permission = "2.0.3"
 //------------------------------------------------------------------------------------------
-versions.gsy_player = "8.0.0"
-versions.gsy_exo = "8.0.0"
-//------------------------------------------------------------------------------------------
 versions.kotlin = "1.4.31"
 versions.material = "1.2.1"
 versions.okhttp = "4.8.1"
@@ -31,8 +28,6 @@ versions.rxandroid = "3.0.0"
 versions.autosize = "1.2.1"
 versions.mmkv = "1.2.2"
 versions.recovery = "1.0.0"
-versions.greendao = "3.3.0"
-versions.cameraview = "2.7.0"
 versions.guide = "v2.4.0"
 
 //安卓x库
@@ -68,12 +63,6 @@ yanzhenjie.durban = "com.yanzhenjie:durban:$versions.durban"
 yanzhenjie.permission = "com.yanzhenjie:permission:$versions.permission"
 deps.yanzhenjie = yanzhenjie
 
-//GSYVideoPlayer
-def player = [:]
-player.gsy_player = "com.shuyu:GSYVideoPlayer:$versions.gsy_player"
-player.gsy_exo = "com.shuyu:GSYVideoPlayer-exo2:$versions.gsy_exo"
-deps.player = player
-
 //非组的第三方控件
 deps.kotlin = "org.jetbrains.kotlin:kotlin-stdlib:$versions.kotlin"//kotlin
 deps.material = "com.google.android.material:material:$versions.material"//design库
@@ -82,8 +71,6 @@ deps.rxandroid = "io.reactivex.rxjava3:rxandroid:$versions.rxandroid"//rxandroid
 deps.autosize = "me.jessyan:autosize:$versions.autosize"//今日头条布局兼容
 deps.mmkv = "com.tencent:mmkv-static:$versions.mmkv"//腾讯读写库
 deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
-deps.greendao = "org.greenrobot:greendao:$versions.greendao"//数据库
-deps.cameraview = "com.otaliastudios:cameraview:$versions.cameraview"//相机库
 deps.guide = "com.github.huburt-Hu:NewbieGuide:$versions.guide"//遮罩引导
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
@@ -95,7 +82,6 @@ build_versions.minSdkVersion = 21//最低安装版本
 build_versions.targetSdkVersion = 28//最高安装版本
 build_versions.versionCode = 1//版本号
 build_versions.versionName = "1.0"//版本名
-//build_versions.supportVersion = "1.0.0"//sdk版本
 ext.build_versions = build_versions
 
 //基础参数配置
@@ -104,13 +90,6 @@ build_config.applicationId = "com.dataqin.testnew"//主appId（包名）
 build_config.LOCALHOST_DEBUG = "\"https://netcar.dev.yoogate.cn/\""//测试环境
 build_config.LOCALHOST_RELEASE = "\"https://netcar.yoogate.cn/\""//生产环境
 ext.build_config = build_config
-
-//数据库参数配置
-def build_database = [:]
-build_database.schemaVersion = 1 // 数据库版本号（可同步app版本号）-写死不做改动！
-build_database.daoPackage = "com.dataqin.common.dao" //设置DaoMaster、DaoSession、Dao所在的包名
-build_database.targetGenDir = "src/main/java" //设置DaoMaster、DaoSession、Dao所在的目录
-ext.build_database = build_database
 
 //全局build配置
 def addRepos(repositories) {

@@ -1,8 +1,7 @@
-package com.dataqin.common.utils.helper
+package com.dataqin.base.utils
 
 import android.os.CountDownTimer
 import android.os.Looper
-import com.dataqin.common.utils.handler.WeakHandler
 import java.util.*
 
 /**

@@ -5,6 +5,7 @@ import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.widget.EditText
 import android.widget.ImageView
+import com.dataqin.base.utils.DecimalInputFilter
 
 /**
  *  Created by wangyanbin
