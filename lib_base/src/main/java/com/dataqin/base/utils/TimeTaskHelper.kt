@@ -16,15 +16,27 @@ object TimeTaskHelper {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
     /**
+     * 延时任务
+     */
+    @JvmStatic
+    fun schedule(millisecond: Long = 1000, onTaskListener: OnTaskListener?) {
+        Timer().schedule(object : TimerTask() {
+            override fun run() {
+                weakHandler.post { onTaskListener?.run() }
+            }
+        }, millisecond)
+    }
+
+    /**
      * 计时-开始
      */
     @JvmStatic
-    fun startTask(millisecond: Long = 1000, onCountDownListener: OnCountUpListener?) {
+    fun startTask(millisecond: Long = 1000, onTaskListener: OnTaskListener?) {
         if (timer == null) {
             timer = Timer()
             timerTask = object : TimerTask() {
                 override fun run() {
-                    weakHandler.post { onCountDownListener?.run() }
+                    weakHandler.post { onTaskListener?.run() }
                 }
             }
             timer?.schedule(timerTask, millisecond, millisecond) //1s后执行timer，之后每隔1s执行一次
@@ -80,7 +92,7 @@ object TimeTaskHelper {
         stopCountDown()
     }
 
-    interface OnCountUpListener {
+    interface OnTaskListener {
 
         fun run()
 
