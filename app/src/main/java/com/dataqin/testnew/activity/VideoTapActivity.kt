@@ -1,6 +1,7 @@
 package com.dataqin.testnew.activity
 
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
 import android.widget.RelativeLayout
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -15,7 +16,7 @@ import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityVideoTapBinding
-import com.dataqin.testnew.widget.ShotDialog
+import com.dataqin.testnew.widget.ShotPopup
 import java.io.File
 
 /**
@@ -25,7 +26,7 @@ import java.io.File
 @Route(path = ARouterPath.VideoTapActivity)
 class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickListener {
     private var filePath = ""
-    private val shotDialog by lazy { ShotDialog(this) }
+    private val shotPopup by lazy { ShotPopup(this) }
 
     override fun initView() {
         super.initView()
@@ -65,7 +66,8 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
             }
 
             override fun onSuccess(pictureFile: File) {
-                shotDialog.show(pictureFile.path)
+                shotPopup.setFilePath(pictureFile.path)
+                shotPopup.showAtLocation(binding.btnCatch, Gravity.BOTTOM, 0, 0)
             }
 
             override fun onFailed() {
