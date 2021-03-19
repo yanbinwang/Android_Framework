@@ -28,6 +28,7 @@
             android:layout_marginHorizontal="10mm"
             android:layout_weight="1"
             android:background="@color/white"
+            android:enabled="false"
             android:text="结束"
             android:textColor="@color/black"
             android:textSize="32mm" />

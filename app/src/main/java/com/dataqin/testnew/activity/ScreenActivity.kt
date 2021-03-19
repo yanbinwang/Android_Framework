@@ -47,6 +47,7 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
                     filePath = it.getStringExtra()!!
                     VISIBLE(binding.pvVideo)
                     GSYVideoHelper.setUrl(filePath)
+                    binding.btnEnd.isEnabled = false
                 }
             }
         })
@@ -54,7 +55,10 @@ class ScreenActivity : BaseActivity<ActivityScreenBinding>(), View.OnClickListen
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> ScreenHelper.startScreen()
+            R.id.btn_start -> {
+                ScreenHelper.startScreen()
+                binding.btnEnd.isEnabled = true
+            }
             R.id.btn_end -> {
                 showDialog()
                 showToast("结束录屏")

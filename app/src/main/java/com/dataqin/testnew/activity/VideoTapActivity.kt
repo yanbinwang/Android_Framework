@@ -8,6 +8,7 @@ import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.CameraHelper
 import com.dataqin.media.utils.helper.GSYVideoHelper
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
@@ -55,6 +56,7 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
                 } else {
                     showToast("操作失败，请重试")
                 }
+                binding.btnStop.isEnabled = false
             }
         }
         CameraHelper.onTakePictureListener = object : OnTakePictureListener {
@@ -78,7 +80,15 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_start -> CameraHelper.startRecorder(this)
+            R.id.btn_start -> {
+                //预留1G的存储空间
+                if (MediaFileUtil.scanDisk()) {
+                    CameraHelper.startRecorder(this)
+                    binding.btnStop.isEnabled = true
+                } else {
+                    showToast("磁盘空间不足")
+                }
+            }
             R.id.btn_stop -> {
                 showDialog()
                 CameraHelper.stopRecorder()

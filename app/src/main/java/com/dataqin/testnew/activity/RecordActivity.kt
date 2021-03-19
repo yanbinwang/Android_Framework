@@ -37,11 +37,14 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
             override fun onStartRecord(path: String) {
                 showToast("开始录音")
                 filePath = path
+                binding.btnEnd.isEnabled = true
             }
 
             override fun onStopRecord() {
+                hideDialog()
                 showToast("结束录音")
                 RecorderHelper.setDataSource(filePath)
+                binding.btnEnd.isEnabled = false
             }
         }
     }
@@ -49,10 +52,21 @@ class RecordActivity : BaseActivity<ActivityRecordBinding>(), View.OnClickListen
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_start -> RecorderHelper.startRecord()
-            R.id.btn_end -> RecorderHelper.stopRecord()
-            R.id.btn_play -> RecorderHelper.onStart()
+            R.id.btn_end -> {
+                showDialog()
+                RecorderHelper.stopRecord()
+            }
+            R.id.btn_play -> {
+                showToast("开始循环播放")
+                RecorderHelper.onStart()
+            }
             R.id.ll_main_left -> finish()
         }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        RecorderHelper.onPause()
     }
 
     override fun onDestroy() {

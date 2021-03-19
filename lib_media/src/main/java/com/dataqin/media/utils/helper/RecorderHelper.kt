@@ -14,7 +14,7 @@ import java.io.IOException
  *  Created by wangyanbin
  *  音频工具类
  */
-object RecorderHelper  {
+object RecorderHelper {
     private val mediaPlayer by lazy { MediaPlayer() }
     private var mediaRecorder: MediaRecorder? = null
     var onRecorderListener: OnRecorderListener? = null
@@ -90,8 +90,11 @@ object RecorderHelper  {
      */
     @JvmStatic
     fun onStart() {
-        if (isPlaying()) return
-        mediaPlayer.start()
+        try {
+            if (isPlaying()) return
+            mediaPlayer.start()
+        } catch (e: Exception) {
+        }
     }
 
     /**
@@ -99,8 +102,11 @@ object RecorderHelper  {
      */
     @JvmStatic
     fun onPause() {
-        if (!isPlaying()) return
-        mediaPlayer.pause()
+        try {
+            if (!isPlaying()) return
+            mediaPlayer.pause()
+        } catch (e: Exception) {
+        }
     }
 
     /**
