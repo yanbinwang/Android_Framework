@@ -63,4 +63,25 @@
 
     </LinearLayout>
 
+    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+        android:id="@+id/pv_video"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/ll_main_left"
+        android:layout_width="wrap_content"
+        android:layout_height="93mm"
+        android:gravity="center"
+        android:paddingHorizontal="20mm">
+
+        <ImageView
+            android:layout_width="40mm"
+            android:layout_height="40mm"
+            android:layout_marginHorizontal="20mm"
+            android:src="@mipmap/ic_btn_back2" />
+
+    </LinearLayout>
+
 </RelativeLayout>

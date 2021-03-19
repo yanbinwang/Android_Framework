@@ -59,6 +59,7 @@ object RecorderHelper  {
             mediaRecorder?.release()
         } catch (e: RuntimeException) {
         }
+        onRecorderListener?.onStopRecord()
     }
 
     /**

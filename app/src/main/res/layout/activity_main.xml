@@ -41,7 +41,7 @@
         android:layout_height="80mm"
         android:layout_marginTop="20mm"
         android:background="@color/black"
-        android:text="录像"
+        android:text="录屏"
         android:textColor="@color/white"
         android:textSize="32mm" />
 
