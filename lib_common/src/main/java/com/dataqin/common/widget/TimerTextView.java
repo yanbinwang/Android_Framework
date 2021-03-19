@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.dataqin.common.utils.helper.TimeTaskHelper;
+import com.dataqin.base.utils.TimeTaskHelper;
 
 import java.text.MessageFormat;
 

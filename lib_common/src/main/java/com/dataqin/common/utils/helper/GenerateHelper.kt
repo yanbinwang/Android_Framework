@@ -6,7 +6,7 @@ import android.graphics.Color
 import android.os.Looper
 import android.view.View
 import com.dataqin.common.constant.Constants
-import com.dataqin.common.utils.handler.WeakHandler
+import com.dataqin.base.utils.WeakHandler
 import java.util.concurrent.Executors
 
 /**

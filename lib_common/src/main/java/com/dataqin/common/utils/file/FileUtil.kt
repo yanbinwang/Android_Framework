@@ -24,16 +24,6 @@ import java.util.*
  */
 object FileUtil {
 
-    //创建日志和缓存目录
-    @JvmStatic
-    fun createCacheDir(): String? {
-        val file = File(BaseApplication.instance?.externalCacheDir.toString() + File.separator + "log")
-        if (!file.exists()) {
-            file.mkdir()
-        }
-        return file.path
-    }
-
     //复制文件
     @JvmStatic
     @Throws(IOException::class)

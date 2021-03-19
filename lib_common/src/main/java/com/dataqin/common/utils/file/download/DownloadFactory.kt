@@ -5,7 +5,7 @@ import com.dataqin.common.bus.RxSchedulers
 import com.dataqin.common.http.repository.ResourceSubscriber
 import com.dataqin.common.subscribe.CommonSubscribe.getDownloadApi
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.common.utils.handler.WeakHandler
+import com.dataqin.base.utils.WeakHandler
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream

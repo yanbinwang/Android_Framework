@@ -27,19 +27,21 @@ object RecorderHelper  {
         var filePath = ""
         try {
             val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO, Constants.APPLICATION_NAME + "/" + AUDIO_FILE_PATH)
-            filePath = destDir.toString()
+            filePath = destDir!!.path
             mediaRecorder = MediaRecorder()
-            mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.MIC)//设置麦克风
-            mediaRecorder?.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
-            mediaRecorder?.setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
-            //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                mediaRecorder?.setOutputFile(filePath)
-            } else {
-                mediaRecorder?.setOutputFile(destDir)
+            mediaRecorder?.apply {
+                setAudioSource(MediaRecorder.AudioSource.MIC)//设置麦克风
+                setOutputFormat(MediaRecorder.OutputFormat.MPEG_4)
+                setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
+                //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    setOutputFile(destDir.toString())
+                } else {
+                    setOutputFile(destDir)
+                }
+                prepare()
+                start()
             }
-            mediaRecorder?.prepare()
-            mediaRecorder?.start()
         } catch (e: Exception) {
         } finally {
             onRecorderListener?.onStartRecord(filePath)
@@ -65,9 +67,11 @@ object RecorderHelper  {
     @JvmStatic
     fun setDataSource(path: String) {
         try {
-            mediaPlayer.setDataSource(path)
-            mediaPlayer.isLooping = true //设置是否循环播放
-            mediaPlayer.prepareAsync()
+            mediaPlayer.apply {
+                setDataSource(path)
+                isLooping = true //设置是否循环播放
+                prepareAsync()
+            }
         } catch (e: IOException) {
         }
     }
@@ -104,9 +108,11 @@ object RecorderHelper  {
     @JvmStatic
     fun onDestroy() {
         try {
-            mediaPlayer.stop()
-            mediaPlayer.reset()
-            mediaPlayer.release()
+            mediaPlayer.apply {
+                stop()
+                reset()
+                release()
+            }
         } catch (e: RuntimeException) {
         }
     }

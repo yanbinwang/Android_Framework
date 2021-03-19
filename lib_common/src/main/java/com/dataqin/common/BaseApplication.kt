@@ -8,7 +8,6 @@ import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
 import com.dataqin.common.dao.DaoMaster
 import com.dataqin.common.dao.DaoSession
 import com.dataqin.common.imageloader.glide.callback.GlideAlbumLoader
-import com.dataqin.common.utils.handler.CrashHandler
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
@@ -64,9 +63,6 @@ open class BaseApplication : Application() {
             //打印日志
             ARouter.openLog()
             ARouter.openDebug()
-        } else {
-            //异常捕获初始化
-            CrashHandler.instance
         }
         //阿里路由跳转初始化
         ARouter.init(this)
