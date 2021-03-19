@@ -21,19 +21,17 @@ object MethodUtil {
             editText.transformationMethod = HideReturnsTransformationMethod.getInstance()
             try {
                 editText.setSelection(editText.text.length)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 //            imageView.setBackgroundResource(R.mipmap.ic_text_show)
+            } catch (e: Exception) {
+            }
         } else {
             //hide password, display "."
             editText.transformationMethod = PasswordTransformationMethod.getInstance()
             try {
                 editText.setSelection(editText.text.length)
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
 //            imageView.setBackgroundResource(R.mipmap.ic_text_hide)
+            } catch (e: Exception) {
+            }
         }
         editText.postInvalidate()
         return !isDisplay
