@@ -47,6 +47,7 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
             }
 
             override fun onStopRecorder(path: String?) {
+                hideDialog()
                 if (!TextUtils.isEmpty(path)) {
                     filePath = path!!
                     VISIBLE(binding.pvVideo)
@@ -78,7 +79,10 @@ class VideoTapActivity : BaseActivity<ActivityVideoTapBinding>(), View.OnClickLi
     override fun onClick(v: View?) {
         when (v?.id) {
             R.id.btn_start -> CameraHelper.startRecorder(this)
-            R.id.btn_stop -> CameraHelper.stopRecorder()
+            R.id.btn_stop -> {
+                showDialog()
+                CameraHelper.stopRecorder()
+            }
             R.id.btn_catch -> CameraHelper.takePicture(true)
             R.id.btn_switch -> CameraHelper.toggleCamera()
             R.id.ll_main_left -> {
