@@ -60,14 +60,6 @@ class MyApplication : BaseApplication() {
                 } catch (e: Throwable) {
                     val stackTraceString = Log.getStackTraceString(e)
                     println("AppCatch -$stackTraceString")
-//                    when (e) {
-//                        is NullPointerException -> println("AppCatch -$stackTraceString")
-//                        is IllegalStateException -> println("AppCatch -$stackTraceString")
-//                        is ArrayIndexOutOfBoundsException -> println("AppCatch -$stackTraceString")
-//                        is IndexOutOfBoundsException -> println("AppCatch -$stackTraceString")
-//                        is OutOfMemoryError -> println("AppCatch -$stackTraceString")
-//                        is NumberFormatException -> println("AppCatch -$stackTraceString")
-//                    }
                 }
             }
         }
