@@ -30,7 +30,7 @@ import java.lang.ref.WeakReference
 class LocationFactory : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
-    private var notificationManager: NotificationManager? = null
+//    private var notificationManager: NotificationManager? = null
     val onLocationCallBack: OnLocationCallBack? = null
 
     companion object {
@@ -73,9 +73,9 @@ class LocationFactory : AMapLocationListener {
         val builder: Notification.Builder?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
-            if (null == notificationManager) {
-                notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            }
+//            if (null == notificationManager) {
+               val notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+//            }
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色
