@@ -48,13 +48,11 @@ class LocationFactory : AMapLocationListener {
         //设置定位监听
         locationClient?.setLocationListener(this)
         //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        aMapLocationClientOption.locationMode =
-            AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+        aMapLocationClientOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
         //设置是否gps优先，只在高精度模式下有效
         aMapLocationClientOption.isGpsFirst = true
         //设置定位场景为出行
-        aMapLocationClientOption.locationPurpose =
-            AMapLocationClientOption.AMapLocationPurpose.SignIn
+        aMapLocationClientOption.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
         //设置定位间隔,单位毫秒,默认为2000ms
         aMapLocationClientOption.interval = 1000
         //true表示允许外界在定位SDK通过GPS定位时模拟位置，false表示不允许模拟GPS位置
@@ -76,14 +74,9 @@ class LocationFactory : AMapLocationListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
             if (null == notificationManager) {
-                notificationManager =
-                    BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+                notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             }
-            val notificationChannel = NotificationChannel(
-                Constants.PUSH_CHANNEL_ID,
-                Constants.PUSH_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_DEFAULT
-            )
+            val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色
             notificationChannel.setShowBadge(true) //是否在久按桌面图标时显示此渠道的通知
