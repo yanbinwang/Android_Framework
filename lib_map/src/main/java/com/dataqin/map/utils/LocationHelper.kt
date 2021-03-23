@@ -1,5 +1,6 @@
 package com.dataqin.map.utils
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
@@ -30,18 +31,19 @@ import java.lang.ref.WeakReference
  *  Created by wangyanbin
  *  定位
  */
-class LocationFactory : AMapLocationListener {
+@SuppressLint("StaticFieldLeak")
+object LocationHelper : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
 //    private var notificationManager: NotificationManager? = null
     val onLocationCallBack: OnLocationCallBack? = null
 
-    companion object {
-        @JvmStatic
-        val instance: LocationFactory by lazy {
-            LocationFactory()
-        }
-    }
+//    companion object {
+//        @JvmStatic
+//        val instance: LocationFactory by lazy {
+//            LocationFactory()
+//        }
+//    }
 
     init {
         //初始化定位

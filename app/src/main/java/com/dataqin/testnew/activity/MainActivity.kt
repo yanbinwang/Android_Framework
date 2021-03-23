@@ -8,7 +8,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.map.utils.LocationFactory
+import com.dataqin.map.utils.LocationHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 
@@ -26,7 +26,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
-        LocationFactory.instance.settingGps(this)
+        LocationHelper.settingGps(this)
     }
 
     private fun pageTesting(index: Int) {
