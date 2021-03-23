@@ -17,9 +17,12 @@ import com.amap.api.location.AMapLocationListener
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.dialog.AppDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.dataqin.map.R
+import com.yanzhenjie.permission.runtime.Permission
 import java.lang.ref.WeakReference
 
 
@@ -104,8 +107,16 @@ class LocationFactory : AMapLocationListener {
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      */
-    fun start() {
-        locationClient?.startLocation()
+    fun start(activity: Activity) {
+        val weakActivity = WeakReference(activity)
+        PermissionHelper.with(weakActivity.get())
+            .setPermissionCallBack(object : OnPermissionCallBack {
+                override fun onPermissionListener(isGranted: Boolean) {
+                    if (isGranted) {
+                        locationClient?.startLocation()
+                    }
+                }
+            }).getPermissions(Permission.Group.LOCATION)
     }
 
     /**
