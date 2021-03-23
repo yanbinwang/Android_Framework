@@ -36,14 +36,7 @@ object LocationHelper : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
 //    private var notificationManager: NotificationManager? = null
-    val onLocationCallBack: OnLocationCallBack? = null
-
-//    companion object {
-//        @JvmStatic
-//        val instance: LocationFactory by lazy {
-//            LocationFactory()
-//        }
-//    }
+    var onLocationCallBack: OnLocationCallBack? = null
 
     init {
         //初始化定位
