@@ -22,6 +22,7 @@ import java.text.MessageFormat
 class PermissionHelper(context: Context) {
     private val weakContext = WeakReference(context)
     private val permissionGroup = arrayOf(
+        Permission.Group.LOCATION,//定位
         Permission.Group.CAMERA,//拍摄照片，录制视频
         Permission.Group.MICROPHONE,//录制音频(腾讯x5)
         Permission.Group.STORAGE//访问照片。媒体。内容和文件
@@ -57,9 +58,10 @@ class PermissionHelper(context: Context) {
                             }
                         }
                         when (permissionIndex) {
-                            0 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
-                            1 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
-                            2 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
+                            0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
+                            1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
+                            2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
+                            3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
                         }
                     }
 

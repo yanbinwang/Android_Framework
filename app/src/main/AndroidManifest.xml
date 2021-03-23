@@ -12,6 +12,10 @@
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 麦克风 -->
@@ -42,6 +46,11 @@
             android:name="design_height_in_dp"
             android:value="1334" />
 
+        <!-- 高德key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="42ad4d4a63aef433caa02235ec4554a1" />
+
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="singleTask"
@@ -57,7 +66,9 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
-
+        <!-- ******************************************************服务****************************************************** -->
+        <!-- 高德地图 -->
+        <service android:name="com.amap.api.location.APSService" />
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"
