@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.view.View;
 
 import com.dataqin.common.base.BasePopupWindow;
+import com.dataqin.common.bus.RxBus;
+import com.dataqin.common.bus.RxEvent;
+import com.dataqin.common.constant.Constants;
 import com.dataqin.share.R;
 import com.dataqin.share.databinding.ViewPopupShareBinding;
 import com.dataqin.share.model.WeChatModel;
 import com.dataqin.share.utils.helper.ShareHelper;
-import com.dataqin.share.widget.popup.callback.OnSharePopupClickListener;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 
 import org.jetbrains.annotations.NotNull;
@@ -19,7 +21,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implements View.OnClickListener {
     private WeChatModel weChatModel;
-    private OnSharePopupClickListener onSharePopupClickListener;
 
     public SharePopup(@NotNull Activity activity) {
         super(activity);
@@ -39,16 +40,10 @@ public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implement
         this.weChatModel = weChatModel;
     }
 
-    public void setOnSharePopupClickListener(OnSharePopupClickListener onSharePopupClickListener) {
-        this.onSharePopupClickListener = onSharePopupClickListener;
-    }
-
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.rl_container || v.getId() == R.id.tv_cancel) {
-            if (null != onSharePopupClickListener) {
-                onSharePopupClickListener.onShareCancel();
-            }
+            RxBus.getInstance().post(new RxEvent(Constants.APP_SHARE_CANCEL));
             dismiss();
         } else if (v.getId() == R.id.ll_wechat) {
             weChatModel.setType(SendMessageToWX.Req.WXSceneSession);
