@@ -164,10 +164,10 @@ object MapHelper {
      * 判断经纬度是否在多边形范围内
      */
     @JvmStatic
-    fun isPolygonContainsPoint(list: MutableList<LatLng>, point: LatLng): Boolean {
+    fun isPolygonContainsPoint(latLngList: MutableList<LatLng>, point: LatLng): Boolean {
         val options = PolygonOptions()
-        for (index in list.indices) {
-            options.add(list[index])
+        for (index in latLngList.indices) {
+            options.add(latLngList[index])
         }
         options.visible(false)//设置区域是否显示
         val polygon = aMap?.addPolygon(options)
