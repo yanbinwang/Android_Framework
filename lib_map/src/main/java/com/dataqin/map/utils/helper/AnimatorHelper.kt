@@ -4,6 +4,7 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.AnimationUtils
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.map.R
 
@@ -12,15 +13,19 @@ import com.dataqin.map.R
  * 3s不可操作
  */
 fun View.refresh() {
-    isEnabled = false
-    visibility = View.VISIBLE
-    val animatorSet = AnimatorSet()
-    animatorSet.playTogether(ObjectAnimator.ofFloat(this, "rotation", 0f, 360f))
-    animatorSet.duration = 500
-    animatorSet.start()
-    WeakHandler().postDelayed({
-        isEnabled = true
-    }, 3000)
+    if (isEnabled) {
+        isEnabled = false
+        visibility = View.VISIBLE
+        val animatorSet = AnimatorSet()
+        animatorSet.playTogether(ObjectAnimator.ofFloat(this, "rotation", 0f, 360f))
+        animatorSet.duration = 500
+        animatorSet.start()
+        WeakHandler().postDelayed({
+            isEnabled = true
+        }, 3000)
+    } else {
+        ToastUtil.mackToastSHORT("刷新3秒一次", context)
+    }
 }
 
 /**
