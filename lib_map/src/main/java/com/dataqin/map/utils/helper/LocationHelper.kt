@@ -84,7 +84,7 @@ object LocationHelper : AMapLocationListener {
         } else {
             builder = Notification.Builder(context)
         }
-        builder.setSmallIcon(R.mipmap.ic_btn_back)
+        builder.setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(Constants.APPLICATION_NAME)
             .setContentText("正在后台运行")
             .setWhen(System.currentTimeMillis())
