@@ -33,14 +33,13 @@ public class CoordinateView extends ImageView {
         initialize();
     }
 
-    private void initialize(){
+    private void initialize() {
         setBackgroundResource(R.drawable.animation_coordinate);
         animationDrawable = (AnimationDrawable) getBackground();
     }
 
     public void start() {
-        animationDrawable.stop();
-        animationDrawable.selectDrawable(0);
+        stop();
         animationDrawable.start();
     }
 
