@@ -10,6 +10,7 @@ import com.dataqin.map.R
  * 刷新
  */
 fun View.refresh() {
+    visibility = View.VISIBLE
     val animatorSet = AnimatorSet()
     animatorSet.playTogether(ObjectAnimator.ofFloat(this, "rotation", 0f, 360f))
     animatorSet.duration = 500
@@ -20,6 +21,7 @@ fun View.refresh() {
  * 底部弹出
  */
 fun View.shown() {
+    visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in)
-    startAnimation(animation);
+    startAnimation(animation)
 }
