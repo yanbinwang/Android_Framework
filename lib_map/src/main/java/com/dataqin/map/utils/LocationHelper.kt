@@ -102,6 +102,7 @@ object LocationHelper : AMapLocationListener {
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      */
+    @JvmStatic
     fun start(activity: Activity) {
         val weakActivity = WeakReference(activity)
         PermissionHelper.with(weakActivity.get())
@@ -117,6 +118,7 @@ object LocationHelper : AMapLocationListener {
     /**
      * 停止定位
      */
+    @JvmStatic
     fun stop() {
         //关闭后台定位，参数为true时会移除通知栏，为false时不会移除通知栏，但是可以手动移除
         locationClient?.disableBackgroundLocation(true)
@@ -127,6 +129,7 @@ object LocationHelper : AMapLocationListener {
     /**
      * 释放，页面关闭调用
      */
+    @JvmStatic
     fun destroy() {
         stop()
         locationClient?.unRegisterLocationListener(this)
@@ -137,6 +140,7 @@ object LocationHelper : AMapLocationListener {
     /**
      * 跳转设置gps
      */
+    @JvmStatic
     fun settingGps(activity: Activity) {
         val weakActivity = WeakReference(activity)
         val locationManager = weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
