@@ -10,6 +10,7 @@ import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.empty.OnEmptyRefreshListener
 import com.dataqin.map.utils.helper.LocationHelper
+import com.dataqin.map.utils.helper.refresh
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -25,19 +26,19 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
-        presenter.setEmptyView(baseBinding.flBaseContainer)
+//        presenter.setEmptyView(baseBinding.flBaseContainer)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
 
-        presenter.getEmptyView()?.showError()
-        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
-            override fun onRefreshListener() {
-                presenter.getOperation()
-            }
-        })
+//        presenter.getEmptyView()?.showError()
+//        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
+//            override fun onRefreshListener() {
+//                presenter.getOperation()
+//            }
+//        })
         LocationHelper.settingGps(this)
     }
 
@@ -58,7 +59,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> pageTesting(0)
+            R.id.btn_shot -> v.refresh()
             R.id.btn_video_tap -> pageTesting(1)
             R.id.btn_record -> pageTesting(2)
             R.id.btn_screen -> pageTesting(3)
