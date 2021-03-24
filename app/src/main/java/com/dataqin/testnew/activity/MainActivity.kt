@@ -8,6 +8,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
+import com.dataqin.common.widget.empty.OnEmptyRefreshListener
 import com.dataqin.map.utils.helper.LocationHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -24,20 +25,19 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
-//        presenter.setEmptyView(baseBinding.flBaseContainer)
+        presenter.setEmptyView(baseBinding.flBaseContainer)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
 
-//        PageHandler.getEmptyView(baseBinding.flBaseContainer).showError()
-//
-//        PageHandler.getEmptyView(baseBinding.flBaseContainer).setOnEmptyRefreshListener(object : OnEmptyRefreshListener{
-//            override fun onRefreshListener() {
-//                presenter.getOperation()
-//            }
-//        })
+        presenter.getEmptyView()?.showError()
+        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
+            override fun onRefreshListener() {
+                presenter.getOperation()
+            }
+        })
         LocationHelper.settingGps(this)
     }
 
