@@ -1,4 +1,4 @@
-package com.dataqin.map.utils
+package com.dataqin.map.utils.helper
 
 import android.content.IntentFilter
 import android.graphics.Color
@@ -23,7 +23,7 @@ import kotlin.math.roundToInt
  *  Created by wangyanbin
  *  高德地图工具类
  */
-object AMapHelper {
+object MapHelper {
     private val defaultLatLng by lazy { GsonUtil.jsonToObj("{latitude:30.2780010000,longitude:120.1680690000}", LatLng::class.java) }//默认地图经纬度
     private val aMapReceiver by lazy { AMapReceiver() }
     private var mapView: MapView? = null
@@ -35,8 +35,8 @@ object AMapHelper {
      */
     @JvmStatic
     fun initialize(savedInstanceState: Bundle, mapView: MapView, receiver: Boolean = false) {
-        this.mapView = mapView
-        this.aMap = mapView.map
+        MapHelper.mapView = mapView
+        aMap = mapView.map
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
         mapView.onCreate(savedInstanceState)
         //更改地图view设置

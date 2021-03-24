@@ -1,4 +1,4 @@
-package com.dataqin.map.utils
+package com.dataqin.map.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
