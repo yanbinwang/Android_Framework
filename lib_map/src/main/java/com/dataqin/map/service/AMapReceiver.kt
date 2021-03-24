@@ -22,7 +22,7 @@ class AMapReceiver : BroadcastReceiver(){
     override fun onReceive(context: Context?, intent: Intent?) {
         //如果网络状态发生变化则需要重新定位
         if (ConnectivityManager.CONNECTIVITY_ACTION == intent?.action) {
-            val netWorkState: Int = NetWorkUtil.getNetWorkState()
+            val netWorkState = NetWorkUtil.getNetWorkState()
             if (-1 != netWorkState) {
                 //广播
             }
