@@ -11,21 +11,33 @@ import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
+import com.dataqin.testnew.presenter.MainPresenter
+import com.dataqin.testnew.presenter.contract.MainContract
 
 /**
  * Created by WangYanBin
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,MainContract.View {
+    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
+//        presenter.setEmptyView(baseBinding.flBaseContainer)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
+
+//        PageHandler.getEmptyView(baseBinding.flBaseContainer).showError()
+//
+//        PageHandler.getEmptyView(baseBinding.flBaseContainer).setOnEmptyRefreshListener(object : OnEmptyRefreshListener{
+//            override fun onRefreshListener() {
+//                presenter.getOperation()
+//            }
+//        })
         LocationHelper.settingGps(this)
     }
 
@@ -62,6 +74,10 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("没开")
             }
         }
+    }
+
+    override fun getOperation() {
+
     }
 
 }
