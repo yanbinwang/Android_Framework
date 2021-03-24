@@ -13,19 +13,16 @@ import com.dataqin.map.R
  * 3s不可操作
  */
 fun View.refresh() {
-    if (isEnabled) {
-        isEnabled = false
-        visibility = View.VISIBLE
-        val animatorSet = AnimatorSet()
-        animatorSet.playTogether(ObjectAnimator.ofFloat(this, "rotation", 0f, 360f))
-        animatorSet.duration = 500
-        animatorSet.start()
-        WeakHandler().postDelayed({
-            isEnabled = true
-        }, 3000)
-    } else {
-        ToastUtil.mackToastSHORT("刷新3秒一次", context)
-    }
+    isEnabled = false
+    visibility = View.VISIBLE
+    val animatorSet = AnimatorSet()
+    animatorSet.playTogether(ObjectAnimator.ofFloat(this, "rotation", 0f, 360f))
+    animatorSet.duration = 500
+    animatorSet.start()
+    WeakHandler().postDelayed({
+        isEnabled = true
+    }, 3000)
+    ToastUtil.mackToastSHORT("刷新3秒一次", context)
 }
 
 /**
