@@ -4,7 +4,6 @@ import android.animation.AnimatorSet
 import android.animation.ObjectAnimator
 import android.view.View
 import android.view.animation.AnimationUtils
-import com.dataqin.base.utils.ToastUtil
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.map.R
 
@@ -22,7 +21,6 @@ fun View.refresh() {
     WeakHandler().postDelayed({
         isEnabled = true
     }, 3000)
-    ToastUtil.mackToastSHORT("刷新3秒一次", context)
 }
 
 /**
