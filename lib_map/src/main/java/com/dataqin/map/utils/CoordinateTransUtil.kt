@@ -109,10 +109,7 @@ object CoordinateTransUtil {
         }
         // 如果随机生成的数组个数为0，则再随机添加一个距离中心点更近的坐标
         if (latLng.size == 1) {
-            latLng.add(
-                LatLng(
-                    lat + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0),
-                    lng + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0)))
+            latLng.add(LatLng(lat + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0), lng + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0)))
         }
         if (!latLng.contains(endLatLng)) {
             latLng.add(endLatLng)
