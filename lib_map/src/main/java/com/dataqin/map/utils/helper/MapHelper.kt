@@ -35,8 +35,8 @@ object MapHelper {
      */
     @JvmStatic
     fun initialize(savedInstanceState: Bundle, mapView: MapView, receiver: Boolean = false) {
-        MapHelper.mapView = mapView
-        aMap = mapView.map
+        this.mapView = mapView
+        this.aMap = mapView.map
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
         mapView.onCreate(savedInstanceState)
         //更改地图view设置
@@ -159,6 +159,22 @@ object MapHelper {
             .strokeColor(Color.argb(50, 1, 1, 1))// 边框颜色
             .fillColor(Color.argb(1, 1, 1, 1))// 多边形的填充色
         aMap?.addPolygon(polygonOptions)
+    }
+
+    /**
+     * 判断经纬度是否在多边形范围内
+     */
+    @JvmStatic
+    fun isPolygonContainsPoint(list: MutableList<LatLng>, point: LatLng): Boolean {
+        val options = PolygonOptions()
+        for (index in list.indices) {
+            options.add(list[index])
+        }
+        options.visible(false); //设置区域是否显示
+        val polygon = aMap?.addPolygon(options)
+        val contains = polygon?.contains(point)
+        polygon?.remove()
+        return contains ?: false
     }
 
 }
