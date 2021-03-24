@@ -16,7 +16,8 @@ import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.PolygonOptions
 import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.map.service.MapReceiver
-import kotlin.math.*
+import com.dataqin.map.utils.CoordinateTransUtil
+import kotlin.math.roundToInt
 
 
 /**
@@ -109,38 +110,8 @@ object MapHelper {
      * 移动到中心点
      */
     @JvmStatic
-    fun moveCamera(latLngList: MutableList<LatLng>, zoom: Float = 18f, anim: Boolean = false){
-        moveCamera(getCenterPoint(latLngList), zoom, anim)
-    }
-
-    /**
-     * 获取一组经纬度的相对中心点
-     */
-    private fun getCenterPoint(latLngList: MutableList<LatLng>): LatLng {
-        val total = latLngList.size
-        var calculationX = 0.0
-        var calculationY = 0.0
-        var calculationZ = 0.0
-        for (index in latLngList.indices) {
-            var x: Double
-            var y: Double
-            var z: Double
-            val lon = (latLngList[index].longitude) * Math.PI / 180
-            val lat = (latLngList[index].latitude) * Math.PI / 180
-            x = cos(lat) * cos(lon)
-            y = cos(lat) * sin(lon)
-            z = sin(lat)
-            calculationX += x
-            calculationY += y
-            calculationZ += z
-        }
-        calculationX /= total
-        calculationY /= total
-        calculationZ /= total
-        val lon = atan2(calculationY, calculationX)
-        val hYp = sqrt(calculationX * calculationX + calculationY * calculationY)
-        val lat = atan2(calculationZ, hYp)
-        return LatLng(lat * 180 / Math.PI, lon * 180 / Math.PI)
+    fun moveCamera(latLngList: MutableList<LatLng>, zoom: Float = 18f, anim: Boolean = false) {
+        moveCamera(CoordinateTransUtil.getCenterPoint(latLngList), zoom, anim)
     }
 
     /**
