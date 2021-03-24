@@ -18,6 +18,7 @@ import com.amap.api.location.AMapLocationListener
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.utils.NetWorkUtil
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.dialog.AppDialog
@@ -94,7 +95,10 @@ object LocationHelper : AMapLocationListener {
         if (aMapLocation != null && aMapLocation.errorCode == AMapLocation.LOCATION_SUCCESS) {
             onLocationCallBack?.onSuccess(aMapLocation)
         } else {
-            onLocationCallBack?.onFailed()
+            //连接了网络才会检测是否开启gps，回调失败
+            if (NetWorkUtil.isNetworkAvailable()){
+                onLocationCallBack?.onFailed()
+            }
         }
         stop()
     }
