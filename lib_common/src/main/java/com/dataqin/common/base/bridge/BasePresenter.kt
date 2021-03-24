@@ -59,9 +59,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun showEmptyView() {
-        softEmpty?.get()?.showLoading()
-    }
+    protected fun showEmptyView() = softEmpty?.get()?.showLoading()
 
     protected fun hideEmptyView() {
         softRecycler?.get()?.finishRefreshing()
@@ -77,6 +75,8 @@ abstract class BasePresenter<T : BaseView> {
     protected fun getActivity() = weakActivity?.get()
 
     protected fun getContext() = weakContext?.get()
+
+    protected fun getString(resId: Int) = getContext()?.getString(resId)
     // </editor-fold>
 
 }

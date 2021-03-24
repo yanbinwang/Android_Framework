@@ -150,7 +150,7 @@ object LocationHelper : AMapLocationListener {
 
                 override fun onDialogCancel() {
                 }
-            }).setParams("GPS设置", "定位失败，请打开手机GPS", "确定", "取消").show()
+            }).setParams("提示", "定位失败，请打开手机GPS", "确定", "取消").show()
         }
     }
 
