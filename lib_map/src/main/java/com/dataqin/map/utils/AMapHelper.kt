@@ -1,7 +1,9 @@
 package com.dataqin.map.utils
 
+import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.Point
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.PolygonOptions
 import com.dataqin.common.utils.analysis.GsonUtil
+import com.dataqin.map.service.AMapReceiver
 import kotlin.math.roundToInt
 
 
@@ -22,13 +25,15 @@ import kotlin.math.roundToInt
  */
 object AMapHelper {
     private val defaultLatLng by lazy { GsonUtil.jsonToObj("{latitude:30.2780010000,longitude:120.1680690000}", LatLng::class.java) }//默认地图经纬度
+    private val aMapReceiver by lazy { AMapReceiver() }
     private var mapView: MapView? = null
     var aMap: AMap? = null
 
     /**
      * 初始化
+     * 如需要广播监听，需书写对应的rxjava
      */
-    fun initialize(savedInstanceState: Bundle, mapView: MapView) {
+    fun initialize(savedInstanceState: Bundle, mapView: MapView, receiver: Boolean = false) {
         this.mapView = mapView
         this.aMap = mapView.map
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
@@ -46,6 +51,11 @@ object AMapHelper {
         aMap?.uiSettings?.isZoomControlsEnabled = false //隐藏缩放插件
         aMap?.uiSettings?.isTiltGesturesEnabled = false //屏蔽双手指上下滑动切换为3d地图
         aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
+        if (receiver) {
+            val intentFilter = IntentFilter()
+            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
+            mapView.context.registerReceiver(aMapReceiver, intentFilter)
+        }
     }
 
     /**
@@ -75,6 +85,7 @@ object AMapHelper {
      */
     fun destroy() {
         aMap = null
+        mapView?.context?.unregisterReceiver(aMapReceiver)
         mapView?.onDestroy()
     }
 
@@ -100,7 +111,12 @@ object AMapHelper {
         //获取距离中心点为pixel像素的左、右两点（屏幕上的点
         val top = Point(center.x, center.y + pixel)
         //将屏幕上的点转换为地图上的点
-        aMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(projection.fromScreenLocation(top), 16f))
+        aMap?.animateCamera(
+            CameraUpdateFactory.newLatLngZoom(
+                projection.fromScreenLocation(top),
+                16f
+            )
+        )
     }
 
     /**
