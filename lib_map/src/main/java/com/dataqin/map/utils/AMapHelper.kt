@@ -33,6 +33,7 @@ object AMapHelper {
      * 初始化
      * 如需要广播监听，需书写对应的rxjava
      */
+    @JvmStatic
     fun initialize(savedInstanceState: Bundle, mapView: MapView, receiver: Boolean = false) {
         this.mapView = mapView
         this.aMap = mapView.map
@@ -61,6 +62,7 @@ object AMapHelper {
     /**
      * 加载
      */
+    @JvmStatic
     fun resume() {
         mapView?.onResume()
     }
@@ -68,6 +70,7 @@ object AMapHelper {
     /**
      * 暂停
      */
+    @JvmStatic
     fun pause() {
         mapView?.onPause()
     }
@@ -75,6 +78,7 @@ object AMapHelper {
     /**
      * 存储
      */
+    @JvmStatic
     fun saveInstanceState(outState: Bundle) {
         //保存地图当前的状态
         mapView?.onSaveInstanceState(outState)
@@ -83,6 +87,7 @@ object AMapHelper {
     /**
      * 销毁
      */
+    @JvmStatic
     fun destroy() {
         aMap = null
         mapView?.context?.unregisterReceiver(aMapReceiver)
@@ -92,13 +97,19 @@ object AMapHelper {
     /**
      * 地图移动
      */
-    fun moveCamera(latLng: LatLng? = defaultLatLng, zoom: Float = 18f) {
-        aMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+    @JvmStatic
+    fun moveCamera(latLng: LatLng? = defaultLatLng, zoom: Float = 18f, anim: Boolean = false) {
+        if (anim) {
+            aMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        } else {
+            aMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
+        }
     }
 
     /**
      * 需要移动的经纬度，需要移动的范围（米）
      */
+    @JvmStatic
     fun adjustCamera(latLng: LatLng, range: Int) {
         //移动地图需要进行一定的换算
         val scale = aMap!!.scalePerPixel
@@ -111,17 +122,13 @@ object AMapHelper {
         //获取距离中心点为pixel像素的左、右两点（屏幕上的点
         val top = Point(center.x, center.y + pixel)
         //将屏幕上的点转换为地图上的点
-        aMap?.animateCamera(
-            CameraUpdateFactory.newLatLngZoom(
-                projection.fromScreenLocation(top),
-                16f
-            )
-        )
+        moveCamera(projection.fromScreenLocation(top), 16f, true)
     }
 
     /**
      * 添加覆盖物
      */
+    @JvmStatic
     fun addMarker(latLng: LatLng, view: View, json: String = "") {
         //将标识绘制在地图上
         val markerOptions = MarkerOptions()
@@ -141,6 +148,7 @@ object AMapHelper {
     /**
      * 绘制多边形
      */
+    @JvmStatic
     fun addPolygon(latLngList: MutableList<LatLng>) {
         // 声明多边形参数对象
         val polygonOptions = PolygonOptions()
