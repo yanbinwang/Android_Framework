@@ -41,10 +41,6 @@ object Constants {
     const val PUSH_NOTIFY_ID = 0 //固定通知id
     const val PUSH_CHANNEL_ID = "dataqin" //推送渠道id
     const val PUSH_CHANNEL_NAME = "数秦科技" //推送渠道名
-    const val CAMERA_FILE_PATH = "Photo"
-    const val VIDEO_FILE_PATH = "Video"
-    const val AUDIO_FILE_PATH = "Audio"
-    const val SCREEN_FILE_PATH = "Screen"
 
     //MMKV存储字段
     const val KEY_USER_MODEL = "keyUserModel" //用户类json
@@ -52,8 +48,8 @@ object Constants {
     //系统广播
     const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
     const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
-    const val APP_SCREEN_FILE_CREATE = "com.bitnew.oes.APP_SCREEN_FILE_CREATE"//录频文件创建
 
+    const val APP_MAP_CONNECTIVITY = "com.bitnew.tech.APP_MAP_CONNECTIVITY"//地图网络状态
     const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
     const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
     const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败
