@@ -76,11 +76,10 @@ object MapHelper {
     }
 
     /**
-     * 存储
+     * 存储-保存地图当前的状态
      */
     @JvmStatic
     fun saveInstanceState(outState: Bundle) {
-        //保存地图当前的状态
         mapView?.onSaveInstanceState(outState)
     }
 
@@ -112,11 +111,11 @@ object MapHelper {
     @JvmStatic
     fun adjustCamera(latLng: LatLng, range: Int) {
         //移动地图需要进行一定的换算
-        val scale = aMap!!.scalePerPixel
+        val scale = aMap?.scalePerPixel!!
         //代表range（米）的像素数量
         val pixel = (range / scale).roundToInt()
         //小范围，小缩放级别（比例尺较大），有精度损失
-        val projection = aMap!!.projection
+        val projection = aMap?.projection!!
         //将地图的中心点，转换为屏幕上的点
         val center = projection.toScreenLocation(latLng)
         //获取距离中心点为pixel像素的左、右两点（屏幕上的点
@@ -137,7 +136,7 @@ object MapHelper {
             .icon(bitmap) //设置图标样式
             .anchor(0.5f, 0.5f)
             .zIndex(9f) //设置marker所在层级
-            .draggable(false) //设置手势拖拽;
+            .draggable(false) //设置手势拖拽
         //给地图覆盖物加上额外的集合数据（点击时候取）
         val marker = aMap?.addMarker(markerOptions)
         marker?.title = json
@@ -170,7 +169,7 @@ object MapHelper {
         for (index in list.indices) {
             options.add(list[index])
         }
-        options.visible(false); //设置区域是否显示
+        options.visible(false)//设置区域是否显示
         val polygon = aMap?.addPolygon(options)
         val contains = polygon?.contains(point)
         polygon?.remove()
