@@ -13,7 +13,7 @@ import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
 import com.dataqin.map.utils.helper.MapHelper
-import com.dataqin.map.utils.helper.refresh
+import com.dataqin.map.utils.helper.fade
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -99,7 +99,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> v.refresh()
+            R.id.btn_shot -> v.fade()
             R.id.btn_video_tap -> pageTesting(1)
             R.id.btn_record -> pageTesting(2)
             R.id.btn_screen -> pageTesting(3)
