@@ -8,6 +8,7 @@ import com.amap.api.maps.model.LatLng
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.model.UserModel
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationFactory
@@ -26,8 +27,7 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
-    MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
     private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
@@ -95,6 +95,19 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 }
             }
         }).getPermissions()
+    }
+
+    private fun fade(model: UserModel?) {
+        if (null == model) {
+            binding.btnShot.alpha = 0f
+        } else {
+            binding.btnShot.fade()
+            //禁止触发赋值的view操作，保证动画完成
+            ENABLED(500, binding.btnShot)
+            //赋值...改变view
+
+        }
+
     }
 
     override fun onClick(v: View?) {
