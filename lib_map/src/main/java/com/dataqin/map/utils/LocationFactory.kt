@@ -80,7 +80,11 @@ class LocationFactory : AMapLocationListener {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
             val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-            val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
+            val notificationChannel = NotificationChannel(
+                Constants.PUSH_CHANNEL_ID,
+                Constants.PUSH_CHANNEL_NAME,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色
             notificationChannel.setShowBadge(true) //是否在久按桌面图标时显示此渠道的通知
@@ -108,7 +112,8 @@ class LocationFactory : AMapLocationListener {
     /**
      * 不获取权限的定位，进页面地图自动定位使用该方法
      */
-    fun start() {
+    fun start(move: Boolean = false) {
+        locationSubscriber?.move = move
         locationSubscriber?.normal = true
         locationSubscriber?.onStart()
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -122,7 +127,8 @@ class LocationFactory : AMapLocationListener {
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      * 必须具备定位权限！用于打卡，签到
      */
-    fun start(context: Context) {
+    fun start(context: Context, move: Boolean = false) {
+        locationSubscriber?.move = move
         locationSubscriber?.normal = false
         locationSubscriber?.onStart()
         val weakContext = WeakReference(context)
