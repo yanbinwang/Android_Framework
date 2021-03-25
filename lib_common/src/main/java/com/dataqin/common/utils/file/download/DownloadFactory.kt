@@ -1,11 +1,14 @@
 package com.dataqin.common.utils.file.download
 
 import android.os.Looper
+import android.util.Patterns
+import com.dataqin.base.utils.ToastUtil
+import com.dataqin.base.utils.WeakHandler
+import com.dataqin.common.BaseApplication
 import com.dataqin.common.bus.RxSchedulers
 import com.dataqin.common.http.repository.ResourceSubscriber
 import com.dataqin.common.subscribe.CommonSubscribe.getDownloadApi
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.base.utils.WeakHandler
 import okhttp3.ResponseBody
 import java.io.File
 import java.io.FileOutputStream
@@ -30,6 +33,10 @@ class DownloadFactory private constructor() {
     }
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
+        if (!Patterns.WEB_URL.matcher(downloadUrl).matches()) {
+            ToastUtil.mackToastSHORT("链接地址不合法", BaseApplication.instance?.applicationContext!!)
+            return
+        }
         FileUtil.deleteDir(filePath)
         getDownloadApi(downloadUrl).compose(RxSchedulers.ioMain())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
