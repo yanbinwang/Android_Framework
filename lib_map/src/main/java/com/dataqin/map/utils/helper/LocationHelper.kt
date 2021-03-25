@@ -103,8 +103,14 @@ object LocationHelper : AMapLocationListener {
         stop()
     }
 
+    @JvmStatic
+    fun start() {
+        locationClient?.startLocation()
+    }
+
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
+     * 传入activity会做权限判断，不传走网络定位
      */
     @JvmStatic
     fun start(activity: Activity) {
@@ -113,14 +119,14 @@ object LocationHelper : AMapLocationListener {
             .setPermissionCallBack(object : OnPermissionCallBack {
                 override fun onPermissionListener(isGranted: Boolean) {
                     if (isGranted) {
-                        locationClient?.startLocation()
+                        start()
                     }
                 }
             }).getPermissions(Permission.Group.LOCATION)
     }
 
     /**
-     * 停止定位
+     * 停止定位，页面关闭调用
      */
     @JvmStatic
     fun stop() {
@@ -131,7 +137,7 @@ object LocationHelper : AMapLocationListener {
     }
 
     /**
-     * 释放，页面关闭调用
+     * 释放，一半放在MainActivity这种最底层的页面的OnDestroy中
      */
     @JvmStatic
     fun destroy() {
