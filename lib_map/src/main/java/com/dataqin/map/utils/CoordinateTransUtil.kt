@@ -16,32 +16,9 @@ object CoordinateTransUtil {
     private const val EE = 0.00669342162296594323
     private const val PI = 3.1415926535897932384626
     private const val X_PI = 3.14159265358979324 * 3000.0 / 180.0
-    private const val DEF_PI = 3.14159265359 // PI
-    private const val DEF_PI180 = 0.01745329252 // PI/180.0
-    private const val DEF_R = 6370693.5 // radius of earth
-
-    @JvmStatic
-    fun createBounds(latA: Double, lngA: Double, latB: Double, lngB: Double): LatLngBounds {
-        val topLat: Double
-        val topLng: Double
-        val bottomLat: Double
-        val bottomLng: Double
-        if (latA >= latB) {
-            topLat = latA
-            bottomLat = latB
-        } else {
-            topLat = latB
-            bottomLat = latA
-        }
-        if (lngA >= lngB) {
-            topLng = lngA
-            bottomLng = lngB
-        } else {
-            topLng = lngB
-            bottomLng = lngA
-        }
-        return LatLngBounds(LatLng(bottomLat, bottomLng), LatLng(topLat, topLng))
-    }
+    private const val DEF_PI = 3.14159265359//PI
+    private const val DEF_PI180 = 0.01745329252//PI/180.0
+    private const val DEF_R = 6370693.5//radius of earth
 
     /**
      * 根据圆心、半径算出经纬度范围
@@ -74,6 +51,63 @@ object CoordinateTransUtil {
         range[2] = lat1
         range[3] = lat2
         return range
+    }
+
+    /**
+     * 获取一组经纬度的相对中心点
+     */
+    @JvmStatic
+    fun getCenterPoint(latLngList: MutableList<LatLng>): LatLng {
+        val total = latLngList.size
+        var calculationX = 0.0
+        var calculationY = 0.0
+        var calculationZ = 0.0
+        for (index in latLngList.indices) {
+            var x: Double
+            var y: Double
+            var z: Double
+            val lon = (latLngList[index].longitude) * Math.PI / 180
+            val lat = (latLngList[index].latitude) * Math.PI / 180
+            x = cos(lat) * cos(lon)
+            y = cos(lat) * sin(lon)
+            z = sin(lat)
+            calculationX += x
+            calculationY += y
+            calculationZ += z
+        }
+        calculationX /= total
+        calculationY /= total
+        calculationZ /= total
+        val lon = atan2(calculationY, calculationX)
+        val hYp = sqrt(calculationX * calculationX + calculationY * calculationY)
+        val lat = atan2(calculationZ, hYp)
+        return LatLng(lat * 180 / Math.PI, lon * 180 / Math.PI)
+    }
+
+    /**
+     * 设置东南和西北角，构筑一个矩形范围
+     */
+    @JvmStatic
+    fun createBounds(latA: Double, lngA: Double, latB: Double, lngB: Double): LatLngBounds {
+        val topLat: Double
+        val topLng: Double
+        val bottomLat: Double
+        val bottomLng: Double
+        if (latA >= latB) {
+            topLat = latA
+            bottomLat = latB
+        } else {
+            topLat = latB
+            bottomLat = latA
+        }
+        if (lngA >= lngB) {
+            topLng = lngA
+            bottomLng = lngB
+        } else {
+            topLng = lngB
+            bottomLng = lngA
+        }
+        return LatLngBounds(LatLng(bottomLat, bottomLng), LatLng(topLat, topLng))
     }
 
     /**
@@ -215,37 +249,6 @@ object CoordinateTransUtil {
     fun transformBD09ToWGS84(lng: Double, lat: Double): DoubleArray {
         val lngLat = transformBD09ToGCJ02(lng, lat)
         return transformGCJ02ToWGS84(lngLat[0], lngLat[1])
-    }
-
-    /**
-     * 获取一组经纬度的相对中心点
-     */
-    @JvmStatic
-    fun getCenterPoint(latLngList: MutableList<LatLng>): LatLng {
-        val total = latLngList.size
-        var calculationX = 0.0
-        var calculationY = 0.0
-        var calculationZ = 0.0
-        for (index in latLngList.indices) {
-            var x: Double
-            var y: Double
-            var z: Double
-            val lon = (latLngList[index].longitude) * Math.PI / 180
-            val lat = (latLngList[index].latitude) * Math.PI / 180
-            x = cos(lat) * cos(lon)
-            y = cos(lat) * sin(lon)
-            z = sin(lat)
-            calculationX += x
-            calculationY += y
-            calculationZ += z
-        }
-        calculationX /= total
-        calculationY /= total
-        calculationZ /= total
-        val lon = atan2(calculationY, calculationX)
-        val hYp = sqrt(calculationX * calculationX + calculationY * calculationY)
-        val lat = atan2(calculationZ, hYp)
-        return LatLng(lat * 180 / Math.PI, lon * 180 / Math.PI)
     }
 
 }
