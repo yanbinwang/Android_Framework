@@ -112,8 +112,9 @@ class LocationFactory : AMapLocationListener {
     /**
      * 不获取权限的定位，进页面地图自动定位使用该方法
      */
-    fun start() {
-        locationSubscriber?.normal = true
+    fun start(move: Boolean = true) {
+        locationSubscriber?.move = move
+        locationSubscriber?.granted = false
         locationSubscriber?.onStart()
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationClient?.startLocation()
@@ -124,10 +125,11 @@ class LocationFactory : AMapLocationListener {
 
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
-     * 必须具备定位权限！用于打卡，签到
+     * 必须具备定位权限！用于打卡，签到，地图矫正
      */
-    fun start(context: Context) {
-        locationSubscriber?.normal = false
+    fun start(context: Context, move: Boolean = false) {
+        locationSubscriber?.move = move
+        locationSubscriber?.granted = true
         locationSubscriber?.onStart()
         val weakContext = WeakReference(context)
         PermissionHelper.with(weakContext.get())
