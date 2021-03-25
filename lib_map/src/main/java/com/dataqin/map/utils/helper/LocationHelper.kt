@@ -118,7 +118,7 @@ object LocationHelper : AMapLocationListener {
     }
 
     /**
-     * 停止定位
+     * 停止定位，在页面OnDestroy调用
      */
     @JvmStatic
     fun stop() {
@@ -129,7 +129,7 @@ object LocationHelper : AMapLocationListener {
     }
 
     /**
-     * 释放，页面关闭调用
+     * 释放，销毁定位客户端调用
      */
     @JvmStatic
     fun destroy() {
