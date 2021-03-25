@@ -8,7 +8,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.map.utils.helper.LocationHelper
+import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.helper.refresh
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -17,8 +17,9 @@ import com.dataqin.testnew.presenter.contract.MainContract
 
 /**
  * Created by WangYanBin
- * 如果进应用就是地图，则在地图onload生命周期结束后，先移动到默认位置，然后调取整体权限获取接口，走顺序弹出通知的逻辑
- * 已经具备权限了，直接调取定位，未具备根据顺序弹出对应的弹框。权限的优先级最高
+ * 地图库采用高德地图，获取经纬度必须具备定位权限
+ * 如果进应用就是地图，则在进首页前先给个软提示页面，列出所有权限问用户索要，如果还不接受，则直接进应用，在地图onload生命周期结束后，先移动到给定的默认位置，
+ * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,MainContract.View {
@@ -41,6 +42,18 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //            }
 //        })
 //        LocationHelper.settingGps(this)
+//        LocationFactory.instance.start(this)
+//        LocationFactory.instance.onLocationCallBack = object :LocationFactory.OnLocationCallBack{
+//            override fun onSuccess(model: AMapLocation) {
+//                log(GsonUtil.objToJson(model)+"")
+//            }
+//
+//            override fun onFailed() {
+//                TODO("Not yet implemented")
+//            }
+//        }
+
+
     }
 
     private fun pageTesting(index: Int) {
@@ -84,7 +97,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun onDestroy() {
         super.onDestroy()
-        LocationHelper.destroy()
+        LocationFactory.instance.stop()
     }
 
 }

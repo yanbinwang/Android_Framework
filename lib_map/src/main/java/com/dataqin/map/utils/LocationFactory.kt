@@ -1,6 +1,5 @@
-package com.dataqin.map.utils.helper
+package com.dataqin.map.utils
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
@@ -10,11 +9,13 @@ import android.content.Intent
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
+import android.os.Looper
 import android.provider.Settings
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
@@ -27,16 +28,22 @@ import com.dataqin.map.R
 import com.yanzhenjie.permission.runtime.Permission
 import java.lang.ref.WeakReference
 
-
 /**
  *  Created by wangyanbin
  *  定位-必须要有定位权限，否则定位失败，可以不开gps会走网络定位
+ *  定位工具类写成class避免每次init都要初始化
  */
-@SuppressLint("StaticFieldLeak")
-object LocationHelper : AMapLocationListener {
+class LocationFactory : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
     var onLocationCallBack: OnLocationCallBack? = null
+
+    companion object {
+        @JvmStatic
+        val instance: LocationFactory by lazy {
+            LocationFactory()
+        }
+    }
 
     init {
         //初始化定位
@@ -104,7 +111,6 @@ object LocationHelper : AMapLocationListener {
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      * 必须具备定位权限！
      */
-    @JvmStatic
     fun start(context: Context) {
         val weakContext = WeakReference(context)
         PermissionHelper.with(weakContext.get())
@@ -120,7 +126,6 @@ object LocationHelper : AMapLocationListener {
     /**
      * 停止定位，在页面OnDestroy调用
      */
-    @JvmStatic
     fun stop() {
         //关闭后台定位，参数为true时会移除通知栏，为false时不会移除通知栏，但是可以手动移除
         locationClient?.disableBackgroundLocation(true)
@@ -131,7 +136,6 @@ object LocationHelper : AMapLocationListener {
     /**
      * 释放，销毁定位客户端调用
      */
-    @JvmStatic
     fun destroy() {
         stop()
         locationClient?.unRegisterLocationListener(this)
@@ -142,7 +146,6 @@ object LocationHelper : AMapLocationListener {
     /**
      * 跳转设置gps
      */
-    @JvmStatic
     fun settingGps(activity: Activity) {
         val weakActivity = WeakReference(activity)
         val locationManager = weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
