@@ -35,8 +35,8 @@ import java.lang.ref.WeakReference
 @SuppressLint("StaticFieldLeak")
 object LocationHelper : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
+    private var normal = true//区别是否检测权限
     private var locationClient: AMapLocationClient? = null
-//    private var notificationManager: NotificationManager? = null
     var onLocationCallBack: OnLocationCallBack? = null
 
     init {
@@ -72,9 +72,7 @@ object LocationHelper : AMapLocationListener {
         val builder: Notification.Builder?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
-//            if (null == notificationManager) {
-               val notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
-//            }
+            val notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色
@@ -95,16 +93,22 @@ object LocationHelper : AMapLocationListener {
         if (aMapLocation != null && aMapLocation.errorCode == AMapLocation.LOCATION_SUCCESS) {
             onLocationCallBack?.onSuccess(aMapLocation)
         } else {
-            //连接了网络才会检测是否开启gps，回调失败
-            if (NetWorkUtil.isNetworkAvailable()){
-                onLocationCallBack?.onFailed()
+            if (!normal) {
+                //连接了网络才会检测是否开启gps，回调失败
+                if (NetWorkUtil.isNetworkAvailable()) {
+                    onLocationCallBack?.onFailed()
+                }
             }
         }
         stop()
     }
 
+    /**
+     * 进入地图的普通定位
+     */
     @JvmStatic
     fun start() {
+        normal = true
         locationClient?.startLocation()
     }
 
@@ -114,12 +118,13 @@ object LocationHelper : AMapLocationListener {
      */
     @JvmStatic
     fun start(activity: Activity) {
+        normal = false
         val weakActivity = WeakReference(activity)
         PermissionHelper.with(weakActivity.get())
             .setPermissionCallBack(object : OnPermissionCallBack {
                 override fun onPermissionListener(isGranted: Boolean) {
                     if (isGranted) {
-                        start()
+                        locationClient?.startLocation()
                     }
                 }
             }).getPermissions(Permission.Group.LOCATION)
@@ -172,6 +177,9 @@ object LocationHelper : AMapLocationListener {
 
         fun onSuccess(model: AMapLocation)
 
+        /**
+         * 失败只会在定位失败并且有网络的情况下调用
+         */
         fun onFailed()
 
     }
