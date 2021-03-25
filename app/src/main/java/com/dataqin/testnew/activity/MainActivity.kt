@@ -38,16 +38,20 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
             override fun onSuccess(model: AMapLocation) {
                 super.onSuccess(model)
-                if (move) MapHelper.moveCamera(LatLng(model.latitude, model.longitude))
-                if (granted) {
+                if (normal) {
+                    MapHelper.moveCamera(LatLng(model.latitude, model.longitude))
+                } else {
                     //执行打卡
                 }
             }
 
             override fun onFailed() {
                 super.onFailed()
-                if (move) MapHelper.moveCamera()
-                if (granted) LocationFactory.instance.settingGps(activity.get()!!)
+                if (normal) {
+                    MapHelper.moveCamera()
+                } else {
+                    LocationFactory.instance.settingGps(activity.get()!!)
+                }
             }
         }
 //        LocationFactory.instance.start(this)
