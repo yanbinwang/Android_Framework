@@ -117,10 +117,10 @@ object LocationHelper : AMapLocationListener {
      * 传入activity会做权限判断，不传走网络定位
      */
     @JvmStatic
-    fun start(activity: Activity) {
+    fun start(context: Context) {
         normal = false
-        val weakActivity = WeakReference(activity)
-        PermissionHelper.with(weakActivity.get())
+        val weakContext = WeakReference(context)
+        PermissionHelper.with(weakContext.get())
             .setPermissionCallBack(object : OnPermissionCallBack {
                 override fun onPermissionListener(isGranted: Boolean) {
                     if (isGranted) {
