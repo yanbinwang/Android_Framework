@@ -1,25 +1,25 @@
 package com.dataqin.map.utils
 
+import android.Manifest
 import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
-import android.os.Looper
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
-import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.common.utils.NetWorkUtil
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.dialog.AppDialog
@@ -32,11 +32,12 @@ import java.lang.ref.WeakReference
  *  Created by wangyanbin
  *  定位-必须要有定位权限，否则定位失败，可以不开gps会走网络定位
  *  定位工具类写成class避免每次init都要初始化
+ *  先实现回调！
  */
 class LocationFactory : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
-    var onLocationCallBack: OnLocationCallBack? = null
+    var locationSubscriber: LocationSubscriber? = null
 
     companion object {
         @JvmStatic
@@ -78,7 +79,7 @@ class LocationFactory : AMapLocationListener {
         val builder: Notification.Builder?
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
-            val notificationManager = BaseApplication.instance?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色
@@ -97,27 +98,41 @@ class LocationFactory : AMapLocationListener {
 
     override fun onLocationChanged(aMapLocation: AMapLocation?) {
         if (aMapLocation != null && aMapLocation.errorCode == AMapLocation.LOCATION_SUCCESS) {
-            onLocationCallBack?.onSuccess(aMapLocation)
+            locationSubscriber?.onSuccess(aMapLocation)
         } else {
-            //连接了网络才会检测是否开启gps，回调失败
-            if (NetWorkUtil.isNetworkAvailable()) {
-                onLocationCallBack?.onFailed()
-            }
+            locationSubscriber?.onFailed()
         }
         stop()
     }
 
     /**
+     * 不获取权限的定位，进页面地图自动定位使用该方法
+     */
+    fun start() {
+        locationSubscriber?.normal = true
+        locationSubscriber?.onStart()
+        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            locationClient?.startLocation()
+        } else {
+            locationSubscriber?.onFailed()
+        }
+    }
+
+    /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
-     * 必须具备定位权限！
+     * 必须具备定位权限！用于打卡，签到
      */
     fun start(context: Context) {
+        locationSubscriber?.normal = false
+        locationSubscriber?.onStart()
         val weakContext = WeakReference(context)
         PermissionHelper.with(weakContext.get())
             .setPermissionCallBack(object : OnPermissionCallBack {
                 override fun onPermissionListener(isGranted: Boolean) {
                     if (isGranted) {
                         locationClient?.startLocation()
+                    } else {
+                        locationSubscriber?.onFailed()
                     }
                 }
             }).getPermissions(Permission.Group.LOCATION)
@@ -161,17 +176,6 @@ class LocationFactory : AMapLocationListener {
                 }
             }).setParams("提示", "定位失败，请打开手机GPS", "确定", "取消").show()
         }
-    }
-
-    interface OnLocationCallBack {
-
-        fun onSuccess(model: AMapLocation)
-
-        /**
-         * 失败只会在定位失败并且有网络的情况下调用
-         */
-        fun onFailed()
-
     }
 
 }

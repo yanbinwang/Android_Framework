@@ -1,7 +1,9 @@
 package com.dataqin.testnew.activity
 
 import android.os.Build
+import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
+import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.testnew.databinding.ActivityStartBinding
@@ -12,6 +14,7 @@ import com.dataqin.testnew.databinding.ActivityStartBinding
  *  1.进入引导页,权限页（6.0+的手机），引导页存储对应的参数值-ConfigHelper.storageBehavior(Constants.KEY_INITIAL, true)
  *  3.免登陆，进首页
  */
+@Route(path = ARouterPath.StartActivity)
 class StartActivity : BaseActivity<ActivityStartBinding>() {
 
     override fun initView() {
@@ -28,6 +31,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
         }else{
             //做免登陆，去首页
         }
+        navigation(ARouterPath.MainActivity).finish()
     }
 
 }

@@ -7,6 +7,7 @@ package com.dataqin.common.constant
  */
 object ARouterPath {
     //main模块
+    const val StartActivity = "/app/StartActivity"
     const val MainActivity = "/app/MainActivity" //首页
     const val ShotActivity = "/app/ShotActivity"
     const val VideoTapActivity = "/app/VideoTapActivity"

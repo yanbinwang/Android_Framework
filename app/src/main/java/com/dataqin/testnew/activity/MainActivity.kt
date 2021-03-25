@@ -3,12 +3,16 @@ package com.dataqin.testnew.activity
 import android.content.Intent
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.amap.api.location.AMapLocation
+import com.amap.api.maps.model.LatLng
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationFactory
+import com.dataqin.map.utils.LocationSubscriber
+import com.dataqin.map.utils.helper.MapHelper
 import com.dataqin.map.utils.helper.refresh
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -22,13 +26,34 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
     private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 //        presenter.setEmptyView(baseBinding.flBaseContainer)
+
+//        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
+//            override fun onSuccess(model: AMapLocation) {
+//                super.onSuccess(model)
+//                MapHelper.moveCamera(LatLng(model.latitude,model.longitude))
+//                if(!normal){
+//
+//                }
+//            }
+//
+//            override fun onFailed() {
+//                super.onFailed()
+//                if (normal) {
+//                    MapHelper.moveCamera()
+//                } else {
+//                    LocationFactory.instance.settingGps(activity.get()!!)
+//                }
+//            }
+//        }
+//        LocationFactory.instance.start(this)
     }
 
     override fun initEvent() {
