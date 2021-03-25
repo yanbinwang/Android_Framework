@@ -1,6 +1,7 @@
 package com.dataqin.share.model
 
 import android.graphics.Bitmap
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import java.lang.ref.SoftReference
 
 /**
@@ -13,13 +14,13 @@ class WeChatModel {
     var imgUrl: String? = null//分享图片链接
     var url: String? = null//分享地址
     var id: String? = null//小程序id
-    var type: Int = 0 //SendMessageToWX.Req.WXSceneSession微信SendMessageToWX.Req.WXSceneTimeline微信朋友圈
+    var type: Int = SendMessageToWX.Req.WXSceneSession //SendMessageToWX.Req.WXSceneSession微信SendMessageToWX.Req.WXSceneTimeline微信朋友圈
     var bmp: SoftReference<Bitmap>? = null //分享图片
 
     constructor()
 
     //分享链接
-    constructor(title: String, content: String, imgUrl: String, url: String, type: Int = 0) {
+    constructor(title: String, content: String, imgUrl: String, url: String, type: Int = SendMessageToWX.Req.WXSceneSession) {
         this.title = title
         this.content = content
         this.imgUrl = imgUrl
@@ -28,7 +29,7 @@ class WeChatModel {
     }
 
     //分享微信小程序
-    constructor(title: String, content: String, imgUrl: String, url: String, id: String, type: Int = 0) {
+    constructor(title: String, content: String, imgUrl: String, url: String, id: String, type: Int = SendMessageToWX.Req.WXSceneSession) {
         this.title = title
         this.content = content
         this.imgUrl = imgUrl
