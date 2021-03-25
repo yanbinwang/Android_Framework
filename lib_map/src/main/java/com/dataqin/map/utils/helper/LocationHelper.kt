@@ -35,9 +35,9 @@ import java.lang.ref.WeakReference
 @SuppressLint("StaticFieldLeak")
 object LocationHelper : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
-    private var normal = true//区别是否检测权限
     private var locationClient: AMapLocationClient? = null
     var onLocationCallBack: OnLocationCallBack? = null
+    var normal = true//区别是否是普通定位
 
     init {
         //初始化定位
