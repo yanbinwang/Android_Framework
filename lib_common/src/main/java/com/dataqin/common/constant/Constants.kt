@@ -43,8 +43,8 @@ object Constants {
     const val PUSH_CHANNEL_NAME = "数秦科技" //推送渠道名
 
     //MMKV存储字段
+    const val KEY_INITIAL = "keyInitial" //初次安装
     const val KEY_USER_MODEL = "keyUserModel" //用户类json
-
     //系统广播
     const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
     const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
