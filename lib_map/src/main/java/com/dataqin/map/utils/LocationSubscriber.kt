@@ -8,7 +8,6 @@ import com.amap.api.location.AMapLocation
  */
 abstract class LocationSubscriber {
     var normal = true//普通定位还是签到打卡
-    var move = false//是否需要移动
 
     open fun onStart() {}
 
