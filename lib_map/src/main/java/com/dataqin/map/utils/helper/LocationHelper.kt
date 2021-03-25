@@ -30,14 +30,13 @@ import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
- *  定位
+ *  定位-必须要有定位权限，否则定位失败，可以不开gps会走网络定位
  */
 @SuppressLint("StaticFieldLeak")
 object LocationHelper : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
     var onLocationCallBack: OnLocationCallBack? = null
-    var normal = true//区别是否是普通定位
 
     init {
         //初始化定位
@@ -93,32 +92,20 @@ object LocationHelper : AMapLocationListener {
         if (aMapLocation != null && aMapLocation.errorCode == AMapLocation.LOCATION_SUCCESS) {
             onLocationCallBack?.onSuccess(aMapLocation)
         } else {
-            if (!normal) {
-                //连接了网络才会检测是否开启gps，回调失败
-                if (NetWorkUtil.isNetworkAvailable()) {
-                    onLocationCallBack?.onFailed()
-                }
+            //连接了网络才会检测是否开启gps，回调失败
+            if (NetWorkUtil.isNetworkAvailable()) {
+                onLocationCallBack?.onFailed()
             }
         }
         stop()
     }
 
     /**
-     * 进入地图的普通定位
-     */
-    @JvmStatic
-    fun start() {
-        normal = true
-        locationClient?.startLocation()
-    }
-
-    /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
-     * 传入activity会做权限判断，不传走网络定位
+     * 必须具备定位权限！
      */
     @JvmStatic
     fun start(context: Context) {
-        normal = false
         val weakContext = WeakReference(context)
         PermissionHelper.with(weakContext.get())
             .setPermissionCallBack(object : OnPermissionCallBack {

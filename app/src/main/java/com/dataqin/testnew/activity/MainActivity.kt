@@ -8,7 +8,6 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.common.widget.empty.OnEmptyRefreshListener
 import com.dataqin.map.utils.helper.LocationHelper
 import com.dataqin.map.utils.helper.refresh
 import com.dataqin.testnew.R
@@ -18,6 +17,8 @@ import com.dataqin.testnew.presenter.contract.MainContract
 
 /**
  * Created by WangYanBin
+ * 如果进应用就是地图，则在地图onload生命周期结束后，先移动到默认位置，然后调取整体权限获取接口，走顺序弹出通知的逻辑
+ * 已经具备权限了，直接调取定位，未具备根据顺序弹出对应的弹框。权限的优先级最高
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,MainContract.View {
@@ -39,7 +40,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                presenter.getOperation()
 //            }
 //        })
-        LocationHelper.settingGps(this)
+//        LocationHelper.settingGps(this)
     }
 
     private fun pageTesting(index: Int) {
@@ -79,6 +80,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun getOperation() {
 
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LocationHelper.destroy()
     }
 
 }

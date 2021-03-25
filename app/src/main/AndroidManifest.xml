@@ -49,7 +49,7 @@
         <!-- 高德key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="42ad4d4a63aef433caa02235ec4554a1" />
+            android:value="42bee6a932268088f48093512149053f" />
 
         <activity
             android:name=".activity.SplashActivity"
