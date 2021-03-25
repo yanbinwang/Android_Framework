@@ -112,7 +112,7 @@ class LocationFactory : AMapLocationListener {
     /**
      * 不获取权限的定位，进页面地图自动定位使用该方法
      */
-    fun start(move: Boolean = false) {
+    fun start(move: Boolean = true) {
         locationSubscriber?.move = move
         locationSubscriber?.normal = true
         locationSubscriber?.onStart()
