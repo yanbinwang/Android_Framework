@@ -29,7 +29,19 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 //        presenter.setEmptyView(baseBinding.flBaseContainer)
+    }
 
+    override fun initEvent() {
+        super.initEvent()
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+
+//        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
+//            override fun onRefreshListener() {
+//                presenter.getOperation()
+//            }
+//        })
+//
+//        LocationFactory.instance.start(this)
 //        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
 //            override fun onSuccess(model: AMapLocation) {
 //                super.onSuccess(model)
@@ -50,29 +62,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //            }
 //        }
 //        LocationFactory.instance.start(this)
-    }
-
-    override fun initEvent() {
-        super.initEvent()
-        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
-
-//        presenter.getEmptyView()?.showError()
-//        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
-//            override fun onRefreshListener() {
-//                presenter.getOperation()
-//            }
-//        })
-//        LocationHelper.settingGps(this)
-//        LocationFactory.instance.start(this)
-//        LocationFactory.instance.onLocationCallBack = object :LocationFactory.OnLocationCallBack{
-//            override fun onSuccess(model: AMapLocation) {
-//                log(GsonUtil.objToJson(model)+"")
-//            }
-//
-//            override fun onFailed() {
-//                TODO("Not yet implemented")
-//            }
-//        }
     }
 
     override fun onClick(v: View?) {
