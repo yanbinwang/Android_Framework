@@ -5,9 +5,11 @@ import android.os.Bundle
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
+import com.dataqin.common.base.page.PageParams
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
+import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.helper.*
@@ -107,7 +109,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test2 -> binding.tvView.fadeOut()
             R.id.btn_test3 -> binding.tvView.shown()
             R.id.btn_test4 -> binding.tvView.hidden()
-            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
+//            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
+            R.id.btn_test5 -> navigation(ARouterPath.ScaleActivity, PageParams().append(Extras.FILE_PATH,"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4"))
         }
     }
 

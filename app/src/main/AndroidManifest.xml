@@ -75,6 +75,11 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.ScaleActivity"
+            android:theme="@style/scaleTheme"
+            android:screenOrientation="portrait" />
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />

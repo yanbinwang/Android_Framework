@@ -9,7 +9,7 @@ object ARouterPath {
     //main模块
     const val StartActivity = "/app/StartActivity"
     const val MainActivity = "/app/MainActivity" //首页
-    const val ShotActivity = "/app/ShotActivity"
+    const val ScaleActivity = "/app/ScaleActivity"
     const val VideoTapActivity = "/app/VideoTapActivity"
     const val RecordActivity = "/app/RecordActivity"
     const val ScreenActivity = "/app/ScreenActivity"
