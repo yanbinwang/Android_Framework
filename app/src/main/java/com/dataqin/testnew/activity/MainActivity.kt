@@ -11,11 +11,11 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
+import java.util.Arrays.asList
 
 /**
  * Created by WangYanBin
@@ -24,12 +24,13 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        MapHelper.initialize(savedInstanceState,binding.map)
+        MapHelper.initialize(savedInstanceState, binding.map)
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -66,10 +67,17 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+        onClick(
+            this,
+            binding.btnTest,
+            binding.btnTest2,
+            binding.btnTest3,
+            binding.btnTest4,
+            binding.btnTest5
+        )
 
-        addDisposable(RxBus.instance.toFlowable{
-            when(it.getAction()){
+        addDisposable(RxBus.instance.toFlowable {
+            when (it.getAction()) {
                 Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
             }
         })
@@ -110,7 +118,20 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test3 -> binding.tvView.shown()
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
-            R.id.btn_test5 -> navigation(ARouterPath.ScaleActivity, PageParams().append(Extras.FILE_PATH,"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4"))
+            R.id.btn_test5 -> {
+                navigation(
+                    ARouterPath.ScaleActivity,
+                    PageParams().append(
+                        Extras.FILE_PATH,
+                        listOf(
+                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4",
+                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa1%2F144%2Fd%2F83.jpg&refer=http%3A%2F%2Fimg1.3lian.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619341141&t=a25aa81f9e0e7cbf611281bfc7f7a486",
+                            "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/ca1349540923dd54ea2076a4d309b3de9d8248af.jpg"
+                        )
+                    )
+                )
+            }
+
         }
     }
 

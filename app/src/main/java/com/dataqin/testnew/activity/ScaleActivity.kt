@@ -6,19 +6,18 @@ import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.imageloader.ImageLoader
+import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScaleBinding
 import com.dataqin.testnew.widget.scale.ScaleAdapter
 import com.dataqin.testnew.widget.scale.ScaleImageView
-import java.util.*
 
 /**
  *  Created by wangyanbin
  *  伸缩页
  */
 @Route(path = ARouterPath.ScaleActivity)
-class ScaleActivity :BaseActivity<ActivityScaleBinding>(){
-    private val list by lazy { ArrayList<ScaleImageView>() }
-    private val url by lazy { intent.getStringExtra(Extras.FILE_PATH) }
+class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
+    private val pathList by lazy { intent.getSerializableExtra(Extras.FILE_PATH) as ArrayList<*> }
 
     override fun initView() {
         super.initView()
@@ -27,10 +26,16 @@ class ScaleActivity :BaseActivity<ActivityScaleBinding>(){
 
     override fun initData() {
         super.initData()
-        val img = ScaleImageView(this)
-        img.setOnClickListener { finish() }
-        ImageLoader.instance.displayImage(img, url)
-        list.add(img)
+        val list = ArrayList<ScaleImageView>()
+        for (url in pathList) {
+            val img = ScaleImageView(this)
+            img.setOnClickListener { finish() }
+            ImageLoader.instance.displayImage(
+                img, url as String,
+                R.drawable.shape_scale_loading, R.drawable.shape_loading_normal, null
+            )
+            list.add(img)
+        }
         val adapter = ScaleAdapter(list)
         binding.svpContainer.adapter = adapter
         binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))

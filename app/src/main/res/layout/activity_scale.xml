@@ -3,4 +3,6 @@
     android:id="@+id/svp_container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/black" />
+    android:background="@color/black"
+    android:overScrollMode="never"
+    android:scrollbars="none" />
