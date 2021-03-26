@@ -117,26 +117,24 @@ object PopupHelper {
      * 跳转通知的设置界面
      */
     private fun settingNotification() {
+        val packageName = weakActivity?.get()?.packageName
         val intent = Intent()
         when {
             //8.0+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                intent.putExtra(
-                    "android.provider.extra.APP_PACKAGE",
-                    weakActivity?.get()?.packageName
-                )
+                intent.putExtra("android.provider.extra.APP_PACKAGE", packageName)
             }
             //5.0-7.0
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                intent.putExtra("app_package", weakActivity?.get()?.packageName)
+                intent.putExtra("app_package", packageName)
                 intent.putExtra("app_uid", weakActivity?.get()?.applicationInfo?.uid)
             }
             //其他
             else -> {
                 intent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-                intent.data = Uri.fromParts("package", weakActivity?.get()?.packageName, null)
+                intent.data = Uri.fromParts("package", packageName, null)
             }
         }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
