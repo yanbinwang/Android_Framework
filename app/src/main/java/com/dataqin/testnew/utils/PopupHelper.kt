@@ -17,16 +17,19 @@ import java.util.concurrent.ConcurrentHashMap
  */
 object PopupHelper {
     private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
-    private var popupNum = 0//通知数量
     private var show = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
+    //一些配置通知的label屬性集合
+    val labelList = arrayOf(
+        "push_label", //推送
+        "advertisement_label"//广告
+    )
 
     @JvmStatic
-    fun initialize(activity: Activity, popupNum: Int = 0) {
-        this.popupMap.clear()
+    fun initialize(activity: Activity) {
         this.show = false
+        this.popupMap.clear()
         this.weakActivity = WeakReference(activity)
-        this.popupNum = popupNum
     }
 
     /**
@@ -34,8 +37,8 @@ object PopupHelper {
      * label-通知类型说明
      * any-通知对象
      */
-    private fun addPopup(label: String, any: Any) {
-        popupMap[label] = any
+    private fun addPopup(index: Int, any: Any) {
+        popupMap[labelList[index]] = any
         showPopup()
     }
 
@@ -43,7 +46,7 @@ object PopupHelper {
      * 逐步弹出窗口
      */
     private fun showPopup() {
-        if(!show){
+        if (!show) {
             //如果此时添加的对象已经达到了对应通知的数量，按照添加的顺序逐个展示对应弹框-每个弹框一个方法
             if (testingPopup()) {
                 show = true
@@ -55,7 +58,7 @@ object PopupHelper {
      * 检测当前的通知集合是否已经达到了配置的通知总数
      */
     private fun testingPopup(): Boolean {
-        return popupMap.size >= popupNum
+        return popupMap.size >= labelList.size
     }
 
     /**
@@ -78,7 +81,10 @@ object PopupHelper {
             //8.0+
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-                intent.putExtra("android.provider.extra.APP_PACKAGE", weakActivity?.get()?.packageName)
+                intent.putExtra(
+                    "android.provider.extra.APP_PACKAGE",
+                    weakActivity?.get()?.packageName
+                )
             }
             //5.0-7.0
             Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
