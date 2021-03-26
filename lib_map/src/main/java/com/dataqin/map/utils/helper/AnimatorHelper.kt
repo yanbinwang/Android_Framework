@@ -27,22 +27,8 @@ fun View.refresh() {
 }
 
 /**
- * 渐隐显示
- */
-fun View.fade() {
-    isEnabled = false
-    visibility = View.VISIBLE
-    animatorSet.playTogether(ObjectAnimator.ofFloat(this, "alpha", 0f, 0.5f, 1f))
-    animatorSet.duration = 500
-    animatorSet.start()
-    weakHandler.postDelayed({
-        isEnabled = true
-    }, 500)
-}
-
-/**
  * 底部弹出
- * 1s不可操作
+ * 0.5s不可操作
  */
 fun View.shown() {
     isEnabled = false
@@ -50,6 +36,54 @@ fun View.shown() {
     val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in)
     startAnimation(animation)
     weakHandler.postDelayed({
+        isEnabled = true
+    }, 500)
+}
+
+/**
+ * 底部隐藏
+ * 0.5s不可操作
+ */
+fun View.hidden() {
+    isEnabled = false
+    val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_out)
+    startAnimation(animation)
+    weakHandler.postDelayed({
+        isEnabled = true
+        visibility = View.GONE
+    }, 500)
+}
+
+/**
+ * 渐隐显示
+ */
+fun View.fadeIn(view: View? = null) {
+    if (0f != alpha) return
+    view?.isEnabled = false
+    isEnabled = false
+    visibility = View.VISIBLE
+    animatorSet.playTogether(ObjectAnimator.ofFloat(this, "alpha", 0f, 0.5f, 1f))
+    animatorSet.duration = 500
+    animatorSet.start()
+    weakHandler.postDelayed({
+        view?.isEnabled = true
+        isEnabled = true
+    }, 500)
+}
+
+/**
+ * 渐隐隐藏
+ */
+fun View.fadeOut(view: View? = null) {
+    if (0f == alpha) return
+    view?.isEnabled = false
+    isEnabled = false
+    visibility = View.VISIBLE
+    animatorSet.playTogether(ObjectAnimator.ofFloat(this, "alpha", 1f, 0.5f, 0f))
+    animatorSet.duration = 500
+    animatorSet.start()
+    weakHandler.postDelayed({
+        view?.isEnabled = true
         isEnabled = true
     }, 500)
 }

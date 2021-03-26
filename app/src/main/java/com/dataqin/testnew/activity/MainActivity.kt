@@ -13,8 +13,7 @@ import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
-import com.dataqin.map.utils.helper.MapHelper
-import com.dataqin.map.utils.helper.fade
+import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -27,7 +26,8 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
     private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
@@ -97,25 +97,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         }).getPermissions()
     }
 
-    private fun fade(model: UserModel?) {
-        if (null == model) {
-            binding.btnShot.alpha = 0f
-        } else {
-            binding.btnShot.fade()
-            //禁止触发赋值的view操作，保证动画完成
-            ENABLED(500, binding.btnShot)
-            //赋值...改变view
-
-        }
-
-    }
-
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> v.fade()
-            R.id.btn_video_tap -> pageTesting(1)
-            R.id.btn_record -> pageTesting(2)
-            R.id.btn_screen -> pageTesting(3)
+            R.id.btn_shot -> binding.btnRecord.fadeIn()
+            R.id.btn_video_tap -> binding.btnRecord.fadeOut()
+            R.id.btn_record -> binding.tvView.shown()
+            R.id.btn_screen -> binding.tvView.hidden()
         }
     }
 
