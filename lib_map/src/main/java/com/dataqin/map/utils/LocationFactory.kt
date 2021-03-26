@@ -165,8 +165,7 @@ class LocationFactory : AMapLocationListener {
      */
     fun settingGps(activity: Activity) {
         val weakActivity = WeakReference(activity)
-        val locationManager =
-            weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //判断GPS模块是否开启，如果没有则开启
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AppDialog.with(weakActivity.get()).setOnDialogListener(object : OnDialogListener {
