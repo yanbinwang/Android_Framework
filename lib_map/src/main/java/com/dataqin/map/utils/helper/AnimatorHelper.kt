@@ -31,6 +31,7 @@ fun View.refresh() {
  * 0.5s不可操作
  */
 fun View.shown() {
+    if(View.VISIBLE == visibility) return
     isEnabled = false
     visibility = View.VISIBLE
     val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in)
@@ -45,6 +46,7 @@ fun View.shown() {
  * 0.5s不可操作
  */
 fun View.hidden() {
+    if(View.GONE == visibility) return
     isEnabled = false
     val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_out)
     startAnimation(animation)
