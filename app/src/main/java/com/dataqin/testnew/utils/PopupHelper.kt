@@ -18,11 +18,13 @@ import java.util.concurrent.ConcurrentHashMap
 object PopupHelper {
     private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
     private var popupNum = 0//通知数量
+    private var show = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
 
     @JvmStatic
     fun initialize(activity: Activity, popupNum: Int = 0) {
         this.popupMap.clear()
+        this.show = false
         this.weakActivity = WeakReference(activity)
         this.popupNum = popupNum
     }
@@ -41,9 +43,11 @@ object PopupHelper {
      * 逐步弹出窗口
      */
     private fun showPopup() {
-        //如果此时添加的对象已经达到了对应通知的数量，按照添加的顺序逐个展示对应弹框-每个弹框一个方法
-        if (testingPopup()) {
-
+        if(!show){
+            //如果此时添加的对象已经达到了对应通知的数量，按照添加的顺序逐个展示对应弹框-每个弹框一个方法
+            if (testingPopup()) {
+                show = true
+            }
         }
     }
 
