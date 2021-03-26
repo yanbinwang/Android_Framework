@@ -5,6 +5,8 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
+import com.dataqin.common.widget.dialog.AppDialog
+import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 
@@ -19,10 +21,12 @@ object PopupHelper {
     private var show = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
     private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
+
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
-        "push_label", //推送
-        "advertisement_label"//广告
+        "push_label",//推送
+        "advertisement_label",//广告
+        "advertisement_label2"//广告2
     )
 
     @JvmStatic
@@ -30,6 +34,7 @@ object PopupHelper {
         this.show = false
         this.popupMap.clear()
         this.weakActivity = WeakReference(activity)
+        popupMap[labelList[0]] = Any()//0留给推送
     }
 
     /**
@@ -50,6 +55,7 @@ object PopupHelper {
             //如果此时添加的对象已经达到了对应通知的数量，按照添加的顺序逐个展示对应弹框-每个弹框一个方法
             if (testingPopup()) {
                 show = true
+                showNotification()
             }
         }
     }
@@ -59,6 +65,29 @@ object PopupHelper {
      */
     private fun testingPopup(): Boolean {
         return popupMap.size >= labelList.size
+    }
+
+    //第一级
+    private fun showNotification() {
+        if (!isNotificationEnabled()) {
+            AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
+                override fun onDialogConfirm() {
+                    settingNotification()
+                    showAdvertisement()
+                }
+
+                override fun onDialogCancel() {
+                    showAdvertisement()
+                }
+            }).show()
+        } else {
+            showAdvertisement()
+        }
+    }
+
+    //第二级
+    private fun showAdvertisement() {
+
     }
 
     /**
