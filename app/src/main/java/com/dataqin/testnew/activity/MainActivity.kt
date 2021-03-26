@@ -13,7 +13,6 @@ import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
-import com.dataqin.testnew.utils.PopupHelper
 
 /**
  * Created by WangYanBin
@@ -29,13 +28,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 //        presenter.setEmptyView(baseBinding.flBaseContainer)
-        PopupHelper.initialize(this)
-
-        //不需要更新传一个Any，需要的传VersionModel
-        PopupHelper.addPopup(0,Any())
-        PopupHelper.addPopup(1,Any())
-        PopupHelper.addPopup(2,Any())
-        PopupHelper.addPopup(3,Any())
+//        PopupHelper.initialize(this)
+//        //不需要更新传一个Any，需要的传VersionModel
+//        PopupHelper.addPopup(0,Any())
+//        PopupHelper.addPopup(1,Any())
+//        PopupHelper.addPopup(2,Any())
+//        PopupHelper.addPopup(3,Any())
     }
 
     override fun initEvent() {

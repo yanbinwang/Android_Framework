@@ -1,18 +1,15 @@
 package com.dataqin.map.utils
 
-import android.Manifest
 import android.app.Activity
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -106,25 +103,12 @@ class LocationFactory : AMapLocationListener {
     }
 
     /**
-     * 不获取权限的定位，进页面地图自动定位使用该方法
-     */
-    fun start(locationSubscriber: LocationSubscriber? = null) {
-        this.locationSubscriber = locationSubscriber
-        if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            locationClient?.startLocation()
-        } else {
-            locationSubscriber?.onFailed()
-        }
-    }
-
-    /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      * 必须具备定位权限！用于打卡，签到，地图矫正
      */
     fun start(context: Context, locationSubscriber: LocationSubscriber? = null) {
         this.locationSubscriber = locationSubscriber
-        val weakContext = WeakReference(context)
-        PermissionHelper.with(weakContext.get())
+        PermissionHelper.with(context)
             .setPermissionCallBack(object : OnPermissionCallBack {
                 override fun onPermissionListener(isGranted: Boolean) {
                     if (isGranted) {

@@ -1,13 +1,16 @@
 package com.dataqin.map.utils.helper
 
+import android.Manifest
 import android.content.Context
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.app.ActivityCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
@@ -64,8 +67,11 @@ object MapHelper {
         aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
         //地图加载完成，定位一次，让地图移动到坐标点
         aMap?.setOnMapLoadedListener {
-            moveCamera()//先移动到默认点再定位
-            location(mapView.context)
+            //先移动到默认点再检测权限定位
+            moveCamera()
+            if (ActivityCompat.checkSelfPermission(mapView.context, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                location(mapView.context)
+            }
         }
         //是否需要在网络发生改变时，移动地图
         if (receiver) {
