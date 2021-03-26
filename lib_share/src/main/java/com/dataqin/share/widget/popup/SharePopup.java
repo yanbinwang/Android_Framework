@@ -23,7 +23,7 @@ public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implement
     private WeChatModel weChatModel;
 
     public SharePopup(@NotNull Activity activity) {
-        super(activity);
+        super(activity,true);
         initialize();
     }
 

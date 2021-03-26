@@ -24,7 +24,7 @@ public class MapPopup extends BasePopupWindow<ViewPopupMapBinding> implements Vi
     private LatLng latlng;
 
     public MapPopup(@NotNull Activity activity) {
-        super(activity);
+        super(activity,true);
         initialize();
     }
 
