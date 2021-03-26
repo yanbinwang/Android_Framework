@@ -33,7 +33,10 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         PopupHelper.initialize(this)
 
         //不需要更新传一个Any，需要的传VersionModel
-        PopupHelper.addPopup(0,Any())//
+        PopupHelper.addPopup(0,Any())
+        PopupHelper.addPopup(1,Any())
+        PopupHelper.addPopup(2,Any())
+        PopupHelper.addPopup(3,Any())
     }
 
     override fun initEvent() {

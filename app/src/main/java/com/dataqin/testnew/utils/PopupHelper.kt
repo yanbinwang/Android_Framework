@@ -66,11 +66,11 @@ object PopupHelper {
     /**
      * 更新
      */
-    private fun showUpdate(){
+    private fun showUpdate() {
         val model = popupMap[labelList[0]]
-        if(model is Any){
+        if (model is Any) {
             showNotification()
-        }else{
+        } else {
 //            var versionModel = model as VersionModel
         }
     }
@@ -89,7 +89,7 @@ object PopupHelper {
                 override fun onDialogCancel() {
                     showAdvertisement()
                 }
-            }).show()
+            }).setParams("提示", "是否开启推送通知", "确定", "取消").show()
         } else {
             showAdvertisement()
         }
