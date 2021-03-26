@@ -1,5 +1,6 @@
 package com.dataqin.map.utils.helper
 
+import android.content.Context
 import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.Point
@@ -7,6 +8,7 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import com.amap.api.location.AMapLocation
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
 import com.amap.api.maps.MapView
@@ -17,6 +19,8 @@ import com.amap.api.maps.model.PolygonOptions
 import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.map.service.MapReceiver
 import com.dataqin.map.utils.CoordinateTransUtil
+import com.dataqin.map.utils.LocationFactory
+import com.dataqin.map.utils.LocationSubscriber
 import kotlin.math.roundToInt
 
 
@@ -25,7 +29,12 @@ import kotlin.math.roundToInt
  *  高德地图工具类
  */
 object MapHelper {
-    private val defaultLatLng by lazy { GsonUtil.jsonToObj("{latitude:30.2780010000,longitude:120.1680690000}", LatLng::class.java) }//默认地图经纬度
+    private val defaultLatLng by lazy {
+        GsonUtil.jsonToObj(
+            "{latitude:30.2780010000,longitude:120.1680690000}",
+            LatLng::class.java
+        )
+    }//默认地图经纬度
     private val aMapReceiver by lazy { MapReceiver() }
     private var mapView: MapView? = null
     var aMap: AMap? = null
@@ -53,6 +62,12 @@ object MapHelper {
         aMap?.uiSettings?.isZoomControlsEnabled = false //隐藏缩放插件
         aMap?.uiSettings?.isTiltGesturesEnabled = false //屏蔽双手指上下滑动切换为3d地图
         aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
+        //地图加载完成，定位一次，让地图移动到坐标点
+        aMap?.setOnMapLoadedListener {
+            moveCamera()//先移动到默认点再定位
+            location(mapView.context)
+        }
+        //是否需要在网络发生改变时，移动地图
         if (receiver) {
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
@@ -92,6 +107,24 @@ object MapHelper {
         aMap = null
         mapView?.context?.unregisterReceiver(aMapReceiver)
         mapView?.onDestroy()
+    }
+
+    /**
+     * 地图定位
+     */
+    @JvmStatic
+    fun location(context: Context) {
+        LocationFactory.instance.start(context, object : LocationSubscriber() {
+            override fun onSuccess(model: AMapLocation) {
+                super.onSuccess(model)
+                moveCamera(LatLng(model.latitude, model.longitude))
+            }
+
+            override fun onFailed() {
+                super.onFailed()
+                moveCamera()
+            }
+        })
     }
 
     /**

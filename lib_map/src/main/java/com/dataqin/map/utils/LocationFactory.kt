@@ -37,7 +37,7 @@ import java.lang.ref.WeakReference
 class LocationFactory : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private var locationClient: AMapLocationClient? = null
-    var locationSubscriber: LocationSubscriber? = null
+    private var locationSubscriber: LocationSubscriber? = null
 
     companion object {
         @JvmStatic
@@ -108,9 +108,8 @@ class LocationFactory : AMapLocationListener {
     /**
      * 不获取权限的定位，进页面地图自动定位使用该方法
      */
-    fun start() {
-        locationSubscriber?.normal = true
-        locationSubscriber?.onStart()
+    fun start(locationSubscriber: LocationSubscriber? = null) {
+        this.locationSubscriber = locationSubscriber
         if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationClient?.startLocation()
         } else {
@@ -122,9 +121,8 @@ class LocationFactory : AMapLocationListener {
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
      * 必须具备定位权限！用于打卡，签到，地图矫正
      */
-    fun start(context: Context, normal: Boolean = false) {
-        locationSubscriber?.normal = normal
-        locationSubscriber?.onStart()
+    fun start(context: Context, locationSubscriber: LocationSubscriber? = null) {
+        this.locationSubscriber = locationSubscriber
         val weakContext = WeakReference(context)
         PermissionHelper.with(weakContext.get())
             .setPermissionCallBack(object : OnPermissionCallBack {
@@ -163,8 +161,7 @@ class LocationFactory : AMapLocationListener {
      */
     fun settingGps(activity: Activity) {
         val weakActivity = WeakReference(activity)
-        val locationManager =
-            weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        val locationManager = weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //判断GPS模块是否开启，如果没有则开启
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AppDialog.with(weakActivity.get()).setOnDialogListener(object : OnDialogListener {

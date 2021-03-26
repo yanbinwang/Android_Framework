@@ -7,18 +7,11 @@ import com.amap.api.location.AMapLocation
  *  定位的状态订阅
  */
 abstract class LocationSubscriber {
-    var normal = false
-
-    open fun onStart() {}
 
     open fun onSuccess(model: AMapLocation) {
-        onComplete()
     }
 
     open fun onFailed() {
-        onComplete()
     }
-
-    open fun onComplete() {}
 
 }

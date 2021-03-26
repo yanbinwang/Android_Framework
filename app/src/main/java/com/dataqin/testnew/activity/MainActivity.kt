@@ -4,13 +4,12 @@ import android.content.Intent
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
+import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.map.utils.LocationFactory
-import com.dataqin.map.utils.helper.fadeIn
-import com.dataqin.map.utils.helper.fadeOut
-import com.dataqin.map.utils.helper.hidden
-import com.dataqin.map.utils.helper.shown
+import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
@@ -42,6 +41,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+
+        addDisposable(RxBus.instance.toFlowable{
+            when(it.getAction()){
+                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
+            }
+        })
 
 //        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
 //            override fun onRefreshListener() {
