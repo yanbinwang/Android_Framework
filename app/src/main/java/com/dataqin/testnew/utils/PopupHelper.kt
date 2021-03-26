@@ -16,11 +16,11 @@ import java.util.concurrent.ConcurrentHashMap
  *  2.次于更新的弹框为通知是否开启，如果app接了推送，用户需要在弹框关闭后，逐步调取接下来的弹框
  */
 object PopupHelper {
-    private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
     private var show = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
+    private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
     //一些配置通知的label屬性集合
-    val labelList = arrayOf(
+    private val labelList = arrayOf(
         "push_label", //推送
         "advertisement_label"//广告
     )
