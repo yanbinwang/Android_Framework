@@ -12,9 +12,8 @@ import java.util.concurrent.ConcurrentHashMap
 /**
  *  Created by wangyanbin
  *  针对首页弹框的帮助类，如果后台不能给弹框优先级顺序的记录
- *  1.获取系统权限
- *  2.获取通知是否开启
- *  3.各类弹框优先级
+ *  1.更新弹框高于一切弹框，只要弹出更新，其余弹框不会弹出
+ *  2.次于更新的弹框为通知是否开启，如果app接了推送，用户需要在弹框关闭后，逐步调取接下来的弹框
  */
 object PopupHelper {
     private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
