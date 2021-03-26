@@ -1,6 +1,5 @@
 package com.dataqin.map.service
 
-import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -11,6 +10,7 @@ import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.NetWorkUtil
+import com.yanzhenjie.permission.runtime.Permission
 
 /**
  *  Created by wangyanbin
@@ -30,7 +30,13 @@ class MapReceiver : BroadcastReceiver() {
         if (ConnectivityManager.CONNECTIVITY_ACTION == intent?.action) {
             val netWorkState = NetWorkUtil.getNetWorkState()
             if (-1 != netWorkState) {
-                if (ActivityCompat.checkSelfPermission(context!!, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                var granted = true
+                for (index in Permission.Group.LOCATION.indices) {
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) {
+                        granted = false
+                    }
+                }
+                if (granted) {
                     RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
                 }
             }

@@ -9,9 +9,14 @@ import com.amap.api.location.AMapLocation
 abstract class LocationSubscriber {
 
     open fun onSuccess(model: AMapLocation) {
+        onComplete()
     }
 
     open fun onFailed() {
+        onComplete()
+    }
+
+    open fun onComplete() {
     }
 
 }

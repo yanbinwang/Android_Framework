@@ -1,6 +1,5 @@
 package com.dataqin.map.utils.helper
 
-import android.Manifest
 import android.content.Context
 import android.content.IntentFilter
 import android.content.pm.PackageManager
@@ -8,6 +7,7 @@ import android.graphics.Color
 import android.graphics.Point
 import android.net.ConnectivityManager
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
@@ -19,22 +19,24 @@ import com.amap.api.maps.model.BitmapDescriptorFactory
 import com.amap.api.maps.model.LatLng
 import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.PolygonOptions
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.map.service.MapReceiver
 import com.dataqin.map.utils.CoordinateTransUtil
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
+import com.yanzhenjie.permission.runtime.Permission
 import kotlin.math.roundToInt
-
 
 /**
  *  Created by wangyanbin
  *  高德地图工具类
  */
 object MapHelper {
-    private val defaultLatLng by lazy { GsonUtil.jsonToObj("{latitude:30.2780010000,longitude:120.1680690000}", LatLng::class.java) }//默认地图经纬度
-    private val aMapReceiver by lazy { MapReceiver() }
+    private val mapReceiver by lazy { MapReceiver() }
+    private var receiver = false
     private var mapView: MapView? = null
+    private var mapLatLng: LatLng? = null//默认地图经纬度
     var aMap: AMap? = null
 
     /**
@@ -42,9 +44,16 @@ object MapHelper {
      * 如需要广播监听，需书写对应的rxjava
      */
     @JvmStatic
-    fun initialize(savedInstanceState: Bundle, mapView: MapView, receiver: Boolean = false) {
+    fun initialize(savedInstanceState: Bundle?, mapView: MapView, receiver: Boolean = false) {
         this.mapView = mapView
         this.aMap = mapView.map
+        this.receiver = receiver
+        //默认地图经纬度-杭州
+        var json = Constants.LATLNG_JSON
+        if (TextUtils.isEmpty(json)) {
+            json = "{latitude:30.2780010000,longitude:120.1680690000}"
+        }
+        mapLatLng = GsonUtil.jsonToObj(json!!, LatLng::class.java)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
         mapView.onCreate(savedInstanceState)
         //更改地图view设置
@@ -64,7 +73,13 @@ object MapHelper {
         aMap?.setOnMapLoadedListener {
             //先移动到默认点再检测权限定位
             moveCamera()
-            if (ActivityCompat.checkSelfPermission(mapView.context, Manifest.permission_group.LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            var granted = true
+            for (index in Permission.Group.LOCATION.indices) {
+                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) {
+                    granted = false
+                }
+            }
+            if (granted) {
                 location(mapView.context)
             }
         }
@@ -72,7 +87,7 @@ object MapHelper {
         if (receiver) {
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-            mapView.context.registerReceiver(aMapReceiver, intentFilter)
+            mapView.context.registerReceiver(mapReceiver, intentFilter)
         }
     }
 
@@ -106,7 +121,7 @@ object MapHelper {
     @JvmStatic
     fun destroy() {
         aMap = null
-        mapView?.context?.unregisterReceiver(aMapReceiver)
+        if (receiver) mapView?.context?.unregisterReceiver(mapReceiver)
         mapView?.onDestroy()
     }
 
@@ -132,7 +147,7 @@ object MapHelper {
      * 地图移动
      */
     @JvmStatic
-    fun moveCamera(latLng: LatLng? = defaultLatLng, zoom: Float = 18f, anim: Boolean = false) {
+    fun moveCamera(latLng: LatLng? = mapLatLng, zoom: Float = 18f, anim: Boolean = false) {
         if (anim) {
             aMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, zoom))
         } else {

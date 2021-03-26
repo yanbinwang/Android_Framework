@@ -1,6 +1,7 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
+import android.os.Bundle
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
@@ -23,6 +24,31 @@ import com.dataqin.testnew.presenter.contract.MainContract
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        MapHelper.initialize(savedInstanceState,binding.map)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        MapHelper.saveInstanceState(outState)
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MapHelper.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        MapHelper.pause()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        MapHelper.destroy()
+    }
 
     override fun initView() {
         super.initView()
