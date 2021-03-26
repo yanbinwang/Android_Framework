@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap
  *  针对首页弹框的帮助类，如果后台不能给弹框优先级顺序的记录
  *  1.更新弹框高于一切弹框，只要弹出更新，其余弹框不会弹出
  *  2.次于更新的弹框为通知是否开启，如果app接了推送，用户需要在弹框关闭后，逐步调取接下来的弹框
+ *  如果不需要更新，调取
  */
 object PopupHelper {
     private var show = false//是否已经弹过
@@ -24,6 +25,7 @@ object PopupHelper {
 
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
+        "update_label",//更新
         "push_label",//推送
         "advertisement_label",//广告
         "advertisement_label2"//广告2
@@ -33,16 +35,8 @@ object PopupHelper {
     fun initialize(activity: Activity) {
         this.show = false
         this.weakActivity = WeakReference(activity)
-        refresh()
-    }
-
-    /**
-     * 重试=部分接口失败最终调取刷新的时候
-     */
-    @JvmStatic
-    fun refresh() {
-        popupMap.clear()
-        popupMap[labelList[0]] = Any()//0留给推送
+        this.popupMap.clear()
+        this.popupMap[labelList[1]] = Any()//1留给推送
     }
 
     /**
@@ -51,7 +45,7 @@ object PopupHelper {
      * any-通知对象
      */
     @JvmStatic
-    private fun addPopup(index: Int, any: Any) {
+    fun addPopup(index: Int, any: Any) {
         popupMap[labelList[index]] = any
         showPopup()
     }
@@ -61,23 +55,28 @@ object PopupHelper {
      */
     private fun showPopup() {
         if (!show) {
-            //如果此时添加的对象已经达到了对应通知的数量，按照添加的顺序逐个展示对应弹框-每个弹框一个方法
-            if (testingPopup()) {
+            //检测当前的通知集合是否已经达到了配置的通知总数
+            if (popupMap.size >= labelList.size) {
                 show = true
-                showNotification()
+                showUpdate()
             }
         }
     }
 
     /**
-     * 检测当前的通知集合是否已经达到了配置的通知总数
+     * 更新
      */
-    private fun testingPopup(): Boolean {
-        return popupMap.size >= labelList.size
+    private fun showUpdate(){
+        val model = popupMap[labelList[0]]
+        if(model is Any){
+            showNotification()
+        }else{
+//            var versionModel = model as VersionModel
+        }
     }
 
     /**
-     * 第一级
+     * 通知
      */
     private fun showNotification() {
         if (!isNotificationEnabled()) {
@@ -97,7 +96,7 @@ object PopupHelper {
     }
 
     /**
-     * 第二级
+     * 广告
      */
     private fun showAdvertisement() {
 
