@@ -40,7 +40,7 @@ object PopupHelper {
      * 重试=部分接口失败最终调取刷新的时候
      */
     @JvmStatic
-    fun refresh(){
+    fun refresh() {
         popupMap.clear()
         popupMap[labelList[0]] = Any()//0留给推送
     }
