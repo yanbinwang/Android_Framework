@@ -32,8 +32,16 @@ object PopupHelper {
     @JvmStatic
     fun initialize(activity: Activity) {
         this.show = false
-        this.popupMap.clear()
         this.weakActivity = WeakReference(activity)
+        refresh()
+    }
+
+    /**
+     * 重试=部分接口失败最终调取刷新的时候
+     */
+    @JvmStatic
+    fun refresh(){
+        popupMap.clear()
         popupMap[labelList[0]] = Any()//0留给推送
     }
 
@@ -42,6 +50,7 @@ object PopupHelper {
      * label-通知类型说明
      * any-通知对象
      */
+    @JvmStatic
     private fun addPopup(index: Int, any: Any) {
         popupMap[labelList[index]] = any
         showPopup()
@@ -67,7 +76,9 @@ object PopupHelper {
         return popupMap.size >= labelList.size
     }
 
-    //第一级
+    /**
+     * 第一级
+     */
     private fun showNotification() {
         if (!isNotificationEnabled()) {
             AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
@@ -85,7 +96,9 @@ object PopupHelper {
         }
     }
 
-    //第二级
+    /**
+     * 第二级
+     */
     private fun showAdvertisement() {
 
     }
