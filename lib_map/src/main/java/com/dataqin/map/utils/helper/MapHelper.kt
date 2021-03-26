@@ -32,12 +32,7 @@ import kotlin.math.roundToInt
  *  高德地图工具类
  */
 object MapHelper {
-    private val defaultLatLng by lazy {
-        GsonUtil.jsonToObj(
-            "{latitude:30.2780010000,longitude:120.1680690000}",
-            LatLng::class.java
-        )
-    }//默认地图经纬度
+    private val defaultLatLng by lazy { GsonUtil.jsonToObj("{latitude:30.2780010000,longitude:120.1680690000}", LatLng::class.java) }//默认地图经纬度
     private val aMapReceiver by lazy { MapReceiver() }
     private var mapView: MapView? = null
     var aMap: AMap? = null
