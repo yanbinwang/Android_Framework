@@ -3,20 +3,16 @@ package com.dataqin.testnew.activity
 import android.content.Intent
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.amap.api.location.AMapLocation
-import com.amap.api.maps.model.LatLng
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.common.model.UserModel
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.LocationFactory
-import com.dataqin.map.utils.LocationSubscriber
-import com.dataqin.map.utils.helper.*
+import com.dataqin.map.utils.helper.fadeIn
+import com.dataqin.map.utils.helper.fadeOut
+import com.dataqin.map.utils.helper.hidden
+import com.dataqin.map.utils.helper.shown
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
-import com.dataqin.testnew.presenter.MainPresenter
 import com.dataqin.testnew.presenter.contract.MainContract
 
 /**
@@ -26,40 +22,39 @@ import com.dataqin.testnew.presenter.contract.MainContract
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
-    MainContract.View {
-    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
+//    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 //        presenter.setEmptyView(baseBinding.flBaseContainer)
 
-        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
-            override fun onSuccess(model: AMapLocation) {
-                super.onSuccess(model)
-                if (normal) {
-                    MapHelper.moveCamera(LatLng(model.latitude, model.longitude))
-                } else {
-                    //执行打卡
-                }
-            }
-
-            override fun onFailed() {
-                super.onFailed()
-                if (normal) {
-                    MapHelper.moveCamera()
-                } else {
-                    LocationFactory.instance.settingGps(activity.get()!!)
-                }
-            }
-        }
+//        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
+//            override fun onSuccess(model: AMapLocation) {
+//                super.onSuccess(model)
+//                if (normal) {
+//                    MapHelper.moveCamera(LatLng(model.latitude, model.longitude))
+//                } else {
+//                    //执行打卡
+//                }
+//            }
+//
+//            override fun onFailed() {
+//                super.onFailed()
+//                if (normal) {
+//                    MapHelper.moveCamera()
+//                } else {
+//                    LocationFactory.instance.settingGps(activity.get()!!)
+//                }
+//            }
+//        }
 //        LocationFactory.instance.start(this)
     }
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnShot, binding.btnVideoTap, binding.btnRecord, binding.btnScreen)
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
 
 //        presenter.getEmptyView()?.showError()
 //        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
@@ -78,31 +73,15 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                TODO("Not yet implemented")
 //            }
 //        }
-
-
-    }
-
-    private fun pageTesting(index: Int) {
-        PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
-            override fun onPermissionListener(isGranted: Boolean) {
-                if (isGranted) {
-                    when (index) {
-                        0 -> navigation(ARouterPath.ShotActivity)
-                        1 -> navigation(ARouterPath.VideoTapActivity)
-                        2 -> navigation(ARouterPath.RecordActivity)
-                        3 -> navigation(ARouterPath.ScreenActivity)
-                    }
-                }
-            }
-        }).getPermissions()
     }
 
     override fun onClick(v: View?) {
         when (v?.id) {
-            R.id.btn_shot -> binding.btnRecord.fadeIn()
-            R.id.btn_video_tap -> binding.btnRecord.fadeOut()
-            R.id.btn_record -> binding.tvView.shown()
-            R.id.btn_screen -> binding.tvView.hidden()
+            R.id.btn_test -> binding.tvView.fadeIn()
+            R.id.btn_test2 -> binding.tvView.fadeOut()
+            R.id.btn_test3 -> binding.tvView.shown()
+            R.id.btn_test4 -> binding.tvView.hidden()
+            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
         }
     }
 
@@ -118,12 +97,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     }
 
     override fun getOperation() {
-
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        LocationFactory.instance.stop()
-    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        LocationFactory.instance.stop()
+//    }
 
 }

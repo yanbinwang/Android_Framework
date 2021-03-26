@@ -10,41 +10,51 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/btn_shot"
+            android:id="@+id/btn_test"
             android:layout_width="match_parent"
             android:layout_height="80mm"
             android:background="@color/black"
-            android:text="拍照"
+            android:text="渐隐-进入"
             android:textColor="@color/white"
             android:textSize="32mm" />
 
         <Button
-            android:id="@+id/btn_video_tap"
+            android:id="@+id/btn_test2"
             android:layout_width="match_parent"
             android:layout_height="80mm"
             android:layout_marginTop="20mm"
             android:background="@color/black"
-            android:text="录像"
+            android:text="渐隐-退出"
             android:textColor="@color/white"
             android:textSize="32mm" />
 
         <Button
-            android:id="@+id/btn_record"
+            android:id="@+id/btn_test3"
             android:layout_width="match_parent"
             android:layout_height="80mm"
             android:layout_marginTop="20mm"
             android:background="@color/black"
-            android:text="录音"
+            android:text="弹出-进入"
             android:textColor="@color/white"
             android:textSize="32mm" />
 
         <Button
-            android:id="@+id/btn_screen"
+            android:id="@+id/btn_test4"
             android:layout_width="match_parent"
             android:layout_height="80mm"
             android:layout_marginTop="20mm"
             android:background="@color/black"
-            android:text="录像"
+            android:text="弹出-退出"
+            android:textColor="@color/white"
+            android:textSize="32mm" />
+
+        <Button
+            android:id="@+id/btn_test5"
+            android:layout_width="match_parent"
+            android:layout_height="80mm"
+            android:layout_marginTop="20mm"
+            android:background="@color/black"
+            android:text="GPS检测设置"
             android:textColor="@color/white"
             android:textSize="32mm" />
 
