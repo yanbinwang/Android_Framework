@@ -16,9 +16,11 @@ import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
 import com.amap.api.location.AMapLocationListener
+import com.amap.api.maps.model.LatLng
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.dialog.AppDialog
@@ -97,6 +99,7 @@ class LocationFactory : AMapLocationListener {
 
     override fun onLocationChanged(aMapLocation: AMapLocation?) {
         if (aMapLocation != null && aMapLocation.errorCode == AMapLocation.LOCATION_SUCCESS) {
+            Constants.LATLNG_JSON = GsonUtil.objToJson(LatLng(aMapLocation.latitude, aMapLocation.longitude))
             locationSubscriber?.onSuccess(aMapLocation)
         } else {
             locationSubscriber?.onFailed()

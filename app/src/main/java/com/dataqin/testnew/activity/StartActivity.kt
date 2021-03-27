@@ -25,9 +25,9 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparent(true)
-//        //先判断是否是初始化过app
-//        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
-//        //如果不是，验证是否需要免登陆，随后跳转到首页
+        //先判断是否是初始化过app
+        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
+        //如果不是，验证是否需要免登陆，随后跳转到首页
 //        if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
 //            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //                //先去权限页，再去引导页
@@ -48,6 +48,19 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 //                }
 //            })
 //        }
+        //做免登陆，去首页
+        LocationFactory.instance.start(object : LocationSubscriber() {
+            override fun onComplete() {
+                super.onComplete()
+                if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        //先去权限页，再去引导页
+                    } else {
+                        //去引导页-引导页中获取定位
+                    }
+                }
+            }
+        })
         navigation(ARouterPath.MainActivity).finish()
     }
 
