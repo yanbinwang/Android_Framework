@@ -34,7 +34,7 @@ import kotlin.math.roundToInt
  */
 object MapHelper {
     private val mapReceiver by lazy { MapReceiver() }
-    private var receiver = false
+    private var initialize = false
     private var mapView: MapView? = null
     private var mapLatLng: LatLng? = null//默认地图经纬度
     var aMap: AMap? = null
@@ -44,10 +44,10 @@ object MapHelper {
      * 如需要广播监听，需书写对应的rxjava
      */
     @JvmStatic
-    fun initialize(savedInstanceState: Bundle?, mapView: MapView, receiver: Boolean = false) {
+    fun initialize(savedInstanceState: Bundle?, mapView: MapView, initialize: Boolean = true) {
         this.mapView = mapView
         this.aMap = mapView.map
-        this.receiver = receiver
+        this.initialize = initialize
         //默认地图经纬度-杭州
         var json = Constants.LATLNG_JSON
         if (TextUtils.isEmpty(json)) {
@@ -69,22 +69,22 @@ object MapHelper {
         aMap?.uiSettings?.isZoomControlsEnabled = false //隐藏缩放插件
         aMap?.uiSettings?.isTiltGesturesEnabled = false //屏蔽双手指上下滑动切换为3d地图
         aMap?.moveCamera(CameraUpdateFactory.zoomTo(18f))
-        //地图加载完成，定位一次，让地图移动到坐标点
-        aMap?.setOnMapLoadedListener {
-            //先移动到默认点再检测权限定位
-            moveCamera()
-            var granted = true
-            for (index in Permission.Group.LOCATION.indices) {
-                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) {
-                    granted = false
+        //是否需要在网络发生改变时，移动地图
+        if (initialize) {
+            //地图加载完成，定位一次，让地图移动到坐标点
+            aMap?.setOnMapLoadedListener {
+                //先移动到默认点再检测权限定位
+                moveCamera()
+                var granted = true
+                for (index in Permission.Group.LOCATION.indices) {
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) {
+                        granted = false
+                    }
+                }
+                if (granted) {
+                    location(mapView.context)
                 }
             }
-            if (granted) {
-                location(mapView.context)
-            }
-        }
-        //是否需要在网络发生改变时，移动地图
-        if (receiver) {
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
             mapView.context.registerReceiver(mapReceiver, intentFilter)
@@ -121,7 +121,7 @@ object MapHelper {
     @JvmStatic
     fun destroy() {
         aMap = null
-        if (receiver) mapView?.context?.unregisterReceiver(mapReceiver)
+        if (initialize) mapView?.context?.unregisterReceiver(mapReceiver)
         mapView?.onDestroy()
     }
 

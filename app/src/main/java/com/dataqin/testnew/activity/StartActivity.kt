@@ -2,12 +2,9 @@ package com.dataqin.testnew.activity
 
 import android.os.Build
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.amap.api.location.AMapLocation
-import com.amap.api.maps.model.LatLng
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
-import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
@@ -48,20 +45,21 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 //                }
 //            })
 //        }
-        //做免登陆，去首页
-        LocationFactory.instance.start(object : LocationSubscriber() {
-            override fun onComplete() {
-                super.onComplete()
-                if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        //先去权限页，再去引导页
-                    } else {
-                        //去引导页-引导页中获取定位
-                    }
-                }
+        if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //先去权限页，再去引导页
+            } else {
+                //去引导页-引导页中获取定位
             }
-        })
-        navigation(ARouterPath.MainActivity).finish()
+        } else {
+            //做免登陆，去首页
+            LocationFactory.instance.start(object : LocationSubscriber() {
+                override fun onComplete() {
+                    super.onComplete()
+                    navigation(ARouterPath.MainActivity).finish()
+                }
+            })
+        }
     }
 
     override fun onDestroy() {
