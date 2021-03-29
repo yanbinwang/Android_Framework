@@ -18,22 +18,18 @@ public class MessageDialog extends BaseDialog<ViewDialogMessageBinding> {
         initialize();
     }
 
-    public void show() {
-        show("正在加载，请稍后......");
+    public MessageDialog setParams() {
+        setParams("正在加载，请稍后......");
+        return this;
     }
 
-    public void show(String message) {
+    public MessageDialog setParams(String message) {
         binding.tvLabel.setText(message);
-        setCancelable(false);
-        if (!isShowing()) {
-            show();
-        }
+        return this;
     }
 
-    public void hide() {
-        if (isShowing()) {
-            dismiss();
-        }
+    public static MessageDialog with(Context context) {
+        return new MessageDialog(context);
     }
 
 }

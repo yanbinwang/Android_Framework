@@ -12,7 +12,6 @@
 package com.dataqin.testnew.widget.scale;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -43,39 +42,37 @@ import com.dataqin.base.utils.LogUtil;
  *
  * @author wyb
  */
-@SuppressLint("AppCompatCustomView")
+@SuppressLint({"AppCompatCustomView", "ClickableViewAccessibility"})
 public class ScaleImageView extends ImageView {
-    private static final String TAG = "DEBUG";
-    private static final float SUPER_MIN_MULTIPLIER = .75f;
-    private static final float SUPER_MAX_MULTIPLIER = 1.25f;
-
+    private boolean imageRenderedAtLeastOnce;
+    private boolean onDrawReady;
+    private int viewWidth, viewHeight, prevViewWidth, prevViewHeight;
     private float normalizedScale;
-    private Matrix matrix, prevMatrix;
-    private enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
-    private State state;
-
     private float minScale;
     private float maxScale;
     private float superMinScale;
     private float superMaxScale;
+    private float matchViewWidth, matchViewHeight, prevMatchViewWidth, prevMatchViewHeight;
     private float[] m;
 
     private Context context;
+    private State state;
     private Fling fling;
     private ScaleType mScaleType;
-
-    private boolean imageRenderedAtLeastOnce;
-    private boolean onDrawReady;
-
+    private Matrix matrix, prevMatrix;
     private ZoomVariables delayedZoomVariables;
-    private int viewWidth, viewHeight, prevViewWidth, prevViewHeight;
-    private float matchViewWidth, matchViewHeight, prevMatchViewWidth, prevMatchViewHeight;
 
-    private ScaleGestureDetector mScaleDetector;
     private GestureDetector mGestureDetector;
-    private GestureDetector.OnDoubleTapListener doubleTapListener = null;
+    private ScaleGestureDetector mScaleDetector;
     private OnTouchListener userTouchListener = null;
     private OnTouchImageViewListener touchImageViewListener = null;
+    private GestureDetector.OnDoubleTapListener doubleTapListener = null;
+
+    private static final String TAG = "DEBUG";
+    private static final float SUPER_MIN_MULTIPLIER = .75f;
+    private static final float SUPER_MAX_MULTIPLIER = 1.25f;
+
+    private enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
 
     public ScaleImageView(Context context) {
         super(context);
@@ -699,17 +696,16 @@ public class ScaleImageView extends ImageView {
     }
 
     private class DoubleTapZoom implements Runnable {
-
+        private boolean stretchImageToSuper;
         private long startTime;
-        private static final float ZOOM_TIME = 500;
         private float startZoom, targetZoom;
         private float bitmapX, bitmapY;
-        private boolean stretchImageToSuper;
-        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
         private PointF startTouch;
         private PointF endTouch;
+        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        private static final float ZOOM_TIME = 500;
 
-        DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
+        private DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
             setState(State.ANIMATE_ZOOM);
             startTime = System.currentTimeMillis();
             this.startZoom = normalizedScale;
@@ -796,7 +792,7 @@ public class ScaleImageView extends ImageView {
         CompatScroller scroller;
         int currX, currY;
 
-        Fling(int velocityX, int velocityY) {
+        private Fling(int velocityX, int velocityY) {
             setState(State.FLING);
             scroller = new CompatScroller(context);
             matrix.getValues(m);
@@ -808,7 +804,6 @@ public class ScaleImageView extends ImageView {
             if (getImageWidth() > viewWidth) {
                 minX = viewWidth - (int) getImageWidth();
                 maxX = 0;
-
             } else {
                 minX = maxX = startX;
             }
@@ -821,8 +816,7 @@ public class ScaleImageView extends ImageView {
                 minY = maxY = startY;
             }
 
-            scroller.fling(startX, startY, velocityX, velocityY, minX,
-                    maxX, minY, maxY);
+            scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
             currX = startX;
             currY = startY;
         }
@@ -860,11 +854,10 @@ public class ScaleImageView extends ImageView {
         }
     }
 
-    @TargetApi(VERSION_CODES.GINGERBREAD)
-    private class CompatScroller {
-        Scroller scroller;
-        OverScroller overScroller;
-        boolean isPreGingerbread;
+    private static class CompatScroller {
+        private Scroller scroller;
+        private OverScroller overScroller;
+        private boolean isPreGingerbread;
 
         public CompatScroller(Context context) {
             if (VERSION.SDK_INT < VERSION_CODES.GINGERBREAD) {
@@ -927,17 +920,15 @@ public class ScaleImageView extends ImageView {
         }
     }
 
-    @TargetApi(VERSION_CODES.JELLY_BEAN)
     private void compatPostOnAnimation(Runnable runnable) {
         if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
             postOnAnimation(runnable);
-
         } else {
             postDelayed(runnable, 1000 / 60);
         }
     }
 
-    private class ZoomVariables {
+    private static class ZoomVariables {
         public float scale;
         public float focusX;
         public float focusY;
@@ -956,4 +947,5 @@ public class ScaleImageView extends ImageView {
         matrix.getValues(n);
         LogUtil.d(TAG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
     }
+
 }

@@ -5,20 +5,20 @@
     android:layout_height="wrap_content"
     android:background="@drawable/shape_loading"
     android:gravity="center"
-    android:padding="10mm">
+    android:padding="20mm">
 
     <ImageView
-        android:layout_width="40mm"
-        android:layout_height="40mm"
+        android:layout_width="60mm"
+        android:layout_height="60mm"
         android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/tv_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10mm"
+        android:layout_marginStart="20mm"
         android:textColor="@color/blue_2e60df"
-        android:textSize="14mm"
+        android:textSize="28mm"
         tools:text="正在加载，请稍后......" />
 
 </LinearLayout>

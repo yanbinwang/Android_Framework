@@ -24,8 +24,7 @@ import java.util.Arrays.asList
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
-    MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
