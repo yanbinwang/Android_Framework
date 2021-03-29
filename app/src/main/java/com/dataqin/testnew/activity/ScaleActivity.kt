@@ -20,30 +20,28 @@ import com.dataqin.testnew.widget.scale.ScaleImageView
  */
 @Route(path = ARouterPath.ScaleActivity)
 class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
-    private val pathList by lazy { intent.getSerializableExtra(Extras.FILE_PATH) as ArrayList<*> }
+    private val fileList by lazy { intent.getSerializableExtra(Extras.FILE_PATH) as ArrayList<*> }
     private val messageDialog by lazy { MessageDialog.with(this).setParams("图片加载中，请稍后......") }
     private var count = 0
 
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparent(false)
-        messageDialog.show()
-        count = 0
     }
 
     override fun initData() {
         super.initData()
         val list = ArrayList<ScaleImageView>()
-        for (url in pathList) {
+        for (url in fileList) {
             val img = ScaleImageView(this)
             img.setOnClickListener { finish() }
             ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_loading_normal, object : GlideRequestListener<Drawable?>() {
                     override fun onStart() {
+                        showDialog()
                     }
 
                     override fun onComplete(resource: Drawable?) {
-                        count++
-                        if (count >= pathList.size - 1) messageDialog.hide()
+                        hideDialog()
                     }
                 }
             )
@@ -52,6 +50,20 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
         val adapter = ScaleAdapter(list)
         binding.svpContainer.adapter = adapter
         binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
+    }
+
+    override fun showDialog(flag: Boolean) {
+        if (fileList.size > 1 && !messageDialog.isShowing) {
+            count = 0
+            messageDialog.show()
+        }
+    }
+
+    override fun hideDialog() {
+        if (fileList.size > 1) {
+            count++
+            if (count >= fileList.size - 1) messageDialog.hide()
+        }
     }
 
     override fun finish() {
