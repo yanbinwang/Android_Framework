@@ -24,9 +24,9 @@ import com.dataqin.common.R;
  * 数据为空时候显示的页面（适用于列表，详情等）
  * 情况如下：
  * <p>
- * 1.加载中
- * 2.加载错误(只有断网情况下会显示点击刷新按钮)
- * 3.空布局(没有数据的时候显示)
+ * 1.加载中-无按钮
+ * 2.空布局(没有数据或服务器接口访问失败的时候显示)-有按钮
+ * 3.网络错误(只有断网情况下会显示)-有按钮
  */
 @SuppressLint("InflateParams")
 public class EmptyLayout extends SimpleViewGroup {
