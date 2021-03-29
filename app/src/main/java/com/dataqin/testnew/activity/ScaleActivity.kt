@@ -8,6 +8,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.GlideRequestListener
+import com.dataqin.common.utils.NetWorkUtil
 import com.dataqin.common.widget.dialog.MessageDialog
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScaleBinding
@@ -53,16 +54,18 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
     }
 
     override fun showDialog(flag: Boolean) {
-        if (fileList.size > 1 && !messageDialog.isShowing) {
-            count = 0
-            messageDialog.show()
+        if (NetWorkUtil.isNetworkAvailable()) {
+            if (fileList.size > 1 && !messageDialog.isShowing) {
+                count = 0
+                messageDialog.show()
+            }
         }
     }
 
     override fun hideDialog() {
         if (fileList.size > 1) {
             count++
-            if (count >= fileList.size - 1) messageDialog.hide()
+            if (count >= fileList.size - 1) messageDialog.dismiss()
         }
     }
 
