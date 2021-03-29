@@ -11,7 +11,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
 /**
  * Created by wangyanbin
- * 微信支付类
+ * 微信支付工具类
  */
 class WechatFactory {
 
@@ -29,23 +29,23 @@ class WechatFactory {
         wxApi.registerApp(Constants.WX_APP_ID)
         //开始支付
         if (!wxApi.isWXAppInstalled) {
-            showToast(context,"您尚未安装微信")
+            doResult(context,"您尚未安装微信")
             return
         }
         if (!wxApi.isWXAppSupportAPI) {
-            showToast(context,"当前微信版本不支持")
+            doResult(context,"当前微信版本不支持")
             return
         }
-        val sendResult: Boolean = wxApi.sendReq(req)
+        val sendResult = wxApi.sendReq(req)
         LogUtil.e("支付状态:$sendResult")
         if (!sendResult) {
-            showToast(context,"支付失败")
+            doResult(context,"支付失败")
         }
     }
 
-    private fun showToast(context: Context, text: String){
+    private fun doResult(context: Context, text: String){
         ToastUtil.mackToastSHORT(text, context)
-        RxBus.instance.post(RxEvent(Constants.APP_PAY_ERROR))
+        RxBus.instance.post(RxEvent(Constants.APP_PAY_FAILURE))
     }
 
 }

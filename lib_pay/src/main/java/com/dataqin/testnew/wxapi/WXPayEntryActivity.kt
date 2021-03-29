@@ -2,7 +2,9 @@ package com.dataqin.testnew.wxapi
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import androidx.appcompat.app.AppCompatActivity
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
@@ -40,12 +42,18 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
     override fun onResp(resp: BaseResp?) {
         when (resp?.errCode) {
             //支付成功
-            BaseResp.ErrCode.ERR_OK -> RxBus.instance.post(RxEvent(Constants.APP_PAY_SUCCESS))
+            BaseResp.ErrCode.ERR_OK -> showToast("支付成功", Constants.APP_PAY_SUCCESS)
             //支付取消
-            BaseResp.ErrCode.ERR_USER_CANCEL -> RxBus.instance.post(RxEvent(Constants.APP_PAY_CANCEL))
+            BaseResp.ErrCode.ERR_USER_CANCEL -> showToast("支付取消", Constants.APP_PAY_FAILURE)
             //支付失败
-            else -> RxBus.instance.post(RxEvent(Constants.APP_PAY_FAILURE))
+            else -> showToast("支付失败", Constants.APP_PAY_FAILURE)
         }
         finish()
     }
+
+    private fun showToast(text: String?, action: String) {
+        if (!TextUtils.isEmpty(text)) ToastUtil.mackToastSHORT(text!!, this)
+        RxBus.instance.post(RxEvent(action))
+    }
+
 }

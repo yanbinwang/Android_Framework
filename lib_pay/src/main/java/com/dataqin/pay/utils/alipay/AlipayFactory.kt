@@ -1,22 +1,24 @@
 package com.dataqin.pay.utils.alipay
 
 import android.app.Activity
-import android.content.Context
 import android.os.Message
 import android.text.TextUtils
 import com.alipay.sdk.app.PayTask
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.ToastUtil
 import com.dataqin.base.utils.WeakHandler
+import com.dataqin.common.bus.RxBus
+import com.dataqin.common.bus.RxEvent
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
 import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
- *
+ *  支付宝支付工具栏
  */
 class AlipayFactory {
-    private var onAlipayListener: OnAlipayListener? = null
+    private var weakActivity: WeakReference<Activity>? = null
     private val SDK_PAY_FLAG = 1
     private val TAG = "AlipayFactory"
 
@@ -27,24 +29,23 @@ class AlipayFactory {
         }
     }
 
-    fun toPay(activity: Activity, payInfo: String, onAlipayListener: OnAlipayListener?) {
-        this.onAlipayListener = onAlipayListener
-        val weakActivity = WeakReference(activity)
+    fun toPay(activity: Activity, payInfo: String) {
+        weakActivity = WeakReference(activity)
         //未安装给出提示并且取消订单
-        if (!FileUtil.isAvailable(weakActivity.get()!!, "com.eg.android.AlipayGphone")) {
-            showToast(weakActivity.get()!!,"您尚未安装支付宝")
-            onAlipayListener?.onUninstalled()
+        if (!FileUtil.isAvailable(weakActivity?.get()!!, "com.eg.android.AlipayGphone")) {
+            doResult("您尚未安装支付宝", Constants.APP_PAY_FAILURE)
             return
         }
-        showToast(weakActivity.get()!!,"正在发起支付宝支付,请稍后...")
+        showToast("正在发起支付宝支付,请稍后...")
         Thread {
-            //构造PayTask 对象
-            val payTask = PayTask(weakActivity.get()!!)
+            //构造PayTask对象
+            val payTask = PayTask(weakActivity?.get()!!)
             //调用支付接口，获取支付结果
             val result = payTask.pay(payInfo, true)
             LogUtil.e(TAG, "支付结果:\n$result")
+            //处理结果
             if (TextUtils.isEmpty(result)) {
-                onAlipayListener?.onFailure()
+                doResult("支付失败", Constants.APP_PAY_FAILURE)
             } else {
                 val msg = Message()
                 msg.what = SDK_PAY_FLAG
@@ -54,13 +55,19 @@ class AlipayFactory {
         }.start()
     }
 
-    private fun showToast(context: Context, text: String) = ToastUtil.mackToastSHORT(text, context)
+    private fun doResult(text: String?, action: String) {
+        showToast(text)
+        RxBus.instance.post(RxEvent(action))
+    }
+
+    private fun showToast(text: String?) {
+        if (!TextUtils.isEmpty(text)) ToastUtil.mackToastSHORT(text!!, weakActivity?.get()!!)
+    }
 
     private val weakHandler = WeakHandler { msg ->
         when (msg.what) {
             SDK_PAY_FLAG -> {
                 val payResult = PayResult(msg.obj as String)
-
                 /**
                  * 同步返回的结果必须放置到服务端进行验证（验证的规则请看https://doc.open.alipay.com/docs/doc.htm?
                  * spm=a219a.7629140.0.0.M0HfOm&treeId=59&articleId=103671&docType=1) 建议商户依赖异步通知
@@ -72,14 +79,14 @@ class AlipayFactory {
                 val resultStatus = payResult.resultStatus
                 //判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                 if (TextUtils.equals(resultStatus, "9000")) {
-                    onAlipayListener?.onSuccess()
+                    doResult("支付成功", Constants.APP_PAY_SUCCESS)
                 } else {
                     //用户中途取消
                     if (TextUtils.equals(resultStatus, "6001")) {
-                        onAlipayListener?.onCancel()
+                        doResult("支付取消", Constants.APP_PAY_FAILURE)
                         //正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                     } else {
-                        onAlipayListener?.onFailure()
+                        doResult("支付失败", Constants.APP_PAY_FAILURE)
                     }
                 }
             }

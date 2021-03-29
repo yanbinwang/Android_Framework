@@ -56,8 +56,8 @@ object Constants {
 
     const val APP_PAY_SUCCESS = "com.bitnew.tech.APP_PAY_SUCCESS" //支付成功广播字段
     const val APP_PAY_FAILURE = "com.bitnew.tech.APP_PAY_FAILURE" //支付失败广播字段
-    const val APP_PAY_CANCEL = "com.bitnew.tech.APP_PAY_CANCEL" //支付取消广播字段
-    const val APP_PAY_ERROR = "com.bitnew.tech.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
+//    const val APP_PAY_CANCEL = "com.bitnew.tech.APP_PAY_CANCEL" //支付取消广播字段
+//    const val APP_PAY_ERROR = "com.bitnew.tech.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
 
     const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
     const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消

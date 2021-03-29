@@ -86,7 +86,7 @@
             android:exported="true"
             android:launchMode="singleInstance"
             android:screenOrientation="portrait"
-            android:theme="@style/payTheme" />
+            android:theme="@style/wxPayTheme" />
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
