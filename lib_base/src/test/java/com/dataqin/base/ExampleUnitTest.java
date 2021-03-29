@@ -1,4 +1,4 @@
-package com.dataqin.framework;
+package com.dataqin.base;
 
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.dataqin.common
+package com.dataqin.recognition
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

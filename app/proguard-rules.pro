@@ -486,18 +486,6 @@ public static final int *;
  -keep interface me.jessyan.autosize.** { *; }
 #------------------------今日头条兼容结束------------------------
 
-#------------------------黄油刀混淆开始------------------------
--keep class butterknife.** { *; }
--dontwarn butterknife.internal.**
--keep class **$$ViewBinder { *; }
--keepclasseswithmembernames class * {
-   @butterknife.* <fields>;
-}
--keepclasseswithmembernames class * {
-   @butterknife.* <methods>;
-}
-#------------------------黄油刀混淆结束------------------------
-
 #------------------------Retrofit混淆开始------------------------
 # Retrofit
 -dontnote retrofit2.Platform
@@ -562,6 +550,106 @@ public static java.lang.String TABLENAME;
     public <init>(android.content.Context, android.util.AttributeSet, int);
 }
 #------------------------播放器混淆结束------------------------#
+
+#------------------------阿里人脸识别混淆开始------------------------
+-keepclassmembers class ** {
+     @com.squareup.otto.Subscribe public *;
+     @com.squareup.otto.Produce public *;
+}
+
+-keep public class com.alipay.mobile.security.zim.api.**{
+    public <fields>;
+    public <methods>;
+}
+
+-keep class com.alipay.mobile.security.zim.biz.ZIMFacadeBuilder {
+  !private <fields>;
+   !private <methods>;
+}
+
+-keep class com.alipay.android.phone.mobilecommon.logger.AlipayMonitorLogService {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.android.phone.mobilecommon.rpc.AlipayRpcService {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.android.phone.mobilecommon.apsecurity.AlipayApSecurityService {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.zoloz.toyger.bean.ToygerMetaInfo {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.zoloz.toyger.algorithm.** { *; }
+
+-keep class com.alipay.zoloz.toyger.blob.** {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.zoloz.toyger.face.** {
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.zoloz.hardware.camera.impl.** {
+    !private <fields>;
+    !private <methods>;
+}
+
+
+-keep public class com.alipay.mobile.security.zim.plugin.**{
+    public <fields>;
+    public <methods>;
+}
+
+-keep class * extends com.alipay.mobile.security.zim.gw.BaseGwService{
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class * extends com.alipay.mobile.security.bio.service.BioMetaInfo{
+    !private <fields>;
+    !private <methods>;
+}
+
+-keep class com.alipay.zoloz.toyger.workspace.FaceRemoteConfig{
+    *;
+}
+
+-keep public class com.alipay.zoloz.toyger.**{
+    *;
+}
+
+-keep public class com.alipay.mobile.security.zim.gw.**{
+    *;
+}
+
+-keep class com.alipay.deviceid.module.senative.DeviceIdUtil { *;}
+
+#-repackageclass com.alipay.deviceid.module.x
+-keep class com.alipay.deviceid.module.rpc.deviceFp.** { *; }
+-keep class com.alipay.deviceid.module.rpc.report.open.** { *; }
+-keep class com.alipay.deviceid.DeviceTokenClient { *; }
+-keep class com.alipay.deviceid.DeviceTokenClient$InitResultListener { *; }
+-keep class com.alipay.deviceid.DeviceTokenClient$TokenResult {*;}
+
+-keep class com.alipay.rds.v2.face.RDSClient { *; }
+-keep class com.alipay.rds.constant.* { *; }
+#------------------------阿里人脸识别混淆结束------------------------
+
+-keep class com.dataqin.sxevidence.databinding.** {*;}
+-keep class com.dataqin.common.databinding.** {*;}
+-keep class com.dataqin.account.databinding.** {*;}
+-keep class com.dataqin.evidence.databinding.** {*;}
+-keep class com.dataqin.home.databinding.** {*;}
 
 -keep class com.dataqin.common.bus.RxEvent{*;}
 -keep class com.dataqin.common.base.page.PageParams{*;}

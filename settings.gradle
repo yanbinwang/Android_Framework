@@ -3,4 +3,5 @@ include ':lib_common'
 include ':lib_base'
 include ':lib_share'
 include ':lib_map'
+include ':lib_recognition'
 rootProject.name = "Android_Framework"
