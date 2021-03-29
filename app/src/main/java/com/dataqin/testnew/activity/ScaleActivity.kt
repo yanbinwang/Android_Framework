@@ -21,7 +21,7 @@ import com.dataqin.testnew.widget.scale.ScaleImageView
 @Route(path = ARouterPath.ScaleActivity)
 class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
     private val pathList by lazy { intent.getSerializableExtra(Extras.FILE_PATH) as ArrayList<*> }
-    private val messageDialog by lazy { MessageDialog.with(this).setParams("图片加载中...") }
+    private val messageDialog by lazy { MessageDialog.with(this).setParams("图片加载中，请稍后......") }
     private var count = 0
 
     override fun initView() {
@@ -37,12 +37,7 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
         for (url in pathList) {
             val img = ScaleImageView(this)
             img.setOnClickListener { finish() }
-            ImageLoader.instance.displayImage(
-                img,
-                url as String,
-                R.drawable.shape_scale_loading,
-                R.drawable.shape_loading_normal,
-                object : GlideRequestListener<Drawable?>() {
+            ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_loading_normal, object : GlideRequestListener<Drawable?>() {
                     override fun onStart() {
                     }
 
