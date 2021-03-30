@@ -2,6 +2,7 @@ package com.dataqin.testnew.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.TextUtils
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
@@ -14,8 +15,13 @@ import com.dataqin.common.constant.RequestCode
 import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
+import com.dataqin.testnew.model.CityModel
 import com.dataqin.testnew.presenter.contract.MainContract
-import java.util.Arrays.asList
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
 
 /**
  * Created by WangYanBin
@@ -24,7 +30,8 @@ import java.util.Arrays.asList
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -108,6 +115,28 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //            }
 //        }
 //        LocationFactory.instance.start(this)
+    }
+
+    //获取本地省市区文件
+    private fun getAddress() {
+        val stringBuilder = StringBuilder()
+        try {
+            val bufferedReader = BufferedReader(InputStreamReader(assets.open("pcas-code.json")))
+            var str = ""
+            while (null != bufferedReader.readLine().also { str = it }) {
+                stringBuilder.append(str)
+            }
+        } catch (e: IOException) {
+            stringBuilder.delete(0, stringBuilder.length)
+        } finally {
+            val result = stringBuilder.toString()
+            if (!TextUtils.isEmpty(result)) {
+                val cityList = Gson().fromJson<List<CityModel>>(
+                    result,
+                    object : TypeToken<List<CityModel>>() {}.type
+                )
+            }
+        }
     }
 
     override fun onClick(v: View?) {
