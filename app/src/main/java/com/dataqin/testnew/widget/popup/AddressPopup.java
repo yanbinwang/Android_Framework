@@ -13,7 +13,7 @@ import com.dataqin.base.utils.ToastUtil;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.R;
 import com.dataqin.testnew.databinding.ViewPopupAddressBinding;
-import com.dataqin.testnew.model.CityModel;
+import com.dataqin.testnew.model.AddressModel;
 import com.dataqin.testnew.model.ProperModel;
 import com.dataqin.testnew.model.ProvinceModel;
 import com.dataqin.testnew.widget.popup.callback.OnAddressListener;
@@ -28,14 +28,14 @@ import java.util.List;
  * 省市区地址选择
  */
 public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> implements View.OnClickListener {
-    private final List<CityModel> cityList;//省份集合
+    private final List<AddressModel> addressList;//省份集合
     private List<ProvinceModel> provinceList = new ArrayList<>();//市集合
     private List<ProperModel> properList = new ArrayList<>();//区集合
     private OnAddressListener onAddressListener;
 
-    public AddressPopup(@NotNull Activity activity, List<CityModel> cityList) {
+    public AddressPopup(@NotNull Activity activity, List<AddressModel> addressList) {
         super(activity, true);
-        this.cityList = cityList;
+        this.addressList = addressList;
         initialize();
     }
 
@@ -97,9 +97,9 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
 
     //得到所有省份的字符串集合
     public void getCityList() {
-        if (!cityList.isEmpty()) {
+        if (!addressList.isEmpty()) {
             List<String> cityStrList = new ArrayList<>();
-            for (CityModel model : cityList) {
+            for (AddressModel model : addressList) {
                 cityStrList.add(model.getName());
             }
             binding.wpCity.setData(cityStrList);
@@ -110,8 +110,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     //查询要选择的城市下标（如果查询不到默认返回0，既第一条）
     private int getCurrentCityIndex(String code) {
         int index = 0;
-        for (int i = 0; i < cityList.size(); i++) {
-            if (code.equals(cityList.get(i).getCode())) {
+        for (int i = 0; i < addressList.size(); i++) {
+            if (code.equals(addressList.get(i).getCode())) {
                 index = i;
                 break;
             }
@@ -122,7 +122,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     //得到选择的市集合
     private void getProvinceList(int position) {
         List<String> provinceStrList = new ArrayList<>();
-        provinceList = cityList.get(position).getChilds();
+        provinceList = addressList.get(position).getChilds();
         for (ProvinceModel model : provinceList) {
             provinceStrList.add(model.getName());
         }
@@ -174,7 +174,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
 
     //传入全部的区编码回显
     public boolean showPopup(String fullCodes) {
-        if (cityList.isEmpty()) {
+        if (addressList.isEmpty()) {
 //            ToastUtil.mackToastSHORT("获取省市区失败", getWeakActivity().get());
             ToastUtil.mackToastSHORT("正在加载,请稍后...", getWeakActivity().get());
             return false;
@@ -208,11 +208,11 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         if (v.getId() == R.id.tv_sure) {
             //获取省市区字段做返回显示
             //省份编码，市编码，区编码
-            String fullCode = cityList.get(binding.wpCity.getCurrentItemPosition()).getCode() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getCode() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
+            String fullCode = addressList.get(binding.wpCity.getCurrentItemPosition()).getCode() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getCode() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
             //310003
             String areaCode = properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
             //浙江省，杭州市，下城区
-            String fullName = cityList.get(binding.wpCity.getCurrentItemPosition()).getName() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getName() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getName();
+            String fullName = addressList.get(binding.wpCity.getCurrentItemPosition()).getName() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getName() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getName();
             if (null != onAddressListener) {
                 onAddressListener.onAddressCurrent(fullCode, areaCode, fullName);
             }

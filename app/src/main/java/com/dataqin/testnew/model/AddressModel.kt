@@ -6,7 +6,7 @@ import java.util.*
  *  Created by wangyanbin
  *  城市选择
  */
-class CityModel {
+class AddressModel {
     var code: String? = null
     var name: String? = null
     var childs: MutableList<ProvinceModel>? = ArrayList()

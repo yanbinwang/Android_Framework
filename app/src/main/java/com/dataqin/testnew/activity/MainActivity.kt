@@ -15,7 +15,7 @@ import com.dataqin.common.constant.RequestCode
 import com.dataqin.map.utils.helper.*
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
-import com.dataqin.testnew.model.CityModel
+import com.dataqin.testnew.model.AddressModel
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -131,9 +131,9 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         } finally {
             val result = stringBuilder.toString()
             if (!TextUtils.isEmpty(result)) {
-                val cityList = Gson().fromJson<List<CityModel>>(
+                val addressList = Gson().fromJson<List<AddressModel>>(
                     result,
-                    object : TypeToken<List<CityModel>>() {}.type
+                    object : TypeToken<List<AddressModel>>() {}.type
                 )
             }
         }
