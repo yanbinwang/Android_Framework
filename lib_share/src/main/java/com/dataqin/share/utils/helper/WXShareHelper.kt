@@ -42,15 +42,15 @@ object WXShareHelper {
         val platform = ShareSDK.getPlatform(getPlatformType(model.type))
         platform.platformActionListener = object : PlatformActionListener {
             override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
-                RxBus.instance.post(RxEvent(Constants.APP_SHARE_SUCCESS))
+                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_SUCCESS)) }
             }
 
             override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
-                RxBus.instance.post(RxEvent(Constants.APP_SHARE_FAILURE))
+                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_FAILURE)) }
             }
 
             override fun onCancel(p0: Platform?, p1: Int) {
-                RxBus.instance.post(RxEvent(Constants.APP_SHARE_CANCEL))
+                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_CANCEL)) }
             }
         }
         platform.share(shareParams)
@@ -68,8 +68,7 @@ object WXShareHelper {
         onekeyShare.text = model.content
         onekeyShare.setImageUrl(model.imgUrl)
         onekeyShare.setUrl(model.url)
-        onekeyShare.shareContentCustomizeCallback =
-            ShareContentCustomizeCallback { _: Platform?, shareParams: ShareParams ->
+        onekeyShare.shareContentCustomizeCallback = ShareContentCustomizeCallback { _: Platform?, shareParams: ShareParams ->
                 shareParams.shareType = Platform.SHARE_WXMINIPROGRAM //分享小程序类型,修改为Platform.OPEN_WXMINIPROGRAM可直接打开微信小程序
                 shareParams.wxUserName = model.id //配置小程序原始ID，前面有截图说明
                 shareParams.wxPath = model.url //分享小程序页面的具体路径
@@ -102,21 +101,18 @@ object WXShareHelper {
         platform.platformActionListener = object : PlatformActionListener {
             override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
                 weakHandler.post { onWXAuthorizeListener?.onComplete(hashMap) }
-//                weakActivity.get()?.runOnUiThread { ToastUtil.mackToastSHORT("授权成功", context!!) }
             }
 
             override fun onError(platform: Platform, i: Int, throwable: Throwable) {
                 weakHandler.post { onWXAuthorizeListener?.onError(throwable) }
-//                weakActivity.get()?.runOnUiThread { ToastUtil.mackToastSHORT("授权失败,请确认手机是否安装了微信", context!!) }
             }
 
             override fun onCancel(platform: Platform, i: Int) {
                 weakHandler.post { onWXAuthorizeListener?.onCancel() }
-//                weakActivity.get()?.runOnUiThread { ToastUtil.mackToastSHORT("取消授权", context!!) }
             }
         }
-        //authorize
-        platform.authorize() //要功能不要数据，在监听oncomplete中不会返回用户数据
+        //要功能不要数据，在监听oncomplete中不会返回用户数据
+        platform.authorize()
     }
 
     /**
