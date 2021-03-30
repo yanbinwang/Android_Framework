@@ -168,6 +168,11 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     }
     // </editor-fold>
 
+    public void showPopup() {
+        showPopup(null);
+    }
+
+    //传入全部的区编码回显
     public void showPopup(String fullCodes) {
         if (cityList.isEmpty()) {
             ToastUtil.mackToastSHORT("获取省市区失败", getWeakActivity().get());
@@ -200,8 +205,11 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     public void onClick(View v) {
         if (v.getId() == R.id.tv_sure) {
             //获取省市区字段做返回显示
+            //省份编码，市编码，区编码
             String fullCode = cityList.get(binding.wpCity.getCurrentItemPosition()).getCode() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getCode() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
+            //310003
             String areaCode = properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
+            //浙江省，杭州市，下城区
             String fullName = cityList.get(binding.wpCity.getCurrentItemPosition()).getName() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getName() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getName();
             if (null != onAddressListener) {
                 onAddressListener.onAddressCurrent(fullCode, areaCode, fullName);
