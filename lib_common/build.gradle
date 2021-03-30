@@ -80,4 +80,5 @@ dependencies {
     api deps.recovery
     api deps.guide
     api deps.wechat
+    api deps.wheelpicker
 }

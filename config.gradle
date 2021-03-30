@@ -30,6 +30,7 @@ versions.mmkv = "1.2.2"
 versions.recovery = "1.0.0"
 versions.guide = "v2.4.0"
 versions.wechat = "5.1.4"
+versions.wheelpicker = "1.1.2"
 
 //安卓x库
 def androidx = [:]
@@ -74,6 +75,7 @@ deps.mmkv = "com.tencent:mmkv-static:$versions.mmkv"//腾讯读写库
 deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
 deps.guide = "com.github.huburt-Hu:NewbieGuide:$versions.guide"//遮罩引导
 deps.wechat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat"//微信
+deps.wheelpicker = "cn.aigestudio.wheelpicker:WheelPicker:$versions.wheelpicker"//滚筒控件
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
 

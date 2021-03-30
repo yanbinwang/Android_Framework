@@ -89,6 +89,19 @@ object DateUtil {
     }
 
     /**
+     * 传入指定日期格式和日期類转换成字符串
+     * @param format
+     * @param timestamp
+     * @return
+     */
+    @JvmStatic
+    fun getDateTimeStr(format: String, date: Date): String {
+        //传入格式转换成日期
+        val simpleDateFormat = SimpleDateFormat(format, Locale.getDefault())
+        return simpleDateFormat.format(date)
+    }
+
+    /**
      * 传入毫秒转换成00:00的格式
      * @param time
      * @return
