@@ -15,7 +15,7 @@ import com.dataqin.common.BaseApplication
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
-import com.dataqin.share.model.WeChatModel
+import com.dataqin.share.model.WechatModel
 import com.dataqin.share.utils.helper.callback.OnWXAuthorizeListener
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import java.util.*
@@ -32,7 +32,7 @@ object WXShareHelper {
      * 分享链接
      */
     @JvmStatic
-    fun shareWebPage(model: WeChatModel) {
+    fun shareWebPage(model: WechatModel) {
         val shareParams = ShareParams()
         shareParams.title = model.title
         shareParams.text = model.content
@@ -60,7 +60,7 @@ object WXShareHelper {
      * 分享微信小程序
      */
     @JvmStatic
-    fun shareMiniProgram(model: WeChatModel) {
+    fun shareMiniProgram(model: WechatModel) {
         val onekeyShare = OnekeyShare()
         onekeyShare.setPlatform(Wechat.NAME)
         onekeyShare.disableSSOWhenAuthorize()
@@ -80,7 +80,7 @@ object WXShareHelper {
      * 分享图片
      */
     @JvmStatic
-    fun shareImage(model: WeChatModel) {
+    fun shareImage(model: WechatModel) {
         val onekeyShare = OnekeyShare()
         onekeyShare.setPlatform(getPlatformType(model.type))
         //关闭sso授权

@@ -8,7 +8,7 @@ import java.lang.ref.SoftReference
  *  Created by wangyanbin
  *  微信分享类
  */
-class WeChatModel {
+class WechatModel {
     var title: String? = null//分享标题
     var content: String? = null//分享内容
     var imgUrl: String? = null//分享图片链接

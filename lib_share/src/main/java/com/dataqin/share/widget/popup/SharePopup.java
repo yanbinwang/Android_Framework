@@ -9,7 +9,7 @@ import com.dataqin.common.bus.RxEvent;
 import com.dataqin.common.constant.Constants;
 import com.dataqin.share.R;
 import com.dataqin.share.databinding.ViewPopupShareBinding;
-import com.dataqin.share.model.WeChatModel;
+import com.dataqin.share.model.WechatModel;
 import com.dataqin.share.utils.helper.WXShareHelper;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 
@@ -20,7 +20,7 @@ import org.jetbrains.annotations.NotNull;
  * 分享
  */
 public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implements View.OnClickListener {
-    private WeChatModel weChatModel;
+    private WechatModel weChatModel;
 
     public SharePopup(@NotNull Activity activity) {
         super(activity,true);
@@ -36,7 +36,7 @@ public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implement
         binding.rlContainer.setOnClickListener(this);
     }
 
-    public void setWeChatModel(WeChatModel weChatModel) {
+    public void setWeChatModel(WechatModel weChatModel) {
         this.weChatModel = weChatModel;
     }
 
