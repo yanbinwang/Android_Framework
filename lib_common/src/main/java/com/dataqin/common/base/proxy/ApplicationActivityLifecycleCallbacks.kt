@@ -80,8 +80,7 @@ class ApplicationActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
             val mOnClickListener = onClickListenerField[listenerInfoObj] as? View.OnClickListener
             if (mOnClickListener !is ProxyOnclickListener) {
                 //自定义代理事件监听器
-                val onClickListenerProxy: View.OnClickListener =
-                    ProxyOnclickListener(mOnClickListener)
+                val onClickListenerProxy: View.OnClickListener = ProxyOnclickListener(mOnClickListener)
                 //更换
                 onClickListenerField[listenerInfoObj] = onClickListenerProxy
             } else {
