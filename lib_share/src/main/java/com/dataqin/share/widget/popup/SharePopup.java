@@ -10,7 +10,7 @@ import com.dataqin.common.constant.Constants;
 import com.dataqin.share.R;
 import com.dataqin.share.databinding.ViewPopupShareBinding;
 import com.dataqin.share.model.WeChatModel;
-import com.dataqin.share.utils.helper.WechatShareHelper;
+import com.dataqin.share.utils.helper.WXShareHelper;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
 
 import org.jetbrains.annotations.NotNull;
@@ -47,11 +47,11 @@ public class SharePopup extends BasePopupWindow<ViewPopupShareBinding> implement
             dismiss();
         } else if (v.getId() == R.id.ll_wechat) {
             weChatModel.setType(SendMessageToWX.Req.WXSceneSession);
-            WechatShareHelper.shareWebPage(weChatModel);
+            WXShareHelper.shareWebPage(weChatModel);
             dismiss();
         } else if (v.getId() == R.id.ll_wechat_moments) {
             weChatModel.setType(SendMessageToWX.Req.WXSceneTimeline);
-            WechatShareHelper.shareWebPage(weChatModel);
+            WXShareHelper.shareWebPage(weChatModel);
             dismiss();
         }
     }
