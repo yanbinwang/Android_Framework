@@ -168,15 +168,16 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     }
     // </editor-fold>
 
-    public void showPopup() {
-        showPopup(null);
+    public boolean showPopup() {
+        return showPopup(null);
     }
 
     //传入全部的区编码回显
-    public void showPopup(String fullCodes) {
+    public boolean showPopup(String fullCodes) {
         if (cityList.isEmpty()) {
-            ToastUtil.mackToastSHORT("获取省市区失败", getWeakActivity().get());
-            return;
+//            ToastUtil.mackToastSHORT("获取省市区失败", getWeakActivity().get());
+            ToastUtil.mackToastSHORT("正在加载,请稍后...", getWeakActivity().get());
+            return false;
         }
 
         if (TextUtils.isEmpty(fullCodes)) {
@@ -195,6 +196,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         }
 
         showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
+        return true;
     }
 
     public void setOnAddressListener(OnAddressListener onAddressListener) {
