@@ -15,16 +15,15 @@ import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
 import com.dataqin.share.model.WeChatModel
-import com.dataqin.share.utils.helper.callback.OnAuthorizeListener
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX
 import java.lang.ref.WeakReference
 import java.util.*
 
 /**
  *  Created by wangyanbin
- *  分享工具类
+ *  微信分享工具类
  */
-object ShareHelper {
+object WechatShareHelper {
     private val context by lazy { BaseApplication.instance?.applicationContext }
 
     /**
@@ -93,19 +92,18 @@ object ShareHelper {
      * 微信授权登录
      */
     @JvmStatic
-    fun authorize(activity: Activity, onAuthorizeListener: OnAuthorizeListener) {
+    fun authorize(activity: Activity) {
         val weakActivity = WeakReference(activity)
         ShareSDK.setActivity(weakActivity.get())
         val platform = ShareSDK.getPlatform(Wechat.NAME)
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
         platform.platformActionListener = object : PlatformActionListener {
             override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
-                weakActivity.get()?.runOnUiThread { onAuthorizeListener.authorize() }
+                weakActivity.get()?.runOnUiThread { ToastUtil.mackToastSHORT("授权成功", context!!) }
             }
 
             override fun onError(platform: Platform, i: Int, throwable: Throwable) {
                 weakActivity.get()?.runOnUiThread { ToastUtil.mackToastSHORT("授权失败,请确认手机是否安装了微信", context!!) }
-//                throwable.printStackTrace()
             }
 
             override fun onCancel(platform: Platform, i: Int) {
