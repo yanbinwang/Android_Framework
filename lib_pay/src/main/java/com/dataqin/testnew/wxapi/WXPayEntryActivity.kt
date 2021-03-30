@@ -42,16 +42,16 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
     override fun onResp(resp: BaseResp?) {
         when (resp?.errCode) {
             //支付成功
-            BaseResp.ErrCode.ERR_OK -> showToast("支付成功", Constants.APP_PAY_SUCCESS)
+            BaseResp.ErrCode.ERR_OK -> doResult("支付成功", Constants.APP_PAY_SUCCESS)
             //支付取消
-            BaseResp.ErrCode.ERR_USER_CANCEL -> showToast("支付取消", Constants.APP_PAY_FAILURE)
+            BaseResp.ErrCode.ERR_USER_CANCEL -> doResult("支付取消", Constants.APP_PAY_FAILURE)
             //支付失败
-            else -> showToast("支付失败", Constants.APP_PAY_FAILURE)
+            else -> doResult("支付失败", Constants.APP_PAY_FAILURE)
         }
         finish()
     }
 
-    private fun showToast(text: String?, action: String) {
+    private fun doResult(text: String?, action: String) {
         if (!TextUtils.isEmpty(text)) ToastUtil.mackToastSHORT(text!!, this)
         RxBus.instance.post(RxEvent(action))
     }
