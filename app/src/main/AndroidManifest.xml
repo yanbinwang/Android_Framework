@@ -53,6 +53,11 @@
             android:name="com.amap.api.v2.apikey"
             android:value="42bee6a932268088f48093512149053f" />
 
+        <!-- 个推appid -->
+        <meta-data
+            android:name="PUSH_APPID"
+            android:value="个推SDK的appid" />
+
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="singleTask"
@@ -90,6 +95,15 @@
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
+        <!-- 个推 -->
+        <service
+            android:name="com.dataqin.push.service.GetuiPushService"
+            android:exported="true"
+            android:label="PushService"
+            android:process=":pushservice"/>
+        <service
+            android:name="com.dataqin.push.service.GetuiIntentService"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"

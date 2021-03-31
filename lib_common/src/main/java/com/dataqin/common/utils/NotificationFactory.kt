@@ -1,12 +1,14 @@
-package com.dataqin.common.utils.builder
+package com.dataqin.common.utils
 
 import android.app.*
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import java.lang.ref.WeakReference
 
@@ -14,10 +16,17 @@ import java.lang.ref.WeakReference
  * author:wyb
  * 通知工具类
  */
-class NotificationBuilder(activity: Activity) {
-    private val weakActivity by lazy { WeakReference(activity) }
-    private val notificationManager by lazy { weakActivity.get()?.getSystemService(android.content.Context.NOTIFICATION_SERVICE) as NotificationManager }
+class NotificationFactory private constructor() {
+    private val context by lazy { BaseApplication.instance?.applicationContext }
+    private val notificationManager by lazy { context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
     private var builder: NotificationCompat.Builder? = null
+
+    companion object {
+        @JvmStatic
+        val instance: NotificationFactory by lazy {
+            NotificationFactory()
+        }
+    }
 
     /**
      * 构建通知栏
@@ -33,7 +42,7 @@ class NotificationBuilder(activity: Activity) {
             channel.enableLights(false)
             notificationManager.createNotificationChannel(channel)
         }
-        builder = NotificationCompat.Builder(weakActivity.get()!!, Constants.PUSH_CHANNEL_ID)
+        builder = NotificationCompat.Builder(context!!, Constants.PUSH_CHANNEL_ID)
         builder?.apply {
             setContentTitle(title)
             setContentText(text)
@@ -51,7 +60,7 @@ class NotificationBuilder(activity: Activity) {
      */
     fun setPendingIntent(id: Int, title: String, text: String, setupApkIntent: Intent) {
         val contentIntent = PendingIntent.getActivity(
-            weakActivity.get(),
+            context,
             0,
             setupApkIntent,
             PendingIntent.FLAG_UPDATE_CURRENT
@@ -99,7 +108,8 @@ class NotificationBuilder(activity: Activity) {
     /**
      * 判断当前是否开启通知，方便用户接受推送消息
      */
-    fun isNotificationEnabled(): Boolean {
+    fun isNotificationEnabled(activity: Activity): Boolean {
+        val weakActivity = WeakReference(activity)
         return try {
             NotificationManagerCompat.from(weakActivity.get()!!).areNotificationsEnabled()
         } catch (e: Exception) {
@@ -110,7 +120,8 @@ class NotificationBuilder(activity: Activity) {
     /**
      * 跳转通知的设置界面
      */
-    fun settingNotification() {
+    fun settingNotification(activity: Activity) {
+        val weakActivity = WeakReference(activity)
         val intent = Intent()
         when {
             //8.0+

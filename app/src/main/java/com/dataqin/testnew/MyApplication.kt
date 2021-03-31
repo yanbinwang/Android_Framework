@@ -5,6 +5,7 @@ import android.util.Log
 import com.dataqin.base.BuildConfig
 import com.dataqin.common.BaseApplication
 import com.dataqin.testnew.activity.MainActivity
+import com.igexin.sdk.PushManager
 import com.zxy.recovery.core.Recovery
 
 /**
@@ -63,6 +64,8 @@ class MyApplication : BaseApplication() {
                 }
             }
         }
+        //初始化个推
+        PushManager.getInstance().initialize(this)
     }
 
 }
