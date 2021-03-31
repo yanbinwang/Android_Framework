@@ -90,9 +90,9 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     private void initPicker(WheelPicker picker) {
         picker.setAtmospheric(true);//阴影效果
         picker.setCurved(true);//开启类似IOS的滚筒效果
-        picker.setItemTextSize(DisplayUtil.dip2px(getWeakActivity().get(), 15));//每个item的字体大小
-        picker.setIndicatorColor(ContextCompat.getColor(getWeakActivity().get(), R.color.black));//年月日的颜色
-        picker.setItemSpace(DisplayUtil.dip2px(getWeakActivity().get(), 20));//每个item之间的间距
+        picker.setItemTextSize(DisplayUtil.dip2px(getActivity(), 15));//每个item的字体大小
+        picker.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
+        picker.setItemSpace(DisplayUtil.dip2px(getActivity(), 20));//每个item之间的间距
     }
 
     //得到所有省份的字符串集合
@@ -175,8 +175,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     //传入全部的区编码回显
     public boolean showPopup(String fullCodes) {
         if (addressList.isEmpty()) {
-//            ToastUtil.mackToastSHORT("获取省市区失败", getWeakActivity().get());
-            ToastUtil.mackToastSHORT("正在加载,请稍后...", getWeakActivity().get());
+//            ToastUtil.mackToastSHORT("获取省市区失败", getActivity());
+            ToastUtil.mackToastSHORT("正在加载,请稍后...", getActivity());
             return false;
         }
 

@@ -20,7 +20,7 @@ import java.lang.reflect.ParameterizedType
  */
 abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
     protected lateinit var binding: VB
-    protected var weakActivity: WeakReference<Activity>? = null
+    private var weakActivity: WeakReference<Activity>? = null
     private var layoutParams: WindowManager.LayoutParams? = null
     private var dark = false
 
@@ -60,6 +60,8 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
             setDismissAttributes()
         }
     }
+
+    protected fun getActivity() = weakActivity?.get()
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="重写方法">
