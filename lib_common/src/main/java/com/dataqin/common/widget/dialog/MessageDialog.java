@@ -18,11 +18,6 @@ public class MessageDialog extends BaseDialog<ViewDialogMessageBinding> {
         initialize();
     }
 
-    public MessageDialog setParams() {
-        setParams("正在加载，请稍后......");
-        return this;
-    }
-
     public MessageDialog setParams(String message) {
         binding.tvLabel.setText(message);
         return this;

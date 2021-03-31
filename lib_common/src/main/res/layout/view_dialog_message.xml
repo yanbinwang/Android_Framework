@@ -19,6 +19,6 @@
         android:layout_marginStart="20mm"
         android:textColor="@color/blue_2e60df"
         android:textSize="28mm"
-        tools:text="正在加载，请稍后......" />
+        android:text="正在加载，请稍后......" />
 
 </LinearLayout>
