@@ -44,6 +44,10 @@ android {
                 arg("AROUTER_MODULE_NAME", project.getName())
             }
         }
+        //个推appid配置-必须写在主模块
+        manifestPlaceholders = [
+                GETUI_APPID: "your appid"
+        ]
     }
 
     buildFeatures {
