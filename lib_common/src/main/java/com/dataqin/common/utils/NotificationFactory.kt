@@ -3,12 +3,15 @@ package com.dataqin.common.utils
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
+import android.text.TextUtils
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.dataqin.common.BaseApplication
+import com.dataqin.common.R
 import com.dataqin.common.constant.Constants
 import java.lang.ref.WeakReference
 
@@ -29,58 +32,32 @@ class NotificationFactory private constructor() {
     }
 
     /**
-     * 构建通知栏
+     * 构建常规通知栏
      */
-    fun createNotification(id: Int, smallIcon: Int, largeIcon: Bitmap, title: String, text: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(
-                Constants.PUSH_CHANNEL_ID,
-                Constants.PUSH_CHANNEL_NAME,
-                NotificationManager.IMPORTANCE_HIGH
-            )
-            channel.enableVibration(false)
-            channel.enableLights(false)
-            notificationManager.createNotificationChannel(channel)
-        }
+    fun normal(title: String, text: String, smallIcon: Int, largeIcon: Int, intent: Intent? = null, id: String = "") {
         builder = NotificationCompat.Builder(context!!, Constants.PUSH_CHANNEL_ID)
         builder?.apply {
-            setContentTitle(title)
-            setContentText(text)
-            setSmallIcon(smallIcon)
-            setLargeIcon(largeIcon)
-            setOngoing(true)
-            setAutoCancel(true)
-            setWhen(System.currentTimeMillis())
+            color = ContextCompat.getColor(context!!, R.color.black)//6.0提示框白色小球的颜色
+            setTicker(title)//状态栏显示的提示
+            setContentTitle(title)//通知栏标题
+            setContentText(text)//通知正文
+            setAutoCancel(true)//可以点击通知栏的删除按钮删除
+            setSmallIcon(smallIcon)//状态栏显示的小图标
+            setLargeIcon(BitmapFactory.decodeResource(context?.resources, largeIcon))//状态栏下拉显示的大图标
+            setDefaults(NotificationCompat.DEFAULT_ALL)
         }
-        notificationManager.notify(id, builder?.build())
-    }
-
-    /**
-     * 构建通知栏跳转
-     */
-    fun setPendingIntent(id: Int, title: String, text: String, setupApkIntent: Intent) {
-        val contentIntent = PendingIntent.getActivity(
-            context,
-            0,
-            setupApkIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT
-        )
-        builder?.apply {
-            setContentIntent(contentIntent)
-            setContentTitle(title)
-            setContentText(text)
-            setProgress(0, 0, false)
-            setDefaults(Notification.DEFAULT_ALL)
-        }
+        //intent为空说明此次为普通推送
+        builder?.setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))
         val notification = builder?.build()
-        notification?.flags = Notification.FLAG_AUTO_CANCEL
-        notificationManager.notify(id, notification)
+        getChannel()
+        notificationManager.notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
     }
 
     /**
-     * 构建进度条
+     * 构建进度条通知栏
      */
-    fun setProgress(id: Int, progress: Int, title: String, text: String) {
+    fun progress(id: Int, progress: Int, title: String, text: String) {
+        builder = NotificationCompat.Builder(context!!, Constants.PUSH_CHANNEL_ID)
         builder?.apply {
             setContentTitle(title)
             setContentText(text)
@@ -89,20 +66,39 @@ class NotificationFactory private constructor() {
         }
         val notification = builder?.build()
         notification?.flags = Notification.FLAG_AUTO_CANCEL or Notification.FLAG_ONLY_ALERT_ONCE
+        getChannel()
         notificationManager.notify(id, notification)
     }
 
     /**
-     * 取消构建
+     * 取消构建的通知栏
      */
-    fun setCancel(id: Int, title: String, text: String) {
+    fun cancel(id: Int, title: String, text: String) {
+        builder = NotificationCompat.Builder(context!!, Constants.PUSH_CHANNEL_ID)
         builder?.apply {
             setContentTitle(title)
             setContentText(text)
         }
         val notification = builder?.build()
         notification?.flags = Notification.FLAG_AUTO_CANCEL
+        getChannel()
         notificationManager.notify(id, notification)
+    }
+
+    /**
+     * 获取渠道
+     */
+    private fun getChannel(){
+        //8.0+系统需要创建一个推送渠道
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            notificationManager.createNotificationChannel(
+                NotificationChannel(
+                    Constants.PUSH_CHANNEL_ID,
+                    Constants.PUSH_CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_HIGH
+                )
+            )
+        }
     }
 
     /**
