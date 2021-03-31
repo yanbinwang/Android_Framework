@@ -48,29 +48,29 @@ public class MapPopup extends BasePopupWindow<ViewPopupMapBinding> implements Vi
         if (v.getId() == R.id.rl_container || v.getId() == R.id.tv_cancel) {
             dismiss();
         } else if (v.getId() == R.id.tv_bmap) {
-            if (FileUtil.isAvailable(getWeakActivity().get(), "com.baidu.BaiduMap")) {
+            if (FileUtil.isAvailable(getActivity(), "com.baidu.BaiduMap")) {
                 //使用百度地图之前需要对经纬度做转换
                 double[] LngLat = CoordinateTransUtil.transformGCJ02ToBD09(latlng.longitude, latlng.latitude);
                 try {
                     intent = Intent.getIntent("intent://map/direction?destination=latlng:" + LngLat[1] + "," + LngLat[0] + "|name:" + address + "&mode=driving&&src=appname#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
-                    getWeakActivity().get().startActivity(intent);//启动调用
+                    getActivity().startActivity(intent);//启动调用
                 } catch (Exception ignored) {
                 }
             } else {
-                ToastUtil.mackToastSHORT("未安装百度地图", getWeakActivity().get());
+                ToastUtil.mackToastSHORT("未安装百度地图", getActivity());
             }
             dismiss();
         } else if (v.getId() == R.id.tv_amap) {
-            if (FileUtil.isAvailable(getWeakActivity().get(), "com.autonavi.minimap")) {
+            if (FileUtil.isAvailable(getActivity(), "com.autonavi.minimap")) {
                 intent = new Intent();
                 intent.setAction(Intent.ACTION_VIEW);
                 intent.addCategory(Intent.CATEGORY_DEFAULT);
                 Uri uri = Uri.parse("amapuri://route/plan/?sid=BGVIS1&slat=&slon=&sname=&did=&dlat=" + latlng.latitude + "&dlon=" + latlng.longitude + "&dname=" + address + "&dev=0&t=0");
                 intent.setData(uri);
                 //启动该页面即可
-                getWeakActivity().get().startActivity(intent);
+                getActivity().startActivity(intent);
             } else {
-                ToastUtil.mackToastSHORT("未安装高德地图", getWeakActivity().get());
+                ToastUtil.mackToastSHORT("未安装高德地图", getActivity());
             }
             dismiss();
         }
