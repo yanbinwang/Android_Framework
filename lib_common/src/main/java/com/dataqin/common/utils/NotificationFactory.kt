@@ -57,6 +57,7 @@ class NotificationFactory private constructor() {
      */
     fun progress(progress: Int, title: String, text: String, smallIcon: Int, largeIcon: Int, id: String = "") {
         builder.apply {
+            color = ContextCompat.getColor(context!!, R.color.black)//6.0提示框白色小球的颜色
             setProgress(100, progress, false)
             setTicker(title)//状态栏显示的提示
             setContentTitle(title)//通知栏标题
