@@ -2,68 +2,51 @@ package com.dataqin.common.utils.builder
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.os.Build
 import android.view.View
-import android.widget.RelativeLayout
 import androidx.core.content.ContextCompat
 import com.dataqin.common.R
-import com.dataqin.common.constant.Constants
 import com.dataqin.common.databinding.ViewTitleBarBinding
 import java.lang.ref.WeakReference
 
 @SuppressLint("InflateParams")
 class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding) {
-    private val weakActivity = WeakReference(activity)
-    private val statusBarBuilder = StatusBarBuilder(weakActivity.get()!!)
+    private val weakActivity by lazy { WeakReference(activity) }
+    private val statusBarBuilder by lazy { StatusBarBuilder(weakActivity.get()!!) }
 
     init {
         statusBarBuilder.setStatusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.white))
     }
 
     fun getDefault(): TitleBuilder {
-        binding.llMainLeft.visibility = View.VISIBLE
-        binding.llMainLeft.setOnClickListener { weakActivity.get()?.finish() }
+        binding.llMainLeft.apply {
+            visibility = View.VISIBLE
+            setOnClickListener { weakActivity.get()?.finish() }
+        }
         return this
     }
 
     fun hideBack(): TitleBuilder {
-        binding.llMainLeft.visibility = View.GONE
-        binding.llMainLeft.setOnClickListener(null)
+        binding.llMainLeft.apply {
+            visibility = View.GONE
+            setOnClickListener(null)
+        }
         return this
     }
 
-    fun hideTitle(): TitleBuilder {
-        hideTitle(true)
-        return this
-    }
-
-    fun hideTitle(isDark: Boolean): TitleBuilder {
+    fun hideTitle(isDark: Boolean = true): TitleBuilder {
+        statusBarBuilder.setStatusBarLightMode(isDark)
         binding.rlMain.visibility = View.GONE
         binding.vMainLine.visibility = View.GONE
+        return this
+    }
+
+    fun setTitle(titleStr: String, color: Int = ContextCompat.getColor(weakActivity.get()!!, R.color.black), isShade: Boolean = false, isDark: Boolean = true): TitleBuilder {
         statusBarBuilder.setStatusBarLightMode(isDark)
-        return this
-    }
-
-    fun setTitle(titleStr: String): TitleBuilder {
-        setTitle(titleStr, true)
-        return this
-    }
-
-    fun setTitle(titleStr: String, isDark: Boolean): TitleBuilder {
-        setTitle(titleStr, false, isDark)
-        return this
-    }
-
-    fun setTitle(titleStr: String, isShade: Boolean, isDark: Boolean): TitleBuilder {
-        setTitle(titleStr, ContextCompat.getColor(weakActivity.get()!!, R.color.black), isShade, isDark)
-        return this
-    }
-
-    fun setTitle(titleStr: String, color: Int, isShade: Boolean, isDark: Boolean): TitleBuilder {
-        binding.tvMainTitle.text = titleStr
-        binding.tvMainTitle.setTextColor(color)
+        binding.tvMainTitle.apply {
+            text = titleStr
+            setTextColor(color)
+        }
         binding.vMainLine.visibility = if (isShade) View.VISIBLE else View.GONE
-        statusBarBuilder.setStatusBarLightMode(isDark)
         return this
     }
 
@@ -78,28 +61,21 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         return this
     }
 
-    fun setTitleTransparent(isDark: Boolean): TitleBuilder {
-        statusBarBuilder.setTransparent(isDark)
-        binding.rlMain.setBackgroundColor(ContextCompat.getColor(weakActivity.get()!!, android.R.color.transparent))
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val rl = binding.rlMain.layoutParams as RelativeLayout.LayoutParams
-            rl.topMargin = Constants.STATUS_BAR_HEIGHT
-            binding.rlMain.layoutParams = rl
-        }
-        return this
-    }
-
     fun setLeftImageResource(resId: Int): TitleBuilder {
+        binding.ivMainLeft.apply {
+            visibility = View.VISIBLE
+            setImageResource(resId)
+        }
         binding.tvMainLeft.visibility = View.GONE
-        binding.ivMainLeft.visibility = View.VISIBLE
-        binding.ivMainLeft.setImageResource(resId)
         return this
     }
 
-    fun setLeftText(text: String): TitleBuilder {
-        binding.tvMainLeft.visibility = View.VISIBLE
+    fun setLeftText(textStr: String): TitleBuilder {
         binding.ivMainLeft.visibility = View.GONE
-        binding.tvMainLeft.text = text
+        binding.tvMainLeft.apply {
+            visibility = View.VISIBLE
+            text = textStr
+        }
         return this
     }
 
@@ -109,22 +85,28 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
     }
 
     fun setLeftOnClick(onClick: View.OnClickListener): TitleBuilder {
-        binding.llMainLeft.visibility = View.VISIBLE
-        binding.llMainLeft.setOnClickListener(onClick)
+        binding.llMainLeft.apply {
+            visibility = View.VISIBLE
+            setOnClickListener(onClick)
+        }
         return this
     }
 
     fun setRightImageResource(resId: Int): TitleBuilder {
+        binding.ivMainRight.apply {
+            visibility = View.VISIBLE
+            setImageResource(resId)
+        }
         binding.tvMainRight.visibility = View.GONE
-        binding.ivMainRight.visibility = View.VISIBLE
-        binding.ivMainRight.setImageResource(resId)
         return this
     }
 
-    fun setRightText(text: String): TitleBuilder {
-        binding.tvMainRight.visibility = View.VISIBLE
+    fun setRightText(textStr: String): TitleBuilder {
         binding.ivMainRight.visibility = View.GONE
-        binding.tvMainRight.text = text
+        binding.tvMainRight.apply {
+            visibility = View.VISIBLE
+            text = textStr
+        }
         return this
     }
 
@@ -134,8 +116,10 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
     }
 
     fun setRightOnClick(onClick: View.OnClickListener): TitleBuilder {
-        binding.llMainRight.visibility = View.VISIBLE
-        binding.llMainRight.setOnClickListener(onClick)
+        binding.llMainRight.apply {
+            visibility = View.VISIBLE
+            setOnClickListener(onClick)
+        }
         return this
     }
 
