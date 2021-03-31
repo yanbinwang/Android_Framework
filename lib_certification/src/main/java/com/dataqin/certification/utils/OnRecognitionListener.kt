@@ -1,4 +1,4 @@
-package com.dataqin.recognition.utils
+package com.dataqin.certification.utils
 
 /**
  *  Created by wangyanbin

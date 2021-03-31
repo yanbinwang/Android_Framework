@@ -1,4 +1,4 @@
-package com.dataqin.recognition.utils
+package com.dataqin.certification.utils
 
 import android.app.Activity
 import android.content.Context

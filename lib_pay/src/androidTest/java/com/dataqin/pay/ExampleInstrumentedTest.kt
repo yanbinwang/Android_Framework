@@ -1,4 +1,4 @@
-package com.dataqin.recognition
+package com.dataqin.certification
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
