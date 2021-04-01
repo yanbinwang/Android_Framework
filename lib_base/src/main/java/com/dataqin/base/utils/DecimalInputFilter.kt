@@ -3,6 +3,7 @@ package com.dataqin.base.utils
 import android.text.InputFilter
 import android.text.Spanned
 import android.text.TextUtils
+import android.widget.EditText
 import java.util.regex.Pattern
 
 /**
@@ -91,4 +92,14 @@ class DecimalInputFilter : InputFilter {
         }
         return dest?.subSequence(dstart, dend).toString() + sourceText
     }
+}
+
+/**
+ * 补充方法
+ */
+fun EditText.decimalFilter(decimalPoint: Int = 2){
+    val decimalInputFilter = DecimalInputFilter()
+    decimalInputFilter.decimalPoint = decimalPoint
+    val filters = arrayOf<InputFilter>(decimalInputFilter)
+    this.filters = filters
 }
