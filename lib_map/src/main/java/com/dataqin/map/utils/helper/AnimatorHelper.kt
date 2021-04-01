@@ -27,6 +27,14 @@ fun View.refresh() {
 }
 
 /**
+ * 打卡时间的：符号的动画
+ */
+fun View.pass() {
+    val animation = AnimationUtils.loadAnimation(context, R.anim.set_sign_in)
+    startAnimation(animation)
+}
+
+/**
  * 底部弹出
  * 0.5s不可操作
  */

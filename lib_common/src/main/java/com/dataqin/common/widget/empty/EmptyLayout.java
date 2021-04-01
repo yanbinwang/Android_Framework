@@ -35,8 +35,6 @@ public class EmptyLayout extends SimpleViewGroup {
     private TextView tvEmpty;//文本
     private TextView tvRefresh;//刷新
     private OnEmptyRefreshListener onEmptyRefreshListener;
-    private static final String EMPTY_TXT = "没有数据";//数据为空时的内容
-    private static final String ERROR_TXT = "没有网络";//数据加载失败的内容
 
     public EmptyLayout(Context context) {
         super(context);
@@ -59,6 +57,10 @@ public class EmptyLayout extends SimpleViewGroup {
         ivEmpty = contextView.findViewById(R.id.iv_empty);
         tvEmpty = contextView.findViewById(R.id.tv_empty);
         tvRefresh = contextView.findViewById(R.id.tv_refresh);
+
+        contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
+        contextView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
+
         tvRefresh.setOnClickListener(v -> {
             //进入加载中，并停止刷新动画
             showLoading();
@@ -66,8 +68,6 @@ public class EmptyLayout extends SimpleViewGroup {
                 onEmptyRefreshListener.onRefreshListener();
             }
         });
-        contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
-        contextView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
         contextView.setOnClickListener(null);
         showLoading();
     }
@@ -86,8 +86,11 @@ public class EmptyLayout extends SimpleViewGroup {
 
     //当数据正在加载的时候显示（接口返回快速时会造成闪屏）
     public void showLoading() {
-        ivEmpty.setVisibility(View.GONE);
-        tvEmpty.setVisibility(View.GONE);
+        ivEmpty.setVisibility(View.VISIBLE);
+        ivEmpty.setBackgroundResource(0);
+        ivEmpty.setImageResource(R.mipmap.img_loading);
+        tvEmpty.setVisibility(View.VISIBLE);
+        tvEmpty.setText("正在努力加载中...");
         tvRefresh.setVisibility(View.GONE);
     }
 
@@ -98,18 +101,17 @@ public class EmptyLayout extends SimpleViewGroup {
 
     //当数据为空时(显示需要显示的图片，以及内容字)---传入图片-1：原图 0：不需要图片 default：传入的图片
     public void showEmpty(int resId, String emptyText) {
+        ivEmpty.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         if (-1 == resId) {
-            ivEmpty.setVisibility(View.VISIBLE);
             ivEmpty.setImageResource(R.mipmap.img_data_empty);
         } else if (0 == resId) {
             ivEmpty.setVisibility(View.GONE);
         } else {
-            ivEmpty.setVisibility(View.VISIBLE);
             ivEmpty.setImageResource(resId);
         }
         tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText(TextUtils.isEmpty(emptyText) ? EMPTY_TXT : emptyText);
+        tvEmpty.setText(TextUtils.isEmpty(emptyText) ? "暂无数据" : emptyText);
         tvRefresh.setVisibility(View.VISIBLE);
     }
 
@@ -119,7 +121,7 @@ public class EmptyLayout extends SimpleViewGroup {
         ivEmpty.setBackgroundResource(0);
         ivEmpty.setImageResource(R.mipmap.img_net_err);
         tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText(ERROR_TXT);
+        tvEmpty.setText("暂无网络，试试刷新页面吧~");
         tvRefresh.setVisibility(View.VISIBLE);
     }
 

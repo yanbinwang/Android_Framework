@@ -9,8 +9,8 @@
 
     <ImageView
         android:id="@+id/iv_empty"
-        android:layout_width="300mm"
-        android:layout_height="300mm"
+        android:layout_width="480mm"
+        android:layout_height="450mm"
         android:layout_marginBottom="30mm"
         tools:src="@mipmap/img_data_empty" />
 
@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/blue_2e60df"
+        android:textColor="@color/black"
         android:textSize="30mm"
         android:textStyle="bold"
         tools:text="没有数据" />
@@ -29,11 +29,11 @@
         android:layout_width="100mm"
         android:layout_height="wrap_content"
         android:layout_marginTop="20mm"
-        android:paddingVertical="5mm"
-        android:gravity="center"
-        android:textColor="@color/black"
         android:background="@drawable/shape_empty_btn"
+        android:gravity="center"
+        android:paddingVertical="5mm"
         android:text="刷新"
+        android:textColor="@color/black"
         android:textSize="18mm" />
 
 </LinearLayout>
