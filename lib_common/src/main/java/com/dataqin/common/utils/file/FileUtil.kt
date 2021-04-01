@@ -8,11 +8,11 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
+import com.dataqin.base.utils.DateUtil
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
 import java.text.DecimalFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -157,13 +157,13 @@ object FileUtil {
         val filePath: String
         try {
             //输出
-            val rootDir = Constants.APPLICATION_FILE_PATH + "/下载图片"
-            val saveFile = File(rootDir)
+            val root = Constants.APPLICATION_FILE_PATH + "/下载图片"
+            val file = File(root)
             //需要权限
-            if (!saveFile.mkdirs()) {
-                saveFile.createNewFile()
+            if (!file.mkdirs()) {
+                file.createNewFile()
             }
-            filePath = "$rootDir/" + SimpleDateFormat("yyyy_MM_dd_hh_mm_ss", Locale.getDefault()).format(Date()) + ".jpg"
+            filePath = "$root/" + DateUtil.getDateTimeStr("yyyy_MM_dd_hh_mm_ss", Date()) + ".jpg"
             val fileOutputStream = FileOutputStream(filePath)
             bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
             fileOutputStream.flush()

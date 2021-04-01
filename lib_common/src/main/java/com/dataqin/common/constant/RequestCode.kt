@@ -9,4 +9,5 @@ object RequestCode {
     const val FINISH_REQUEST = 10000 //批量关闭回调编码
     const val PHOTO_REQUEST = 10001 //图片回调编码
     const val LOCATION_REQUEST = 10002 //定位回调编码
+    const val SERVICE_REQUEST = 10003 //录屏回调编码
 }
