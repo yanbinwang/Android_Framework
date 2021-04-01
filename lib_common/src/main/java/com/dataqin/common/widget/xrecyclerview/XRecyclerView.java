@@ -9,10 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.dataqin.base.utils.DisplayUtil;
 import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.common.R;
+import com.dataqin.common.base.binding.BaseAdapter;
 import com.dataqin.common.widget.empty.EmptyLayout;
 import com.dataqin.common.widget.xrecyclerview.callback.OnEmptyClickListener;
 import com.dataqin.common.widget.xrecyclerview.manager.SCommonItemDecoration;
@@ -113,7 +115,78 @@ public class XRecyclerView extends SimpleViewGroup {
         addView(view);
     }
 
-    //当数据正在加载的时候显示
+    /**
+     * 类型1的时候才会显示
+     */
+    public void setEmptyVisibility(int visibility) {
+        if (refreshType == 1 && 0 != emptyType) {
+            empty.setVisibility(visibility);
+        }
+    }
+
+    public void setAdapter(BaseAdapter adapter) {
+        setAdapter(adapter, 1);
+    }
+
+    /**
+     * 设置默认recycler的输出manager
+     * 默认一行一个，线样式可自画可调整
+     */
+    public void setAdapter(BaseAdapter adapter, int spanCount) {
+        recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
+        recycler.setAdapter(adapter);
+        addItemDecoration(0, 0, false, false);
+    }
+
+    /**
+     * 修改空布局背景颜色
+     */
+    public void setEmptyBackgroundColor(int color) {
+        empty.setBackgroundColor(color);
+    }
+
+    /**
+     * 空布局刷新
+     */
+    public void setOnEmptyViewClickListener(OnEmptyClickListener onEmptyClickListener) {
+        this.onEmptyClickListener = onEmptyClickListener;
+    }
+
+    /**
+     * 刷新页面刷新
+     */
+    public void setOnXRefreshListener(OnXRefreshListener onXRefreshListener) {
+        this.onXRefreshListener = onXRefreshListener;
+    }
+
+    /**
+     * 获取空布局
+     *
+     * @return
+     */
+    public EmptyLayout getEmptyView() {
+        return empty;
+    }
+
+    /**
+     * 返回页面整体
+     */
+    public DetectionRecyclerView getRecyclerView() {
+        return recycler;
+    }
+
+    /**
+     * 设置停止刷新
+     */
+    public void finishRefreshing() {
+        if (refreshType == 1) {
+            refresh.finishRefreshing();
+        }
+    }
+
+    /**
+     * 当数据正在加载的时候显示
+     */
     public void showLoading() {
         if (0 != emptyType) {
             setEmptyVisibility(View.VISIBLE);
@@ -125,7 +198,9 @@ public class XRecyclerView extends SimpleViewGroup {
         showEmpty(-1, null);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)
+    /**
+     * 当数据为空时(显示需要显示的图片，以及内容字)
+     */
     public void showEmpty(int imgInt, String text) {
         if (0 != emptyType) {
             setEmptyVisibility(View.VISIBLE);
@@ -140,7 +215,9 @@ public class XRecyclerView extends SimpleViewGroup {
         }
     }
 
-    //当数据异常时(显示需要显示的图片，以及内容字)
+    /**
+     * 当数据异常时(显示需要显示的图片，以及内容字)
+     */
     public void showError(int imgInt, String text) {
         if (0 != emptyType) {
             setEmptyVisibility(View.VISIBLE);
@@ -148,56 +225,21 @@ public class XRecyclerView extends SimpleViewGroup {
         }
     }
 
-    //类型1的时候才会显示
-    public void setEmptyVisibility(int visibility) {
-        if (refreshType == 1 && 0 != emptyType) {
-            empty.setVisibility(visibility);
-        }
-    }
-
-    //设置禁止刷新
-    public void finishRefreshing() {
-        if (refreshType == 1) {
-            refresh.finishRefreshing();
-        }
-    }
-
-    //修改背景颜色
-    public void setEmptyBackgroundColor(int color) {
-        empty.setBackgroundColor(color);
-    }
-
-    //选择下标
+    /**
+     * 滚动至指定下标
+     */
     public void scrollToPosition(int position) {
         recycler.scrollToPosition(position);
     }
 
-    //获取空布局
-    public EmptyLayout getEmptyView() {
-        return empty;
-    }
-
-    //添加分隔线
+    /**
+     * 添加分隔线
+     */
     public void addItemDecoration(int horizontalSpace, int verticalSpace, boolean hasHorizontalEdge, boolean hasVerticalEdge) {
         SparseArray<SCommonItemDecoration.ItemDecorationProps> propMap = new SparseArray<>();
         SCommonItemDecoration.ItemDecorationProps prop1 = new SCommonItemDecoration.ItemDecorationProps(DisplayUtil.dip2px(getContext(), horizontalSpace), DisplayUtil.dip2px(getContext(), verticalSpace), hasHorizontalEdge, hasVerticalEdge);
         propMap.put(0, prop1);
         recycler.addItemDecoration(new SCommonItemDecoration(propMap));
-    }
-
-    //返回页面整体
-    public DetectionRecyclerView getRecyclerView() {
-        return recycler;
-    }
-
-    //空布局刷新
-    public void setOnEmptyViewClickListener(OnEmptyClickListener onEmptyClickListener) {
-        this.onEmptyClickListener = onEmptyClickListener;
-    }
-
-    //刷新页面刷新
-    public void setOnXRefreshListener(OnXRefreshListener onXRefreshListener) {
-        this.onXRefreshListener = onXRefreshListener;
     }
 
 }
