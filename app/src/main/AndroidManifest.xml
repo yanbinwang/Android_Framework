@@ -73,7 +73,6 @@
         <!-- 启动页 -->
         <activity
             android:name=".activity.StartActivity"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/startTheme" />
 
