@@ -6,6 +6,7 @@ import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.SdcardUtil
+import com.dataqin.common.constant.Constants
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -17,19 +18,44 @@ import java.util.*
  *  相机文件管理工具类
  */
 object MediaFileUtil {
+    private const val CAMERA_FILE_PATH = "Photo"
+    private const val VIDEO_FILE_PATH = "Video"
+    private const val AUDIO_FILE_PATH = "Audio"
+    private const val SCREEN_FILE_PATH = "Screen"
     private const val TAG = "MediaFileUtil"
 
     //获取对应文件类型的存储地址
     @JvmStatic
-    fun getOutputMediaFile(type: Int, filePath: String?): File? {
+    fun getOutputMediaFile(type: Int): File? {
         if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
             LogUtil.e(TAG, "can not get sdcard!")
             return null
         }
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            filePath
-        )
+        var prefix = Constants.APPLICATION_NAME + "/"
+        var suffix = ""
+        when (type) {
+            //拍照/抓拍
+            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
+                prefix += CAMERA_FILE_PATH
+                suffix = ".jpg"
+            }
+            //录像
+            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> {
+                prefix += VIDEO_FILE_PATH
+                suffix = ".mp4"
+            }
+            //录音
+            MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> {
+                prefix += AUDIO_FILE_PATH
+                suffix = ".wav"
+            }
+            //录屏
+            MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> {
+                prefix += SCREEN_FILE_PATH
+                suffix = ".mp4"
+            }
+        }
+        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
@@ -37,23 +63,12 @@ object MediaFileUtil {
                 return null
             }
         } else LogUtil.i(TAG, "mkdirs,文件夹已存在： " + mediaStorageDir.path)
-
-        return when (type) {
-            //拍照/抓拍
-            MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> getSuffix(mediaStorageDir, "jpg")
-            //录像
-            MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> getSuffix(mediaStorageDir, "mp4")
-            //录音
-            MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> getSuffix(mediaStorageDir, "wav")
-            //录屏
-            MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> getSuffix(mediaStorageDir, "mp4")
-            else -> return null
-        }
+        return File(mediaStorageDir.path + File.separator + DateUtil.getDateTimeStr("yyyyMMdd_HHmmss", Date()) + suffix)
     }
 
-    private fun getSuffix(mediaStorageDir: File, suffix: String) = File(mediaStorageDir.path + File.separator + DateUtil.getDateTimeStr("yyyyMMdd_HHmmss", Date()) + "." + suffix)
-
-    //传入指定大小的文件长度，扫描sd卡空间是否足够
+    /**
+     * 传入指定大小的文件长度，扫描sd卡空间是否足够
+     */
     @JvmStatic
     fun scanDisk(space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
@@ -62,9 +77,11 @@ object MediaFileUtil {
         return availableSize < space
     }
 
-    //将bitmap存成文件
+    /**
+     * 将bitmap存成文件
+     */
     @JvmStatic
-    fun saveBitmapToSd(bitmap: Bitmap, path: String?, quality: Int): Boolean {
+    fun saveBitToSd(bitmap: Bitmap, path: String?, quality: Int): Boolean {
         val file = File(path)
         if (file.exists()) {
             file.delete()

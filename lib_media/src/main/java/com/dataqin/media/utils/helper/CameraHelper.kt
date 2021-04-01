@@ -8,9 +8,6 @@ import android.net.Uri
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
-import com.dataqin.common.constant.Constants
-import com.dataqin.common.constant.Constants.CAMERA_FILE_PATH
-import com.dataqin.common.constant.Constants.VIDEO_FILE_PATH
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
@@ -85,7 +82,7 @@ object CameraHelper {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE, Constants.APPLICATION_NAME + "/" + CAMERA_FILE_PATH)
+                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE)
                 if (null != pictureFile) {
                     result.toFile(pictureFile) { file ->
                         if (null != file) {
@@ -108,7 +105,7 @@ object CameraHelper {
     @JvmStatic
     fun startRecorder(activity: Activity? = null) {
         val weakActivity = WeakReference(activity)
-        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO, Constants.APPLICATION_NAME + "/" + VIDEO_FILE_PATH)
+        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO)
         if (null != videoFile) {
             try {
                 //设置一下声音

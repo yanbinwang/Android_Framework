@@ -4,8 +4,6 @@ import android.media.MediaPlayer
 import android.media.MediaRecorder
 import android.os.Build
 import android.provider.MediaStore
-import com.dataqin.common.constant.Constants
-import com.dataqin.common.constant.Constants.AUDIO_FILE_PATH
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnRecorderListener
 import java.io.IOException
@@ -26,7 +24,7 @@ object RecorderHelper {
     fun startRecord() {
         var filePath = ""
         try {
-            val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO, Constants.APPLICATION_NAME + "/" + AUDIO_FILE_PATH)
+            val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
             filePath = destDir!!.path
             mediaRecorder = MediaRecorder()
             mediaRecorder?.apply {
