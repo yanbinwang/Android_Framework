@@ -21,6 +21,13 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
  * 该类只负责掉起微信和支付操作的界面
  * 需要支付的界面需要配置一个去除activity动画样式的style
  * 否则会造成闪屏
+ *
+ * <activity
+ *     android:name=".wxapi.WXPayEntryActivity"
+ *     android:exported="true"
+ *     android:launchMode="singleInstance"
+ *     android:screenOrientation="portrait"
+ *     android:theme="@style/wxTheme" />
  */
 class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
     private var iwxapi: IWXAPI? = null// IWXAPI 是第三方app和微信通信的openapi接口

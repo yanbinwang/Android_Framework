@@ -12,6 +12,16 @@ import com.igexin.sdk.message.GTTransmitMessage
  *  Created by wangyanbin
  *  个推服务
  *  继承 GTIntentService 接收来自个推的消息，所有消息在线程中回调，如果注册了该服务，则务必要在 AndroidManifest 中声明，否则无法接受消息
+ *
+ *  <!-- 个推 -->
+ *  <service
+ *     android:name="com.dataqin.push.service.GetuiPushService"
+ *     android:exported="true"
+ *     android:label="PushService"
+ *     android:process=":pushservice"/>
+ *  <service
+ *     android:name="com.dataqin.push.service.GetuiIntentService"
+ *     android:permission="android.permission.BIND_JOB_SERVICE"/>
  */
 class GetuiIntentService : GTIntentService(){
 

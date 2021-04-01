@@ -44,10 +44,10 @@ android {
                 arg("AROUTER_MODULE_NAME", project.getName())
             }
         }
-        //个推appid配置-必须写在主模块
-        manifestPlaceholders = [
-                GETUI_APPID: "your appid"
-        ]
+//        //个推appid配置-必须写在主模块
+//        manifestPlaceholders = [
+//                GETUI_APPID: "your appid"
+//        ]
     }
 
     buildFeatures {
@@ -104,8 +104,8 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //基础库
     implementation project(':lib_map')
-    implementation project(':lib_pay')
-    implementation project(':lib_push')
+//    implementation project(':lib_pay')
+//    implementation project(':lib_push')
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
