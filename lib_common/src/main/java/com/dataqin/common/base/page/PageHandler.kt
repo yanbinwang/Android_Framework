@@ -32,7 +32,9 @@ object PageHandler {
     }
 
     /**
-     * 详情页调取方法
+     * 详情页调取方法-详情页只需考虑请求是否成功，成功了就隐藏emptyview，不成功就显示
+     * 当前为不成功的处理方式
+     * 如果服务器报错了，约定的json不具备，msg定为空，会具有刷新。如果不崩溃，非200内的msg需要有值
      */
     @JvmStatic
     fun setState(container: ViewGroup, msg: String?) {
@@ -51,7 +53,8 @@ object PageHandler {
         if (!isNetworkAvailable()) {
             emptyLayout.showError()
         } else {
-            emptyLayout.showEmpty(imgRes, emptyText)
+//            emptyLayout.showEmpty(imgRes, emptyText)
+            emptyLayout.showEmpty(imgRes, emptyText, TextUtils.isEmpty(msg))
         }
     }
 

@@ -25,7 +25,7 @@ import com.dataqin.common.R;
  * 情况如下：
  * <p>
  * 1.加载中-无按钮
- * 2.空布局(没有数据或服务器接口访问失败的时候显示)-有按钮
+ * 2.空数据(没数据都视为空数据，可能原因是服务器没有或请求报错)-有按钮，提示看PageHandler处理
  * 3.网络错误(只有断网情况下会显示)-有按钮
  */
 @SuppressLint("InflateParams")
@@ -101,6 +101,10 @@ public class EmptyLayout extends SimpleViewGroup {
 
     //当数据为空时(显示需要显示的图片，以及内容字)---传入图片-1：原图 0：不需要图片 default：传入的图片
     public void showEmpty(int resId, String emptyText) {
+        showEmpty(resId, emptyText, false);
+    }
+
+    public void showEmpty(int resId, String emptyText, boolean refresh) {
         ivEmpty.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         if (-1 == resId) {
@@ -112,7 +116,7 @@ public class EmptyLayout extends SimpleViewGroup {
         }
         tvEmpty.setVisibility(View.VISIBLE);
         tvEmpty.setText(TextUtils.isEmpty(emptyText) ? "暂无数据" : emptyText);
-        tvRefresh.setVisibility(View.VISIBLE);
+        tvRefresh.setVisibility(refresh ? View.VISIBLE : View.GONE);
     }
 
     //当数据错误时（没有网络）
