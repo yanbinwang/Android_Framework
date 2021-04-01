@@ -99,42 +99,4 @@ object PopupHelper {
 
     }
 
-//    /**
-//     * 判断当前是否开启通知，方便用户接受推送消息
-//     */
-//    private fun isNotificationEnabled(): Boolean {
-//        return try {
-//            NotificationManagerCompat.from(weakActivity?.get()!!).areNotificationsEnabled()
-//        } catch (e: Exception) {
-//            false
-//        }
-//    }
-//
-//    /**
-//     * 跳转通知的设置界面
-//     */
-//    private fun settingNotification() {
-//        val intent = Intent()
-//        when {
-//            //8.0+
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
-//                intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-//                intent.putExtra("android.provider.extra.APP_PACKAGE", Constants.APPLICATION_ID)
-//            }
-//            //5.0-7.0
-//            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
-//                intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
-//                intent.putExtra("app_package", Constants.APPLICATION_ID)
-//                intent.putExtra("app_uid", weakActivity?.get()?.applicationInfo?.uid)
-//            }
-//            //其他
-//            else -> {
-//                intent.action = "android.settings.APPLICATION_DETAILS_SETTINGS"
-//                intent.data = Uri.fromParts("package", Constants.APPLICATION_ID, null)
-//            }
-//        }
-//        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-//        weakActivity?.get()?.startActivity(intent)
-//    }
-
 }
