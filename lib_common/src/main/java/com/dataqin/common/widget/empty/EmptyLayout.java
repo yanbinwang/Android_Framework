@@ -136,7 +136,9 @@ public class EmptyLayout extends SimpleViewGroup {
         contextView.setBackgroundColor(color);
     }
 
-    //设置点击
+    /**
+     * 设置点击
+     */
     public void setOnEmptyRefreshListener(OnEmptyRefreshListener onEmptyRefreshListener) {
         this.onEmptyRefreshListener = onEmptyRefreshListener;
     }
