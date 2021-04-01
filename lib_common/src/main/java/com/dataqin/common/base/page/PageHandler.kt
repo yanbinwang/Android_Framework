@@ -35,7 +35,7 @@ object PageHandler {
      * 详情页调取方法
      */
     @JvmStatic
-    fun setState(container: ViewGroup, msg: String?, imgRes: Int = -1, emptyText: String? = null, shown: Boolean = true) {
+    fun setState(container: ViewGroup, msg: String?, imgRes: Int = -1, text: String? = null) {
         val emptyLayout = if (container is EmptyLayout) {
             container
         } else {
@@ -43,25 +43,21 @@ object PageHandler {
         }
         doResponse(msg)
         emptyLayout.visibility = View.VISIBLE
-        if (!isNetworkAvailable()) {
-            emptyLayout.showError()
-        } else {
-            emptyLayout.showEmpty(imgRes, emptyText, shown)
-        }
+        emptyLayout.showError(imgRes, text)
     }
 
     /**
      * 列表页调取方法
      */
     @JvmStatic
-    fun setState(xRecyclerView: XRecyclerView, msg: String?, length: Int = 0, imgRes: Int = -1, emptyText: String? = null, shown: Boolean = true) {
+    fun setState(xRecyclerView: XRecyclerView, msg: String?, length: Int = 0, imgRes: Int = -1, text: String? = null) {
         xRecyclerView.finishRefreshing()
         val emptyLayout = getEmptyView(xRecyclerView)
         //判断集合长度，有长度不展示emptyview只做提示
         if (length > 0) {
             doResponse(msg)
         } else {
-            setState(emptyLayout, msg, imgRes, emptyText, shown)
+            setState(emptyLayout, msg, imgRes, text)
         }
     }
 

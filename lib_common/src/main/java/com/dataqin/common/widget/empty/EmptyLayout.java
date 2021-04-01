@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat;
 import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.common.R;
 
+import static com.dataqin.common.utils.NetWorkUtil.isNetworkAvailable;
+
 /**
  * Created by android on 2017/8/7.
  *
@@ -25,15 +27,15 @@ import com.dataqin.common.R;
  * 情况如下：
  * <p>
  * 1.加载中-无按钮
- * 2.空数据(没数据都视为空数据，可能原因是服务器没有或请求报错)-有按钮，提示看PageHandler处理
- * 3.网络错误(只有断网情况下会显示)-有按钮
+ * 2.空数据-无按钮
+ * 3.加载错误(无网络，服务器错误)-有按钮
  */
 @SuppressLint("InflateParams")
 public class EmptyLayout extends SimpleViewGroup {
     private View contextView;
-    private ImageView ivEmpty;//内容
+    private ImageView ivEmpty;//图案
     private TextView tvEmpty;//文本
-    private TextView tvRefresh;//刷新
+    private TextView tvRefresh;//刷新按钮
     private OnEmptyRefreshListener onEmptyRefreshListener;
 
     public EmptyLayout(Context context) {
@@ -77,59 +79,59 @@ public class EmptyLayout extends SimpleViewGroup {
         if (detectionInflate()) addView(contextView);
     }
 
-    //设置列表所需的emptyview
+    /**
+     * 设置列表所需的emptyview
+     */
     public View setListView(View listView) {
         removeView(contextView);
         ((ViewGroup) listView.getParent()).addView(contextView);//添加到当前的View hierarchy
         return contextView;
     }
 
-    //当数据正在加载的时候显示（接口返回快速时会造成闪屏）
+    /**
+     * 数据加载中
+     */
     public void showLoading() {
-        ivEmpty.setVisibility(View.VISIBLE);
-        ivEmpty.setBackgroundResource(0);
-        ivEmpty.setImageResource(R.mipmap.img_loading);
-        tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText("正在努力加载中...");
+        ivEmpty.setImageResource(R.mipmap.img_data_loading);
+        tvEmpty.setText("正在玩命加载数据...");
         tvRefresh.setVisibility(View.GONE);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)
     public void showEmpty() {
         showEmpty(-1, null);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)---传入图片-1：原图 0：不需要图片 default：传入的图片
-    public void showEmpty(int resId, String emptyText) {
-        showEmpty(resId, emptyText, false);
+    /**
+     * 数据为空--只会在200并且无数据的时候展示
+     */
+    public void showEmpty(int resId, String text) {
+        ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_empty : resId);
+        tvEmpty.setText(TextUtils.isEmpty(text) ? "这里还什么都没有呢~" : text);
+        tvRefresh.setVisibility(View.GONE);
     }
 
-    public void showEmpty(int resId, String emptyText, boolean shown) {
-        ivEmpty.setVisibility(View.VISIBLE);
-        ivEmpty.setBackgroundResource(0);
-        if (-1 == resId) {
-            ivEmpty.setImageResource(R.mipmap.img_data_empty);
-        } else if (0 == resId) {
-            ivEmpty.setVisibility(View.GONE);
-        } else {
-            ivEmpty.setImageResource(resId);
-        }
-        tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText(TextUtils.isEmpty(emptyText) ? "暂无数据" : emptyText);
-        tvRefresh.setVisibility(shown ? View.VISIBLE : View.GONE);
-    }
-
-    //当数据错误时（没有网络）
     public void showError() {
-        ivEmpty.setVisibility(View.VISIBLE);
-        ivEmpty.setBackgroundResource(0);
-        ivEmpty.setImageResource(R.mipmap.img_net_err);
-        tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText("暂无网络，试试刷新页面吧~");
+        showError(-1, null);
+    }
+
+    /**
+     * 数据加载失败-无网络，服务器请求
+     * 无网络优先级最高
+     */
+    public void showError(int resId, String text) {
+        if(!isNetworkAvailable()){
+            ivEmpty.setImageResource(R.mipmap.img_data_net_error);
+            tvEmpty.setText("暂无网络，试试刷新页面吧~");
+        }else{
+            ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_error : resId);
+            tvEmpty.setText(TextUtils.isEmpty(text) ? "页面加载失败，请重试" : text);
+        }
         tvRefresh.setVisibility(View.VISIBLE);
     }
 
-    //设置背景颜色
+    /**
+     * 设置背景颜色
+     */
     public void setBackgroundColor(int color) {
         contextView.setBackgroundColor(color);
     }

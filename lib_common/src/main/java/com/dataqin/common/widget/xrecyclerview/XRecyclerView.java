@@ -121,24 +121,30 @@ public class XRecyclerView extends SimpleViewGroup {
         }
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)
     public void showEmpty() {
         showEmpty(-1, null);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)---传入图片
-    public void showEmpty(int imgInt, String emptyStr) {
+    //当数据为空时(显示需要显示的图片，以及内容字)
+    public void showEmpty(int imgInt, String text) {
         if (0 != emptyType) {
             setEmptyVisibility(View.VISIBLE);
-            empty.showEmpty(imgInt, emptyStr);
+            empty.showEmpty(imgInt, text);
         }
     }
 
-    //当数据错误时（没有网络）
     public void showError() {
         if (0 != emptyType) {
             setEmptyVisibility(View.VISIBLE);
             empty.showError();
+        }
+    }
+
+    //当数据异常时(显示需要显示的图片，以及内容字)
+    public void showError(int imgInt, String text) {
+        if (0 != emptyType) {
+            setEmptyVisibility(View.VISIBLE);
+            empty.showError(imgInt, text);
         }
     }
 
