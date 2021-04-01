@@ -161,8 +161,6 @@ public class XRecyclerView extends SimpleViewGroup {
 
     /**
      * 获取空布局
-     *
-     * @return
      */
     public EmptyLayout getEmptyView() {
         return empty;
