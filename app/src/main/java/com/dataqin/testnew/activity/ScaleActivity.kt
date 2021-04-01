@@ -36,7 +36,7 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
         for (url in fileList) {
             val img = ScaleImageView(this)
             img.setOnClickListener { finish() }
-            ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_loading_normal, object : GlideRequestListener<Drawable?>() {
+            ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_image_loading, object : GlideRequestListener<Drawable?>() {
                     override fun onStart() {
                         showDialog()
                     }
