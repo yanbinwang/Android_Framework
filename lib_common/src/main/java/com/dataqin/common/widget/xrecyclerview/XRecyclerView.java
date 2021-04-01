@@ -122,14 +122,13 @@ public class XRecyclerView extends SimpleViewGroup {
 
     //当数据为空时(显示需要显示的图片，以及内容字)
     public void showEmpty() {
-        if (0 != emptyType) {
-            empty.showEmpty();
-        }
+        showEmpty(-1, null);
     }
 
     //当数据为空时(显示需要显示的图片，以及内容字)---传入图片
     public void showEmpty(int imgInt, String emptyStr) {
         if (0 != emptyType) {
+            setEmptyVisibility(View.VISIBLE);
             empty.showEmpty(imgInt, emptyStr);
         }
     }

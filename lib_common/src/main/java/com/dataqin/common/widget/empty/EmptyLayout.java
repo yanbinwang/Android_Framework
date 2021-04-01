@@ -104,7 +104,7 @@ public class EmptyLayout extends SimpleViewGroup {
         showEmpty(resId, emptyText, false);
     }
 
-    public void showEmpty(int resId, String emptyText, boolean refresh) {
+    public void showEmpty(int resId, String emptyText, boolean shown) {
         ivEmpty.setVisibility(View.VISIBLE);
         ivEmpty.setBackgroundResource(0);
         if (-1 == resId) {
@@ -116,7 +116,7 @@ public class EmptyLayout extends SimpleViewGroup {
         }
         tvEmpty.setVisibility(View.VISIBLE);
         tvEmpty.setText(TextUtils.isEmpty(emptyText) ? "暂无数据" : emptyText);
-        tvRefresh.setVisibility(refresh ? View.VISIBLE : View.GONE);
+        tvRefresh.setVisibility(shown ? View.VISIBLE : View.GONE);
     }
 
     //当数据错误时（没有网络）

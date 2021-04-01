@@ -32,17 +32,10 @@ object PageHandler {
     }
 
     /**
-     * 详情页调取方法-详情页只需考虑请求是否成功，成功了就隐藏emptyview，不成功就显示
-     * 当前为不成功的处理方式
-     * 如果服务器报错了，约定的json不具备，msg定为空，会具有刷新。如果不崩溃，非200内的msg需要有值
+     * 详情页调取方法
      */
     @JvmStatic
-    fun setState(container: ViewGroup, msg: String?) {
-        setState(container, msg, -1, null)
-    }
-
-    @JvmStatic
-    fun setState(container: ViewGroup, msg: String?, imgRes: Int, emptyText: String?) {
+    fun setState(container: ViewGroup, msg: String?, imgRes: Int = -1, emptyText: String? = null, shown: Boolean = true) {
         val emptyLayout = if (container is EmptyLayout) {
             container
         } else {
@@ -53,8 +46,7 @@ object PageHandler {
         if (!isNetworkAvailable()) {
             emptyLayout.showError()
         } else {
-//            emptyLayout.showEmpty(imgRes, emptyText)
-            emptyLayout.showEmpty(imgRes, emptyText, TextUtils.isEmpty(msg))
+            emptyLayout.showEmpty(imgRes, emptyText, shown)
         }
     }
 
@@ -62,23 +54,14 @@ object PageHandler {
      * 列表页调取方法
      */
     @JvmStatic
-    fun setState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int) {
-        setState(xRecyclerView, refresh, msg, length, -1, null)
-    }
-
-    @JvmStatic
-    fun setState(xRecyclerView: XRecyclerView, refresh: Boolean, msg: String?, length: Int, imgRes: Int, emptyText: String?) {
-        val emptyLayout = getEmptyView(xRecyclerView)
+    fun setState(xRecyclerView: XRecyclerView, msg: String?, length: Int = 0, imgRes: Int = -1, emptyText: String? = null, shown: Boolean = true) {
         xRecyclerView.finishRefreshing()
-        //区分此次刷新是否成功
-        if (refresh) {
-            emptyLayout.visibility = View.GONE
+        val emptyLayout = getEmptyView(xRecyclerView)
+        //判断集合长度，有长度不展示emptyview只做提示
+        if (length > 0) {
+            doResponse(msg)
         } else {
-            if (length > 0) {
-                doResponse(msg)
-                return
-            }
-            setState(emptyLayout, msg, imgRes, emptyText)
+            setState(emptyLayout, msg, imgRes, emptyText, shown)
         }
     }
 
