@@ -3,6 +3,7 @@ package com.dataqin.testnew.wxapi
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.bus.RxBus
@@ -28,6 +29,7 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
         iwxapi = WXAPIFactory.createWXAPI(this, Constants.WX_APP_ID)
         iwxapi?.handleIntent(intent, this)
         super.onCreate(savedInstanceState)
+        window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     }
 
     override fun onNewIntent(intent: Intent?) {
