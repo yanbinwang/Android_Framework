@@ -28,6 +28,7 @@ import java.io.InputStreamReader
  * 地图库采用高德地图，获取经纬度必须具备定位权限
  * 如果进应用就是地图，则在进首页前先给个软提示页面，列出所有权限问用户索要，如果还不接受，则直接进应用，在地图onload生命周期结束后，先移动到给定的默认位置，
  * 再进首页前弹出拦截的权限按钮进行权限的索要
+ * cameraview_tts
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
