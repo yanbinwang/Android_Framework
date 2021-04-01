@@ -79,8 +79,7 @@ object GSYVideoHelper{
             ImageLoader.instance.displayCoverImage(imgCover!!, url)
         }
         if (null != player) {
-            val gsyVideoOption = GSYVideoOptionBuilder()
-            gsyVideoOption
+            GSYVideoOptionBuilder()
                 .setIsTouchWiget(false)
                 .setRotateViewAuto(true)
                 .setLockLand(true)
