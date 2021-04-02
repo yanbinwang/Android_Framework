@@ -1,7 +1,12 @@
 package com.dataqin.common.utils
 
+import android.annotation.SuppressLint
+import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
+import android.os.VibrationEffect
+import android.os.Vibrator
 import android.text.InputFilter
 import android.text.SpannableString
 import android.text.Spanned
@@ -19,6 +24,19 @@ import java.text.DecimalFormat
  */
 
 /**
+ * 震动
+ */
+@SuppressLint("MissingPermission")
+fun View.setVibrate(milliseconds: Long) {
+    val vibrator = (context.getSystemService(VIBRATOR_SERVICE) as Vibrator)
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+        vibrator.vibrate(milliseconds)
+    } else {
+        vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
+    }
+}
+
+/**
  * 开启一个网页
  */
 fun View.openWebsite(url: String) {
@@ -28,14 +46,14 @@ fun View.openWebsite(url: String) {
 /**
  * 当小数位不超过两位时，补0
  */
-fun TextView.setDecimalFormat(number:Double){
+fun TextView.setDecimalFormat(number: Double) {
     text = DecimalFormat("0.00").format(number)
 }
 
 /**
  * 当小数位超过两位时，只显示两位，但只有一位或没有，则不需要补0
  */
-fun TextView.setDecimalFormat2(number:Double){
+fun TextView.setDecimalFormat2(number: Double) {
     text = DecimalFormat("0.##").format(number)
 }
 
