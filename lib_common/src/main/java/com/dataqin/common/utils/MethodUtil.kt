@@ -36,7 +36,7 @@ fun TextView.setDecimalFormat(number:Double){
 }
 
 /**
- * 当小数位超过两位时，只显示两位，但只有一位或没有，则不需要补“0
+ * 当小数位超过两位时，只显示两位，但只有一位或没有，则不需要补0
  */
 fun TextView.setDecimalFormat2(number:Double){
     text = DecimalFormat("0.##").format(number)
