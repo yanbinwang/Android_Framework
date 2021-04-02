@@ -34,6 +34,22 @@
         <item name="android:activityCloseExitAnimation">@anim/set_translate_right_out</item>
     </style>
 
+    <!-- 黑样式-用于白电池界面 -->
+    <style name="blackTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+        <item name="android:windowBackground">@color/black</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+    <!-- 白样式-用于黑电池界面 -->
+    <style name="whiteTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/white</item>
+        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
     <!-- 布局画高线样式 -->
     <style name="lineHeight">
         <item name="android:layout_width">1dp</item>

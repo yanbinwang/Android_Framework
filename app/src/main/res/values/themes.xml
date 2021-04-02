@@ -10,12 +10,4 @@
         <item name="android:windowBackground">@mipmap/img_start</item>
     </style>
 
-    <!-- 图片伸缩页面的样式 -->
-    <style name="scaleTheme" parent="AppTheme">
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:windowBackground">@color/black</item>
-        <item name="android:windowAnimationStyle">@null</item>
-    </style>
-
 </resources>
