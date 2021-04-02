@@ -10,13 +10,4 @@
         <item name="android:windowBackground">@color/white</item>
     </style>
 
-    <!-- 图片缩放动画 -->
-    <style name="scaleTheme" parent="Theme.AppCompat.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-        <item name="colorPrimaryDark">@color/black</item>
-        <item name="android:navigationBarColor">@color/black</item>
-        <item name="android:windowBackground">@color/black</item>
-    </style>
-
 </resources>

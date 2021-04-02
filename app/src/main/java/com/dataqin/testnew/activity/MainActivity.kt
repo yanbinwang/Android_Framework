@@ -34,30 +34,30 @@ import java.io.InputStreamReader
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        MapHelper.initialize(savedInstanceState, binding.map)
-    }
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        MapHelper.saveInstanceState(outState)
-    }
-
-    override fun onResume() {
-        super.onResume()
-        MapHelper.resume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        MapHelper.pause()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        MapHelper.destroy()
-    }
+//    override fun onCreate(savedInstanceState: Bundle?) {
+//        super.onCreate(savedInstanceState)
+//        MapHelper.initialize(savedInstanceState, binding.map)
+//    }
+//
+//    override fun onSaveInstanceState(outState: Bundle) {
+//        super.onSaveInstanceState(outState)
+//        MapHelper.saveInstanceState(outState)
+//    }
+//
+//    override fun onResume() {
+//        super.onResume()
+//        MapHelper.resume()
+//    }
+//
+//    override fun onPause() {
+//        super.onPause()
+//        MapHelper.pause()
+//    }
+//
+//    override fun onDestroy() {
+//        super.onDestroy()
+//        MapHelper.destroy()
+//    }
 
     override fun initView() {
         super.initView()
@@ -73,20 +73,13 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(
-            this,
-            binding.btnTest,
-            binding.btnTest2,
-            binding.btnTest3,
-            binding.btnTest4,
-            binding.btnTest5
-        )
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
 
-        addDisposable(RxBus.instance.toFlowable {
-            when (it.getAction()) {
-                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
-            }
-        })
+//        addDisposable(RxBus.instance.toFlowable {
+//            when (it.getAction()) {
+//                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
+//            }
+//        })
 
 //        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
 //            override fun onRefreshListener() {
@@ -159,7 +152,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                     )
                 )
             }
-
         }
     }
 
