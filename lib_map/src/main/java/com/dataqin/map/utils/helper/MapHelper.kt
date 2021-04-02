@@ -120,7 +120,6 @@ object MapHelper {
      */
     @JvmStatic
     fun destroy() {
-        aMap = null
         if (initialize) mapView?.context?.unregisterReceiver(mapReceiver)
         mapView?.onDestroy()
     }
