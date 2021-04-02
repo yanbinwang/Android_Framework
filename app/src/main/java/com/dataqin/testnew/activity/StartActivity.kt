@@ -53,6 +53,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     override fun onDestroy() {
         super.onDestroy()
         LocationFactory.instance.stop()
+        TimeTaskHelper.stopTask()
     }
 
 }
