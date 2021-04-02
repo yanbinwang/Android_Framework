@@ -79,7 +79,7 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/splashTheme" />
+            android:theme="@style/whiteTheme" />
 
         <activity
             android:name=".activity.ScaleActivity"

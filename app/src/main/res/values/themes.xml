@@ -1,6 +1,6 @@
 <resources>
 
-    <!-- 白色样式-适用于启动页和首页，使页面过度更顺滑 -->
+    <!-- 启动页，直接背景是一张启动页图，点开app就是引导页的展示 -->
     <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
