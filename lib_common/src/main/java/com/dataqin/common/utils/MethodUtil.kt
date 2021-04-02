@@ -5,12 +5,9 @@ import android.net.Uri
 import android.text.InputFilter
 import android.text.SpannableString
 import android.text.Spanned
-import android.text.method.HideReturnsTransformationMethod
-import android.text.method.PasswordTransformationMethod
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.EditText
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dataqin.base.utils.DecimalInputFilter
@@ -54,30 +51,30 @@ fun TextView.setSpannable(textStr: String, keyword: String, colorRes: Int = R.co
     }
 }
 
-/**
- * EditText输入密码是否可见(显隐)
- */
-fun EditText.inputTransformation(isDisplay: Boolean, imageView: ImageView): Boolean {
-    if (!isDisplay) {
-        //display password text, for example "123456"
-        transformationMethod = HideReturnsTransformationMethod.getInstance()
-        try {
-            setSelection(text.length)
-//            imageView.setBackgroundResource(R.mipmap.ic_text_show)
-        } catch (e: Exception) {
-        }
-    } else {
-        //hide password, display "."
-        transformationMethod = PasswordTransformationMethod.getInstance()
-        try {
-            setSelection(text.length)
-//            imageView.setBackgroundResource(R.mipmap.ic_text_hide)
-        } catch (e: Exception) {
-        }
-    }
-    postInvalidate()
-    return !isDisplay
-}
+///**
+// * EditText输入密码是否可见(显隐)
+// */
+//fun EditText.inputTransformation(isDisplay: Boolean, imageView: ImageView): Boolean {
+//    if (!isDisplay) {
+//        //display password text, for example "123456"
+//        transformationMethod = HideReturnsTransformationMethod.getInstance()
+//        try {
+//            setSelection(text.length)
+////            imageView.setBackgroundResource(R.mipmap.ic_text_show)
+//        } catch (e: Exception) {
+//        }
+//    } else {
+//        //hide password, display "."
+//        transformationMethod = PasswordTransformationMethod.getInstance()
+//        try {
+//            setSelection(text.length)
+////            imageView.setBackgroundResource(R.mipmap.ic_text_hide)
+//        } catch (e: Exception) {
+//        }
+//    }
+//    postInvalidate()
+//    return !isDisplay
+//}
 
 /**
  * EditText输入金额小数限制
