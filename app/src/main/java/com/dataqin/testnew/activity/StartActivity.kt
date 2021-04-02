@@ -2,6 +2,7 @@ package com.dataqin.testnew.activity
 
 import android.os.Build
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.dataqin.base.utils.TimeTaskHelper
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
@@ -22,24 +23,31 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparent(true)
-        //先判断是否是初始化过app
-        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
-        //如果不是，验证是否需要免登陆，随后跳转到首页
-        if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                //先去权限页，再去引导页
-            } else {
-                //去引导页-引导页中获取定位
+//        //先判断是否是初始化过app
+//        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
+//        //如果不是，验证是否需要免登陆，随后跳转到首页
+//        if (!ConfigHelper.obtainBehavior(Constants.KEY_INITIAL)) {
+//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//                //先去权限页，再去引导页
+//            } else {
+//                //去引导页-引导页中获取定位
+//            }
+//        } else {
+//            //做免登陆，去首页
+//            LocationFactory.instance.start(object : LocationSubscriber() {
+//                override fun onComplete() {
+//                    super.onComplete()
+//                    navigation(ARouterPath.MainActivity).finish()
+//                    overridePendingTransition(0,0)
+//                }
+//            })
+//        }
+        TimeTaskHelper.startTask(2000,object :TimeTaskHelper.OnTaskListener{
+            override fun run() {
+                navigation(ARouterPath.MainActivity).finish()
+                overridePendingTransition(0,0)
             }
-        } else {
-            //做免登陆，去首页
-            LocationFactory.instance.start(object : LocationSubscriber() {
-                override fun onComplete() {
-                    super.onComplete()
-                    navigation(ARouterPath.MainActivity).finish()
-                }
-            })
-        }
+        })
     }
 
     override fun onDestroy() {

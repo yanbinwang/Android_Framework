@@ -1,18 +1,18 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
-import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.base.page.PageParams
-import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.map.utils.helper.*
+import com.dataqin.map.utils.helper.fadeIn
+import com.dataqin.map.utils.helper.fadeOut
+import com.dataqin.map.utils.helper.hidden
+import com.dataqin.map.utils.helper.shown
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.model.AddressModel

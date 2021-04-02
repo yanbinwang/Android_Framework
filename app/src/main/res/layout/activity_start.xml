@@ -1,48 +1,49 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@mipmap/img_start">
 
     <ImageView
         android:layout_width="300mm"
-        android:layout_height="354mm"
+        android:layout_height="300mm"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="104mm"
         android:scaleType="fitXY"
-        android:src="@mipmap/img_start" />
+        android:src="@mipmap/ic_launcher" />
 
-<!--    <LinearLayout-->
-<!--        android:id="@+id/ll_method"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="48mm"-->
-<!--        android:layout_alignParentBottom="true"-->
-<!--        android:layout_marginHorizontal="30mm"-->
-<!--        android:layout_marginBottom="84mm"-->
-<!--        android:visibility="gone">-->
+    <!--    <LinearLayout-->
+    <!--        android:id="@+id/ll_method"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="48mm"-->
+    <!--        android:layout_alignParentBottom="true"-->
+    <!--        android:layout_marginHorizontal="30mm"-->
+    <!--        android:layout_marginBottom="84mm"-->
+    <!--        android:visibility="gone">-->
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_login"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@drawable/shape_blue_btn"-->
-<!--            android:text="登录"-->
-<!--            android:textColor="@color/blue_1e2b8e"-->
-<!--            android:textSize="16mm"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_login"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:background="@drawable/shape_blue_btn"-->
+    <!--            android:text="登录"-->
+    <!--            android:textColor="@color/blue_1e2b8e"-->
+    <!--            android:textSize="16mm"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--        <Button-->
-<!--            android:id="@+id/btn_register"-->
-<!--            android:layout_width="0dp"-->
-<!--            android:layout_height="match_parent"-->
-<!--            android:layout_marginStart="15mm"-->
-<!--            android:layout_weight="1"-->
-<!--            android:background="@drawable/selector_blue_btn"-->
-<!--            android:text="注册"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textSize="16mm"-->
-<!--            android:textStyle="bold" />-->
+    <!--        <Button-->
+    <!--            android:id="@+id/btn_register"-->
+    <!--            android:layout_width="0dp"-->
+    <!--            android:layout_height="match_parent"-->
+    <!--            android:layout_marginStart="15mm"-->
+    <!--            android:layout_weight="1"-->
+    <!--            android:background="@drawable/selector_blue_btn"-->
+    <!--            android:text="注册"-->
+    <!--            android:textColor="@color/white"-->
+    <!--            android:textSize="16mm"-->
+    <!--            android:textStyle="bold" />-->
 
-<!--    </LinearLayout>-->
+    <!--    </LinearLayout>-->
 
 </RelativeLayout>

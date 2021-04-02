@@ -1,13 +1,13 @@
 <resources>
 
-    <!-- 启动页样式 -->
-    <style name="startTheme" parent="Theme.AppCompat.NoActionBar">
+    <!-- 白色样式-适用于启动页和首页，使页面过度更顺滑 -->
+    <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="android:navigationBarColor">@color/black</item>
-        <!--        <item name="android:windowBackground">@mipmap/img_start_loading</item>-->
-        <item name="android:windowBackground">@color/white</item>
+        <!--        <item name="android:windowBackground">@color/white</item>-->
+        <item name="android:windowBackground">@mipmap/img_start</item>
     </style>
 
 </resources>

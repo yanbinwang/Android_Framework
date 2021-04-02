@@ -27,7 +27,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory
  *     android:exported="true"
  *     android:launchMode="singleInstance"
  *     android:screenOrientation="portrait"
- *     android:theme="@style/wxTheme" />
+ *     android:theme="@style/fullScreenAlphaTheme" />
  */
 class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
     private var iwxapi: IWXAPI? = null// IWXAPI 是第三方app和微信通信的openapi接口

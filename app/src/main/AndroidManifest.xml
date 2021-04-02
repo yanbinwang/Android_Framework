@@ -53,16 +53,16 @@
             android:name="com.amap.api.v2.apikey"
             android:value="42bee6a932268088f48093512149053f" />
 
-<!--        &lt;!&ndash; 个推appid &ndash;&gt;-->
-<!--        <meta-data-->
-<!--            android:name="PUSH_APPID"-->
-<!--            android:value="个推SDK的appid" />-->
+        <!--        &lt;!&ndash; 个推appid &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="PUSH_APPID"-->
+        <!--            android:value="个推SDK的appid" />-->
 
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/startTheme">
+            android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -74,15 +74,16 @@
         <activity
             android:name=".activity.StartActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/startTheme" />
+            android:theme="@style/splashTheme" />
 
         <activity
             android:name=".activity.MainActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/splashTheme" />
 
         <activity
             android:name=".activity.ScaleActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
