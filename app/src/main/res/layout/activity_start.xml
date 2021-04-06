@@ -4,14 +4,6 @@
     android:layout_height="match_parent"
     android:background="@mipmap/img_start">
 
-    <ImageView
-        android:layout_width="300mm"
-        android:layout_height="300mm"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="104mm"
-        android:scaleType="fitXY"
-        android:src="@mipmap/ic_launcher" />
-
     <!--    <LinearLayout-->
     <!--        android:id="@+id/ll_method"-->
     <!--        android:layout_width="match_parent"-->

@@ -14,8 +14,6 @@
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-
-    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" /><!-- 白名单权限，可删 -->
     <!-- 定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
@@ -87,6 +85,12 @@
             android:name=".activity.ScaleActivity"
             android:screenOrientation="portrait"
             android:theme="@style/blackTheme" />
+
+        <activity
+            android:name=".activity.TransActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/fullScreenTransTheme" />
+
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />

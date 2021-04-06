@@ -72,6 +72,16 @@
         <item name="android:windowAnimationStyle">@null</item>
     </style>
 
+    <!-- 透明样式,透明页面使用 -->
+    <style name="fullScreenTransTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowBackground">@color/white_00ffffff</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
     <!-- 透明样式,微信支付使用 -->
     <style name="fullScreenAlphaTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:background">@color/white_00ffffff</item>
