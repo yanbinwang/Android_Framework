@@ -3,7 +3,6 @@ package com.dataqin.testnew.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.dataqin.common.utils.builder.StatusBarBuilder
 
 /**
  *  Created by wangyanbin
@@ -14,7 +13,6 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        StatusBarBuilder(this).setTransparent(true)
         if (!isTaskRoot
             && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
             && intent.action != null

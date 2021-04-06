@@ -7,9 +7,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
-import com.dataqin.common.base.page.PageParams
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
