@@ -3,10 +3,9 @@ package com.dataqin.testnew.activity
 import android.content.Intent
 import androidx.viewbinding.ViewBinding
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.dataqin.base.utils.TimeTaskHelper
+import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
-import com.dataqin.map.utils.LocationFactory
 
 /**
  *  Created by wangyanbin
@@ -16,6 +15,12 @@ import com.dataqin.map.utils.LocationFactory
  */
 @Route(path = ARouterPath.StartActivity)
 class StartActivity : BaseActivity<ViewBinding>() {
+    private val weakHandler by lazy {
+        WeakHandler {
+            navigation(ARouterPath.MainActivity).finish()
+            false
+        }
+    }
 
     override fun initView() {
         super.initView()
@@ -46,17 +51,12 @@ class StartActivity : BaseActivity<ViewBinding>() {
 //                }
 //            })
 //        }
-        TimeTaskHelper.startTask(2000, object : TimeTaskHelper.OnTaskListener {
-            override fun run() {
-                navigation(ARouterPath.MainActivity).finish()
-            }
-        })
+        weakHandler.sendEmptyMessageDelayed(0, 2000)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        LocationFactory.instance.stop()
-        TimeTaskHelper.stopTask()
+//        LocationFactory.instance.stop()
     }
 
 }
