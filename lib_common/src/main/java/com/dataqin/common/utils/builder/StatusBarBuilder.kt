@@ -30,7 +30,7 @@ class StatusBarBuilder(activity: Activity) {
     //透明状态栏(白电池)
     fun setTransparentStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = weakActivity.get()?.window
+            val window = weakActivity.get()!!.window
             window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
             window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
@@ -43,7 +43,7 @@ class StatusBarBuilder(activity: Activity) {
     //透明状态栏(黑电池)
     fun setTransparentDarkStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            val window = weakActivity.get()?.window
+            val window = weakActivity.get()!!.window
             window?.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             window?.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             window?.decorView?.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
@@ -93,22 +93,22 @@ class StatusBarBuilder(activity: Activity) {
     }
 
     //设置状态栏字体图标，需要MIUIV6以上
-    private fun setMiuiStatusBarLightMode(window: Window?, isDark: Boolean) {
-        val clazz = window?.javaClass
+    private fun setMiuiStatusBarLightMode(window: Window, isDark: Boolean) {
+        val clazz = window.javaClass
         try {
             val layoutParams = Class.forName("android.view.MiuiWindowManager\$LayoutParams")
             val field = layoutParams.getField("EXTRA_FLAG_STATUS_BAR_DARK_MODE")
             val darkModeFlag = field.getInt(layoutParams)
-            val extraFlagField = clazz?.getMethod("setExtraFlags", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType)
-            extraFlagField?.invoke(window, if (isDark) darkModeFlag else 0, darkModeFlag)  //状态栏透明且黑色字体/清除黑色字体
+            val extraFlagField = clazz.getMethod("setExtraFlags", Int::class.javaPrimitiveType, Int::class.javaPrimitiveType)
+            extraFlagField.invoke(window, if (isDark) darkModeFlag else 0, darkModeFlag)  //状态栏透明且黑色字体/清除黑色字体
         } catch (ignored: Exception) {
         }
     }
 
     //设置状态栏图标和魅族特定的文字风格 可以用来判断是否为Flyme用户
-    private fun setFlymeStatusBarLightMode(window: Window?, isDark: Boolean) {
+    private fun setFlymeStatusBarLightMode(window: Window, isDark: Boolean) {
         try {
-            val lp = window?.attributes
+            val lp = window.attributes
             val darkFlag = WindowManager.LayoutParams::class.java.getDeclaredField("MEIZU_FLAG_DARK_STATUS_BAR_ICON")
             val meizuFlags = WindowManager.LayoutParams::class.java.getDeclaredField("meizuFlags")
             darkFlag.isAccessible = true
@@ -117,7 +117,7 @@ class StatusBarBuilder(activity: Activity) {
             var value = meizuFlags.getInt(lp)
             value = if (isDark) value or bit else value and bit.inv()
             meizuFlags.setInt(lp, value)
-            window?.attributes = lp
+            window.attributes = lp
         } catch (ignored: Exception) {
         }
     }
