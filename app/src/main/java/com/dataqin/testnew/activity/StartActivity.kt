@@ -1,11 +1,12 @@
 package com.dataqin.testnew.activity
 
+import android.content.Intent
+import androidx.viewbinding.ViewBinding
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.TimeTaskHelper
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.map.utils.LocationFactory
-import com.dataqin.testnew.databinding.ActivityStartBinding
 
 /**
  *  Created by wangyanbin
@@ -14,11 +15,18 @@ import com.dataqin.testnew.databinding.ActivityStartBinding
  *  3.免登陆，进首页
  */
 @Route(path = ARouterPath.StartActivity)
-class StartActivity : BaseActivity<ActivityStartBinding>() {
+class StartActivity : BaseActivity<ViewBinding>() {
 
     override fun initView() {
         super.initView()
         statusBarBuilder.setHideStatus()
+        if (!isTaskRoot
+            && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
+            && intent.action != null
+            && intent.action == Intent.ACTION_MAIN) {
+            finish()
+            return
+        }
 //        //先判断是否是初始化过app
 //        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
 //        //如果不是，验证是否需要免登陆，随后跳转到首页

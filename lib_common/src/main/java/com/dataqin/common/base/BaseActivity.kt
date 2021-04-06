@@ -76,7 +76,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                 binding = method?.invoke(null, layoutInflater) as VB
                 setContentView(binding.root)
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
         initView()

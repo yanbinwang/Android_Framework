@@ -63,9 +63,9 @@
         <!--            android:name="PUSH_APPID"-->
         <!--            android:value="个推SDK的appid" />-->
 
+        <!-- 启动页 -->
         <activity
-            android:name=".activity.SplashActivity"
-            android:launchMode="singleTask"
+            android:name=".activity.StartActivity"
             android:screenOrientation="portrait"
             android:theme="@style/splashTheme">
             <intent-filter>
@@ -74,12 +74,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <!-- 启动页 -->
-        <activity
-            android:name=".activity.StartActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/splashTheme" />
 
         <activity
             android:name=".activity.MainActivity"
