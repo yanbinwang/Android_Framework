@@ -9,7 +9,7 @@ import com.dataqin.testnew.databinding.ActivityTransBinding
 
 /**
  *  Created by wangyanbin
- *  透明页
+ *  透明页-底部直接显示activity
  */
 @Route(path = ARouterPath.TransActivity)
 class TransActivity :BaseActivity<ActivityTransBinding>(){
@@ -22,11 +22,6 @@ class TransActivity :BaseActivity<ActivityTransBinding>(){
         layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
         layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
         windowManager.updateViewLayout(window.decorView, layoutParams)
-    }
-
-    override fun initView() {
-        super.initView()
-        statusBarBuilder.setStatusBarLightMode(true)
     }
 
 }
