@@ -8,8 +8,8 @@
         <item name="windowNoTitle">true</item>
         <!-- 设置页面切换动画 -->
         <item name="android:windowAnimationStyle">@style/activityAnimation</item>
-        <!--        &lt;!&ndash; Appbar背景色 &ndash;&gt;-->
-        <!--        <item name="colorPrimary">@android:color/transparent</item>-->
+<!--        &lt;!&ndash; Appbar背景色 &ndash;&gt;-->
+<!--        <item name="colorPrimary">@color/black</item>-->
         <!-- 导航栏颜色 -->
         <item name="colorPrimaryDark">@color/black</item>
         <!-- 底部导航栏颜色 -->
@@ -67,7 +67,7 @@
     <!-- 白样式-用于黑电池界面 -->
     <style name="whiteTheme" parent="AppTheme">
         <item name="colorPrimaryDark">@color/white</item>
-        <item name="android:navigationBarColor">@color/white</item>
+        <item name="android:navigationBarColor">@color/black</item><!-- 白色导航栏底部也得是黑色的 -->
         <item name="android:windowBackground">@color/white</item>
         <item name="android:windowAnimationStyle">@null</item>
     </style>

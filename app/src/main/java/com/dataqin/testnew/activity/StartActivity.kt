@@ -18,6 +18,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 
     override fun initView() {
         super.initView()
+        statusBarBuilder.setHideStatus()
 //        //先判断是否是初始化过app
 //        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
 //        //如果不是，验证是否需要免登陆，随后跳转到首页
@@ -37,7 +38,7 @@ class StartActivity : BaseActivity<ActivityStartBinding>() {
 //                }
 //            })
 //        }
-        TimeTaskHelper.startTask(2000,object :TimeTaskHelper.OnTaskListener{
+        TimeTaskHelper.startTask(2000, object : TimeTaskHelper.OnTaskListener {
             override fun run() {
                 navigation(ARouterPath.MainActivity).finish()
             }
