@@ -44,7 +44,8 @@ object CameraHelper {
             keepScreenOn = true//是否保持屏幕高亮
             playSounds = true//录像是否录制声音
             audio = Audio.ON//录制开启声音
-            engine = Engine.CAMERA2//相机底层类型
+//            engine = Engine.CAMERA2//相机底层类型
+            engine = Engine.CAMERA1//相机底层类型
             preview = Preview.GL_SURFACE//绘制相机的装载控件
             facing = Facing.BACK//打开时镜头默认后置
             flash = Flash.AUTO//闪光灯自动
@@ -94,7 +95,6 @@ object CameraHelper {
                 } else {
                     onTakePictureListener?.onFailed()
                 }
-                onTakePictureListener?.onComplete()
             }
         })
     }

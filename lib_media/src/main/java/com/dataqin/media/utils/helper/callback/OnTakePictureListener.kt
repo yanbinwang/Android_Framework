@@ -6,14 +6,18 @@ import java.io.File
  *  Created by wangyanbin
  *  拍照监听
  */
-interface OnTakePictureListener {
+abstract class OnTakePictureListener {
 
-    fun onStart()
+    open fun onStart() {}
 
-    fun onSuccess(pictureFile: File)
+    open fun onSuccess(pictureFile: File) {
+        onComplete()
+    }
 
-    fun onFailed()
+    open fun onFailed() {
+        onComplete()
+    }
 
-    fun onComplete()
+    open fun onComplete() {}
 
 }
