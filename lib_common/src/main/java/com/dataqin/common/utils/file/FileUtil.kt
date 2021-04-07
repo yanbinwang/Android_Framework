@@ -45,6 +45,15 @@ object FileUtil {
     }
 
     /**
+     * 删除文件
+     */
+    @JvmStatic
+    fun deleteFile(filePath: String?) {
+        val file = File(filePath)
+        if (file.isFile && file.exists()) file.delete()
+    }
+
+    /**
      * 删除本地路径下的所有文件
      */
     @JvmStatic
