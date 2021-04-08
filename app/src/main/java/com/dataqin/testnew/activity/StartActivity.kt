@@ -1,6 +1,5 @@
 package com.dataqin.testnew.activity
 
-import android.content.Intent
 import androidx.viewbinding.ViewBinding
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.WeakHandler
@@ -24,13 +23,6 @@ class StartActivity : BaseActivity<ViewBinding>() {
 
     override fun initView() {
         super.initView()
-        if (!isTaskRoot
-            && intent.hasCategory(Intent.CATEGORY_LAUNCHER)
-            && intent.action != null
-            && intent.action == Intent.ACTION_MAIN) {
-            finish()
-            return
-        }
         statusBarBuilder.setHideStatus()
 //        //先判断是否是初始化过app
 //        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
