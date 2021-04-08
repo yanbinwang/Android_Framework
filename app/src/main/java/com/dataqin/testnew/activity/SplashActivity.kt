@@ -2,14 +2,16 @@ package com.dataqin.testnew.activity
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
+import com.dataqin.common.base.BaseActivity
+import com.dataqin.common.constant.ARouterPath
 
 /**
  *  Created by wangyanbin
  *  app整体启动页
  *  安卓本身bug会在初次安装应用后点击图标再次拉起启动页，造成界面显示不不正常
  */
-class SplashActivity : AppCompatActivity() {
+class SplashActivity : BaseActivity<ViewBinding>() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,8 +22,7 @@ class SplashActivity : AppCompatActivity() {
             finish()
             return
         }
-        startActivity(Intent(this, StartActivity::class.java))
-        finish()
+        navigation(ARouterPath.StartActivity).finish()
     }
 
 }
