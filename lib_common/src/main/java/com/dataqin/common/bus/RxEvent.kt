@@ -44,13 +44,13 @@ class RxEvent {
     fun getAction() = action
 
     //获取默认布尔值
-    fun getBooleanExtra(defaultValue: Boolean): Boolean? {
-        return if (args == null) defaultValue else args?.getBoolean(action, defaultValue)
+    fun getBooleanExtra(defaultValue: Boolean): Boolean {
+        return if (args == null) defaultValue else args?.getBoolean(action, defaultValue) ?: false
     }
 
     //获取默认字符串值
-    fun getStringExtra(): String? {
-        return if (args == null) null else args?.getString(action)
+    fun getStringExtra(): String {
+        return if (args == null) "" else args?.getString(action) ?: ""
     }
 
     //获取默认类值
