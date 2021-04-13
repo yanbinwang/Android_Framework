@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import androidx.core.content.ContextCompat;
 
 import com.dataqin.common.R;
-import com.dataqin.common.widget.xrecyclerview.refresh.callback.OnXRefreshListener;
 
 /**
  * Created by WangYanBin on 2020/9/17.
@@ -26,10 +25,6 @@ public class XRefreshLayout extends SwipeRefreshLayout{
 
     private void initialize() {
         setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.black));
-    }
-
-    public void setOnXRefreshListener(OnXRefreshListener onXRefreshListener) {
-        setOnRefreshListener(onXRefreshListener);
     }
 
     public void finishRefreshing(){

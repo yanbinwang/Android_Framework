@@ -6,7 +6,6 @@ package com.dataqin.common.widget.xrecyclerview.refresh.callback;
  * 
  */
 public enum SwipeRefreshLayoutDirection {
-
 	TOP(0), // 只有下拉刷新
 	BOTTOM(1), // 只有加载更多
 	BOTH(2);// 全都有
