@@ -52,7 +52,7 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
     //传入一组yyyy-MM-dd HH:mm:ss的日期数据
     public void setDefault(String date) {
         Calendar defaultCal = Calendar.getInstance();
-        defaultCal.setTime(new Date(DateUtil.getDateTime(DateUtil.EN_YMDHMS_FORMAT, date)));
+        defaultCal.setTime(new Date(DateUtil.getDateTime(DateUtil.EN_YMDHMS, date)));
         binding.wdpChannel.setSelectedYear(defaultCal.get(Calendar.YEAR));
         binding.wdpChannel.setMonth(defaultCal.get(Calendar.MONTH) + 1);
         binding.wdpChannel.setSelectedDay(defaultCal.get(Calendar.DAY_OF_MONTH));
@@ -66,7 +66,7 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
     public void onClick(View v) {
         if (v.getId() == R.id.tv_sure) {
             if (null != onDateListener) {
-                onDateListener.onCurrent(DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS_FORMAT, binding.wdpChannel.getCurrentDate()));
+                onDateListener.onCurrent(DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS, binding.wdpChannel.getCurrentDate()));
             }
             dismiss();
         } else if (v.getId() == R.id.tv_cancel) {
