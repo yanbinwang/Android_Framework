@@ -74,7 +74,7 @@ object MediaFileUtil {
         //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSdcardAvailableCapacity()
         LogUtil.e(TAG, "sd availableSize: " + availableSize + "M")
-        return availableSize < space
+        return availableSize > space
     }
 
     /**
