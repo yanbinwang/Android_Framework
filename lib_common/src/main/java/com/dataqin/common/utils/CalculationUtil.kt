@@ -7,7 +7,6 @@ import java.math.BigDecimal
  * 计算工具类
  */
 object CalculationUtil {
-    private val DEF_DIV_SCALE = 10
 
     //加法运算
     @JvmStatic
@@ -33,15 +32,9 @@ object CalculationUtil {
         return b1.multiply(b2).toDouble()
     }
 
-    //除法运算
-    @JvmStatic
-    fun div(v1: Double, v2: Double): Double {
-        return div(v1, v2, DEF_DIV_SCALE)
-    }
-
     //除法运算-当发生除不尽的情况时，由scale参数指定精度，以后的数字四舍五入。
     @JvmStatic
-    fun div(v1: Double, v2: Double, scale: Int): Double {
+    fun div(v1: Double, v2: Double, scale: Int = 10): Double {
         require(scale >= 0) { "The scale must be a positive integer or zero" }
         val b1 = BigDecimal(v1.toString())
         val b2 = BigDecimal(v2.toString())
