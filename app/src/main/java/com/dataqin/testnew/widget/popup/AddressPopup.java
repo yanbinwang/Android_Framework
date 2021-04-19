@@ -17,9 +17,14 @@ import com.dataqin.testnew.model.AddressModel;
 import com.dataqin.testnew.model.ProperModel;
 import com.dataqin.testnew.model.ProvinceModel;
 import com.dataqin.testnew.widget.popup.callback.OnAddressListener;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,14 +33,13 @@ import java.util.List;
  * 省市区地址选择
  */
 public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> implements View.OnClickListener {
-    private final List<AddressModel> addressList;//省份集合
+    private List<AddressModel> addressList;//省份集合
     private List<ProvinceModel> provinceList = new ArrayList<>();//市集合
     private List<ProperModel> properList = new ArrayList<>();//区集合
     private OnAddressListener onAddressListener;
 
-    public AddressPopup(@NotNull Activity activity, List<AddressModel> addressList) {
+    public AddressPopup(@NotNull Activity activity) {
         super(activity, true);
-        this.addressList = addressList;
         initialize();
     }
 
@@ -82,9 +86,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         binding.tvCancel.setOnClickListener(this);
         binding.tvSure.setOnClickListener(this);
         //设置默认值
-        getCityList();
-        getProvinceList(0);
-        getProperList(0);
+        getAddressData();
     }
 
     private void initPicker(WheelPicker picker) {
@@ -93,6 +95,29 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         picker.setItemTextSize(DisplayUtil.dip2px(getActivity(), 15));//每个item的字体大小
         picker.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
         picker.setItemSpace(DisplayUtil.dip2px(getActivity(), 20));//每个item之间的间距
+    }
+
+    //获取本地省市区文件
+    private void getAddressData() {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getActivity().getAssets().open("pcas-code.json")));
+            String str = "";
+            while (null != (str = bufferedReader.readLine())) {
+                stringBuilder.append(str);
+            }
+        } catch (IOException e) {
+            stringBuilder.delete(0, stringBuilder.length());
+        } finally {
+            String result = stringBuilder.toString();
+            if (!TextUtils.isEmpty(result)) {
+                addressList = new Gson().fromJson(result, new TypeToken<List<AddressModel>>() {}.getType());
+                //设置默认值
+                getCityList();
+                getProvinceList(0);
+                getProperList(0);
+            }
+        }
     }
 
     //得到所有省份的字符串集合
@@ -122,9 +147,11 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     //得到选择的市集合
     private void getProvinceList(int position) {
         List<String> provinceStrList = new ArrayList<>();
-        provinceList = addressList.get(position).getChilds();
-        for (ProvinceModel model : provinceList) {
-            provinceStrList.add(model.getName());
+        if (!addressList.isEmpty() && addressList.size() > position) {
+            provinceList = addressList.get(position).getChilds();
+            for (ProvinceModel model : provinceList) {
+                provinceStrList.add(model.getName());
+            }
         }
         binding.wpProvince.setData(provinceStrList);
         binding.wpProvince.setSelectedItemPosition(0);
@@ -175,8 +202,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     //传入全部的区编码回显
     public boolean showPopup(String fullCodes) {
         if (addressList.isEmpty()) {
-//            ToastUtil.mackToastSHORT("获取省市区失败", getActivity());
             ToastUtil.mackToastSHORT("正在加载,请稍后...", getActivity());
+            getAddressData();
             return false;
         }
 

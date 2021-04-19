@@ -17,6 +17,7 @@ import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.model.AddressModel
 import com.dataqin.testnew.presenter.contract.MainContract
+import com.dataqin.testnew.widget.popup.AddressPopup
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import java.io.BufferedReader
@@ -33,6 +34,7 @@ import java.io.InputStreamReader
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
 //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+    private val addressPopup by lazy { AddressPopup(this) }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -110,27 +112,27 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //        LocationFactory.instance.start(this)
     }
 
-    //获取本地省市区文件
-    private fun getAddress() {
-        val stringBuilder = StringBuilder()
-        try {
-            val bufferedReader = BufferedReader(InputStreamReader(assets.open("pcas-code.json")))
-            var str = ""
-            while (null != bufferedReader.readLine().also { str = it }) {
-                stringBuilder.append(str)
-            }
-        } catch (e: IOException) {
-            stringBuilder.delete(0, stringBuilder.length)
-        } finally {
-            val result = stringBuilder.toString()
-            if (!TextUtils.isEmpty(result)) {
-                val addressList = Gson().fromJson<List<AddressModel>>(
-                    result,
-                    object : TypeToken<List<AddressModel>>() {}.type
-                )
-            }
-        }
-    }
+//    //获取本地省市区文件
+//    private fun getAddress() {
+//        val stringBuilder = StringBuilder()
+//        try {
+//            val bufferedReader = BufferedReader(InputStreamReader(assets.open("pcas-code.json")))
+//            var str = ""
+//            while (null != bufferedReader.readLine().also { str = it }) {
+//                stringBuilder.append(str)
+//            }
+//        } catch (e: IOException) {
+//            stringBuilder.delete(0, stringBuilder.length)
+//        } finally {
+//            val result = stringBuilder.toString()
+//            if (!TextUtils.isEmpty(result)) {
+//                val addressList = Gson().fromJson<List<AddressModel>>(
+//                    result,
+//                    object : TypeToken<List<AddressModel>>() {}.type
+//                )
+//            }
+//        }
+//    }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onClick(v: View?) {
@@ -141,7 +143,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                navigation(ARouterPath.TransActivity)
+                addressPopup.showPopup()
+//                navigation(ARouterPath.TransActivity)
 //                navigation(
 //                    ARouterPath.ScaleActivity,
 //                    PageParams().append(
