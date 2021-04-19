@@ -92,6 +92,7 @@ public class EmptyLayout extends SimpleViewGroup {
      * 数据加载中
      */
     public void showLoading() {
+        setVisibility(View.VISIBLE);
         ivEmpty.setImageResource(R.mipmap.img_data_loading);
         tvEmpty.setText("正在玩命加载数据...");
         tvRefresh.setVisibility(View.GONE);
@@ -105,6 +106,7 @@ public class EmptyLayout extends SimpleViewGroup {
      * 数据为空--只会在200并且无数据的时候展示
      */
     public void showEmpty(int resId, String text) {
+        setVisibility(View.VISIBLE);
         ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_empty : resId);
         tvEmpty.setText(TextUtils.isEmpty(text) ? "这里还什么都没有呢~" : text);
         tvRefresh.setVisibility(View.GONE);
@@ -119,6 +121,7 @@ public class EmptyLayout extends SimpleViewGroup {
      * 无网络优先级最高
      */
     public void showError(int resId, String text) {
+        setVisibility(View.VISIBLE);
         if(!isNetworkAvailable()){
             ivEmpty.setImageResource(R.mipmap.img_data_net_error);
             tvEmpty.setText("暂无网络，试试刷新页面吧~");

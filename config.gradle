@@ -103,7 +103,7 @@ def addRepos(repositories) {
     repositories.google()
     repositories.jcenter()
     repositories.maven { url 'https://jitpack.io' }
-    repositories.maven { url 'http://mvn.gt.getui.com/nexus/content/repositories/releases/' }
+//    repositories.maven { url 'http://mvn.gt.getui.com/nexus/content/repositories/releases/' }
     repositories.mavenCentral()
 }
 

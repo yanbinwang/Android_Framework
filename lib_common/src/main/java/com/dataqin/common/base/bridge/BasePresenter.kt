@@ -59,7 +59,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun dispose() {
+    protected fun disposePage() {
         softRecycler?.get()?.finishRefreshing()
         softEmpty?.get()?.visibility = View.GONE
     }
