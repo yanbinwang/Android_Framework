@@ -97,9 +97,7 @@ object DateUtil {
      */
     @JvmStatic
     fun getTimeStr(time: Long): String {
-        if (time <= 0) {
-            return "00:00"
-        }
+        if (time <= 0) return "00:00"
         val second = (time / 1000 / 60).toInt()
         val million = (time / 1000 % 60).toInt()
         val f = if (second >= 10) second.toString() else "0$second"
@@ -140,20 +138,18 @@ object DateUtil {
     fun isToday(inputDate: Date): Boolean {
         var flag = false
         try {
-            // 获取当前系统时间
+            //获取当前系统时间
             val longDate = System.currentTimeMillis()
             val nowDate = Date(longDate)
             val dateFormat = SimpleDateFormat(EN_YMDHMS, Locale.getDefault())
             val format = dateFormat.format(nowDate)
             val subDate = format.substring(0, 10)
-            // 定义每天的24h时间范围
+            //定义每天的24h时间范围
             val beginTime = "$subDate 00:00:00"
             val endTime = "$subDate 23:59:59"
             val parseBeginTime = dateFormat.parse(beginTime)
             val parseEndTime = dateFormat.parse(endTime)
-            if (inputDate.after(parseBeginTime) && inputDate.before(parseEndTime)) {
-                flag = true
-            }
+            if (inputDate.after(parseBeginTime) && inputDate.before(parseEndTime)) flag = true
         } catch (e: ParseException) {
         }
         return flag
@@ -192,9 +188,7 @@ object DateUtil {
             val calendar = Calendar.getInstance()
             calendar.time = time
             var weekIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1
-            if (weekIndex < 0) {
-                weekIndex = 0
-            }
+            if (weekIndex < 0) weekIndex = 0
             return weekIndex
         } catch (e: ParseException) {
         }
