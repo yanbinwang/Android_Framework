@@ -33,7 +33,8 @@ import java.lang.ref.WeakReference
  *  Created by wangyanbin
  *  定位-必须要有定位权限，否则定位失败，可以不开gps会走网络定位
  *  定位工具类写成class避免每次init都要初始化
- *  先实现回调！
+ *  1.先实现回调
+ *  2.key文件一定要校准
  */
 class LocationFactory : AMapLocationListener {
     private val context by lazy { BaseApplication.instance?.applicationContext }
@@ -78,8 +79,8 @@ class LocationFactory : AMapLocationListener {
 
     private fun buildNotification(): Notification {
         val builder: Notification.Builder?
+        //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
             val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
