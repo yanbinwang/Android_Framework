@@ -11,6 +11,7 @@ import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.pay.R
 import java.lang.ref.WeakReference
 
 /**
@@ -33,10 +34,10 @@ class AlipayFactory {
         weakActivity = WeakReference(activity)
         //未安装给出提示并且取消订单
         if (!FileUtil.isAvailable(weakActivity?.get()!!, "com.eg.android.AlipayGphone")) {
-            doResult("您尚未安装支付宝", Constants.APP_PAY_FAILURE)
+            doResult(weakActivity?.get()?.getString(R.string.toast_alipay_uninstall), Constants.APP_PAY_FAILURE)
             return
         }
-        showToast("正在发起支付宝支付,请稍后...")
+        showToast(weakActivity?.get()?.getString(R.string.toast_alipay_pay_loading))
         Thread {
             //构造PayTask对象
             val payTask = PayTask(weakActivity?.get()!!)
@@ -45,7 +46,7 @@ class AlipayFactory {
             LogUtil.e(TAG, "支付结果:\n$result")
             //处理结果
             if (TextUtils.isEmpty(result)) {
-                doResult("支付失败", Constants.APP_PAY_FAILURE)
+                doResult(weakActivity?.get()?.getString(R.string.toast_pay_failure), Constants.APP_PAY_FAILURE)
             } else {
                 val msg = Message()
                 msg.what = SDK_PAY_FLAG
@@ -79,14 +80,14 @@ class AlipayFactory {
                 val resultStatus = payResult.resultStatus
                 //判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                 if (TextUtils.equals(resultStatus, "9000")) {
-                    doResult("支付成功", Constants.APP_PAY_SUCCESS)
+                    doResult(weakActivity?.get()?.getString(R.string.toast_pay_success), Constants.APP_PAY_SUCCESS)
                 } else {
                     //用户中途取消
                     if (TextUtils.equals(resultStatus, "6001")) {
-                        doResult("支付取消", Constants.APP_PAY_FAILURE)
+                        doResult(weakActivity?.get()?.getString(R.string.toast_pay_cancel), Constants.APP_PAY_FAILURE)
                         //正在处理中，支付结果未知（有可能已经支付成功），请查询商户订单列表中订单的支付状态
                     } else {
-                        doResult("支付失败", Constants.APP_PAY_FAILURE)
+                        doResult(weakActivity?.get()?.getString(R.string.toast_pay_failure), Constants.APP_PAY_FAILURE)
                     }
                 }
             }

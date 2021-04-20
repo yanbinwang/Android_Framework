@@ -9,6 +9,7 @@ import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
+import com.dataqin.pay.R
 import com.tencent.mm.opensdk.modelbase.BaseReq
 import com.tencent.mm.opensdk.modelbase.BaseResp
 import com.tencent.mm.opensdk.openapi.IWXAPI
@@ -51,11 +52,11 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
     override fun onResp(resp: BaseResp?) {
         when (resp?.errCode) {
             //支付成功
-            BaseResp.ErrCode.ERR_OK -> doResult("支付成功", Constants.APP_PAY_SUCCESS)
+            BaseResp.ErrCode.ERR_OK -> doResult(getString(R.string.toast_pay_success), Constants.APP_PAY_SUCCESS)
             //支付取消
-            BaseResp.ErrCode.ERR_USER_CANCEL -> doResult("支付取消", Constants.APP_PAY_FAILURE)
+            BaseResp.ErrCode.ERR_USER_CANCEL -> doResult(getString(R.string.toast_pay_cancel), Constants.APP_PAY_FAILURE)
             //支付失败
-            else -> doResult("支付失败", Constants.APP_PAY_FAILURE)
+            else -> doResult(getString(R.string.toast_pay_failure), Constants.APP_PAY_FAILURE)
         }
         finish()
     }

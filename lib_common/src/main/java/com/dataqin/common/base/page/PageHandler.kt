@@ -25,8 +25,8 @@ object PageHandler {
     fun doResponse(msg: String?) {
         var str = msg
         val context = BaseApplication.instance?.applicationContext!!
-        if (TextUtils.isEmpty(str)) str = context.getString(R.string.label_response_err)
-        mackToastSHORT(if (!isNetworkAvailable()) context.getString(R.string.label_response_net_err) else str!!, context)
+        if (TextUtils.isEmpty(str)) str = context.getString(R.string.label_response_error)
+        mackToastSHORT(if (!isNetworkAvailable()) context.getString(R.string.label_response_net_error) else str!!, context)
     }
 
     /**

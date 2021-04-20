@@ -1,0 +1,6 @@
+<resources>
+    <!-- app内的view显示字段 -->
+    <string name="label_window_wechat">微信</string>
+    <string name="label_window_wechat_moments">朋友圈</string>
+
+</resources>

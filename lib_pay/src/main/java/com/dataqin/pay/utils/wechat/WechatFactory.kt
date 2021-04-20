@@ -6,6 +6,7 @@ import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
+import com.dataqin.pay.R
 import com.tencent.mm.opensdk.modelpay.PayReq
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
 
@@ -29,18 +30,16 @@ class WechatFactory {
         wxApi.registerApp(Constants.WX_APP_ID)
         //开始支付
         if (!wxApi.isWXAppInstalled) {
-            doResult(context,"您尚未安装微信")
+            doResult(context, context.getString(R.string.toast_wechat_uninstall))
             return
         }
         if (!wxApi.isWXAppSupportAPI) {
-            doResult(context,"当前微信版本不支持")
+            doResult(context,context.getString(R.string.toast_wechat_pay_error))
             return
         }
         val sendResult = wxApi.sendReq(req)
         LogUtil.e("支付状态:$sendResult")
-        if (!sendResult) {
-            doResult(context,"支付失败")
-        }
+        if (!sendResult) doResult(context,context.getString(R.string.toast_pay_failure))
     }
 
     private fun doResult(context: Context, text: String){

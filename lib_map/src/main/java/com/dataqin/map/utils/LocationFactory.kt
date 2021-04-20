@@ -180,7 +180,7 @@ class LocationFactory : AMapLocationListener {
 
                 override fun onDialogCancel() {
                 }
-            }).setParams("提示", "定位失败，请打开手机GPS", "确定", "取消").show()
+            }).setParams(weakActivity.get()?.getString(R.string.label_window_title), weakActivity.get()?.getString(R.string.label_window_gps), weakActivity.get()?.getString(R.string.label_window_sure), weakActivity.get()?.getString(R.string.label_window_cancel)).show()
         }
     }
 

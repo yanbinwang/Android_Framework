@@ -32,7 +32,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16mm"
-                    android:text="微信"
+                    android:text="@string/label_window_wechat"
                     android:textColor="@color/black_010026"
                     android:textSize="28mm" />
 
@@ -55,7 +55,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16mm"
-                    android:text="朋友圈"
+                    android:text="@string/label_window_wechat_moments"
                     android:textColor="@color/black_010026"
                     android:textSize="28mm" />
 
@@ -75,7 +75,7 @@
             android:layout_width="match_parent"
             android:layout_height="88mm"
             android:gravity="center"
-            android:text="取消"
+            android:text="@string/label_window_cancel"
             android:textColor="@color/black_010026"
             android:textSize="30mm" />
 

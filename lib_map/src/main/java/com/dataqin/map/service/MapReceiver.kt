@@ -36,9 +36,7 @@ class MapReceiver : BroadcastReceiver() {
                         granted = false
                     }
                 }
-                if (granted) {
-                    RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
-                }
+                if (granted) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
             }
         }
     }

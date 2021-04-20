@@ -5,6 +5,7 @@ import android.util.Patterns
 import com.dataqin.base.utils.ToastUtil
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.BaseApplication
+import com.dataqin.common.R
 import com.dataqin.common.bus.RxSchedulers
 import com.dataqin.common.http.repository.ResourceSubscriber
 import com.dataqin.common.subscribe.CommonSubscribe.getDownloadApi
@@ -22,6 +23,7 @@ import java.util.concurrent.Executors
  * 故下载的完成回调需要在线程池内外做判断
  */
 class DownloadFactory private constructor() {
+    private val content by lazy { BaseApplication.instance?.applicationContext!! }
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private val executors by lazy { Executors.newSingleThreadExecutor() }
 
@@ -34,7 +36,7 @@ class DownloadFactory private constructor() {
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {
         if (!Patterns.WEB_URL.matcher(downloadUrl).matches()) {
-            ToastUtil.mackToastSHORT("链接地址不合法", BaseApplication.instance?.applicationContext!!)
+            ToastUtil.mackToastSHORT(content.getString(R.string.toast_download_url_error), content)
             return
         }
         FileUtil.deleteDir(filePath)

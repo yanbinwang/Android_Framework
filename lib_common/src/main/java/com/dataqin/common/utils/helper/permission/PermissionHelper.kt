@@ -68,7 +68,7 @@ class PermissionHelper(context: Context) {
                     //如果用户拒绝了开启权限
                     if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
                         AndDialog.with(weakContext.get())
-                            .setParams(weakContext.get()?.getString(R.string.label_dialog_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_dialog_permission), result), weakContext.get()?.getString(R.string.label_dialog_sure), weakContext.get()?.getString(R.string.label_dialog_cancel))
+                            .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
                             .setOnDialogListener(object : OnDialogListener {
                                 override fun onDialogConfirm() {
                                     val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
