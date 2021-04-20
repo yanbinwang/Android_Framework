@@ -28,9 +28,9 @@ abstract class BaseQuickAdapter<T, VB : ViewBinding> : BaseAdapter<T> {
             val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
             binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
         } catch (e: Exception) {
-            e.printStackTrace()
+        } finally {
+            return BaseViewBindingHolder(binding!!)
         }
-        return BaseViewBindingHolder(binding!!)
     }
 
 }
