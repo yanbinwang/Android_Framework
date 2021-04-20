@@ -34,26 +34,30 @@ object WXShareHelper {
     @JvmStatic
     fun shareWebPage(model: WechatModel) {
         val shareParams = ShareParams()
-        shareParams.title = model.title
-        shareParams.text = model.content
-        shareParams.imageUrl = model.imgUrl
-        shareParams.url = model.url
-        shareParams.shareType = Platform.SHARE_TEXT
-        val platform = ShareSDK.getPlatform(getPlatformType(model.type))
-        platform.platformActionListener = object : PlatformActionListener {
-            override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
-                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_SUCCESS)) }
-            }
-
-            override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
-                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_FAILURE)) }
-            }
-
-            override fun onCancel(p0: Platform?, p1: Int) {
-                weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_CANCEL)) }
-            }
+        shareParams.apply {
+            title = model.title
+            text = model.content
+            imageUrl = model.imgUrl
+            url = model.url
+            shareType = Platform.SHARE_TEXT
         }
-        platform.share(shareParams)
+        val platform = ShareSDK.getPlatform(getPlatformType(model.type))
+        platform.apply {
+            platformActionListener = object : PlatformActionListener {
+                override fun onComplete(p0: Platform?, p1: Int, p2: HashMap<String, Any>?) {
+                    weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_SUCCESS)) }
+                }
+
+                override fun onError(p0: Platform?, p1: Int, p2: Throwable?) {
+                    weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_FAILURE)) }
+                }
+
+                override fun onCancel(p0: Platform?, p1: Int) {
+                    weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_SHARE_CANCEL)) }
+                }
+            }
+            share(shareParams)
+        }
     }
 
     /**
@@ -62,18 +66,22 @@ object WXShareHelper {
     @JvmStatic
     fun shareMiniProgram(model: WechatModel) {
         val onekeyShare = OnekeyShare()
-        onekeyShare.setPlatform(Wechat.NAME)
-        onekeyShare.disableSSOWhenAuthorize()
-        onekeyShare.setTitle(model.title)
-        onekeyShare.text = model.content
-        onekeyShare.setImageUrl(model.imgUrl)
-        onekeyShare.setUrl(model.url)
-        onekeyShare.shareContentCustomizeCallback = ShareContentCustomizeCallback { _: Platform?, shareParams: ShareParams ->
-                shareParams.shareType = Platform.SHARE_WXMINIPROGRAM //分享小程序类型,修改为Platform.OPEN_WXMINIPROGRAM可直接打开微信小程序
-                shareParams.wxUserName = model.id //配置小程序原始ID，前面有截图说明
-                shareParams.wxPath = model.url //分享小程序页面的具体路径
-            }
-        onekeyShare.show(context)
+        onekeyShare.apply {
+            setPlatform(Wechat.NAME)
+            disableSSOWhenAuthorize()
+            setTitle(model.title)
+            text = model.content
+            setImageUrl(model.imgUrl)
+            setUrl(model.url)
+            shareContentCustomizeCallback = ShareContentCustomizeCallback { _: Platform?, shareParams: ShareParams ->
+                    shareParams.apply {
+                        shareType = Platform.SHARE_WXMINIPROGRAM //分享小程序类型,修改为Platform.OPEN_WXMINIPROGRAM可直接打开微信小程序
+                        wxUserName = model.id //配置小程序原始ID，前面有截图说明
+                        wxPath = model.url //分享小程序页面的具体路径
+                    }
+                }
+            show(context)
+        }
     }
 
     /**
@@ -82,12 +90,14 @@ object WXShareHelper {
     @JvmStatic
     fun shareImage(model: WechatModel) {
         val onekeyShare = OnekeyShare()
-        onekeyShare.setPlatform(getPlatformType(model.type))
-        //关闭sso授权
-        onekeyShare.disableSSOWhenAuthorize()
-        onekeyShare.setImageData(model.bmp?.get())//确保SDcard下面存在此张图片
-        //启动分享GUI
-        onekeyShare.show(context)
+        onekeyShare.apply {
+            setPlatform(getPlatformType(model.type))
+            //关闭sso授权
+            disableSSOWhenAuthorize()
+            setImageData(model.bmp?.get())//确保SDcard下面存在此张图片
+            //启动分享GUI
+            show(context)
+        }
     }
 
     /**
@@ -98,21 +108,23 @@ object WXShareHelper {
         ShareSDK.setActivity(activity)
         val platform = ShareSDK.getPlatform(Wechat.NAME)
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
-        platform.platformActionListener = object : PlatformActionListener {
-            override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
-                weakHandler.post { onWXAuthorizeListener?.onComplete(hashMap) }
-            }
+        platform.apply {
+            platformActionListener = object : PlatformActionListener {
+                override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
+                    weakHandler.post { onWXAuthorizeListener?.onComplete(hashMap) }
+                }
 
-            override fun onError(platform: Platform, i: Int, throwable: Throwable) {
-                weakHandler.post { onWXAuthorizeListener?.onError(throwable) }
-            }
+                override fun onError(platform: Platform, i: Int, throwable: Throwable) {
+                    weakHandler.post { onWXAuthorizeListener?.onError(throwable) }
+                }
 
-            override fun onCancel(platform: Platform, i: Int) {
-                weakHandler.post { onWXAuthorizeListener?.onCancel() }
+                override fun onCancel(platform: Platform, i: Int) {
+                    weakHandler.post { onWXAuthorizeListener?.onCancel() }
+                }
             }
+            //要功能不要数据，在监听oncomplete中不会返回用户数据
+            authorize()
         }
-        //要功能不要数据，在监听oncomplete中不会返回用户数据
-        platform.authorize()
     }
 
     /**
@@ -122,14 +134,10 @@ object WXShareHelper {
     fun removeAccount(activity: Activity) {
         ShareSDK.setActivity(activity) //抖音登录适配安卓9.0
         val platform = ShareSDK.getPlatform(Wechat.NAME)
-        if (platform.isAuthValid) {
-            platform.removeAccount(true) //执行此操作就可以移除掉本地授权状态和授权信息
-        }
+        if (platform.isAuthValid) platform.removeAccount(true) //执行此操作就可以移除掉本地授权状态和授权信息
     }
 
     //获取分享方式
-    private fun getPlatformType(type: Int): String? {
-        return if (type == SendMessageToWX.Req.WXSceneTimeline) WechatMoments.NAME else Wechat.NAME
-    }
+    private fun getPlatformType(type: Int) = if (type == SendMessageToWX.Req.WXSceneTimeline) WechatMoments.NAME else Wechat.NAME
 
 }
