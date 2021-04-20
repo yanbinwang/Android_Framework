@@ -10,6 +10,7 @@ import com.dataqin.common.widget.xrecyclerview.callback.OnItemClickListener
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //适配器类型-后续可扩展
     private var itemType = BaseItemType.Model
+
     //数据类型为集合
     var data: MutableList<T> = ArrayList()
         set(value) {
@@ -58,7 +59,8 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     }
 
     override fun onBindViewHolder(holder: BaseViewBindingHolder, position: Int) {
-        holder.itemView.setOnClickListener { onItemClickListener?.setOnItemClickListener(position) }
+        //注意判断当前适配器是否具有头部view
+        holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(holder.adapterPosition) }
         convert(
             holder, when (itemType) {
                 BaseItemType.List -> data[position]

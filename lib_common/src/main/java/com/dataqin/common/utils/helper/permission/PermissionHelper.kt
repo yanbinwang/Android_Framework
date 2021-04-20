@@ -42,11 +42,11 @@ class PermissionHelper(context: Context) {
                 .permission(*groups)
                 .onGranted {
                     //权限申请成功回调
-                    onPermissionCallBack?.onPermissionListener(true)
+                    onPermissionCallBack?.onPermission(true)
                 }
                 .onDenied { permissions ->
                     //权限申请失败回调
-                    onPermissionCallBack?.onPermissionListener(false)
+                    onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
                     if (permissions.isNotEmpty()) {
@@ -81,7 +81,7 @@ class PermissionHelper(context: Context) {
                     }
                 }.start()
         } else {
-            onPermissionCallBack?.onPermissionListener(true)
+            onPermissionCallBack?.onPermission(true)
         }
         return this
     }

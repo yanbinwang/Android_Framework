@@ -134,7 +134,7 @@ class LocationFactory : AMapLocationListener {
         this.locationSubscriber = locationSubscriber
         PermissionHelper.with(context)
             .setPermissionCallBack(object : OnPermissionCallBack {
-                override fun onPermissionListener(isGranted: Boolean) {
+                override fun onPermission(isGranted: Boolean) {
                     if (isGranted) {
                         locationClient?.startLocation()
                     } else {
