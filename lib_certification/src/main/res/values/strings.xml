@@ -1,0 +1,5 @@
+<resources>
+    <!-- app内的view显示字段 -->
+    <string name="toast_recognition_error">初始化失败</string>
+    <string name="toast_recognition_failure">认证失败,请重试</string>
+</resources>

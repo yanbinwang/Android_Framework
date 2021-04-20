@@ -23,5 +23,7 @@
     <string name="label_data_error">页面加载失败，请重试~</string>
     <string name="label_data_net_error">暂无网络，试试刷新页面吧~</string>
     <string name="toast_download_url_error">链接地址不合法</string>
+    <string name="toast_alipay_uninstall">您尚未安装支付宝</string>
+    <string name="toast_wechat_uninstall">您尚未安装微信</string>
 
 </resources>

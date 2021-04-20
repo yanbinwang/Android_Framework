@@ -6,10 +6,10 @@ package com.dataqin.certification.utils
  */
 interface OnRecognitionListener {
 
-    fun onRecognitionWaitFor()
+    fun onWaitFor()
 
-    fun onRecognitionSuccess(certifyId: String, response: String)
+    fun onSuccess(certifyId: String, response: String)
 
-    fun onRecognitionFailure(result: String)
+    fun onFailure(result: String)
 
 }

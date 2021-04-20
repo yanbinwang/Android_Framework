@@ -7,6 +7,7 @@ import com.alibaba.fastjson.JSON
 import com.alibaba.fastjson.JSONObject
 import com.alipay.mobile.android.verify.sdk.ServiceFactory
 import com.dataqin.base.utils.LogUtil
+import com.dataqin.certification.R
 import com.dataqin.common.utils.file.FileUtil
 import java.lang.ref.WeakReference
 
@@ -52,12 +53,12 @@ class RecognitionFactory {
     fun startService(activity: Activity, bizCode: String?, certifyId: String?, url: String?, onRecognitionListener: OnRecognitionListener) {
         val weakActivity = WeakReference(activity)
         if (!FileUtil.isAvailable(weakActivity.get()!!, "com.eg.android.AlipayGphone")) {
-            onRecognitionListener.onRecognitionFailure("您尚未安装支付宝")
+            onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_alipay_uninstall))
             return
         }
 
         if (TextUtils.isEmpty(certifyId) || TextUtils.isEmpty(url) || TextUtils.isEmpty(bizCode)) {
-            onRecognitionListener.onRecognitionFailure("初始化失败")
+            onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_recognition_error))
             return
         }
 
@@ -79,11 +80,11 @@ class RecognitionFactory {
             LogUtil.e(response.toString())
             when (response["resultStatus"]) {
                 // 9001需要等待回调/回前台查询认证结果--告知页面可在onresume中去查询结果
-                "9001" -> onRecognitionListener.onRecognitionWaitFor()
+                "9001" -> onRecognitionListener.onWaitFor()
                 //回调处理-查询结果
-                "9000" -> onRecognitionListener.onRecognitionSuccess(certifyId ?: "", JSON.toJSONString(response))
+                "9000" -> onRecognitionListener.onSuccess(certifyId ?: "", JSON.toJSONString(response))
                 //其余编号统一回调失败
-                else -> onRecognitionListener.onRecognitionFailure("认证失败,请重试")
+                else -> onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_recognition_failure))
             }
         }
     }
