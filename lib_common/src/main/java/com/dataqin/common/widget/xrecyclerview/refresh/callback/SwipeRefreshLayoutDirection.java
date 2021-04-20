@@ -10,15 +10,14 @@ public enum SwipeRefreshLayoutDirection {
 	BOTTOM(1), // 只有加载更多
 	BOTH(2);// 全都有
 
-	private int mValue;
+	private final int mValue;
 
 	SwipeRefreshLayoutDirection(int value) {
 		this.mValue = value;
 	}
 
 	public static SwipeRefreshLayoutDirection getFromInt(int value) {
-		for (SwipeRefreshLayoutDirection direction : SwipeRefreshLayoutDirection
-				.values()) {
+		for (SwipeRefreshLayoutDirection direction : SwipeRefreshLayoutDirection.values()) {
 			if (direction.mValue == value) {
 				return direction;
 			}

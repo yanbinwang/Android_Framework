@@ -24,6 +24,8 @@ import android.view.animation.Transformation;
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -33,59 +35,65 @@ import java.util.ArrayList;
  */
 @SuppressWarnings("unused")
 class MaterialProgressDrawable extends Drawable implements Animatable {
+    private double mHeight;
+    private double mWidth;
+    private float mRotation;
+    private float mRotationCount;
+    private Animation mAnimation;
+    private Animation mFinishAnimation;
+
+    private final View mParent;
+    private final Resources mResources;
+    private final Ring mRing;
+    private final ArrayList<Animation> mAnimators = new ArrayList<>();
+
+    private static final float CENTER_RADIUS = 8.75f;
+    private static final float STROKE_WIDTH = 2.5f;
+    private static final float CENTER_RADIUS_LARGE = 12.5f;
+    private static final float STROKE_WIDTH_LARGE = 3f;
+    private static final float NUM_POINTS = 5f;
+    private static final float ARROW_OFFSET_ANGLE = 5;
+    private static final float MAX_PROGRESS_ARC = .8f;
+    private static final int CIRCLE_DIAMETER = 40;
+    private static final int CIRCLE_DIAMETER_LARGE = 56;
+    private static final int ANIMATION_DURATION = 1000 * 80 / 60;
+    private static final int ARROW_WIDTH = 10;
+    private static final int ARROW_HEIGHT = 5;
+    private static final int ARROW_WIDTH_LARGE = 12;
+    private static final int ARROW_HEIGHT_LARGE = 6;
     private static final Interpolator LINEAR_INTERPOLATOR = new LinearInterpolator();
     private static final Interpolator END_CURVE_INTERPOLATOR = new EndCurveInterpolator();
     private static final Interpolator START_CURVE_INTERPOLATOR = new StartCurveInterpolator();
     private static final Interpolator EASE_INTERPOLATOR = new AccelerateDecelerateInterpolator();
+
+    public static final int LARGE = 0;
+    public static final int DEFAULT = 1;
 
     @Retention(RetentionPolicy.CLASS)
     @IntDef({LARGE, DEFAULT})
     public @interface ProgressDrawableSize {
     }
 
-    // Maps to ProgressBar.Large style
-    static final int LARGE = 0;
-    // Maps to ProgressBar default style
-    static final int DEFAULT = 1;
-
-    // Maps to ProgressBar default style
-    private static final int CIRCLE_DIAMETER = 40;
-    private static final float CENTER_RADIUS = 8.75f; //should add up to 10 when + stroke_width
-    private static final float STROKE_WIDTH = 2.5f;
-
-    // Maps to ProgressBar.Large style
-    private static final int CIRCLE_DIAMETER_LARGE = 56;
-    private static final float CENTER_RADIUS_LARGE = 12.5f;
-    private static final float STROKE_WIDTH_LARGE = 3f;
-
-    private final int[] COLORS = new int[]{
-            Color.BLACK
-    };
-
-    private static final int ANIMATION_DURATION = 1000 * 80 / 60;
-    private static final float NUM_POINTS = 5f;
-    private final ArrayList<Animation> mAnimators = new ArrayList<Animation>();
-    private final Ring mRing;
-    private float mRotation;
-    private static final int ARROW_WIDTH = 10;
-    private static final int ARROW_HEIGHT = 5;
-    private static final float ARROW_OFFSET_ANGLE = 5;
-    private static final int ARROW_WIDTH_LARGE = 12;
-    private static final int ARROW_HEIGHT_LARGE = 6;
-    private static final float MAX_PROGRESS_ARC = .8f;
-
-    private final Resources mResources;
-    private final View mParent;
-    private Animation mAnimation;
-    private float mRotationCount;
-    private double mWidth;
-    private double mHeight;
-    private Animation mFinishAnimation;
-
     public MaterialProgressDrawable(Context context, View parent) {
         mParent = parent;
         mResources = context.getResources();
-        mRing = new Ring(mCallback);
+        mRing = new Ring(new Callback() {
+            @Override
+            public void invalidateDrawable(@NotNull Drawable d) {
+                invalidateSelf();
+            }
+
+            @Override
+            public void scheduleDrawable(@NotNull Drawable d, @NotNull Runnable what, long when) {
+                scheduleSelf(what, when);
+            }
+
+            @Override
+            public void unscheduleDrawable(@NotNull Drawable d, @NotNull Runnable what) {
+                unscheduleSelf(what);
+            }
+        });
+        int[] COLORS = new int[]{Color.BLACK};
         mRing.setColors(COLORS);
         updateSizes(DEFAULT);
         setupAnimators();
@@ -300,49 +308,31 @@ class MaterialProgressDrawable extends Drawable implements Animatable {
         mAnimation = animation;
     }
 
-    private final Callback mCallback = new Callback() {
-        @Override
-        public void invalidateDrawable(Drawable d) {
-            invalidateSelf();
-        }
-
-        @Override
-        public void scheduleDrawable(Drawable d, Runnable what, long when) {
-            scheduleSelf(what, when);
-        }
-
-        @Override
-        public void unscheduleDrawable(Drawable d, Runnable what) {
-            unscheduleSelf(what);
-        }
-    };
-
     private static class Ring {
-        private final RectF mTempBounds = new RectF();
-        private final Paint mPaint = new Paint();
-        private final Paint mArrowPaint = new Paint();
-        private final Callback mCallback;
-
+        private boolean mShowArrow;
+        private double mRingCenterRadius;
+        private float mStartingStartTrim;
+        private float mStartingEndTrim;
+        private float mStartingRotation;
+        private float mArrowScale;
         private float mStartTrim = 0.0f;
         private float mEndTrim = 0.0f;
         private float mRotation = 0.0f;
         private float mStrokeWidth = 5.0f;
         private float mStrokeInset = 2.5f;
-
-        private int[] mColors;
-        private int mColorIndex;
-        private float mStartingStartTrim;
-        private float mStartingEndTrim;
-        private float mStartingRotation;
-        private boolean mShowArrow;
-        private Path mArrow;
-        private float mArrowScale;
-        private double mRingCenterRadius;
         private int mArrowWidth;
         private int mArrowHeight;
         private int mAlpha;
-        private final Paint mCirclePaint = new Paint();
+        private int mColorIndex;
         private int mBackgroundColor;
+        private int[] mColors;
+        private Path mArrow;
+
+        private final RectF mTempBounds = new RectF();
+        private final Paint mPaint = new Paint();
+        private final Paint mArrowPaint = new Paint();
+        private final Paint mCirclePaint = new Paint();
+        private final Callback mCallback;
 
         public Ring(Callback callback) {
             mCallback = callback;
