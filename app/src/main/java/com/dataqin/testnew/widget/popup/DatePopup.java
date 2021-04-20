@@ -10,7 +10,7 @@ import com.dataqin.base.utils.DisplayUtil;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.R;
 import com.dataqin.testnew.databinding.ViewPopupDateBinding;
-import com.dataqin.testnew.widget.popup.callback.OnDateListener;
+import com.dataqin.testnew.widget.popup.callback.OnDatePopupListener;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -23,7 +23,7 @@ import java.util.Locale;
  * 日期选择类
  */
 public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements View.OnClickListener {
-    private OnDateListener onDateListener;
+    private OnDatePopupListener onDatePopupListener;
 
     public DatePopup(@NotNull Activity activity) {
         super(activity, true);
@@ -58,15 +58,15 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
         binding.wdpChannel.setSelectedDay(defaultCal.get(Calendar.DAY_OF_MONTH));
     }
 
-    public void setOnDateListener(OnDateListener onDateListener) {
-        this.onDateListener = onDateListener;
+    public void setOnDatePopupListener(OnDatePopupListener onDatePopupListener) {
+        this.onDatePopupListener = onDatePopupListener;
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.tv_sure) {
-            if (null != onDateListener) {
-                onDateListener.onCurrent(DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS, binding.wdpChannel.getCurrentDate()));
+            if (null != onDatePopupListener) {
+                onDatePopupListener.onCurrent(DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS, binding.wdpChannel.getCurrentDate()));
             }
             dismiss();
         } else if (v.getId() == R.id.tv_cancel) {

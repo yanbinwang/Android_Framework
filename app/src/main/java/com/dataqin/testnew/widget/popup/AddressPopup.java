@@ -16,7 +16,7 @@ import com.dataqin.testnew.databinding.ViewPopupAddressBinding;
 import com.dataqin.testnew.model.AddressModel;
 import com.dataqin.testnew.model.ProperModel;
 import com.dataqin.testnew.model.ProvinceModel;
-import com.dataqin.testnew.widget.popup.callback.OnAddressListener;
+import com.dataqin.testnew.widget.popup.callback.OnAddressPopupListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -36,7 +36,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     private List<AddressModel> addressList;//省份集合
     private List<ProvinceModel> provinceList = new ArrayList<>();//市集合
     private List<ProperModel> properList = new ArrayList<>();//区集合
-    private OnAddressListener onAddressListener;
+    private OnAddressPopupListener onAddressPopupListener;
 
     public AddressPopup(@NotNull Activity activity) {
         super(activity, true);
@@ -226,8 +226,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         return true;
     }
 
-    public void setOnAddressListener(OnAddressListener onAddressListener) {
-        this.onAddressListener = onAddressListener;
+    public void setOnAddressPopupListener(OnAddressPopupListener onAddressPopupListener) {
+        this.onAddressPopupListener = onAddressPopupListener;
     }
 
     @Override
@@ -240,8 +240,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
             String areaCode = properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
             //浙江省，杭州市，下城区
             String fullName = addressList.get(binding.wpCity.getCurrentItemPosition()).getName() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getName() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getName();
-            if (null != onAddressListener) {
-                onAddressListener.onAddressCurrent(fullCode, areaCode, fullName);
+            if (null != onAddressPopupListener) {
+                onAddressPopupListener.onCurrent(fullCode, areaCode, fullName);
             }
             dismiss();
         } else if (v.getId() == R.id.tv_cancel) {
