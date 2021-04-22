@@ -36,8 +36,10 @@ object PageHandler {
     fun setState(container: ViewGroup, msg: String?, imgRes: Int = -1, text: String? = null) {
         val emptyLayout = if (container is EmptyLayout) container else getEmptyView(container)
         doResponse(msg)
-        emptyLayout.visibility = View.VISIBLE
-        emptyLayout.showError(imgRes, text)
+        emptyLayout.apply {
+            visibility = View.VISIBLE
+            showError(imgRes, text)
+        }
     }
 
     /**
