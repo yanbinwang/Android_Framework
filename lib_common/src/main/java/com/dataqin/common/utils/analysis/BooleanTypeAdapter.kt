@@ -6,7 +6,10 @@ import com.google.gson.stream.JsonWriter
 
 import java.io.IOException
 
-class BooleanTypeAdapter : TypeAdapter<Boolean>() { //接管【Stringa】类型的序列化和反序列化过程
+/**
+ * 接管【String】类型的序列化和反序列化过程
+ */
+class BooleanTypeAdapter : TypeAdapter<Boolean>() {
 
     @Throws(IOException::class)
     override fun write(writer: JsonWriter, value: Boolean?) {

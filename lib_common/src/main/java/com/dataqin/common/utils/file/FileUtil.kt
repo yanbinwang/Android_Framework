@@ -26,16 +26,12 @@ object FileUtil {
      */
     @JvmStatic
     @Throws(IOException::class)
-    fun copyFile(srcFile: String, destFile: String) {
-        copyFile(File(srcFile), File(destFile))
-    }
+    fun copyFile(srcFile: String, destFile: String) = copyFile(File(srcFile), File(destFile))
 
     @JvmStatic
     @Throws(IOException::class)
     fun copyFile(srcFile: File, destFile: File) {
-        if (!destFile.exists()) {
-            destFile.createNewFile()
-        }
+        if (!destFile.exists()) destFile.createNewFile()
 
         FileInputStream(srcFile).channel.use { source ->
             FileOutputStream(destFile).channel.use { destination ->
@@ -79,9 +75,7 @@ object FileUtil {
     @Throws(IOException::class)
     fun isExistDir(filePath: String): String {
         val downloadFile = File(filePath)
-        if (!downloadFile.mkdirs()) {
-            downloadFile.createNewFile()
-        }
+        if (!downloadFile.mkdirs()) downloadFile.createNewFile()
         return downloadFile.absolutePath
     }
 
@@ -96,9 +90,7 @@ object FileUtil {
                 val sb = StringBuilder()
                 var s: String?
                 val br = BufferedReader(InputStreamReader(FileInputStream(f)))
-                while (br.readLine().also { s = it } != null) {
-                    sb.append(s)
-                }
+                while (br.readLine().also { s = it } != null) sb.append(s)
                 return sb.toString()
             } catch (e: Exception) {
             }

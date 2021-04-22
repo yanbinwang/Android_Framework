@@ -15,22 +15,22 @@ object GsonUtil {
 
     @JvmStatic
     fun <T> jsonToObj(json: String, className: Class<T>): T? {
-        var ret: T? = null
+        var t: T? = null
         try {
-            ret = gson.fromJson(json, className)
+            t = gson.fromJson(json, className)
         } catch (ignored: Exception) {
         }
-        return ret
+        return t
     }
 
     @JvmStatic
     fun objToJson(obj: Any): String? {
-        var ret: String? = null
+        var json: String? = null
         try {
-            ret = gson.toJson(obj)
+            json = gson.toJson(obj)
         } catch (ignored: Exception) {
         }
-        return ret
+        return json
     }
 
 }

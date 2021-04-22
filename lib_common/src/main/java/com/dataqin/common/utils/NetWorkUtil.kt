@@ -25,7 +25,6 @@ object NetWorkUtil {
     fun isNetworkAvailable(): Boolean {
         val networkInfo = connectivityManager.activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
-            //当前网络是连接的
             return networkInfo.state == NetworkInfo.State.CONNECTED
         }
         return false
