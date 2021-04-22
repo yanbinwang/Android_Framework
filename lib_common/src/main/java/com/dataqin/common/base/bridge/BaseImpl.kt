@@ -48,7 +48,7 @@ interface BaseImpl {
     /**
      * 获取控件的基础值
      */
-    fun getParameters(view: View?): String?
+    fun getParameters(view: View?): String
 
     /**
      * 批量注入输入监听

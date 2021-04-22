@@ -137,14 +137,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         view?.findFocus() //获取焦点
     }
 
-    override fun getParameters(view: View?): String? {
+    override fun getParameters(view: View?): String {
         return when (view) {
             is EditText -> view.text.toString().trim { it <= ' ' }
             is TextView -> view.text.toString().trim { it <= ' ' }
             is CheckBox -> view.text.toString().trim { it <= ' ' }
             is RadioButton -> view.text.toString().trim { it <= ' ' }
             is Button -> view.text.toString().trim { it <= ' ' }
-            else -> null
+            else -> ""
         }
     }
 
