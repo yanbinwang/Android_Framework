@@ -173,12 +173,12 @@ class LocationFactory : AMapLocationListener {
         //判断GPS模块是否开启，如果没有则开启
         if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             AppDialog.with(weakActivity.get()).setOnDialogListener(object : OnDialogListener {
-                override fun onDialogConfirm() {
+                override fun onConfirm() {
                     val intent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
                     weakActivity.get()?.startActivityForResult(intent, RequestCode.LOCATION_REQUEST)
                 }
 
-                override fun onDialogCancel() {
+                override fun onCancel() {
                 }
             }).setParams(weakActivity.get()?.getString(R.string.label_window_title), weakActivity.get()?.getString(R.string.label_window_gps), weakActivity.get()?.getString(R.string.label_window_sure), weakActivity.get()?.getString(R.string.label_window_cancel)).show()
         }

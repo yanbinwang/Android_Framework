@@ -18,14 +18,12 @@ import android.view.animation.OvershootInterpolator;
 import com.dataqin.common.R;
 
 public class SwipeMenuLayout extends ViewGroup {
-
     private int mScaleTouchSlop;//为了处理单击事件的冲突
     private int mMaxVelocity;//计算滑动速度用
     private int mPointerId;//多点触摸只算第一根手指的速度
     private int mHeight;//自己的高度
     //右侧菜单宽度总和(最大滑动距离)
     private int mRightMenuWidths;
-
     //滑动判定临界值（右侧菜单宽度的40%） 手指抬起时，超过了展开，没超过收起menu
     private int mLimit;
 
@@ -51,7 +49,6 @@ public class SwipeMenuLayout extends ViewGroup {
     private static boolean isTouching;
 
     private VelocityTracker mVelocityTracker;//滑动速度变量
-    private android.util.Log LogUtils;
 
     /**
      * 右滑删除功能的开关,默认开

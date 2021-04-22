@@ -12,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
  * author: wyb
  * date: 2017/9/5.
  */
-
 public class FullyGridLayoutManager extends GridLayoutManager {
     private final int[] mMeasuredDimension = new int[2];
 
@@ -85,4 +84,5 @@ public class FullyGridLayoutManager extends GridLayoutManager {
             }
         }
     }
+
 }

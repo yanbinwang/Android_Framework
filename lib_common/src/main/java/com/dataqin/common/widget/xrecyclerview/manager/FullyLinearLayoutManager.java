@@ -15,7 +15,6 @@ import com.dataqin.base.utils.LogUtil;
  * author: wyb
  * date: 2017/9/5.
  */
-
 public class FullyLinearLayoutManager extends LinearLayoutManager {
     private final int[] mMeasuredDimension = new int[2];
     private static final String TAG = FullyLinearLayoutManager.class.getSimpleName();
@@ -88,4 +87,5 @@ public class FullyLinearLayoutManager extends LinearLayoutManager {
         } catch (Exception ignored) {
         }
     }
+
 }
