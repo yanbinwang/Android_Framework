@@ -14,6 +14,7 @@ import java.nio.charset.Charset
 /**
  * author: wyb
  * date: 2019/7/9.
+ * 自定义日志拦截器
  */
 internal class LoggingInterceptor : Interceptor {
 
@@ -39,15 +40,15 @@ internal class LoggingInterceptor : Interceptor {
                 val hasRequestBody = requestBody != null
                 if (hasRequestBody && !bodyEncoded(request.headers)) {
                     val buffer = Buffer()
-                    requestBody!!.writeTo(buffer)
+                    requestBody?.writeTo(buffer)
 
-                    var charset: Charset? = UTF8
-                    val contentType = requestBody.contentType()
+                    var charset = UTF8
+                    val contentType = requestBody?.contentType()
                     if (contentType != null) {
                         charset = contentType.charset(UTF8)
                     }
                     if (isPlaintext(buffer)) {
-                        queryParameter = buffer.readString(charset!!)
+                        queryParameter = buffer.readString(charset)
                     }
                 }
             }
@@ -60,23 +61,20 @@ internal class LoggingInterceptor : Interceptor {
             throw e
         }
         val responseBody = response.body
-        val contentLength = responseBody!!.contentLength()
+        val contentLength = responseBody?.contentLength()
         if (response.promisesBody() && !bodyEncoded(response.headers)) {
-            val source = responseBody.source()
-            source.request(java.lang.Long.MAX_VALUE)
-            val buffer = source.buffer
-
+            val source = responseBody?.source()
+            source?.request(Long.MAX_VALUE)
+            val buffer = source?.buffer
             var charset: Charset? = UTF8
-            val contentType = responseBody.contentType()
+            val contentType = responseBody?.contentType()
             if (contentType != null) {
                 charset = contentType.charset(UTF8)
             }
-
-            if (!isPlaintext(buffer)) {
+            if (!isPlaintext(buffer!!)) {
                 interceptLogging(headerValues, url, queryParameter, null)
                 return response
             }
-
             if (contentLength != 0L) {
                 result = buffer.clone().readString(charset!!)
             }
