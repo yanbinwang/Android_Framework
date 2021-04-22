@@ -61,8 +61,7 @@ class ScreenRecordService : Service() {
             mediaRecorder = createMediaRecorder()
             virtualDisplay = createVirtualDisplay()
             mediaRecorder?.start()
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
         return START_STICKY
     }
@@ -88,14 +87,9 @@ class ScreenRecordService : Service() {
             setVideoFrameRate(60)
             try {
                 //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                    setOutputFile(filePath)
-                } else {
-                    setOutputFile(file)
-                }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) setOutputFile(filePath) else setOutputFile(file)
                 prepare()
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (ignored: Exception) {
             }
         }
     }
@@ -120,7 +114,7 @@ class ScreenRecordService : Service() {
             mediaRecorder?.reset()
             mediaRecorder?.release()
             mediaRecorder = null
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
         mediaProjection?.stop()
         mediaProjection = null
