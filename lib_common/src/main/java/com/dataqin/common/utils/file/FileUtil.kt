@@ -8,12 +8,10 @@ import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
 import androidx.core.content.FileProvider
-import com.dataqin.base.utils.DateUtil
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
 import java.text.DecimalFormat
-import java.util.*
 
 /**
  * Created by WangYanBin on 2020/7/1.
@@ -84,15 +82,15 @@ object FileUtil {
      */
     @JvmStatic
     fun readText(filePath: String): String? {
-        val f = File(filePath)
-        if (f.exists()) {
+        val file = File(filePath)
+        if (file.exists()) {
             try {
-                val sb = StringBuilder()
-                var s: String?
-                val br = BufferedReader(InputStreamReader(FileInputStream(f)))
-                while (br.readLine().also { s = it } != null) sb.append(s)
-                return sb.toString()
-            } catch (e: Exception) {
+                val stringBuilder = StringBuilder()
+                var str: String?
+                val bufferedReader = BufferedReader(InputStreamReader(FileInputStream(file)))
+                while (bufferedReader.readLine().also { str = it } != null) stringBuilder.append(str)
+                return stringBuilder.toString()
+            } catch (ignored: Exception) {
             }
         }
         return null
@@ -130,52 +128,6 @@ object FileUtil {
     }
 
     /**
-     * 将Bitmap缓存到本地
-     */
-    @JvmStatic
-    fun saveBitmap(bitmap: Bitmap?) {
-//        val screenImagePath: String
-//        //输出
-//        try {
-//            val rootDir = Constants.APPLICATION_FILE_PATH + "/截屏"
-//            val downloadFile = File(rootDir)
-//            if (!downloadFile.mkdirs()) {
-//                //需要权限
-//                downloadFile.createNewFile()
-//            }
-//            screenImagePath = "$rootDir/screen_capture" + SimpleDateFormat(
-//                "yyyy_MM_dd_hh_mm_ss",
-//                Locale.getDefault()
-//            ).format(Date()) + ".png"
-//            val fileOutputStream = FileOutputStream(screenImagePath)
-//            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-//            fileOutputStream.flush()
-//            fileOutputStream.close()
-//        } catch (ignored: java.lang.Exception) {
-//        } finally {
-//            bitmap?.recycle()
-//        }
-        val filePath: String
-        try {
-            //输出
-            val root = Constants.APPLICATION_FILE_PATH + "/下载图片"
-            val file = File(root)
-            //需要权限
-            if (!file.mkdirs()) {
-                file.createNewFile()
-            }
-            filePath = "$root/" + DateUtil.getDateTimeStr("yyyy_MM_dd_hh_mm_ss", Date()) + ".jpg"
-            val fileOutputStream = FileOutputStream(filePath)
-            bitmap?.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream)
-            fileOutputStream.flush()
-            fileOutputStream.close()
-        } catch (ignored: Exception) {
-        } finally {
-            bitmap?.recycle()
-        }
-    }
-
-    /**
      * 是否安装了XXX应用
      */
     @JvmStatic
@@ -185,9 +137,7 @@ object FileUtil {
         if (packageInfos != null) {
             for (i in packageInfos.indices) {
                 val pn = packageInfos[i].packageName
-                if (pn == packageName) {
-                    return true
-                }
+                if (pn == packageName) return true
             }
         }
         return false
