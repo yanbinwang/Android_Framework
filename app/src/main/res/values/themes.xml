@@ -1,14 +1,6 @@
 <resources>
 
     <!-- 启动页，直接背景是一张启动页图，点开app就是引导页的展示 -->
-<!--    <style name="splashTheme" parent="Theme.AppCompat.NoActionBar">-->
-<!--        <item name="windowActionBar">false</item>-->
-<!--        <item name="windowNoTitle">true</item>-->
-<!--        <item name="colorPrimaryDark">@color/white</item>-->
-<!--        <item name="android:navigationBarColor">@color/black</item>-->
-<!--        &lt;!&ndash;        <item name="android:windowBackground">@color/white</item>&ndash;&gt;-->
-<!--        <item name="android:windowBackground">@mipmap/img_start</item>-->
-<!--    </style>-->
     <style name="splashTheme" parent="AppTheme">
         <item name="android:windowBackground">@mipmap/img_start</item>
         <item name="android:windowAnimationStyle">@null</item>
