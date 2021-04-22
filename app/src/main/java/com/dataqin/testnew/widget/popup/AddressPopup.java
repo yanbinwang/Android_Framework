@@ -195,12 +195,12 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     }
     // </editor-fold>
 
-    public boolean showPopup() {
-        return showPopup(null);
+    public boolean showPopup(View view) {
+        return showPopup(view, null);
     }
 
     //传入全部的区编码回显
-    public boolean showPopup(String fullCodes) {
+    public boolean showPopup(View view, String fullCodes) {
         if (addressList.isEmpty()) {
             ToastUtil.mackToastSHORT("正在加载,请稍后...", getActivity());
             getAddressData();
@@ -222,7 +222,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
             binding.wpProper.setSelectedItemPosition(getCurrentProperIndex(fullCode[2]));
         }
 
-        showAtLocation(binding.getRoot(), Gravity.BOTTOM, 0, 0);
+        showAtLocation(view, Gravity.BOTTOM, 0, 0);
         return true;
     }
 

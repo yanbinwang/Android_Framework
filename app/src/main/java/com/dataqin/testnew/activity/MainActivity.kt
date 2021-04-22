@@ -136,7 +136,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                addressPopup.showPopup()
+                addressPopup.showPopup(v)
 //                navigation(ARouterPath.TransActivity)
 //                navigation(
 //                    ARouterPath.ScaleActivity,
