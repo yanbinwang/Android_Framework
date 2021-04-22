@@ -3,10 +3,10 @@ package com.dataqin.common.base
 import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.os.Build
+import android.transition.Slide
+import android.transition.Visibility
+import android.view.*
 import android.widget.PopupWindow
 import androidx.viewbinding.ViewBinding
 import com.dataqin.common.R
@@ -47,13 +47,26 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
                 val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, weakActivity?.get()?.layoutInflater) as VB
             } catch (e: Exception) {
-                e.printStackTrace()
             }
             contentView = binding.root
             isFocusable = true
             isOutsideTouchable = true
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            animationStyle = R.style.pushBottomAnimStyle //默认底部弹出，可重写
+            //默认底部弹出，可重写
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                enterTransition = Slide().apply {
+                    duration = 500
+                    mode = Visibility.MODE_IN
+                    slideEdge = Gravity.BOTTOM
+                }
+                setExitTransition(Slide().apply {
+                    duration = 500
+                    mode = Visibility.MODE_OUT
+                    slideEdge = Gravity.BOTTOM
+                })
+            } else {
+                animationStyle = R.style.pushBottomAnimStyle
+            }
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             width = ViewGroup.LayoutParams.MATCH_PARENT
             softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
