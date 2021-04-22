@@ -2,7 +2,6 @@ package com.dataqin.testnew.activity
 
 import android.content.Intent
 import android.os.Build
-import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
@@ -15,14 +14,8 @@ import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
-import com.dataqin.testnew.model.AddressModel
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
 
 /**
  * Created by WangYanBin
