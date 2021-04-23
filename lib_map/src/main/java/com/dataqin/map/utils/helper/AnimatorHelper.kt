@@ -68,7 +68,7 @@ fun View.hidden() {
  * 渐隐显示
  */
 fun View.fadeIn(view: View? = null) {
-    if (0f != alpha) return
+    if (1f == alpha) return
     view?.isEnabled = false
     isEnabled = false
     visibility = View.VISIBLE
