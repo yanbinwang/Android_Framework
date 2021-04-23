@@ -68,9 +68,9 @@ public class ScaleImageView extends ImageView {
     private OnTouchImageViewListener touchImageViewListener = null;
     private GestureDetector.OnDoubleTapListener doubleTapListener = null;
 
-    private static final String TAG = "DEBUG";
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
+    private static final String TAG = "DEBUG";
 
     private enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
 
@@ -296,7 +296,7 @@ public class ScaleImageView extends ImageView {
             setScaleType(scaleType);
         }
         resetZoom();
-        scaleImage(scale, viewWidth / 2, viewHeight / 2, true);
+        scaleImage(scale, viewWidth / 2f, viewHeight / 2f, true);
         matrix.getValues(m);
         m[Matrix.MTRANS_X] = -((focusX * getImageWidth()) - (viewWidth * 0.5f));
         m[Matrix.MTRANS_Y] = -((focusY * getImageHeight()) - (viewHeight * 0.5f));
@@ -318,7 +318,7 @@ public class ScaleImageView extends ImageView {
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
 
-        PointF point = transformCoordTouchToBitmap(viewWidth / 2, viewHeight / 2, true);
+        PointF point = transformCoordTouchToBitmap(viewWidth / 2f, viewHeight / 2f, true);
         point.x /= drawableWidth;
         point.y /= drawableHeight;
         return point;
@@ -582,7 +582,7 @@ public class ScaleImageView extends ImageView {
     }
 
     private class PrivateOnTouchListener implements OnTouchListener {
-        private PointF last = new PointF();
+        private final PointF last = new PointF();
 
         @Override
         public boolean onTouch(View v, MotionEvent event) {
@@ -617,17 +617,14 @@ public class ScaleImageView extends ImageView {
                         break;
                 }
             }
-
             setImageMatrix(matrix);
 
             if (userTouchListener != null) {
                 userTouchListener.onTouch(v, event);
             }
-
             if (touchImageViewListener != null) {
                 touchImageViewListener.onMove();
             }
-
             return true;
         }
     }
@@ -664,7 +661,7 @@ public class ScaleImageView extends ImageView {
             }
 
             if (animateToZoomBoundary) {
-                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2, viewHeight / 2, true);
+                DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2f, viewHeight / 2f, true);
                 compatPostOnAnimation(doubleTap);
             }
         }
@@ -675,7 +672,6 @@ public class ScaleImageView extends ImageView {
         if (stretchImageToSuper) {
             lowerScale = superMinScale;
             upperScale = superMaxScale;
-
         } else {
             lowerScale = minScale;
             upperScale = maxScale;
@@ -696,13 +692,15 @@ public class ScaleImageView extends ImageView {
     }
 
     private class DoubleTapZoom implements Runnable {
-        private boolean stretchImageToSuper;
-        private long startTime;
-        private float startZoom, targetZoom;
-        private float bitmapX, bitmapY;
-        private PointF startTouch;
-        private PointF endTouch;
-        private AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
+        private final boolean stretchImageToSuper;
+        private final long startTime;
+        private final float startZoom;
+        private final float targetZoom;
+        private final float bitmapX;
+        private final float bitmapY;
+        private final PointF startTouch;
+        private final PointF endTouch;
+        private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
         private static final float ZOOM_TIME = 500;
 
         private DoubleTapZoom(float targetZoom, float focusX, float focusY, boolean stretchImageToSuper) {
@@ -716,7 +714,7 @@ public class ScaleImageView extends ImageView {
             this.bitmapY = bitmapPoint.y;
 
             startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY);
-            endTouch = new PointF(viewWidth / 2, viewHeight / 2);
+            endTouch = new PointF(viewWidth / 2f, viewHeight / 2f);
         }
 
         @Override
@@ -731,10 +729,8 @@ public class ScaleImageView extends ImageView {
             if (touchImageViewListener != null) {
                 touchImageViewListener.onMove();
             }
-
             if (t < 1f) {
                 compatPostOnAnimation(this);
-
             } else {
                 setState(State.NONE);
             }
@@ -773,7 +769,6 @@ public class ScaleImageView extends ImageView {
             finalX = Math.min(Math.max(finalX, 0), origW);
             finalY = Math.min(Math.max(finalY, 0), origH);
         }
-
         return new PointF(finalX, finalY);
     }
 
@@ -807,7 +802,6 @@ public class ScaleImageView extends ImageView {
             } else {
                 minX = maxX = startX;
             }
-
             if (getImageHeight() > viewHeight) {
                 minY = viewHeight - (int) getImageHeight();
                 maxY = 0;
@@ -857,7 +851,7 @@ public class ScaleImageView extends ImageView {
     private static class CompatScroller {
         private Scroller scroller;
         private OverScroller overScroller;
-        private boolean isPreGingerbread;
+        private final boolean isPreGingerbread;
 
         public CompatScroller(Context context) {
             if (VERSION.SDK_INT < VERSION_CODES.GINGERBREAD) {
