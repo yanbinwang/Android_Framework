@@ -10,6 +10,8 @@ import android.view.View;
 
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.dataqin.base.utils.DisplayUtil;
 import com.dataqin.base.widget.SimpleViewGroup;
@@ -134,6 +136,14 @@ public class XRecyclerView extends SimpleViewGroup {
         recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         recycler.setAdapter(adapter);
         addItemDecoration(0, 0, false, false);
+    }
+
+    /**
+     * 设置横向左右滑动的adapter
+     */
+    public void setHorizontalAdapter(BaseAdapter adapter) {
+        recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
+        recycler.setAdapter(adapter);
     }
 
     /**
