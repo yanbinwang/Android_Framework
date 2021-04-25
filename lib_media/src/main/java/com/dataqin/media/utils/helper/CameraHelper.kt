@@ -85,9 +85,9 @@ object CameraHelper {
                 //在sd卡的Picture文件夹下创建对应的文件
                 val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE)
                 if (null != pictureFile) {
-                    result.toFile(pictureFile) { file ->
-                        if (null != file) {
-                            onTakePictureListener?.onSuccess(file)
+                    result.toFile(pictureFile) {
+                        if (null != it) {
+                            onTakePictureListener?.onSuccess(it)
                         } else {
                             onTakePictureListener?.onFailed()
                         }

@@ -25,7 +25,7 @@ import java.lang.ref.WeakReference
  *  默认-开锁可随屏幕翻转角度
  */
 @SuppressLint("StaticFieldLeak")
-object GSYVideoHelper{
+object GSYVideoHelper {
     private var retryNum = 0
     private var weakActivity: WeakReference<Activity>? = null
     private var imgCover: ImageView? = null
@@ -75,9 +75,7 @@ object GSYVideoHelper{
     fun setUrl(url: String) {
         retryNum = 0
         //加载图片
-        if (null != imgCover) {
-            ImageLoader.instance.displayCoverImage(imgCover!!, url)
-        }
+        if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
         if (null != player) {
             GSYVideoOptionBuilder()
                 .setIsTouchWiget(false)
