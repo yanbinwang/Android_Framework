@@ -47,10 +47,7 @@ class GetuiIntentService : GTIntentService(){
         //第三方回执调用接口，actionid范围为90000-90999，可根据业务场景执行
         val result = PushManager.getInstance().sendFeedbackMessage(p0, taskid, messageid, 90001)
         LogUtil.d(TAG, "call sendFeedbackMessage = " + if (result) "success" else "failed")
-        LogUtil.d(
-            TAG,
-            "onReceiveMessageData -> appid = $appid\ntaskid = $taskid\nmessageid = $messageid\npkg = $pkg\ncid = $cid"
-        )
+        LogUtil.d(TAG, "onReceiveMessageData -> appid = $appid\ntaskid = $taskid\nmessageid = $messageid\npkg = $pkg\ncid = $cid")
         if(null == payload){
             LogUtil.e(TAG, "receiver payload = null")
         }else{
