@@ -49,10 +49,10 @@ public class MapPopup extends BasePopupWindow<ViewPopupMapBinding> implements Vi
             dismiss();
         } else if (v.getId() == R.id.tv_bmap) {
             if (FileUtil.isAvailable(getActivity(), "com.baidu.BaiduMap")) {
-                //使用百度地图之前需要对经纬度做转换
-                double[] LngLat = CoordinateTransUtil.transformGCJ02ToBD09(latlng.longitude, latlng.latitude);
                 try {
-                    intent = Intent.getIntent("intent://map/direction?destination=latlng:" + LngLat[1] + "," + LngLat[0] + "|name:" + address + "&mode=driving&&src=appname#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end");
+                    //使用百度地图之前需要对经纬度做转换
+                    double[] LngLat = CoordinateTransUtil.transformGCJ02ToBD09(latlng.longitude, latlng.latitude);
+                    intent = Intent.parseUri("intent://map/direction?destination=latlng:" + LngLat[1] + "," + LngLat[0] + "|name:" + address + "&mode=driving&&src=appname#Intent;scheme=bdapp;package=com.baidu.BaiduMap;end", 0);
                     getActivity().startActivity(intent);//启动调用
                 } catch (Exception ignored) {
                 }
