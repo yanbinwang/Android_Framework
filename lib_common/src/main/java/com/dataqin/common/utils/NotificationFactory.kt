@@ -48,7 +48,7 @@ class NotificationFactory private constructor() {
         //intent为空说明此次为普通推送
         builder.setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))
         val notification = builder.build()
-        getNotificationChannel()
+        createChannel()
         notificationManager.notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
     }
 
@@ -69,18 +69,16 @@ class NotificationFactory private constructor() {
         }
         val notification = builder.build()
         notification?.flags = Notification.FLAG_AUTO_CANCEL or Notification.FLAG_ONLY_ALERT_ONCE
-        getNotificationChannel()
+        createChannel()
         notificationManager.notify(id.toInt(), notification)
     }
 
     /**
      * 获取渠道
+     * 8.0+系统需要创建一个推送渠道
      */
-    private fun getNotificationChannel() {
-        //8.0+系统需要创建一个推送渠道
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
-        }
+    private fun createChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) notificationManager.createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
     }
 
     /**
