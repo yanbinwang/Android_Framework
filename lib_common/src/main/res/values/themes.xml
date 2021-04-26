@@ -75,7 +75,7 @@
     <!-- 透明样式,透明页面使用 -->
     <style name="fullScreenTransTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowNoTitle">true</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowFullscreen">true</item><!-- 可被注释，使用statusBarBuilder.setTransparent()控制电池颜色 -->
         <item name="android:windowBackground">@color/white_00ffffff</item>
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">true</item>
