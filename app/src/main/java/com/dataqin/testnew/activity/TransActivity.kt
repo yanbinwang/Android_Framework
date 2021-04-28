@@ -22,7 +22,7 @@ class TransActivity :BaseActivity<ActivityTransBinding>(){
 //        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
         layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
         windowManager.updateViewLayout(window.decorView, layoutParams)
-        statusBarBuilder.setTransparent(true)//新加
+        statusBarBuilder.setTransparent(true)//控制电池黑白
     }
 
 }
