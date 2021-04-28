@@ -23,6 +23,19 @@ public class MessageDialog extends BaseDialog<ViewDialogMessageBinding> {
         return this;
     }
 
+    public void show(boolean flag) {
+        setCancelable(flag);
+        if (!isShowing()) {
+            show();
+        }
+    }
+
+    public void hide() {
+        if (isShowing()) {
+            dismiss();
+        }
+    }
+
     public static MessageDialog with(Context context) {
         return new MessageDialog(context);
     }

@@ -57,7 +57,7 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
         if (NetWorkUtil.isNetworkAvailable()) {
             if (fileList.size > 1 && !messageDialog.isShowing) {
                 count = 0
-                messageDialog.show()
+                messageDialog.show(flag)
             }
         }
     }
@@ -65,7 +65,7 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
     override fun hideDialog() {
         if (fileList.size > 1) {
             count++
-            if (count >= fileList.size - 1) messageDialog.dismiss()
+            if (count >= fileList.size - 1) messageDialog.hide()
         }
     }
 
