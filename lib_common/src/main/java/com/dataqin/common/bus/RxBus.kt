@@ -23,8 +23,10 @@ class RxBus private constructor() {
         }
     }
 
-    fun post(obj: Any) {
-        mBus.onNext(obj)
+    fun post(vararg objs: Any) {
+        for (obj in objs) {
+            mBus.onNext(obj)
+        }
     }
 
     fun <T> toFlowable(tClass: Class<T>): Flowable<T> {
