@@ -72,7 +72,7 @@ abstract class BasePresenter<T : BaseView> {
 
     protected fun getContext() = weakContext?.get()
 
-    protected fun getString(resId: Int) = weakContext?.get()?.getString(resId)!!
+    protected fun getString(resId: Int) = weakContext?.get()?.getString(resId)
     // </editor-fold>
 
 }
