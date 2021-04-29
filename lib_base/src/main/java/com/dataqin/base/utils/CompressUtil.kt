@@ -90,7 +90,7 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun scale(context: Context, image: Bitmap): Bitmap {
+    fun scale(context: Context?, image: Bitmap): Bitmap {
         var bitmap = image
         val fileSize: Long = getBitmapSize(bitmap).toLong()
         var scaleSize = 1f
@@ -109,7 +109,7 @@ object CompressUtil {
                 options.inJustDecodeBounds = false
                 options.inSampleSize = (scaleSize + 0.5).toInt()
                 bitmap = compressImgBySize(bitmap)!!
-                val file = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
+                val file = File(context?.applicationContext?.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
                 val fileOutputStream = try {
                     FileOutputStream(file)
                 } catch (e: FileNotFoundException) {
@@ -145,7 +145,7 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun degreeImage(context: Context, mFile: File): File {
+    fun degreeImage(context: Context?, mFile: File): File {
         val degree = readImageDegree(mFile.path)
         var bitmap: Bitmap
         return if (degree != 0) {
@@ -154,7 +154,7 @@ object CompressUtil {
             matrix.postRotate(degree.toFloat())
             bitmap = BitmapFactory.decodeFile(mFile.path)
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
-            val fTemp = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
+            val fTemp = File(context?.applicationContext?.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
             val fileOutputStream: FileOutputStream
             try {
                 fileOutputStream = FileOutputStream(fTemp)
