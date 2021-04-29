@@ -56,7 +56,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
                 presenter = pClass.newInstance()
                 presenter?.initialize(activity.get(), context.get(), this)
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
         return presenter as P
@@ -70,7 +69,6 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
             val method = aClass.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
             binding = method.invoke(null, layoutInflater, container, false) as VB
         } catch (e: Exception) {
-            e.printStackTrace()
         }
         return binding.root
     }

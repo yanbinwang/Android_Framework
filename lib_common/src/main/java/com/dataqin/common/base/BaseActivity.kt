@@ -60,7 +60,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                 presenter = pClass.newInstance()
                 presenter?.initialize(this, this, this)
             } catch (e: Exception) {
-                e.printStackTrace()
             }
         }
         return presenter as P
