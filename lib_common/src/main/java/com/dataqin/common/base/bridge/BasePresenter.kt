@@ -46,6 +46,8 @@ abstract class BasePresenter<T : BaseView> {
 
     fun getRecyclerView() = softRecycler?.get()!!
 
+    fun getString(resId: Int) = weakContext?.get()?.getString(resId)!!
+
     fun disposeView() {
         softRecycler?.get()?.finishRefreshing()
         softEmpty?.get()?.visibility = View.GONE
@@ -71,8 +73,6 @@ abstract class BasePresenter<T : BaseView> {
     protected fun getActivity() = weakActivity?.get()
 
     protected fun getContext() = weakContext?.get()
-
-    protected fun getString(resId: Int) = weakContext?.get()?.getString(resId)
     // </editor-fold>
 
 }
