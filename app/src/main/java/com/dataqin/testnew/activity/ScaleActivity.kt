@@ -48,8 +48,7 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
             )
             list.add(img)
         }
-        val adapter = ScaleAdapter(list)
-        binding.svpContainer.adapter = adapter
+        binding.svpContainer.adapter = ScaleAdapter(list)
         binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
     }
 
