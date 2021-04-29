@@ -52,7 +52,7 @@ object CompressUtil {
     }
 
     @JvmStatic
-    fun scale(context: Context, mFile: File, fileMaxSize: Long = 100 * 1024.toLong()): File {
+    fun scale(context: Context?, mFile: File, fileMaxSize: Long = 100 * 1024.toLong()): File {
         val fileSize = mFile.length()
         var scaleSize = 1f
         return if (fileSize >= fileMaxSize) {
@@ -70,7 +70,7 @@ object CompressUtil {
                 options.inSampleSize = (scaleSize + 0.5).toInt()
                 var bitmap: Bitmap? = BitmapFactory.decodeFile(mFile.path, options)
                 bitmap = compressImgBySize(bitmap!!)
-                val fTemp = File(context.applicationContext.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
+                val fTemp = File(context?.applicationContext?.externalCacheDir, System.currentTimeMillis().toString() + "img.jpg")
                 val fileOutputStream = try {
                     FileOutputStream(fTemp)
                 } catch (e: FileNotFoundException) {

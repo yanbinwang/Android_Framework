@@ -167,7 +167,7 @@ class LocationFactory : AMapLocationListener {
     /**
      * 跳转设置gps
      */
-    fun settingGps(activity: Activity) {
+    fun settingGps(activity: Activity?) {
         val weakActivity = WeakReference(activity)
         val locationManager = weakActivity.get()?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
         //判断GPS模块是否开启，如果没有则开启
