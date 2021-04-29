@@ -42,7 +42,14 @@ abstract class BasePresenter<T : BaseView> {
         this.softRecycler = SoftReference(xRecyclerView)
     }
 
-    fun getEmptyView() = softEmpty?.get()
+    fun getEmptyView() = softEmpty?.get()!!
+
+    fun getRecyclerView() = softRecycler?.get()!!
+
+    fun disposeView() {
+        softRecycler?.get()?.finishRefreshing()
+        softEmpty?.get()?.visibility = View.GONE
+    }
 
     fun detachView() {
         weakActivity?.clear()
@@ -59,14 +66,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun pageDispose() {
-        softRecycler?.get()?.finishRefreshing()
-        softEmpty?.get()?.visibility = View.GONE
-    }
-
     protected fun getView() = softView?.get() as? T
-
-    protected fun getRecycler() = softRecycler?.get()
 
     protected fun getActivity() = weakActivity?.get()
 

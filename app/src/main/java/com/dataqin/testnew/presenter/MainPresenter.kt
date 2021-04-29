@@ -10,9 +10,9 @@ import com.dataqin.testnew.presenter.contract.MainContract
 class MainPresenter : MainContract.Presenter(){
 
     override fun getOperation() {
-        pageDispose()
+        disposeView()
         getView()?.getOperation()
-        PageHandler.setState(getEmptyView()!!,"dfsdfds")
+        PageHandler.setState(getEmptyView(),"dfsdfds")
     }
 
 }
