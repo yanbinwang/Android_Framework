@@ -80,9 +80,7 @@ class PermissionHelper(context: Context) {
                             }).show()
                     }
                 }.start()
-        } else {
-            onPermissionCallBack?.onPermission(true)
-        }
+        } else onPermissionCallBack?.onPermission(true)
         return this
     }
 

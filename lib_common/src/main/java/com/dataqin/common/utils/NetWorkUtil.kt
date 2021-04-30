@@ -16,7 +16,9 @@ object NetWorkUtil {
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
     private val connectivityManager by lazy { context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager }
 
-    //验证是否联网
+    /**
+     * 验证是否联网
+     */
     @JvmStatic
     fun isNetworkAvailable(): Boolean {
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -26,7 +28,9 @@ object NetWorkUtil {
         return false
     }
 
-    //无线网络=1 移动网络=0 没有连接网络=-1
+    /**
+     * 无线网络=1 移动网络=0 没有连接网络=-1
+     */
     @JvmStatic
     fun getNetWorkState(): Int {
         val networkInfo = connectivityManager.activeNetworkInfo
@@ -36,16 +40,14 @@ object NetWorkUtil {
             } else if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
                 return 0
             }
-        } else {
-            return -1
-        }
+        } else return -1
         return -1
     }
 
-    //判断当前网络环境是否为wifi
+    /**
+     * 判断当前网络环境是否为wifi
+     */
     @JvmStatic
-    fun isWifi(): Boolean {
-        return connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
-    }
+    fun isWifi() = connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
 
 }

@@ -8,7 +8,9 @@ import java.math.BigDecimal
  */
 object CalculationUtil {
 
-    //加法运算
+    /**
+     * 加法运算
+     */
     @JvmStatic
     fun add(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
@@ -16,7 +18,9 @@ object CalculationUtil {
         return b1.add(b2).toDouble()
     }
 
-    //减法运算
+    /**
+     * 减法运算
+     */
     @JvmStatic
     fun sub(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
@@ -24,7 +28,9 @@ object CalculationUtil {
         return b1.subtract(b2).toDouble()
     }
 
-    //乘法运算
+    /**
+     * 乘法运算
+     */
     @JvmStatic
     fun mul(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
@@ -32,7 +38,9 @@ object CalculationUtil {
         return b1.multiply(b2).toDouble()
     }
 
-    //除法运算-当发生除不尽的情况时，由scale参数指定精度，以后的数字四舍五入。
+    /**
+     * 除法运算-当发生除不尽的情况时，由scale参数指定精度，以后的数字四舍五入
+     */
     @JvmStatic
     fun div(v1: Double, v2: Double, scale: Int = 10): Double {
         require(scale >= 0) { "The scale must be a positive integer or zero" }
@@ -41,13 +49,13 @@ object CalculationUtil {
         return b1.divide(b2, scale, BigDecimal.ROUND_HALF_UP).toDouble()
     }
 
-    //小数位四舍五入处理
+    /**
+     * 小数位四舍五入处理
+     */
     @JvmStatic
     fun round(v: Double, scale: Int): Double {
         require(scale >= 0) { "The scale must be a positive integer or zero" }
-        val b = BigDecimal(v.toString())
-        val one = BigDecimal("1")
-        return b.divide(one, scale, BigDecimal.ROUND_HALF_UP).toDouble()
+        return BigDecimal(v.toString()).divide(BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP).toDouble()
     }
 
 }
