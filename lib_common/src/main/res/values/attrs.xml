@@ -34,16 +34,16 @@
     <!-- 自定义XRecyclerView -->
     <declare-styleable name="XRecyclerView">
         <!-- recyclerview的类型 -->
-        <attr name="refreshType">
+        <attr name="refresh">
             <enum name="ordinary" value="0" />
             <enum name="equipped" value="1" />
         </attr>
-        <attr name="refreshDirection">
+        <attr name="direction">
             <enum name="top" value="0" />
             <enum name="bottom" value="1" />
             <enum name="both" value="2" />
         </attr>
-        <attr name="emptyType">
+        <attr name="empty">
             <enum name="ordinary" value="0" />
             <enum name="equipped" value="1" />
         </attr>

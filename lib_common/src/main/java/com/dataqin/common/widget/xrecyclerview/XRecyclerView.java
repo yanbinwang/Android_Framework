@@ -37,7 +37,7 @@ public class XRecyclerView extends SimpleViewGroup {
     private XRefreshLayout refresh;//刷新控件 类型1才有
     private DetectionRecyclerView recycler;//数据列表
     private OnEmptyClickListener onEmptyClickListener;//空布局点击
-    private int refreshType, emptyType, refreshDirection;//页面类型(0无刷新-1带刷新)刷新类型（0顶部-1底部-2全部）是否具有空布局（0无-1有）
+    private int refreshId, emptyId, directionId;//页面类型(0无刷新-1带刷新)刷新类型（0顶部-1底部-2全部）是否具有空布局（0无-1有）
 
     public XRecyclerView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,15 +51,15 @@ public class XRecyclerView extends SimpleViewGroup {
 
     private void initialize(AttributeSet attrs) {
         TypedArray mTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.XRecyclerView);
-        refreshType = mTypedArray.getInt(R.styleable.XRecyclerView_refreshType, 0);
-        refreshDirection = mTypedArray.getInt(R.styleable.XRecyclerView_refreshDirection, 2);
-        emptyType = mTypedArray.getInt(R.styleable.XRecyclerView_emptyType, 0);
+        refreshId = mTypedArray.getInt(R.styleable.XRecyclerView_refresh, 0);
+        directionId = mTypedArray.getInt(R.styleable.XRecyclerView_direction, 2);
+        emptyId = mTypedArray.getInt(R.styleable.XRecyclerView_empty, 0);
         mTypedArray.recycle();
     }
 
     @Override
     public void draw() {
-        if (onDetectionInflate()) initRefreshType(refreshType);
+        if (onDetectionInflate()) initRefreshType(refreshId);
     }
 
     private void initRefreshType(int refreshType) {
@@ -69,7 +69,7 @@ public class XRecyclerView extends SimpleViewGroup {
             case 0:
                 view = LayoutInflater.from(getContext()).inflate(R.layout.view_xrecyclerview, null);
                 recycler = view.findViewById(R.id.d_rv);
-                if (0 != emptyType) {
+                if (0 != emptyId) {
                     empty = new EmptyLayout(getContext());
                     recycler.setEmptyView(empty.setListView(recycler));
                     recycler.setHasFixedSize(true);
@@ -88,7 +88,7 @@ public class XRecyclerView extends SimpleViewGroup {
                 refresh = view.findViewById(R.id.x_refresh);
                 recycler = view.findViewById(R.id.d_rv);
                 //设置刷新的方式，默认上下皆有
-                switch (refreshDirection) {
+                switch (directionId) {
                     case 0:
                         refresh.setDirection(SwipeRefreshLayoutDirection.TOP);
                         break;
@@ -101,7 +101,7 @@ public class XRecyclerView extends SimpleViewGroup {
                 }
                 recycler.setHasFixedSize(true);
                 recycler.setItemAnimator(new DefaultItemAnimator());
-                if (0 != emptyType) {
+                if (0 != emptyId) {
                     empty.setOnEmptyRefreshListener(() -> {
                         if (null != onEmptyClickListener) {
                             onEmptyClickListener.onClick();
@@ -119,7 +119,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 类型1的时候才会显示
      */
     public void setEmptyVisibility(int visibility) {
-        if (refreshType == 1 && 0 != emptyType) {
+        if (refreshId == 1 && 0 != emptyId) {
             empty.setVisibility(visibility);
         }
     }
@@ -164,7 +164,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 刷新页面刷新
      */
     public void setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener onRefreshListener) {
-        if (refreshType == 1) {
+        if (refreshId == 1) {
             refresh.setOnRefreshListener(onRefreshListener);
         }
     }
@@ -187,7 +187,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 设置停止刷新
      */
     public void finishRefreshing() {
-        if (refreshType == 1) {
+        if (refreshId == 1) {
             refresh.finishRefreshing();
         }
     }
@@ -196,7 +196,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 当数据正在加载的时候显示
      */
     public void showLoading() {
-        if (0 != emptyType) {
+        if (0 != emptyId) {
             setEmptyVisibility(View.VISIBLE);
             empty.showLoading();
         }
@@ -210,14 +210,14 @@ public class XRecyclerView extends SimpleViewGroup {
      * 当数据为空时(显示需要显示的图片，以及内容字)
      */
     public void showEmpty(int imgInt, String text) {
-        if (0 != emptyType) {
+        if (0 != emptyId) {
             setEmptyVisibility(View.VISIBLE);
             empty.showEmpty(imgInt, text);
         }
     }
 
     public void showError() {
-        if (0 != emptyType) {
+        if (0 != emptyId) {
             setEmptyVisibility(View.VISIBLE);
             empty.showError();
         }
@@ -227,7 +227,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 当数据异常时(显示需要显示的图片，以及内容字)
      */
     public void showError(int imgInt, String text) {
-        if (0 != emptyType) {
+        if (0 != emptyId) {
             setEmptyVisibility(View.VISIBLE);
             empty.showError(imgInt, text);
         }
