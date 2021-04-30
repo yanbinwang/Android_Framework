@@ -44,12 +44,12 @@ public class ProgressWheel extends View {
     private boolean isSpinning = false;
     private boolean shouldAnimate;
     private ProgressCallback callback;
-    private Paint barPaint = new Paint();
-    private Paint rimPaint = new Paint();
     private RectF circleBounds = new RectF();
     private final int barLength = 16;
     private final int barMaxLength = 270;
     private final long pauseGrowingTime = 200;
+    private final Paint barPaint = new Paint();
+    private final Paint rimPaint = new Paint();
     private static final String TAG = ProgressWheel.class.getSimpleName();
 
     public ProgressWheel(Context context) {
@@ -91,7 +91,6 @@ public class ProgressWheel extends View {
         if (a.getBoolean(R.styleable.ProgressWheel_matProg_progressIndeterminate, false)) {
             spin();
         }
-
         // Recycle
         a.recycle();
     }
@@ -101,14 +100,13 @@ public class ProgressWheel extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int viewWidth = circleRadius + this.getPaddingLeft() + this.getPaddingRight();
         int viewHeight = circleRadius + this.getPaddingTop() + this.getPaddingBottom();
-
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         int heightSize = MeasureSpec.getSize(heightMeasureSpec);
-
         int width;
         int height;
+
         //Measure Width
         if (widthMode == MeasureSpec.EXACTLY) {
             //Must be this size
@@ -120,7 +118,6 @@ public class ProgressWheel extends View {
             //Be whatever you want
             width = viewWidth;
         }
-
         //Measure Height
         if (heightMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.EXACTLY) {
             //Must be this size
@@ -132,7 +129,6 @@ public class ProgressWheel extends View {
             //Be whatever you want
             height = viewHeight;
         }
-
         setMeasuredDimension(width, height);
     }
 
@@ -151,7 +147,6 @@ public class ProgressWheel extends View {
             mustInvalidate = true;
             long deltaTime = (SystemClock.uptimeMillis() - lastTimeAnimated);
             float deltaNormalized = deltaTime * spinSpeed / 1000.0f;
-
             updateBarLength(deltaTime);
             mProgress += deltaNormalized;
             if (mProgress > 360) {
@@ -170,7 +165,6 @@ public class ProgressWheel extends View {
                 from = 0;
                 length = 135;
             }
-
             canvas.drawArc(circleBounds, from, length, false, barPaint);
         } else {
             float oldProgress = mProgress;
@@ -178,13 +172,11 @@ public class ProgressWheel extends View {
             if (mProgress != mTargetProgress) {
                 //We smoothly increase the progress bar
                 mustInvalidate = true;
-
                 float deltaTime = (float) (SystemClock.uptimeMillis() - lastTimeAnimated) / 1000;
                 float deltaNormalized = deltaTime * spinSpeed;
                 mProgress = Math.min(mProgress + deltaNormalized, mTargetProgress);
                 lastTimeAnimated = SystemClock.uptimeMillis();
             }
-
             if (oldProgress != mProgress) {
                 runCallback();
             }
@@ -196,14 +188,11 @@ public class ProgressWheel extends View {
                 offset = (float) (1.0f - Math.pow(1.0f - mProgress / 360.0f, 2.0f * factor)) * 360.0f;
                 progress = (float) (1.0f - Math.pow(1.0f - mProgress / 360.0f, factor)) * 360.0f;
             }
-
             if (isInEditMode()) {
                 progress = 360;
             }
-
             canvas.drawArc(circleBounds, offset - 90, progress, false, barPaint);
         }
-
         if (mustInvalidate) {
             invalidate();
         }
@@ -212,7 +201,6 @@ public class ProgressWheel extends View {
     private void updateBarLength(long deltaTimeInMilliSeconds) {
         if (pausedTimeWithoutGrowing >= pauseGrowingTime) {
             timeStartGrowing += deltaTimeInMilliSeconds;
-
             if (timeStartGrowing > barSpinCycleTime) {
                 // We completed a size change cycle
                 // (growing or shrinking)
@@ -225,7 +213,6 @@ public class ProgressWheel extends View {
 
             float distance = (float) Math.cos((timeStartGrowing / barSpinCycleTime + 1) * Math.PI) / 2 + 0.5f;
             float destLength = (barMaxLength - barLength);
-
             if (barGrowingFromFront) {
                 barExtraLength = distance * destLength;
             } else {
@@ -269,7 +256,6 @@ public class ProgressWheel extends View {
             // Width should equal to Height, find the min value to setup the circle
             int minValue = Math.min(layout_width - paddingLeft - paddingRight, layout_height - paddingBottom - paddingTop);
             int circleDiameter = Math.min(minValue, circleRadius * 2 - barWidth * 2);
-
             // Calc the Offset if needed for centering the wheel in the available space
             int xOffset = (layout_width - paddingLeft - paddingRight - circleDiameter) / 2 + paddingLeft;
             int yOffset = (layout_height - paddingTop - paddingBottom - circleDiameter) / 2 + paddingTop;
@@ -304,7 +290,6 @@ public class ProgressWheel extends View {
     protected Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
         WheelSavedState ss = new WheelSavedState(superState);
-
         // We save everything that can be changed at runtime
         ss.mProgress = this.mProgress;
         ss.mTargetProgress = this.mTargetProgress;
@@ -317,7 +302,6 @@ public class ProgressWheel extends View {
         ss.circleRadius = this.circleRadius;
         ss.linearProgress = this.linearProgress;
         ss.fillRadius = this.fillRadius;
-
         return ss;
     }
 
@@ -347,7 +331,6 @@ public class ProgressWheel extends View {
 
     public void setCallback(ProgressCallback progressCallback) {
         callback = progressCallback;
-
         if (!isSpinning) {
             runCallback();
         }
@@ -381,7 +364,6 @@ public class ProgressWheel extends View {
             mProgress = 0.0f;
             isSpinning = false;
         }
-
         if (progress > 1.0f) {
             progress -= 1.0f;
         } else if (progress < 0) {
@@ -408,17 +390,14 @@ public class ProgressWheel extends View {
             isSpinning = false;
             runCallback();
         }
-
         if (progress > 1.0f) {
             progress -= 1.0f;
         } else if (progress < 0) {
             progress = 0;
         }
-
         if (progress == mTargetProgress) {
             return;
         }
-
         // If we are currently in the right position
         // we set again the last time animated so the
         // animation starts smooth from here

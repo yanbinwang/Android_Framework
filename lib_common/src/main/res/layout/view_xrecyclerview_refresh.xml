@@ -6,12 +6,12 @@
     tools:viewBindingIgnore="true">
 
     <com.dataqin.common.widget.xrecyclerview.refresh.XRefreshLayout
-        android:id="@+id/x_refresh"
+        android:id="@+id/xrl_refresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.dataqin.common.widget.xrecyclerview.DetectionRecyclerView
-            android:id="@+id/d_rv"
+            android:id="@+id/drv_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:overScrollMode="never" />
@@ -19,7 +19,7 @@
     </com.dataqin.common.widget.xrecyclerview.refresh.XRefreshLayout>
 
     <com.dataqin.common.widget.empty.EmptyLayout
-        android:id="@+id/el"
+        android:id="@+id/el_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 

@@ -59,16 +59,16 @@ public class XRecyclerView extends SimpleViewGroup {
 
     @Override
     public void draw() {
-        if (onDetectionInflate()) initRefreshType(refreshId);
+        if (onDetectionInflate()) initView(refreshId);
     }
 
-    private void initRefreshType(int refreshType) {
+    private void initView(int refreshId) {
         View view = null;
-        switch (refreshType) {
+        switch (refreshId) {
             //不带刷新
             case 0:
                 view = LayoutInflater.from(getContext()).inflate(R.layout.view_xrecyclerview, null);
-                recycler = view.findViewById(R.id.d_rv);
+                recycler = view.findViewById(R.id.drv_container);
                 if (0 != emptyId) {
                     empty = new EmptyLayout(getContext());
                     recycler.setEmptyView(empty.setListView(recycler));
@@ -84,9 +84,9 @@ public class XRecyclerView extends SimpleViewGroup {
             //带刷新
             case 1:
                 view = LayoutInflater.from(getContext()).inflate(R.layout.view_xrecyclerview_refresh, null);
-                empty = view.findViewById(R.id.el);
-                refresh = view.findViewById(R.id.x_refresh);
-                recycler = view.findViewById(R.id.d_rv);
+                empty = view.findViewById(R.id.el_container);
+                refresh = view.findViewById(R.id.xrl_refresh);
+                recycler = view.findViewById(R.id.drv_container);
                 //设置刷新的方式，默认上下皆有
                 switch (directionId) {
                     case 0:
