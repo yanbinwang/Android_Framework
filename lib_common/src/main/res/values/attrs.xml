@@ -38,7 +38,7 @@
             <enum name="ordinary" value="0" />
             <enum name="equipped" value="1" />
         </attr>
-        <attr name="direction">
+        <attr name="refreshDirection">
             <enum name="top" value="0" />
             <enum name="bottom" value="1" />
             <enum name="both" value="2" />

@@ -52,7 +52,7 @@ public class XRecyclerView extends SimpleViewGroup {
     private void initialize(AttributeSet attrs) {
         TypedArray mTypedArray = getContext().obtainStyledAttributes(attrs, R.styleable.XRecyclerView);
         refreshId = mTypedArray.getInt(R.styleable.XRecyclerView_refresh, 0);
-        directionId = mTypedArray.getInt(R.styleable.XRecyclerView_direction, 2);
+        directionId = mTypedArray.getInt(R.styleable.XRecyclerView_refreshDirection, 2);
         emptyId = mTypedArray.getInt(R.styleable.XRecyclerView_empty, 0);
         mTypedArray.recycle();
     }
