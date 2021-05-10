@@ -103,6 +103,7 @@ dependencies {
     //基础库
     implementation project(':lib_map')
     implementation project(':lib_pay')
+    implementation project(':lib_media')
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler

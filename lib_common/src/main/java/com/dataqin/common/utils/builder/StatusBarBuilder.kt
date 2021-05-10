@@ -19,15 +19,18 @@ import java.lang.ref.WeakReference
  */
 @SuppressLint("PrivateApi", "InlinedApi")
 class StatusBarBuilder(activity: Activity) {
-    //弱应用传入的activity
     private val weakActivity by lazy { WeakReference(activity) }
 
-    //隐藏导航栏
+    /**
+     * 隐藏导航栏
+     */
     fun setHideStatus() {
         weakActivity.get()?.window?.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
-    //透明状态栏(白电池)
+    /**
+     * 透明状态栏(白电池)
+     */
     fun setTransparentStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = weakActivity.get()!!.window
@@ -40,7 +43,9 @@ class StatusBarBuilder(activity: Activity) {
         }
     }
 
-    //透明状态栏(黑电池)
+    /**
+     * 透明状态栏(黑电池)
+     */
     fun setTransparentDarkStatus() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             val window = weakActivity.get()!!.window
@@ -53,7 +58,9 @@ class StatusBarBuilder(activity: Activity) {
         }
     }
 
-    //设置样式兼容（透明样式）
+    /**
+     * 设置样式兼容（透明样式）
+     */
     fun setTransparent(isDark: Boolean) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             if (isDark) setTransparentDarkStatus() else setTransparentStatus()
@@ -62,13 +69,17 @@ class StatusBarBuilder(activity: Activity) {
         }
     }
 
-    //设置状态栏颜色
+    /**
+     * 设置状态栏颜色
+     */
     fun setStatusBarColor(colorId: Int) {
         val window = weakActivity.get()!!.window
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) window.statusBarColor = colorId else window.statusBarColor = Color.BLACK
     }
 
-    //状态栏黑色UI(只处理安卓6.0+的系统)
+    /**
+     * 状态栏黑色UI(只处理安卓6.0+的系统)
+     */
     fun setStatusBarLightMode(isDark: Boolean) {
         val window = weakActivity.get()!!.window
         //如果大于7.0的系统，国内已经兼容谷歌黑电池的架构
@@ -84,7 +95,9 @@ class StatusBarBuilder(activity: Activity) {
         }
     }
 
-    //原生状态栏操作
+    /**
+     * 原生状态栏操作
+     */
     private fun setNormalStatusBarLightMode(window: Window, isDark: Boolean) {
         val decorView = window.decorView
         var vis = decorView.systemUiVisibility
@@ -92,7 +105,9 @@ class StatusBarBuilder(activity: Activity) {
         decorView.systemUiVisibility = vis
     }
 
-    //设置状态栏字体图标，需要MIUIV6以上
+    /**
+     * 设置状态栏字体图标，需要MIUIV6以上
+     */
     private fun setMiuiStatusBarLightMode(window: Window, isDark: Boolean) {
         val clazz = window.javaClass
         try {
@@ -105,7 +120,9 @@ class StatusBarBuilder(activity: Activity) {
         }
     }
 
-    //设置状态栏图标和魅族特定的文字风格 可以用来判断是否为Flyme用户
+    /**
+     * 设置状态栏图标和魅族特定的文字风格 可以用来判断是否为Flyme用户
+     */
     private fun setFlymeStatusBarLightMode(window: Window, isDark: Boolean) {
         try {
             val lp = window.attributes
