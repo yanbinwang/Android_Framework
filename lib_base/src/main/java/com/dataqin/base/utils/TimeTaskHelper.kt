@@ -56,7 +56,7 @@ object TimeTaskHelper {
 
     /**
      * 倒计时-开始
-     * second-秒，onFinish时调用stopCountDown销毁这次行为
+     * second-秒
      */
     @JvmStatic
     fun startCountDown(second: Long, onCountDownListener: OnCountDownListener?) {
@@ -67,7 +67,7 @@ object TimeTaskHelper {
                 override fun run() {
                     time++
                     if (time == second) {
-                        time = 0L
+                        stopCountDown()
                         weakHandler.post { onCountDownListener?.onFinish() }
                     } else {
                         weakHandler.post { onCountDownListener?.onTick(second - time) }
