@@ -28,21 +28,23 @@ import java.util.ArrayList;
  */
 @SuppressLint("ObsoleteSdkInt")
 public class AutofitHelper {
-    private boolean mEnabled;
-    private boolean mIsAutofitting;
     private int mMaxLines;
     private float mTextSize;
     private float mMinTextSize;
     private float mMaxTextSize;
     private float mPrecision;
+    private boolean mEnabled;
+    private boolean mIsAutofitting;
     private ArrayList<OnTextSizeChangeListener> mListeners;
+
     private final TextView mTextView;
     private final TextPaint mPaint;
     private final TextWatcher mTextWatcher = new AutofitTextWatcher();
     private final View.OnLayoutChangeListener mOnLayoutChangeListener = new AutofitOnLayoutChangeListener();
-    private static final boolean SPEW = false;
+
     private static final int DEFAULT_MIN_TEXT_SIZE = 8;
     private static final float DEFAULT_PRECISION = 0.5f;
+    private static final boolean SPEW = false;
     private static final String TAG = "AutoFitTextHelper";
 
     public static AutofitHelper create(TextView view) {

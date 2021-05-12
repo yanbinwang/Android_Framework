@@ -45,12 +45,12 @@ public class ProgressWheel extends View {
     private boolean shouldAnimate;
     private ProgressCallback callback;
     private RectF circleBounds = new RectF();
+
     private final int barLength = 16;
     private final int barMaxLength = 270;
     private final long pauseGrowingTime = 200;
     private final Paint barPaint = new Paint();
     private final Paint rimPaint = new Paint();
-    private static final String TAG = ProgressWheel.class.getSimpleName();
 
     public ProgressWheel(Context context) {
         super(context);
@@ -136,7 +136,6 @@ public class ProgressWheel extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         canvas.drawArc(circleBounds, 360, 360, false, rimPaint);
-
         boolean mustInvalidate = false;
         if (!shouldAnimate) {
             return;
@@ -160,7 +159,6 @@ public class ProgressWheel extends View {
 
             float from = mProgress - 90;
             float length = barLength + barExtraLength;
-
             if (isInEditMode()) {
                 from = 0;
                 length = 135;
@@ -168,7 +166,6 @@ public class ProgressWheel extends View {
             canvas.drawArc(circleBounds, from, length, false, barPaint);
         } else {
             float oldProgress = mProgress;
-
             if (mProgress != mTargetProgress) {
                 //We smoothly increase the progress bar
                 mustInvalidate = true;
@@ -251,7 +248,6 @@ public class ProgressWheel extends View {
         int paddingBottom = getPaddingBottom();
         int paddingLeft = getPaddingLeft();
         int paddingRight = getPaddingRight();
-
         if (!fillRadius) {
             // Width should equal to Height, find the min value to setup the circle
             int minValue = Math.min(layout_width - paddingLeft - paddingRight, layout_height - paddingBottom - paddingTop);
@@ -314,7 +310,6 @@ public class ProgressWheel extends View {
 
         WheelSavedState ss = (WheelSavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
-
         this.mProgress = ss.mProgress;
         this.mTargetProgress = ss.mTargetProgress;
         this.isSpinning = ss.isSpinning;
@@ -488,17 +483,18 @@ public class ProgressWheel extends View {
     }
 
     static class WheelSavedState extends BaseSavedState {
-        private float mProgress;
-        private float mTargetProgress;
-        private boolean isSpinning;
-        private float spinSpeed;
         private int barWidth;
         private int barColor;
         private int rimWidth;
         private int rimColor;
         private int circleRadius;
+        private float mProgress;
+        private float mTargetProgress;
+        private float spinSpeed;
+        private boolean isSpinning;
         private boolean linearProgress;
         private boolean fillRadius;
+
         //required field that makes Parcelables from a Parcel
         public static final Creator<WheelSavedState> CREATOR = new Creator<WheelSavedState>() {
 
