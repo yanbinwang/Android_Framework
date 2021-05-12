@@ -16,7 +16,7 @@ object TimeTaskHelper {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
     /**
-     * 延时任务
+     * 延时任务-容易造成内存泄漏
      */
     @JvmStatic
     fun schedule(millisecond: Long = 1000, onTaskListener: OnTaskListener?) {

@@ -20,6 +20,50 @@ import java.text.DecimalFormat
 object FileUtil {
 
     /**
+     * 是否安装了XXX应用
+     */
+    @JvmStatic
+    fun isAvailable(context: Context, packageName: String): Boolean {
+        val packageManager = context.packageManager
+        val packageInfos = packageManager.getInstalledPackages(0)
+        if (packageInfos != null) {
+            for (i in packageInfos.indices) {
+                val pn = packageInfos[i].packageName
+                if (pn == packageName) return true
+            }
+        }
+        return false
+    }
+
+    /**
+     * 是否Root-报错或获取失败都为未Root
+     */
+    @JvmStatic
+    fun isRoot(): Boolean {
+        var file :File
+        val paths = arrayOf("/system/bin/", "/system/xbin/", "/system/sbin/", "/sbin/", "/vendor/bin/")
+        try {
+            for (element in paths) {
+                file = File(element + "su")
+                if (file.exists()) return true
+            }
+        } catch (ignored: Exception) {
+        }
+        return false
+    }
+
+    /**
+     * 判断下载目录是否存在
+     */
+    @JvmStatic
+    @Throws(IOException::class)
+    fun isExistDir(filePath: String): String {
+        val downloadFile = File(filePath)
+        if (!downloadFile.mkdirs()) downloadFile.createNewFile()
+        return downloadFile.absolutePath
+    }
+
+    /**
      * 复制文件
      */
     @JvmStatic
@@ -30,7 +74,6 @@ object FileUtil {
     @Throws(IOException::class)
     fun copyFile(srcFile: File, destFile: File) {
         if (!destFile.exists()) destFile.createNewFile()
-
         FileInputStream(srcFile).channel.use { source ->
             FileOutputStream(destFile).channel.use { destination ->
                 destination.transferFrom(source, 0, source.size())
@@ -67,17 +110,6 @@ object FileUtil {
     }
 
     /**
-     * 判断下载目录是否存在
-     */
-    @JvmStatic
-    @Throws(IOException::class)
-    fun isExistDir(filePath: String): String {
-        val downloadFile = File(filePath)
-        if (!downloadFile.mkdirs()) downloadFile.createNewFile()
-        return downloadFile.absolutePath
-    }
-
-    /**
      * 读取文件到文本（文本，找不到文件或读取错返回null）
      */
     @JvmStatic
@@ -94,6 +126,20 @@ object FileUtil {
             }
         }
         return null
+    }
+
+    /**
+     * 转换文件大小格式
+     */
+    @JvmStatic
+    fun formatFileSize(fileS: Long): String {
+        val df = DecimalFormat("#.00")
+        return when {
+            fileS < 1024 -> df.format(fileS.toDouble()) + "B"
+            fileS < 1048576 -> df.format(fileS.toDouble() / 1024) + "K"
+            fileS < 1073741824 -> df.format(fileS.toDouble() / 1048576) + "M"
+            else -> df.format(fileS.toDouble() / 1073741824) + "G"
+        }
     }
 
     /**
@@ -114,36 +160,6 @@ object FileUtil {
     }
 
     /**
-     * 转换文件大小格式
-     */
-    @JvmStatic
-    fun formatFileSize(fileS: Long): String {
-        val df = DecimalFormat("#.00")
-        return when {
-            fileS < 1024 -> df.format(fileS.toDouble()) + "B"
-            fileS < 1048576 -> df.format(fileS.toDouble() / 1024) + "K"
-            fileS < 1073741824 -> df.format(fileS.toDouble() / 1048576) + "M"
-            else -> df.format(fileS.toDouble() / 1073741824) + "G"
-        }
-    }
-
-    /**
-     * 是否安装了XXX应用
-     */
-    @JvmStatic
-    fun isAvailable(context: Context, packageName: String): Boolean {
-        val packageManager = context.packageManager
-        val packageInfos = packageManager.getInstalledPackages(0)
-        if (packageInfos != null) {
-            for (i in packageInfos.indices) {
-                val pn = packageInfos[i].packageName
-                if (pn == packageName) return true
-            }
-        }
-        return false
-    }
-
-    /**
      * 获取app的图标
      */
     @JvmStatic
@@ -151,7 +167,7 @@ object FileUtil {
         try {
             val drawable = context.packageManager.getApplicationIcon(Constants.APPLICATION_ID)
             val bitmap = SoftReference(Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565))
-            val canvas = Canvas(bitmap.get()!!)
+            val canvas = Canvas(bitmap.get())
             //canvas.setBitmap(bitmap);
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             drawable.draw(canvas)
@@ -165,7 +181,7 @@ object FileUtil {
      * 获取安装跳转的行为
      */
     @JvmStatic
-    private fun getSetupApk(context: Context, apkFilePath: String): Intent {
+    fun getSetupApk(context: Context, apkFilePath: String): Intent {
         val intent = Intent(Intent.ACTION_VIEW)
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -178,6 +194,22 @@ object FileUtil {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         return intent
+    }
+
+    /**
+     * 获取手机cpu信息-报错或获取失败显示暂无
+     */
+    @JvmStatic
+    fun getCpuInfo(): String {
+        try {
+            val fr = FileReader("/proc/cpuinfo")
+            val br = BufferedReader(fr)
+            val text = br.readLine()
+            val array = text.split(":\\s+".toRegex(), 2).toTypedArray()
+            return array[1]
+        } catch (ignored: Exception) {
+        }
+        return "暂无"
     }
 
 }
