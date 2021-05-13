@@ -85,7 +85,7 @@ object FileUtil {
      * 删除文件
      */
     @JvmStatic
-    fun deleteFile(filePath: String?) {
+    fun deleteFile(filePath: String) {
         val file = File(filePath)
         if (file.isFile && file.exists()) file.delete()
     }
