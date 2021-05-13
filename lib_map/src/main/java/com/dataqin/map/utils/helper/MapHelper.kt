@@ -50,9 +50,7 @@ object MapHelper {
         this.initialize = initialize
         //默认地图经纬度-杭州
         var json = Constants.LATLNG_JSON
-        if (TextUtils.isEmpty(json)) {
-            json = "{latitude:30.2780010000,longitude:120.1680690000}"
-        }
+        if (TextUtils.isEmpty(json)) json = "{latitude:30.2780010000,longitude:120.1680690000}"
         mapLatLng = GsonUtil.jsonToObj(json!!, LatLng::class.java)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
         mapView.onCreate(savedInstanceState)
@@ -60,9 +58,7 @@ object MapHelper {
         mapView.viewTreeObserver.addOnGlobalLayoutListener {
             val child = mapView.getChildAt(0) as ViewGroup //地图框架
             val logo = child.getChildAt(2)
-            if (null != logo) {
-                logo.visibility = View.GONE //隐藏logo
-            }
+            if (null != logo) logo.visibility = View.GONE //隐藏logo
         }
         aMap?.isTrafficEnabled = true //显示实时交通状况
         aMap?.uiSettings?.isRotateGesturesEnabled = false //屏蔽旋转
@@ -77,13 +73,9 @@ object MapHelper {
                 moveCamera()
                 var granted = true
                 for (index in Permission.Group.LOCATION.indices) {
-                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) {
-                        granted = false
-                    }
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) granted = false
                 }
-                if (granted) {
-                    location(mapView.context)
-                }
+                if (granted) location(mapView.context)
             }
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)

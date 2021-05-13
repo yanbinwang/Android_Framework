@@ -30,24 +30,24 @@ object CoordinateTransUtil {
     @JvmStatic
     fun getRange(lon: Double, lat: Double, r: Int): DoubleArray {
         val range = DoubleArray(4)
-        // 角度转换为弧度
+        //角度转换为弧度
         val ns = lat * DEF_PI180
         val sinNs = sin(ns)
         val cosNs = cos(ns)
         val cosTmp = cos(r / DEF_R)
-        // 经度的差值
+        //经度的差值
         val lonDif = acos((cosTmp - sinNs * sinNs) / (cosNs * cosNs)) / DEF_PI180
-        // 保存经度
+        //保存经度
         range[0] = lon - lonDif
         range[1] = lon + lonDif
         val m = 0 - 2 * cosTmp * sinNs
         val n = cosTmp * cosTmp - cosNs * cosNs
         val o1 = (0 - m - sqrt(m * m - 4 * n)) / 2
         val o2 = (0 - m + sqrt(m * m - 4 * n)) / 2
-        // 纬度
+        //纬度
         val lat1 = 180 / DEF_PI * asin(o1)
         val lat2 = 180 / DEF_PI * asin(o2)
-        // 保存
+        //保存
         range[2] = lat1
         range[3] = lat2
         return range
@@ -118,7 +118,7 @@ object CoordinateTransUtil {
     @JvmStatic
     fun randomLatLng(MinLon: Double, MaxLon: Double, MinLat: Double, MaxLat: Double): LatLng {
         var bigDecimal = BigDecimal(Math.random() * (MaxLon - MinLon) + MinLon)
-        val lon = bigDecimal.setScale(6, BigDecimal.ROUND_HALF_UP).toDouble() // 小数后6位
+        val lon = bigDecimal.setScale(6, BigDecimal.ROUND_HALF_UP).toDouble() //小数后6位
         bigDecimal = BigDecimal(Math.random() * (MaxLat - MinLat) + MinLat)
         val lat = bigDecimal.setScale(6, BigDecimal.ROUND_HALF_UP).toDouble()
         return LatLng(lat, lon)
@@ -141,7 +141,7 @@ object CoordinateTransUtil {
                 latLng.add(newLatLng)
             }
         }
-        // 如果随机生成的数组个数为0，则再随机添加一个距离中心点更近的坐标
+        //如果随机生成的数组个数为0，则再随机添加一个距离中心点更近的坐标
         if (latLng.size == 1) {
             latLng.add(LatLng(lat + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0), lng + (if (Math.random() > 0.5) 1 else -1) / 10.0.pow(3.0)))
         }

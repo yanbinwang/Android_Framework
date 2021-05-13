@@ -34,11 +34,7 @@ class MapReceiver : BroadcastReceiver() {
             if (-1 != netWorkState) {
                 var granted = true
                 for (index in Permission.Group.LOCATION.indices) {
-                    if(null != context){
-                        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context, Permission.Group.LOCATION[index])) {
-                            granted = false
-                        }
-                    }
+                    if(null != context) if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context, Permission.Group.LOCATION[index])) granted = false
                 }
                 if (granted) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
             }
