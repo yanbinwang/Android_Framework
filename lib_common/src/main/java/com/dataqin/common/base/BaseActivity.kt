@@ -59,7 +59,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
             try {
                 presenter = pClass.newInstance()
                 presenter?.initialize(this, this, this)
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             }
         }
         return presenter as P
@@ -74,7 +74,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                 val method = vbClass?.getDeclaredMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, layoutInflater) as VB
                 setContentView(binding.root)
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             }
         }
         initView()

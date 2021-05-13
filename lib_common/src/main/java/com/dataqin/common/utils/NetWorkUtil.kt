@@ -41,7 +41,7 @@ object NetWorkUtil {
     fun isWifi(): Boolean {
         try {
             return connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
         return false
     }

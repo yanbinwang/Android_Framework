@@ -48,7 +48,7 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
                 val vbClass = type.actualTypeArguments[0] as? Class<VB>
                 val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, weakActivity?.get()?.layoutInflater) as VB
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             }
             contentView = binding.root
             isFocusable = true

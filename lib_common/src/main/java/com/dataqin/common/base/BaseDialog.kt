@@ -41,7 +41,7 @@ abstract class BaseDialog<VB : ViewBinding> : Dialog {
                 val vbClass = type.actualTypeArguments[0] as? Class<VB>
                 val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, layoutInflater) as VB
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             }
             setContentView(binding.root, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
             if (anim) {

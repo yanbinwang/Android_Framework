@@ -112,7 +112,7 @@ object CameraHelper {
                 if ((weakActivity.get()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
                     MediaPlayer.create(weakActivity.get(), Uri.parse("file:///system/media/audio/ui/camera_focus.ogg")).start()
                 }
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             }
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {

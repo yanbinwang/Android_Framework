@@ -152,8 +152,7 @@ object ConfigHelper {
                 }
                 return res1.toString()
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
         return null
     }

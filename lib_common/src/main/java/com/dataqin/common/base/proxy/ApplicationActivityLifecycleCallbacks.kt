@@ -86,8 +86,7 @@ class ApplicationActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
             } else {
                 e("OnClickListenerProxy", "setted proxy listener ")
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
     }
 

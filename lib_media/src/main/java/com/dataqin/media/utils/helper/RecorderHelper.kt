@@ -40,7 +40,7 @@ object RecorderHelper {
                 prepare()
                 start()
             }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         } finally {
             onRecorderListener?.onStartRecord(filePath)
         }
@@ -91,7 +91,7 @@ object RecorderHelper {
         try {
             if (isPlaying()) return
             mediaPlayer.start()
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
     }
 
@@ -103,7 +103,7 @@ object RecorderHelper {
         try {
             if (!isPlaying()) return
             mediaPlayer.pause()
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
     }
 

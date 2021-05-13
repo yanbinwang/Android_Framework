@@ -123,7 +123,7 @@ object DateUtil {
                 comparedDate.time < comparedDate2.time -> -1//日程时间小于系统时间
                 else -> 0
             }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
         return 0
     }
