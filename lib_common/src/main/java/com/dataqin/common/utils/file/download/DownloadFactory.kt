@@ -8,7 +8,7 @@ import com.dataqin.common.BaseApplication
 import com.dataqin.common.R
 import com.dataqin.common.bus.RxSchedulers
 import com.dataqin.common.http.repository.ResourceSubscriber
-import com.dataqin.common.subscribe.CommonSubscribe.getDownloadApi
+import com.dataqin.common.subscribe.CommonSubscribe
 import com.dataqin.common.utils.file.FileUtil
 import okhttp3.ResponseBody
 import java.io.File
@@ -40,9 +40,9 @@ class DownloadFactory private constructor() {
             return
         }
         FileUtil.deleteDir(filePath)
-        getDownloadApi(downloadUrl).compose(RxSchedulers.ioMain())
+        CommonSubscribe.getDownloadApi(downloadUrl)
+            .compose(RxSchedulers.ioMain())
             .subscribeWith(object : ResourceSubscriber<ResponseBody>() {
-
                 override fun onStart() {
                     super.onStart()
                     onDownloadListener?.onStart()
