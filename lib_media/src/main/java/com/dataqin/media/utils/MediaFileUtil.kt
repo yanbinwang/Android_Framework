@@ -32,7 +32,7 @@ object MediaFileUtil {
         when (type) {
             //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
-                prefix += "Photo"
+                prefix += "Image"
                 suffix = ".jpg"
             }
             //录像
@@ -47,7 +47,7 @@ object MediaFileUtil {
             }
             //录屏
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> {
-                prefix += "Screen"
+                prefix += "PlayList"
                 suffix = ".mp4"
             }
         }
