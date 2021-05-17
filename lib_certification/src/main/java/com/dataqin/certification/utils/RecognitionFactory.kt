@@ -42,9 +42,7 @@ class RecognitionFactory {
     /**
      * 先调取本地服务器接口取号需要用到bizCode
      */
-    fun getBizCode(context: Context): String {
-        return ServiceFactory.build().getBizCode(context)
-    }
+    fun getBizCode(context: Context) = ServiceFactory.build().getBizCode(context)
 
     /**
      * 唤起支付宝人脸识别用到的bizCode则是服务器下发的

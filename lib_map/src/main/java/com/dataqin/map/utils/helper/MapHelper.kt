@@ -87,25 +87,19 @@ object MapHelper {
      * 加载
      */
     @JvmStatic
-    fun resume() {
-        mapView?.onResume()
-    }
+    fun resume() = mapView?.onResume()
 
     /**
      * 暂停
      */
     @JvmStatic
-    fun pause() {
-        mapView?.onPause()
-    }
+    fun pause() = mapView?.onPause()
 
     /**
      * 存储-保存地图当前的状态
      */
     @JvmStatic
-    fun saveInstanceState(outState: Bundle) {
-        mapView?.onSaveInstanceState(outState)
-    }
+    fun saveInstanceState(outState: Bundle) = mapView?.onSaveInstanceState(outState)
 
     /**
      * 销毁
