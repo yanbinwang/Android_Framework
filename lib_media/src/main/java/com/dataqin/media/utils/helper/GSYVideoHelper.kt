@@ -120,17 +120,13 @@ object GSYVideoHelper {
      * 写在系统的onPause之前
      */
     @JvmStatic
-    fun onPause() {
-        player?.currentPlayer?.onVideoPause()
-    }
+    fun onPause() = player?.currentPlayer?.onVideoPause()
 
     /**
      * 写在系统的onResume之前
      */
     @JvmStatic
-    fun onResume() {
-        player?.currentPlayer?.onVideoResume(false)
-    }
+    fun onResume() = player?.currentPlayer?.onVideoResume(false)
 
     /**
      * 写在系统的onDestroy之后
