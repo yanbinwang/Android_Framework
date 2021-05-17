@@ -5,6 +5,12 @@ import java.math.BigDecimal
 /**
  * author:wyb
  * 计算工具类
+ * kotlin中使用其自带的方法:
+ * （1）a + b -> a.plus(b)
+ * （2）a - b -> a.minus(b)
+ * （3）a * b -> a.times(b)
+ * （4）a / b -> a.div(b)
+ * （5）a % b -> a.mod(b)
  */
 object CalculationUtil {
 
@@ -12,7 +18,7 @@ object CalculationUtil {
      * 加法运算
      */
     @JvmStatic
-    fun add(v1: Double, v2: Double): Double {
+    fun plus(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
         val b2 = BigDecimal(v2.toString())
         return b1.add(b2).toDouble()
@@ -22,7 +28,7 @@ object CalculationUtil {
      * 减法运算
      */
     @JvmStatic
-    fun sub(v1: Double, v2: Double): Double {
+    fun minus(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
         val b2 = BigDecimal(v2.toString())
         return b1.subtract(b2).toDouble()
@@ -32,7 +38,7 @@ object CalculationUtil {
      * 乘法运算
      */
     @JvmStatic
-    fun mul(v1: Double, v2: Double): Double {
+    fun times(v1: Double, v2: Double): Double {
         val b1 = BigDecimal(v1.toString())
         val b2 = BigDecimal(v2.toString())
         return b1.multiply(b2).toDouble()

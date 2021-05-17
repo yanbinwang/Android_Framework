@@ -64,8 +64,6 @@ class MyApplication : BaseApplication() {
                 }
             }
         }
-//        //初始化个推
-//        PushManager.getInstance().initialize(this)
     }
 
 }

@@ -15,7 +15,7 @@ import android.view.animation.ScaleAnimation
 object AnimationLoader {
 
     @JvmStatic
-    fun getInAnimation(context: Context?): AnimationSet {
+    fun getInAnimation(context: Context): AnimationSet {
         val inAnimation = AnimationSet(context, null)
         val alpha = AlphaAnimation(0.0f, 1.0f)
         alpha.duration = 90
@@ -35,7 +35,7 @@ object AnimationLoader {
     }
 
     @JvmStatic
-    fun getOutAnimation(context: Context?): AnimationSet {
+    fun getOutAnimation(context: Context): AnimationSet {
         val outAnimation = AnimationSet(context, null)
         val alpha = AlphaAnimation(1.0f, 0.0f)
         alpha.duration = 150

@@ -43,8 +43,7 @@ open class BaseApplication : Application() {
             AlbumConfig.newBuilder(this)
                 .setAlbumLoader(GlideAlbumLoader()) //设置Album加载器。
                 .setLocale(Locale.CHINA) //强制设置在任何语言下都用中文显示。
-                .build()
-        )
+                .build())
         //x5内核初始化接口
         QbSdk.initX5Environment(applicationContext, object : PreInitCallback {
             override fun onViewInitFinished(arg0: Boolean) {
@@ -56,8 +55,7 @@ open class BaseApplication : Application() {
         })
         //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         if (BuildConfig.ISDEBUG) {
-            //打印日志
-            ARouter.openLog()
+            ARouter.openLog()//打印日志
             ARouter.openDebug()
         }
         //阿里路由跳转初始化

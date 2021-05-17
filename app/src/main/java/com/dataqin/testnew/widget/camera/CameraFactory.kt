@@ -22,14 +22,14 @@ import java.util.*
 
 /**
  *  Created by wangyanbin
- *  相机帮助类
+ *  相机帮助类-基于camera实现，部分手机存在相机对焦问题
  */
 class CameraFactory {
-    private var isRecording = false
-    private var safeToTakePicture = true
-    private var cameraId = Camera.CameraInfo.CAMERA_FACING_BACK //前置或后置摄像头
-    private var mCamera: Camera? = null
+    private var safe = true
+    private var recording = false
     private var mMediaRecorder: MediaRecorder? = null
+    private var mCamera: Camera? = null
+    private var cameraId = CameraInfo.CAMERA_FACING_BACK //前置或后置摄像头
     private val TAG = "CameraInterface"
     var onCameraListener: OnCameraListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
@@ -111,7 +111,7 @@ class CameraFactory {
     /**
      * 旋转镜头
      */
-    fun switchCamera() {
+    fun toggleCamera() {
         if (getCamera() != null) {
             val cameraInfo = CameraInfo()
             Camera.getCameraInfo(cameraId, cameraInfo)
@@ -168,12 +168,12 @@ class CameraFactory {
      * 开始拍照
      */
     fun takePicture() {
-        if (mCamera != null && safeToTakePicture) {
-            safeToTakePicture = false
+        if (mCamera != null && safe) {
+            safe = false
             mCamera?.takePicture(null, null, object : Camera.PictureCallback {
                 override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
                     val pictureFile = MediaFileUtil.getOutputMediaFile(FileColumns.MEDIA_TYPE_IMAGE)
-                    safeToTakePicture = true
+                    safe = true
                     if (pictureFile == null) {
                         LogUtil.e(TAG, "Error creating media file, check storage permissions")
                         onCameraListener?.onTakePictureFail(data)
@@ -203,13 +203,13 @@ class CameraFactory {
      * 开启或停止录像
      */
     fun startOrStopRecorder(surface: Surface?) {
-        if (isRecording) {
+        if (recording) {
             stopRecorder()
         } else {
             val path = prepareVideoRecorder(surface)
             if (!TextUtils.isEmpty(path)) {
                 mMediaRecorder?.start()
-                isRecording = true
+                recording = true
                 onVideoRecordListener?.onStartRecorder(path)
             } else {
                 releaseMediaRecorder()
@@ -257,7 +257,7 @@ class CameraFactory {
      */
     fun startRecorder(surface: Surface?) {
         LogUtil.i("startRecorder")
-        if (isRecording) return
+        if (recording) return
         startOrStopRecorder(surface)
     }
 
@@ -266,7 +266,7 @@ class CameraFactory {
      */
     fun stopRecorder() {
         LogUtil.i("stopRecorder")
-        if (!isRecording) return
+        if (!recording) return
         try {
             mMediaRecorder?.setOnErrorListener(null)
             mMediaRecorder?.setOnInfoListener(null)
@@ -277,7 +277,7 @@ class CameraFactory {
         }
         releaseMediaRecorder()
         mCamera?.lock()
-        isRecording = false
+        recording = false
         onVideoRecordListener?.onStopRecorder()
     }
 
@@ -285,7 +285,7 @@ class CameraFactory {
      * 销毁相机
      */
     fun releaseCamera() {
-        if (isRecording) stopRecorder()
+        if (recording) stopRecorder()
         if (mCamera != null) {
             mCamera?.release()
             mCamera = null
