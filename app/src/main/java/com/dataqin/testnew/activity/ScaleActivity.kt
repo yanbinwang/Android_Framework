@@ -49,7 +49,6 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
             list.add(img)
         }
         binding.svpContainer.adapter = ScaleAdapter(list)
-        binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
     }
 
     override fun showDialog(flag: Boolean) {
@@ -64,8 +63,11 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
     override fun hideDialog() {
         if (fileList.size > 1) {
             count++
-            if (count >= fileList.size - 1) messageDialog.hide()
-        }
+            if (count >= fileList.size - 1) {
+                messageDialog.hide()
+                binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
+            }
+        } else binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
     }
 
     override fun finish() {
