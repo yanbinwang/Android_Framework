@@ -77,7 +77,7 @@ class ScreenRecordService : Service() {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
-            setVideoEncodingBitRate(if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) getWidth(Constants.SCREEN_WIDTH) * getHeight(Constants.SCREEN_HEIGHT) else Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
+            setVideoEncodingBitRate(if (Build.VERSION.SDK_INT > Build.VERSION_CODES.P) 5 * getWidth(Constants.SCREEN_WIDTH) * getHeight(Constants.SCREEN_HEIGHT) else 5 * Constants.SCREEN_WIDTH * Constants.SCREEN_HEIGHT)
             setVideoEncoder(MediaRecorder.VideoEncoder.H264)
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
             //高版本手机分辨率会有问题
@@ -107,18 +107,19 @@ class ScreenRecordService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        virtualDisplay?.release()
-        virtualDisplay = null
         try {
+            virtualDisplay?.release()
+            virtualDisplay = null
             mediaRecorder?.stop()
             mediaRecorder?.reset()
             mediaRecorder?.release()
             mediaRecorder = null
+            mediaProjection?.stop()
+            mediaProjection = null
         } catch (ignored: Exception) {
+        } finally {
+            RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE_CREATE, filePath))
         }
-        mediaProjection?.stop()
-        mediaProjection = null
-        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE_CREATE, filePath))
     }
 
 }

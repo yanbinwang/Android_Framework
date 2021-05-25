@@ -3,6 +3,9 @@ package com.dataqin.media.utils
 /**
  *  Created by wangyanbin
  *  安卓10录屏尺寸工具类
+ *  部分手机对屏幕大小随意修改，如通过代码获取屏幕宽高，传入录屏类中会报错
+ *  针对此类问题，在录屏时对屏幕的宽高，录屏的画布，屏幕分辨率等都做一定的换算修正
+ *  更改为谷歌官方公布的比例
  */
 object MobileSizeUtil {
 
