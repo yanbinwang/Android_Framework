@@ -48,19 +48,17 @@ object Constants {
     //MMKV存储字段
     const val KEY_INITIAL = "keyInitial" //初次安装
     const val KEY_USER_MODEL = "keyUserModel" //用户类json
+
     //系统广播
-    const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
-    const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
-
-    const val APP_MAP_CONNECTIVITY = "com.bitnew.tech.APP_MAP_CONNECTIVITY"//地图网络状态
-    const val APP_SCREEN_FILE_CREATE = "com.bitnew.tech.APP_SCREEN_FILE_CREATE"//录屏文件创建
-
-    const val APP_PAY_SUCCESS = "com.bitnew.tech.APP_PAY_SUCCESS" //支付成功广播字段
-    const val APP_PAY_FAILURE = "com.bitnew.tech.APP_PAY_FAILURE" //支付失败广播字段
-//    const val APP_PAY_CANCEL = "com.bitnew.tech.APP_PAY_CANCEL" //支付取消广播字段
-//    const val APP_PAY_ERROR = "com.bitnew.tech.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
-
-    const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
-    const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
-    const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败
+    const val APP_USER_LOGIN = "$APPLICATION_ID.APP_USER_LOGIN"//用户登录
+    const val APP_USER_LOGIN_OUT = "$APPLICATION_ID.APP_USER_LOGIN_OUT"//用户注销
+    const val APP_MAP_CONNECTIVITY = "$APPLICATION_ID.APP_MAP_CONNECTIVITY"//地图网络状态
+    const val APP_SCREEN_FILE_CREATE = "$APPLICATION_ID.APP_SCREEN_FILE_CREATE"//录屏文件创建
+    const val APP_PAY_SUCCESS = "$APPLICATION_ID.APP_PAY_SUCCESS" //支付成功广播字段
+    const val APP_PAY_FAILURE = "$APPLICATION_ID.APP_PAY_FAILURE" //支付失败广播字段
+//    const val APP_PAY_CANCEL = "$APPLICATION_ID.APP_PAY_CANCEL" //支付取消广播字段
+//    const val APP_PAY_ERROR = "$APPLICATION_ID.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
+    const val APP_SHARE_SUCCESS = "$APPLICATION_ID.APP_SHARE_SUCCESS"//分享成功
+    const val APP_SHARE_CANCEL = "$APPLICATION_ID.APP_SHARE_CANCEL"//分享取消
+    const val APP_SHARE_FAILURE = "$APPLICATION_ID.APP_SHARE_FAILURE"//分享失败
 }
