@@ -13,15 +13,16 @@ import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dataqin.base.utils.DecimalInputFilter
 import com.dataqin.common.R
+import com.dataqin.common.constant.Constants
 import java.text.DecimalFormat
 
-/**
- *  按钮，控件行为工具类
- */
+//------------------------------------按钮，控件行为工具类------------------------------------
 
 /**
  * 震动
@@ -41,6 +42,21 @@ fun View.setVibrate(milliseconds: Long) {
  */
 fun View.openWebsite(url: String) {
     context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+}
+
+/**
+ * 空出状态栏高度
+ */
+fun RelativeLayout.rlTopMargin(){
+    val params = layoutParams as RelativeLayout.LayoutParams
+    params.topMargin = Constants.STATUS_BAR_HEIGHT
+    layoutParams = params
+}
+
+fun LinearLayout.llTopMargin(){
+    val params = layoutParams as LinearLayout.LayoutParams
+    params.topMargin = Constants.STATUS_BAR_HEIGHT
+    layoutParams = params
 }
 
 /**
