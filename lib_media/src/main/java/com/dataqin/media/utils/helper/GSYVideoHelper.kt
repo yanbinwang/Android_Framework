@@ -26,7 +26,7 @@ import java.lang.ref.WeakReference
  */
 @SuppressLint("StaticFieldLeak")
 object GSYVideoHelper {
-    private var retryNum = 0
+    private var retryTimes = 0
     private var weakActivity: WeakReference<Activity>? = null
     private var imgCover: ImageView? = null
     private var player: StandardGSYVideoPlayer? = null
@@ -73,7 +73,7 @@ object GSYVideoHelper {
      */
     @JvmStatic
     fun setUrl(url: String) {
-        retryNum = 0
+        retryTimes = 0
         //加载图片
         if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
         if (null != player) {
@@ -94,13 +94,13 @@ object GSYVideoHelper {
 
                     override fun onPlayError(url: String?, vararg objects: Any?) {
                         super.onPlayError(url, *objects)
-                        if (retryNum != 3) {
+                        if (retryTimes != 3) {
                             //播放失败切换内核
                             GSYVideoType.enableMediaCodecTexture()
                             PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
                             CacheFactory.setCacheManager(ProxyCacheManager::class.java)
                             player?.startPlayLogic()
-                            retryNum++
+                            retryTimes++
                         }
                     }
                 }).build(player)
