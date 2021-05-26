@@ -1,10 +1,5 @@
 package com.dataqin.media.utils.helper
 
-import android.app.Activity
-import android.content.Context
-import android.media.AudioManager
-import android.media.MediaPlayer
-import android.net.Uri
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
@@ -16,7 +11,6 @@ import com.otaliastudios.cameraview.CameraView
 import com.otaliastudios.cameraview.PictureResult
 import com.otaliastudios.cameraview.VideoResult
 import com.otaliastudios.cameraview.controls.*
-import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
@@ -92,9 +86,7 @@ object CameraHelper {
                             onTakePictureListener?.onFailed()
                         }
                     }
-                } else {
-                    onTakePictureListener?.onFailed()
-                }
+                } else onTakePictureListener?.onFailed()
             }
         })
     }
@@ -103,17 +95,9 @@ object CameraHelper {
      * 开始录像
      */
     @JvmStatic
-    fun startRecorder(activity: Activity? = null) {
-        val weakActivity = WeakReference(activity)
+    fun startRecorder() {
         val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO)
         if (null != videoFile) {
-            try {
-                //设置一下声音
-                if ((weakActivity.get()?.getSystemService(Context.AUDIO_SERVICE) as AudioManager).getStreamVolume(AudioManager.STREAM_NOTIFICATION) != 0) {
-                    MediaPlayer.create(weakActivity.get(), Uri.parse("file:///system/media/audio/ui/camera_focus.ogg")).start()
-                }
-            } catch (ignored: Exception) {
-            }
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {
                 //正式完成录制的回调，获取路径
@@ -133,9 +117,7 @@ object CameraHelper {
 //                    onVideoRecordListener?.onStopRecorder()
 //                }
             })
-        } else {
-            onVideoRecordListener?.onStopRecorder(null)
-        }
+        } else onVideoRecordListener?.onStopRecorder(null)
     }
 
     /**
