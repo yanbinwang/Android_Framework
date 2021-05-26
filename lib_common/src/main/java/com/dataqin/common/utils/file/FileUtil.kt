@@ -7,6 +7,7 @@ import android.graphics.Canvas
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import androidx.core.content.FileProvider
 import com.dataqin.common.constant.Constants
 import java.io.*
@@ -51,6 +52,12 @@ object FileUtil {
         }
         return false
     }
+
+    /**
+     * 判断手机是否开启开发者模式
+     */
+    @JvmStatic
+    fun isAdbEnabled(context: Context) = (Settings.Secure.getInt(context.contentResolver, Settings.Global.ADB_ENABLED, 0) > 0)
 
     /**
      * 判断下载目录是否存在
