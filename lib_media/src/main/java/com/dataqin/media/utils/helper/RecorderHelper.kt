@@ -6,7 +6,6 @@ import android.os.Build
 import android.provider.MediaStore
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnRecorderListener
-import java.io.IOException
 
 /**
  *  Created by wangyanbin
@@ -25,7 +24,7 @@ object RecorderHelper {
         var filePath = ""
         try {
             val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
-            filePath = destDir!!.path
+            filePath = destDir?.path ?: ""
             mediaRecorder = MediaRecorder()
             mediaRecorder?.apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)//设置麦克风
@@ -52,12 +51,15 @@ object RecorderHelper {
     @JvmStatic
     fun stopRecord() {
         try {
-            mediaRecorder?.stop()
-            mediaRecorder?.reset()
-            mediaRecorder?.release()
-        } catch (e: RuntimeException) {
+            mediaRecorder?.apply {
+                stop()
+                reset()
+                release()
+            }
+        } catch (ignored: Exception) {
+        } finally {
+            onRecorderListener?.onStopRecord()
         }
-        onRecorderListener?.onStopRecord()
     }
 
     /**
@@ -71,7 +73,7 @@ object RecorderHelper {
                 isLooping = true //设置是否循环播放
                 prepareAsync()
             }
-        } catch (e: IOException) {
+        } catch (ignored: Exception) {
         }
     }
 
@@ -118,7 +120,7 @@ object RecorderHelper {
                 reset()
                 release()
             }
-        } catch (e: RuntimeException) {
+        } catch (ignored: Exception) {
         }
     }
 
