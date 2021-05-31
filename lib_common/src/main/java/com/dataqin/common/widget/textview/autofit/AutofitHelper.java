@@ -14,11 +14,11 @@ import android.text.method.SingleLineTransformationMethod;
 import android.text.method.TransformationMethod;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.TextView;
 
+import com.dataqin.base.utils.LogUtil;
 import com.dataqin.common.R;
 
 import java.util.ArrayList;
@@ -121,7 +121,7 @@ public class AutofitHelper {
             layout = new StaticLayout(text, paint, (int)targetWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
             lineCount = layout.getLineCount();
         }
-        if (SPEW) Log.d(TAG, "low=" + low + " high=" + high + " mid=" + mid + " target=" + targetWidth + " maxLines=" + maxLines + " lineCount=" + lineCount);
+        if (SPEW) LogUtil.d(TAG, "low=" + low + " high=" + high + " mid=" + mid + " target=" + targetWidth + " maxLines=" + maxLines + " lineCount=" + lineCount);
         if (lineCount > maxLines) {
             if ((high - low) < precision) {
                 return low;
