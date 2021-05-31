@@ -161,7 +161,7 @@ public class AutofitHelper {
     private static int getMaxLines(TextView view) {
         int maxLines = -1;
         TransformationMethod method = view.getTransformationMethod();
-        if (method != null && method instanceof SingleLineTransformationMethod) {
+        if (method instanceof SingleLineTransformationMethod) {
             maxLines = 1;
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             maxLines = view.getMaxLines();
