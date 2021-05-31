@@ -16,12 +16,12 @@ object StringUtil {
      * 如果值为空，展示默认值
      */
     @JvmStatic
-    fun processedString(source: String?, defaultStr: String?): String {
+    fun processedString(source: String?, defaultStr: String = ""): String {
         return if (source == null) {
-            defaultStr!!
+            defaultStr
         } else {
             if (source.trim { it <= ' ' }.isEmpty()) {
-                defaultStr!!
+                defaultStr
             } else {
                 source
             }
@@ -83,9 +83,7 @@ object StringUtil {
      */
     @JvmStatic
     fun getFormat(doubleValue: String, decimalPlace: Int): String {
-        if (TextUtils.isEmpty(doubleValue)) {
-            return ""
-        }
+        if (TextUtils.isEmpty(doubleValue)) return ""
         val value = java.lang.Double.parseDouble(doubleValue)
         val format = StringBuilder()
         for (i in 0 until decimalPlace) {

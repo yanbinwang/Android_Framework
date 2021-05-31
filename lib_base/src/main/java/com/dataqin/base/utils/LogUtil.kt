@@ -62,18 +62,12 @@ object LogUtil {
 
     @JvmStatic
     fun m() {
-        if (debug) {
-            val methodName = Exception().stackTrace[1].methodName
-            Log.v(TAG, methodName)
-        }
+        if (debug) Log.v(TAG, Exception().stackTrace[1].methodName)
     }
 
     @JvmStatic
     fun m(msg: String) {
-        if (debug) {
-            val methodName = Exception().stackTrace[1].methodName
-            Log.v(TAG, "$methodName:    $msg")
-        }
+        if (debug) Log.v(TAG, "${Exception().stackTrace[1].methodName}:    $msg")
     }
 
 }
