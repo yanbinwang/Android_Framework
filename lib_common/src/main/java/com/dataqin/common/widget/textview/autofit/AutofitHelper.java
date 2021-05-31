@@ -30,9 +30,9 @@ import java.util.ArrayList;
 public class AutofitHelper {
     private int mMaxLines;
     private float mTextSize;
+    private float mPrecision;
     private float mMinTextSize;
     private float mMaxTextSize;
-    private float mPrecision;
     private boolean mEnabled;
     private boolean mIsAutofitting;
     private ArrayList<OnTextSizeChangeListener> mListeners;
@@ -87,14 +87,12 @@ public class AutofitHelper {
         if (method != null) {
             text = method.getTransformation(text, view);
         }
-
         Context context = view.getContext();
         Resources r = Resources.getSystem();
         DisplayMetrics displayMetrics;
         float size = maxTextSize;
         float high = size;
         float low = 0;
-
         if (context != null) {
             r = context.getResources();
         }
@@ -116,7 +114,6 @@ public class AutofitHelper {
         int lineCount = 1;
         StaticLayout layout = null;
         paint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_PX, mid, displayMetrics));
-
         if (maxLines != 1) {
             layout = new StaticLayout(text, paint, (int)targetWidth, Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, true);
             lineCount = layout.getLineCount();
@@ -172,7 +169,6 @@ public class AutofitHelper {
     private AutofitHelper(TextView view) {
         final Context context = view.getContext();
         float scaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-
         mTextView = view;
         mPaint = new TextPaint();
         setRawTextSize(view.getTextSize());

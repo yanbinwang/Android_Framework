@@ -19,8 +19,8 @@ import java.util.WeakHashMap;
  */
 @SuppressLint("CustomViewStyleable")
 public class AutofitLayout extends FrameLayout {
-    private float mMinTextSize, mPrecision;
     private boolean mEnabled;
+    private float mMinTextSize, mPrecision;
     private final WeakHashMap<View, AutofitHelper> mHelpers = new WeakHashMap<>();
 
     public AutofitLayout(Context context) {
@@ -42,10 +42,9 @@ public class AutofitLayout extends FrameLayout {
         boolean sizeToFit = true;
         int minTextSize = -1;
         float precision = -1;
-
         if (attrs != null) {
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AutofitTextView, defStyle, 0);
-            sizeToFit = ta.getBoolean(R.styleable.AutofitTextView_sizeToFit, sizeToFit);
+            sizeToFit = ta.getBoolean(R.styleable.AutofitTextView_sizeToFit, true);
             minTextSize = ta.getDimensionPixelSize(R.styleable.AutofitTextView_minTextSize, minTextSize);
             precision = ta.getFloat(R.styleable.AutofitTextView_precision, precision);
             ta.recycle();

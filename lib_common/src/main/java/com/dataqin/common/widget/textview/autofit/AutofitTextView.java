@@ -69,10 +69,6 @@ public class AutofitTextView extends TextView implements AutofitHelper.OnTextSiz
     public void onTextSizeChange(float textSize, float oldTextSize) {
     }
 
-    public AutofitHelper getAutofitHelper() {
-        return mHelper;
-    }
-
     public boolean isSizeToFit() {
         return mHelper.isEnabled();
     }
@@ -85,6 +81,10 @@ public class AutofitTextView extends TextView implements AutofitHelper.OnTextSiz
         mHelper.setEnabled(sizeToFit);
     }
 
+    public void setMinTextSize(int minSize) {
+        mHelper.setMinTextSize(TypedValue.COMPLEX_UNIT_SP, minSize);
+    }
+
     public void setMaxTextSize(float size) {
         mHelper.setMaxTextSize(size);
     }
@@ -93,28 +93,28 @@ public class AutofitTextView extends TextView implements AutofitHelper.OnTextSiz
         mHelper.setMaxTextSize(unit, size);
     }
 
-    public float getMaxTextSize() {
-        return mHelper.getMaxTextSize();
-    }
-
-    public void setMinTextSize(int minSize) {
-        mHelper.setMinTextSize(TypedValue.COMPLEX_UNIT_SP, minSize);
-    }
-
     public void setMinTextSize(int unit, float minSize) {
         mHelper.setMinTextSize(unit, minSize);
-    }
-
-    public float getMinTextSize() {
-        return mHelper.getMinTextSize();
     }
 
     public void setPrecision(float precision) {
         mHelper.setPrecision(precision);
     }
 
+    public float getMinTextSize() {
+        return mHelper.getMinTextSize();
+    }
+
+    public float getMaxTextSize() {
+        return mHelper.getMaxTextSize();
+    }
+
     public float getPrecision() {
         return mHelper.getPrecision();
+    }
+
+    public AutofitHelper getAutofitHelper() {
+        return mHelper;
     }
 
 }
