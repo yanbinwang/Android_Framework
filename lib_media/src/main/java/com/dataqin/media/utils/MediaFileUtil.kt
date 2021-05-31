@@ -22,7 +22,7 @@ object MediaFileUtil {
     //获取对应文件类型的存储地址
     @JvmStatic
     fun getOutputMediaFile(type: Int): File? {
-        if (Environment.getExternalStorageState() != Environment.MEDIA_MOUNTED) {
+        if (!SdcardUtil.hasSdcard()) {
             LogUtil.e(TAG, "can not get sdcard!")
             return null
         }
