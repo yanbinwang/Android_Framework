@@ -56,7 +56,7 @@ class RecognitionFactory {
         }
 
         if (TextUtils.isEmpty(certifyId) || TextUtils.isEmpty(url) || TextUtils.isEmpty(bizCode)) {
-            onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_recognition_error))
+            onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_certification_error))
             return
         }
 
@@ -82,7 +82,7 @@ class RecognitionFactory {
                 //回调处理-查询结果
                 "9000" -> onRecognitionListener.onSuccess(certifyId ?: "", JSON.toJSONString(response))
                 //其余编号统一回调失败
-                else -> onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_recognition_failure))
+                else -> onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_certification_failure))
             }
         }
     }
