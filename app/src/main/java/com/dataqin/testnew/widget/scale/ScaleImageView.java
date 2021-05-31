@@ -44,8 +44,8 @@ import com.dataqin.base.utils.LogUtil;
  */
 @SuppressLint({"AppCompatCustomView", "ClickableViewAccessibility"})
 public class ScaleImageView extends ImageView {
-    private boolean imageRenderedAtLeastOnce;
     private boolean onDrawReady;
+    private boolean imageRenderedAtLeastOnce;
     private int viewWidth, viewHeight, prevViewWidth, prevViewHeight;
     private float normalizedScale;
     private float minScale;
@@ -230,7 +230,6 @@ public class ScaleImageView extends ImageView {
             super.onRestoreInstanceState(bundle.getParcelable("instanceState"));
             return;
         }
-
         super.onRestoreInstanceState(state);
     }
 
@@ -291,7 +290,6 @@ public class ScaleImageView extends ImageView {
             delayedZoomVariables = new ZoomVariables(scale, focusX, focusY, scaleType);
             return;
         }
-
         if (scaleType != mScaleType) {
             setScaleType(scaleType);
         }
@@ -317,7 +315,6 @@ public class ScaleImageView extends ImageView {
         }
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
-
         PointF point = transformCoordTouchToBitmap(viewWidth / 2f, viewHeight / 2f, true);
         point.x /= drawableWidth;
         point.y /= drawableHeight;
@@ -334,7 +331,6 @@ public class ScaleImageView extends ImageView {
         float transY = m[Matrix.MTRANS_Y];
         float fixTransX = getFixTrans(transX, viewWidth, getImageWidth());
         float fixTransY = getFixTrans(transY, viewHeight, getImageHeight());
-
         if (fixTransX != 0 || fixTransY != 0) {
             matrix.postTranslate(fixTransX, fixTransY);
         }
@@ -346,7 +342,6 @@ public class ScaleImageView extends ImageView {
         if (getImageWidth() < viewWidth) {
             m[Matrix.MTRANS_X] = (viewWidth - getImageWidth()) / 2;
         }
-
         if (getImageHeight() < viewHeight) {
             m[Matrix.MTRANS_Y] = (viewHeight - getImageHeight()) / 2;
         }
@@ -355,7 +350,6 @@ public class ScaleImageView extends ImageView {
 
     private float getFixTrans(float trans, float viewSize, float contentSize) {
         float minTrans, maxTrans;
-
         if (contentSize <= viewSize) {
             minTrans = 0;
             maxTrans = viewSize - contentSize;
@@ -363,7 +357,6 @@ public class ScaleImageView extends ImageView {
             minTrans = viewSize - contentSize;
             maxTrans = 0;
         }
-
         if (trans < minTrans)
             return -trans + minTrans;
         if (trans > maxTrans)
@@ -393,7 +386,6 @@ public class ScaleImageView extends ImageView {
             setMeasuredDimension(0, 0);
             return;
         }
-
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -402,7 +394,6 @@ public class ScaleImageView extends ImageView {
         int heightMode = MeasureSpec.getMode(heightMeasureSpec);
         viewWidth = setViewSize(widthMode, widthSize, drawableWidth);
         viewHeight = setViewSize(heightMode, heightSize, drawableHeight);
-
         setMeasuredDimension(viewWidth, viewHeight);
         fitImageToView();
     }
@@ -418,10 +409,8 @@ public class ScaleImageView extends ImageView {
 
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
-
         float scaleX = (float) viewWidth / drawableWidth;
         float scaleY = (float) viewHeight / drawableHeight;
-
         switch (mScaleType) {
             case CENTER:
                 scaleX = scaleY = 1;
@@ -455,17 +444,14 @@ public class ScaleImageView extends ImageView {
             prevMatrix.getValues(m);
             m[Matrix.MSCALE_X] = matchViewWidth / drawableWidth * normalizedScale;
             m[Matrix.MSCALE_Y] = matchViewHeight / drawableHeight * normalizedScale;
-
             float transX = m[Matrix.MTRANS_X];
             float transY = m[Matrix.MTRANS_Y];
             float prevActualWidth = prevMatchViewWidth * normalizedScale;
             float actualWidth = getImageWidth();
             translateMatrixAfterRotate(Matrix.MTRANS_X, transX, prevActualWidth, actualWidth, prevViewWidth, viewWidth, drawableWidth);
-
             float prevActualHeight = prevMatchViewHeight * normalizedScale;
             float actualHeight = getImageHeight();
             translateMatrixAfterRotate(Matrix.MTRANS_Y, transY, prevActualHeight, actualHeight, prevViewHeight, viewHeight, drawableHeight);
-
             matrix.setValues(m);
         }
         fixTrans();
@@ -478,15 +464,12 @@ public class ScaleImageView extends ImageView {
             case MeasureSpec.EXACTLY:
                 viewSize = size;
                 break;
-
             case MeasureSpec.AT_MOST:
                 viewSize = Math.min(drawableWidth, size);
                 break;
-
             case MeasureSpec.UNSPECIFIED:
                 viewSize = drawableWidth;
                 break;
-
             default:
                 viewSize = size;
                 break;
@@ -517,15 +500,11 @@ public class ScaleImageView extends ImageView {
     public boolean canScrollHorizontally(int direction) {
         matrix.getValues(m);
         float x = m[Matrix.MTRANS_X];
-
         if (getImageWidth() < viewWidth) {
             return false;
-
         } else if (x >= -1 && direction < 0) {
             return false;
-
         } else return !(Math.abs(x) + viewWidth + 1 >= getImageWidth()) || direction <= 0;
-
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
@@ -618,7 +597,6 @@ public class ScaleImageView extends ImageView {
                 }
             }
             setImageMatrix(matrix);
-
             if (userTouchListener != null) {
                 userTouchListener.onTouch(v, event);
             }
@@ -659,7 +637,6 @@ public class ScaleImageView extends ImageView {
                 targetZoom = minScale;
                 animateToZoomBoundary = true;
             }
-
             if (animateToZoomBoundary) {
                 DoubleTapZoom doubleTap = new DoubleTapZoom(targetZoom, viewWidth / 2f, viewHeight / 2f, true);
                 compatPostOnAnimation(doubleTap);
@@ -676,7 +653,6 @@ public class ScaleImageView extends ImageView {
             lowerScale = minScale;
             upperScale = maxScale;
         }
-
         float origScale = normalizedScale;
         normalizedScale *= deltaScale;
         if (normalizedScale > upperScale) {
@@ -686,18 +662,17 @@ public class ScaleImageView extends ImageView {
             normalizedScale = lowerScale;
             deltaScale = lowerScale / origScale;
         }
-
         matrix.postScale((float) deltaScale, (float) deltaScale, focusX, focusY);
         fixScaleTrans();
     }
 
     private class DoubleTapZoom implements Runnable {
         private final boolean stretchImageToSuper;
-        private final long startTime;
         private final float startZoom;
         private final float targetZoom;
         private final float bitmapX;
         private final float bitmapY;
+        private final long startTime;
         private final PointF startTouch;
         private final PointF endTouch;
         private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
@@ -712,7 +687,6 @@ public class ScaleImageView extends ImageView {
             PointF bitmapPoint = transformCoordTouchToBitmap(focusX, focusY, false);
             this.bitmapX = bitmapPoint.x;
             this.bitmapY = bitmapPoint.y;
-
             startTouch = transformCoordBitmapToTouch(bitmapX, bitmapY);
             endTouch = new PointF(viewWidth / 2f, viewHeight / 2f);
         }
@@ -725,7 +699,6 @@ public class ScaleImageView extends ImageView {
             translateImageToCenterTouchPosition(t);
             fixScaleTrans();
             setImageMatrix(matrix);
-
             if (touchImageViewListener != null) {
                 touchImageViewListener.onMove();
             }
@@ -764,7 +737,6 @@ public class ScaleImageView extends ImageView {
         float transY = m[Matrix.MTRANS_Y];
         float finalX = ((x - transX) * origW) / getImageWidth();
         float finalY = ((y - transY) * origH) / getImageHeight();
-
         if (clipToBitmap) {
             finalX = Math.min(Math.max(finalX, 0), origW);
             finalY = Math.min(Math.max(finalY, 0), origH);
@@ -791,11 +763,9 @@ public class ScaleImageView extends ImageView {
             setState(State.FLING);
             scroller = new CompatScroller(context);
             matrix.getValues(m);
-
             int startX = (int) m[Matrix.MTRANS_X];
             int startY = (int) m[Matrix.MTRANS_Y];
             int minX, maxX, minY, maxY;
-
             if (getImageWidth() > viewWidth) {
                 minX = viewWidth - (int) getImageWidth();
                 maxX = 0;
@@ -827,12 +797,10 @@ public class ScaleImageView extends ImageView {
             if (touchImageViewListener != null) {
                 touchImageViewListener.onMove();
             }
-
             if (scroller.isFinished()) {
                 scroller = null;
                 return;
             }
-
             if (scroller.computeScrollOffset()) {
                 int newX = scroller.getCurrX();
                 int newY = scroller.getCurrY();
