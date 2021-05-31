@@ -42,9 +42,9 @@ public class AutofitHelper {
     private final TextWatcher mTextWatcher = new AutofitTextWatcher();
     private final View.OnLayoutChangeListener mOnLayoutChangeListener = new AutofitOnLayoutChangeListener();
 
+    private static final boolean SPEW = false;
     private static final int DEFAULT_MIN_TEXT_SIZE = 8;
     private static final float DEFAULT_PRECISION = 0.5f;
-    private static final boolean SPEW = false;
     private static final String TAG = "AutoFitTextHelper";
 
     public static AutofitHelper create(TextView view) {
@@ -63,7 +63,7 @@ public class AutofitHelper {
             int minTextSize = (int) helper.getMinTextSize();
             float precision = helper.getPrecision();
             TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.AutofitTextView, defStyle, 0);
-            sizeToFit = ta.getBoolean(R.styleable.AutofitTextView_sizeToFit, sizeToFit);
+            sizeToFit = ta.getBoolean(R.styleable.AutofitTextView_sizeToFit, true);
             minTextSize = ta.getDimensionPixelSize(R.styleable.AutofitTextView_minTextSize, minTextSize);
             precision = ta.getFloat(R.styleable.AutofitTextView_precision, precision);
             ta.recycle();
