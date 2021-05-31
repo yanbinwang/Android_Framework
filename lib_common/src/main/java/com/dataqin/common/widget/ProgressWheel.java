@@ -1,12 +1,10 @@
 package com.dataqin.common.widget;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.RectF;
-import android.os.Build;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.os.SystemClock;
@@ -25,24 +23,24 @@ import com.dataqin.common.R;
  * Created by WangYanBin on 2020/8/14.
  */
 public class ProgressWheel extends View {
-    private int circleRadius = 28;
     private int barWidth = 4;
     private int rimWidth = 4;
+    private int circleRadius = 28;
     private int barColor = 0xAA000000;
     private int rimColor = 0x00FFFFFF;
     private long lastTimeAnimated = 0;
     private long pausedTimeWithoutGrowing = 0;
-    private float barExtraLength = 0;
-    private float spinSpeed = 230.0f;
     private float mProgress = 0.0f;
     private float mTargetProgress = 0.0f;
+    private float spinSpeed = 230.0f;
+    private float barExtraLength = 0;
     private double timeStartGrowing = 0;
     private double barSpinCycleTime = 460;
+    private boolean shouldAnimate;
     private boolean linearProgress;
-    private boolean barGrowingFromFront = true;
     private boolean fillRadius = false;
     private boolean isSpinning = false;
-    private boolean shouldAnimate;
+    private boolean barGrowingFromFront = true;
     private ProgressCallback callback;
     private RectF circleBounds = new RectF();
 
@@ -63,7 +61,6 @@ public class ProgressWheel extends View {
         setAnimationEnabled();
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
     private void setAnimationEnabled() {
         float animationValue;
         animationValue = Settings.Global.getFloat(getContext().getContentResolver(), Settings.Global.ANIMATOR_DURATION_SCALE, 1);
@@ -266,7 +263,6 @@ public class ProgressWheel extends View {
         barPaint.setAntiAlias(true);
         barPaint.setStyle(Paint.Style.STROKE);
         barPaint.setStrokeWidth(barWidth);
-
         rimPaint.setColor(rimColor);
         rimPaint.setAntiAlias(true);
         rimPaint.setStyle(Paint.Style.STROKE);
@@ -483,17 +479,17 @@ public class ProgressWheel extends View {
     }
 
     static class WheelSavedState extends BaseSavedState {
-        private int barWidth;
         private int barColor;
-        private int rimWidth;
+        private int barWidth;
         private int rimColor;
+        private int rimWidth;
         private int circleRadius;
+        private float spinSpeed;
         private float mProgress;
         private float mTargetProgress;
-        private float spinSpeed;
         private boolean isSpinning;
-        private boolean linearProgress;
         private boolean fillRadius;
+        private boolean linearProgress;
 
         //required field that makes Parcelables from a Parcel
         public static final Creator<WheelSavedState> CREATOR = new Creator<WheelSavedState>() {
