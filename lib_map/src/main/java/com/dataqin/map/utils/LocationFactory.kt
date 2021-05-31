@@ -55,22 +55,24 @@ class LocationFactory : AMapLocationListener {
         val aMapLocationClientOption = AMapLocationClientOption()
         //设置定位监听
         locationClient?.setLocationListener(this)
-        //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
-        aMapLocationClientOption.locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
-        //设置是否gps优先，只在高精度模式下有效
-        aMapLocationClientOption.isGpsFirst = true
-        //设置定位场景为出行
-        aMapLocationClientOption.locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
-        //设置定位间隔,单位毫秒,默认为2000ms
-        aMapLocationClientOption.interval = 1000
-        //true表示允许外界在定位SDK通过GPS定位时模拟位置，false表示不允许模拟GPS位置
-        aMapLocationClientOption.isMockEnable = true
-        //设置是否返回方向角(取值范围：【0，360】，其中0度表示正北方向，90度表示正东，180度表示正南，270度表示正西)
-        aMapLocationClientOption.isSensorEnable = true
-        //启动定位时SDK会返回最近3s内精度最高的一次定位结果（+）
-        aMapLocationClientOption.isOnceLocationLatest = true
-        //请求超时时间
-        aMapLocationClientOption.httpTimeOut = 3000
+        aMapLocationClientOption.apply {
+            //设置定位模式为高精度模式，Battery_Saving为低功耗模式，Device_Sensors是仅设备模式
+            locationMode = AMapLocationClientOption.AMapLocationMode.Hight_Accuracy
+            //设置是否gps优先，只在高精度模式下有效
+            isGpsFirst = true
+            //设置定位场景为出行
+            locationPurpose = AMapLocationClientOption.AMapLocationPurpose.SignIn
+            //设置定位间隔,单位毫秒,默认为2000ms
+            interval = 1000
+            //true表示允许外界在定位SDK通过GPS定位时模拟位置，false表示不允许模拟GPS位置
+            isMockEnable = true
+            //设置是否返回方向角(取值范围：【0，360】，其中0度表示正北方向，90度表示正东，180度表示正南，270度表示正西)
+            isSensorEnable = true
+            //启动定位时SDK会返回最近3s内精度最高的一次定位结果（+）
+            isOnceLocationLatest = true
+            //请求超时时间
+            httpTimeOut = 3000
+        }
         //设置定位参数
         locationClient?.setLocationOption(aMapLocationClientOption)
         //启动后台定位，第一个参数为通知栏ID，建议整个APP使用一个
@@ -115,9 +117,7 @@ class LocationFactory : AMapLocationListener {
         this.locationSubscriber = locationSubscriber
         var granted = true
         for (index in Permission.Group.LOCATION.indices) {
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) {
-                granted = false
-            }
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) granted = false
         }
         if (granted) {
             locationClient?.startLocation()
