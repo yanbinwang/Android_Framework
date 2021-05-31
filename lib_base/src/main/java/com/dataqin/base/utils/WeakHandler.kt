@@ -167,10 +167,10 @@ class WeakHandler {
     }
 
     private class ChainedRef(lock: Lock, r: Runnable?) {
-        var next: ChainedRef? = null
-        var prev: ChainedRef? = null
         var lock: Lock? = lock
         var runnable: Runnable? = r
+        var next: ChainedRef? = null
+        var prev: ChainedRef? = null
         var wrapper: WeakRunnable? = null
 
         init {
