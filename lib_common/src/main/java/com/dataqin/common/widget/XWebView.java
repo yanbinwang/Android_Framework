@@ -1,6 +1,5 @@
 package com.dataqin.common.widget;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
@@ -39,7 +38,7 @@ public class XWebView extends WebView {
         webSettings.setJavaScriptCanOpenWindowsAutomatically(true);
         //设置WebView 可以加载更多格式页面
         webSettings.setLoadWithOverviewMode(true);
-        // 设置webview页面自适应网页宽度
+        //设置webview页面自适应网页宽度
         webSettings.setUseWideViewPort(true);
         //启用或禁止WebView访问文件数据
         webSettings.setAllowFileAccess(true);
