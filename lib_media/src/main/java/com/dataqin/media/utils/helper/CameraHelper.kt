@@ -66,9 +66,9 @@ object CameraHelper {
      * 拍照/抓拍
      */
     @JvmStatic
-    fun takePicture(isSnapshot: Boolean = false) {
+    fun takePicture(snapshot: Boolean = false) {
         onTakePictureListener?.onStart()
-        if (isSnapshot) {
+        if (snapshot) {
             cvFinder?.takePictureSnapshot()
         } else {
             cvFinder?.takePicture()
