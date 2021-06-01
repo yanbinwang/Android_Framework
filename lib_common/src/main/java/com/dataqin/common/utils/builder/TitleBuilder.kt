@@ -17,29 +17,6 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         statusBarBuilder.setStatusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.white))
     }
 
-    fun getDefault(): TitleBuilder {
-        binding.llMainLeft.apply {
-            visibility = View.VISIBLE
-            setOnClickListener { weakActivity.get()?.finish() }
-        }
-        return this
-    }
-
-    fun hideBack(): TitleBuilder {
-        binding.llMainLeft.apply {
-            visibility = View.GONE
-            setOnClickListener(null)
-        }
-        return this
-    }
-
-    fun hideTitle(dark: Boolean = true): TitleBuilder {
-        statusBarBuilder.setStatusBarLightMode(dark)
-        binding.rlMain.visibility = View.GONE
-        binding.vMainLine.visibility = View.GONE
-        return this
-    }
-
     fun setTitle(titleStr: String, shade: Boolean = false, dark: Boolean = true): TitleBuilder {
         statusBarBuilder.setStatusBarLightMode(dark)
         binding.tvMainTitle.apply {
@@ -134,6 +111,29 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
     fun setTransparentDarkStatus(): TitleBuilder {
         hideTitle()
         statusBarBuilder.setTransparentDarkStatus()
+        return this
+    }
+
+    fun hideBack(): TitleBuilder {
+        binding.llMainLeft.apply {
+            visibility = View.GONE
+            setOnClickListener(null)
+        }
+        return this
+    }
+
+    fun hideTitle(dark: Boolean = true): TitleBuilder {
+        statusBarBuilder.setStatusBarLightMode(dark)
+        binding.rlMain.visibility = View.GONE
+        binding.vMainLine.visibility = View.GONE
+        return this
+    }
+
+    fun getDefault(): TitleBuilder {
+        binding.llMainLeft.apply {
+            visibility = View.VISIBLE
+            setOnClickListener { weakActivity.get()?.finish() }
+        }
         return this
     }
 
