@@ -61,7 +61,7 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         return this
     }
 
-    fun setLeftImageResource(resId: Int): TitleBuilder {
+    fun setLeftResource(resId: Int): TitleBuilder {
         binding.ivMainLeft.apply {
             visibility = View.VISIBLE
             setImageResource(resId)
@@ -92,7 +92,7 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         return this
     }
 
-    fun setRightImageResource(resId: Int): TitleBuilder {
+    fun setRightResource(resId: Int): TitleBuilder {
         binding.ivMainRight.apply {
             visibility = View.VISIBLE
             setImageResource(resId)
