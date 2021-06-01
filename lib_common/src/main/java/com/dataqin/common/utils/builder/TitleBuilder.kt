@@ -44,7 +44,7 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         statusBarBuilder.setStatusBarLightMode(dark)
         binding.tvMainTitle.apply {
             text = titleStr
-            setTextColor(ContextCompat.getColor(weakActivity.get()!!, if(dark) R.color.white else R.color.black))
+            setTextColor(ContextCompat.getColor(weakActivity.get()!!, if(dark) R.color.black else R.color.white))
         }
         binding.vMainLine.visibility = if (shade) View.VISIBLE else View.GONE
         return this
