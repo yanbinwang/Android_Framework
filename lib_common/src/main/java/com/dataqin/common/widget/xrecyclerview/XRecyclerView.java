@@ -31,6 +31,7 @@ import com.dataqin.common.widget.xrecyclerview.refresh.callback.SwipeRefreshLayo
  * 一般自定义view或viewGroup基本上都会去实现onMeasure、onLayout、onDraw方法，还有另外两个方法是onFinishInflate和onSizeChanged。
  * onFinishInflate方法只有在布局文件中加载view实例会回调，如果直接new一个view的话是不会回调的。
  */
+@SuppressWarnings("rawtypes")
 @SuppressLint("InflateParams")
 public class XRecyclerView extends SimpleViewGroup {
     private EmptyLayout empty;//自定义封装的空布局
@@ -128,23 +129,23 @@ public class XRecyclerView extends SimpleViewGroup {
      * 设置默认recycler的输出manager
      * 默认一行一个，线样式可自画可调整
      */
-    public void setAdapter(BaseAdapter adapter) {
+    public <T extends BaseAdapter> void setAdapter(T adapter) {
         setAdapter(adapter, 0);
     }
 
-    public void setAdapter(BaseAdapter adapter, int spanCount) {
+    public <T extends BaseAdapter> void setAdapter(T adapter, int spanCount) {
         setAdapter(adapter, spanCount, 0, 0, false, false);
     }
 
-    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace) {
+    public <T extends BaseAdapter> void setAdapter(T adapter, int spanCount, int horizontalSpace) {
         setAdapter(adapter, spanCount, horizontalSpace, 0, true, false);
     }
 
-    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace, int verticalSpace) {
+    public <T extends BaseAdapter> void setAdapter(T adapter, int spanCount, int horizontalSpace, int verticalSpace) {
         setAdapter(adapter, spanCount, horizontalSpace, verticalSpace, true, true);
     }
 
-    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace, int verticalSpace, boolean hasHorizontalEdge, boolean hasVerticalEdge) {
+    public <T extends BaseAdapter> void setAdapter(T adapter, int spanCount, int horizontalSpace, int verticalSpace, boolean hasHorizontalEdge, boolean hasVerticalEdge) {
         recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         recycler.setAdapter(adapter);
         addItemDecoration(horizontalSpace, verticalSpace, hasHorizontalEdge, hasVerticalEdge);
