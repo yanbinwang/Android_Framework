@@ -124,18 +124,30 @@ public class XRecyclerView extends SimpleViewGroup {
         }
     }
 
-    public void setAdapter(BaseAdapter adapter) {
-        setAdapter(adapter, 1);
-    }
-
     /**
      * 设置默认recycler的输出manager
      * 默认一行一个，线样式可自画可调整
      */
+    public void setAdapter(BaseAdapter adapter) {
+        setAdapter(adapter, 0);
+    }
+
     public void setAdapter(BaseAdapter adapter, int spanCount) {
+        setAdapter(adapter, spanCount, 0, 0, false, false);
+    }
+
+    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace) {
+        setAdapter(adapter, spanCount, horizontalSpace, 0, true, false);
+    }
+
+    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace, int verticalSpace) {
+        setAdapter(adapter, spanCount, horizontalSpace, verticalSpace, true, true);
+    }
+
+    public void setAdapter(BaseAdapter adapter, int spanCount, int horizontalSpace, int verticalSpace, boolean hasHorizontalEdge, boolean hasVerticalEdge) {
         recycler.setLayoutManager(new GridLayoutManager(getContext(), spanCount));
         recycler.setAdapter(adapter);
-        addItemDecoration(0, 0, false, false);
+        addItemDecoration(horizontalSpace, verticalSpace, hasHorizontalEdge, hasVerticalEdge);
     }
 
     /**
