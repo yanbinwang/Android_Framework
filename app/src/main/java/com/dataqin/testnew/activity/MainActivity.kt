@@ -1,6 +1,7 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -8,10 +9,13 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
+import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
@@ -136,7 +140,17 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                addressPopup.showPopup(v)
+                PermissionHelper.with(this)
+                    .setPermissionCallBack(object :OnPermissionCallBack{
+                        override fun onPermission(isGranted: Boolean) {
+                            if(isGranted){
+                                MediaFileUtil.saveBitmap(this@MainActivity, BitmapFactory.decodeResource(resources,R.mipmap.ic_launcher_round))
+                            }else{
+                                showToast("未授权")
+                            }
+                        }
+                    }).getPermissions()
+//                addressPopup.showPopup(v)
 //                navigation(ARouterPath.TransActivity)
 //                navigation(
 //                    ARouterPath.ScaleActivity,

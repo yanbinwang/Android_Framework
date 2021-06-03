@@ -40,7 +40,7 @@ object NetWorkUtil {
     @JvmStatic
     fun isWifi(): Boolean {
         try {
-            return connectivityManager.activeNetworkInfo.type == ConnectivityManager.TYPE_WIFI
+            return connectivityManager.activeNetworkInfo?.type == ConnectivityManager.TYPE_WIFI
         } catch (ignored: Exception) {
         }
         return false

@@ -2,7 +2,7 @@ package com.dataqin.testnew.activity
 
 import android.graphics.drawable.Drawable
 import com.alibaba.android.arouter.facade.annotation.Route
-import com.dataqin.base.utils.AnimationLoader
+import com.dataqin.base.utils.getInAnimation
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
@@ -65,9 +65,9 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
             count++
             if (count >= fileList.size - 1) {
                 messageDialog.hide()
-                binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
+                binding.svpContainer.startAnimation(getInAnimation())
             }
-        } else binding.svpContainer.startAnimation(AnimationLoader.getInAnimation(this))
+        } else binding.svpContainer.startAnimation(getInAnimation())
     }
 
     override fun finish() {

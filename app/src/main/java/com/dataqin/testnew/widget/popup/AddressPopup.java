@@ -8,7 +8,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.aigestudio.wheelpicker.WheelPicker;
-import com.dataqin.base.utils.DisplayUtil;
+import com.dataqin.base.utils.DisplayUtilKt;
 import com.dataqin.base.utils.ToastUtil;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.R;
@@ -92,9 +92,9 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
     private void initPicker(WheelPicker picker) {
         picker.setAtmospheric(true);//阴影效果
         picker.setCurved(true);//开启类似IOS的滚筒效果
-        picker.setItemTextSize(DisplayUtil.dip2px(getActivity(), 15));//每个item的字体大小
+        picker.setItemTextSize(DisplayUtilKt.dip2px(getActivity(), 15));//每个item的字体大小
         picker.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
-        picker.setItemSpace(DisplayUtil.dip2px(getActivity(), 20));//每个item之间的间距
+        picker.setItemSpace(DisplayUtilKt.dip2px(getActivity(), 20));//每个item之间的间距
     }
 
     //获取本地省市区文件

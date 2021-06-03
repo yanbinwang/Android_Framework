@@ -174,7 +174,7 @@ object FileUtil {
         try {
             val drawable = context.packageManager.getApplicationIcon(Constants.APPLICATION_ID)
             val bitmap = SoftReference(Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565))
-            val canvas = Canvas(bitmap.get())
+            val canvas = Canvas(bitmap.get()!!)
             //canvas.setBitmap(bitmap);
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             drawable.draw(canvas)

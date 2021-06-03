@@ -6,7 +6,7 @@ import android.view.View;
 import androidx.core.content.ContextCompat;
 
 import com.dataqin.base.utils.DateUtil;
-import com.dataqin.base.utils.DisplayUtil;
+import com.dataqin.base.utils.DisplayUtilKt;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.R;
 import com.dataqin.testnew.databinding.ViewPopupDateBinding;
@@ -39,10 +39,10 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
         binding.wdpChannel.setSelectedYear(calendar.get(Calendar.YEAR));
         binding.wdpChannel.setMonth(calendar.get(Calendar.MONTH) + 1);
         binding.wdpChannel.setSelectedDay(calendar.get(Calendar.DAY_OF_MONTH));
-        binding.wdpChannel.setItemSpace(DisplayUtil.dip2px(getActivity(), 30));//每个item之间的间距
+        binding.wdpChannel.setItemSpace(DisplayUtilKt.dip2px(getActivity(), 30));//每个item之间的间距
         binding.wdpChannel.setAtmospheric(true);//阴影效果
         binding.wdpChannel.setCurved(true);//开启类似IOS的滚筒效果
-        binding.wdpChannel.setItemTextSize(DisplayUtil.dip2px(getActivity(), 20));//每个item的字体大小
+        binding.wdpChannel.setItemTextSize(DisplayUtilKt.dip2px(getActivity(), 20));//每个item的字体大小
         binding.wdpChannel.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
 
         binding.tvSure.setOnClickListener(this);

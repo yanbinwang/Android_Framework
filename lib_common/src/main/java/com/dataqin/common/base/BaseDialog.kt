@@ -7,8 +7,8 @@ import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.widget.LinearLayout
 import androidx.viewbinding.ViewBinding
-import com.dataqin.base.utils.AnimationLoader.getInAnimation
-import com.dataqin.base.utils.AnimationLoader.getOutAnimation
+import com.dataqin.base.utils.getInAnimation
+import com.dataqin.base.utils.getOutAnimation
 import com.dataqin.common.R
 import java.lang.reflect.ParameterizedType
 
@@ -45,12 +45,10 @@ abstract class BaseDialog<VB : ViewBinding> : Dialog {
             }
             setContentView(binding.root, LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT))
             if (anim) {
-                val mAnimIn = getInAnimation(context)
-                val mAnimOut = getOutAnimation(context)
                 //当布局show出来的时候执行开始动画
-                setOnShowListener { binding.root.startAnimation(mAnimIn) }
+                setOnShowListener { binding.root.startAnimation(context.getInAnimation()) }
                 //当布局销毁时执行结束动画
-                setOnDismissListener { binding.root.startAnimation(mAnimOut) }
+                setOnDismissListener { binding.root.startAnimation(context.getOutAnimation()) }
             }
             if (close) {
                 setOnKeyListener { _: DialogInterface?, _: Int, _: KeyEvent? -> true }

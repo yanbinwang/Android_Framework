@@ -15,26 +15,26 @@ import com.dataqin.base.utils.LogUtil.e
 @SuppressLint("DiscouragedPrivateApi", "PrivateApi")
 class ApplicationActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
 
-    override fun onActivityPaused(activity: Activity?) {
+    override fun onActivityPaused(activity: Activity) {
     }
 
-    override fun onActivityResumed(activity: Activity?) {
+    override fun onActivityResumed(activity: Activity) {
     }
 
-    override fun onActivityStarted(activity: Activity?) {
+    override fun onActivityStarted(activity: Activity) {
     }
 
-    override fun onActivityDestroyed(activity: Activity?) {
+    override fun onActivityDestroyed(activity: Activity) {
     }
 
-    override fun onActivitySaveInstanceState(activity: Activity?, outState: Bundle?) {
+    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
     }
 
-    override fun onActivityStopped(activity: Activity?) {
+    override fun onActivityStopped(activity: Activity) {
     }
 
-    override fun onActivityCreated(activity: Activity?, savedInstanceState: Bundle?) {
-        activity?.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener {
+    override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {
+        activity.window?.decorView?.viewTreeObserver?.addOnGlobalLayoutListener {
             proxyOnClick(activity.window.decorView, 5)
         }
     }
@@ -70,9 +70,7 @@ class ApplicationActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
             val mOnClickListener = onClickListenerField[listenerInfoObj] as? View.OnClickListener
             if (mOnClickListener !is ProxyOnclickListener) {
                 //自定义代理事件监听器
-                val onClickListenerProxy: View.OnClickListener = ProxyOnclickListener(mOnClickListener)
-                //更换
-                onClickListenerField[listenerInfoObj] = onClickListenerProxy
+                onClickListenerField[listenerInfoObj] = ProxyOnclickListener(mOnClickListener)
             } else e("OnClickListenerProxy", "setted proxy listener ")
         } catch (ignored: Exception) {
         }
