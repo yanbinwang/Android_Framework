@@ -144,7 +144,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                     .setPermissionCallBack(object :OnPermissionCallBack{
                         override fun onPermission(isGranted: Boolean) {
                             if(isGranted){
-                                MediaFileUtil.saveBitmap(this@MainActivity, BitmapFactory.decodeResource(resources,R.mipmap.ic_launcher_round))
+                                showToast("已经授权")
                             }else{
                                 showToast("未授权")
                             }
