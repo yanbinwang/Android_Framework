@@ -72,22 +72,22 @@ class PermissionHelper(context: Context) {
                             2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
                             3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
                         }
-                    }
+                        //如果用户拒绝了开启权限
+                        if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
+                            AndDialog.with(weakContext.get())
+                                .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
+                                .setOnDialogListener(object : OnDialogListener {
+                                    override fun onConfirm() {
+                                        val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
+                                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
+                                        weakContext.get()?.startActivity(intent)
+                                    }
 
-                    //如果用户拒绝了开启权限
-                    if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
-                        AndDialog.with(weakContext.get())
-                            .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
-                            .setOnDialogListener(object : OnDialogListener {
-                                override fun onConfirm() {
-                                    val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
-                                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
-                                    weakContext.get()?.startActivity(intent)
-                                }
+                                    override fun onCancel() {}
+                                }).show()
+                        }
+                    } else onPermissionCallBack?.onPermission(false)
 
-                                override fun onCancel() {}
-                            }).show()
-                    }
 //                    //权限申请失败回调
 //                    onPermissionCallBack?.onPermission(false)
 //                    //提示参数
