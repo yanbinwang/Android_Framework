@@ -130,7 +130,7 @@ public class XRecyclerView extends SimpleViewGroup {
      * 默认一行一个，线样式可自画可调整
      */
     public <T extends BaseAdapter> void setAdapter(T adapter) {
-        setAdapter(adapter, 0);
+        setAdapter(adapter, 1);
     }
 
     public <T extends BaseAdapter> void setAdapter(T adapter, int spanCount) {
