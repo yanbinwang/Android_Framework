@@ -116,8 +116,13 @@ class LocationFactory : AMapLocationListener {
     fun start(locationSubscriber: LocationSubscriber) {
         this.locationSubscriber = locationSubscriber
         var granted = true
-        for (index in Permission.Group.LOCATION.indices) {
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) granted = false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.ACCESS_FINE_LOCATION)) granted = false
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+        } else {
+            for (index in Permission.Group.LOCATION.indices) {
+                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) granted = false
+            }
         }
         if (granted) {
             locationClient?.startLocation()
