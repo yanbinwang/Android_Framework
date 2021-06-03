@@ -2,9 +2,11 @@ package com.dataqin.common.utils.helper.permission
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
+import androidx.core.app.ActivityCompat
 import com.dataqin.common.R
 import com.dataqin.common.widget.dialog.AndDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
@@ -45,8 +47,8 @@ class PermissionHelper(context: Context) {
                     onPermissionCallBack?.onPermission(true)
                 }
                 .onDenied { permissions ->
-                    //权限申请失败回调
-                    onPermissionCallBack?.onPermission(false)
+//                    //权限申请失败回调
+//                    onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
                     if (permissions.isNotEmpty()) {
@@ -57,6 +59,19 @@ class PermissionHelper(context: Context) {
                                 break
                             }
                         }
+
+                        //安卓10及以上版本新增了在使用期间允许权限，只需允许前台定位的权限即可满足
+                        if (Build.VERSION.SDK_INT >= 29) {
+                            var granted = true
+                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
+                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+                            if (granted && permissions.size == 1) {
+                                onPermissionCallBack?.onPermission(true)
+                                return@onDenied
+                            }
+                        }
+                        onPermissionCallBack?.onPermission(false)
+
                         when (permissionIndex) {
                             0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
                             1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)

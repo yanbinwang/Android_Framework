@@ -14,7 +14,6 @@ object ClipboardUtil {
         val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
         //添加ClipData对象到剪切板中
         clipboardManager.primaryClip = ClipData.newPlainText(label, text)
-        if (clipboardManager.hasPrimaryClip()) clipboardManager.primaryClip?.getItemAt(0)?.text
     }
 
     @JvmStatic
