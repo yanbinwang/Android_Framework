@@ -1,6 +1,9 @@
 package com.dataqin.media.utils
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
@@ -51,14 +54,17 @@ object MediaFileUtil {
                 suffix = ".mp4"
             }
         }
-        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
+        val mediaStorageDir = File(
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+            prefix
+        )
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
                 LogUtil.e(TAG, "failed to create directory")
                 return null
             }
-        } else LogUtil.i(TAG, "mkdirs,文件夹已存在： " + mediaStorageDir.path)
+        } else LogUtil.i(TAG, "mkdirs,文件夹已存在： ${mediaStorageDir.path}")
         return File(mediaStorageDir.path + File.separator + DateUtil.getDateTimeStr("yyyyMMdd_HHmmss", Date()) + suffix)
     }
 
@@ -75,41 +81,44 @@ object MediaFileUtil {
     }
 
     /**
-     * 将bitmap存成文件至指定目录下
+     * 将bitmap存成文件至指定目录下-读写权限
+     * BitmapFactory.decodeResource(resources, R.mipmap.img_qr_code)
      */
     @JvmStatic
-    fun saveBitToSd(bitmap: Bitmap, root: String = Constants.APPLICATION_FILE_PATH + "/图片", quality: Int = 100) {
-        val filePath: String
+    fun saveBitmap(context: Context, bitmap: Bitmap, root: String = Constants.APPLICATION_FILE_PATH + "/图片", formatJpg: Boolean = false, quality: Int = 100): Boolean {
+//        try {
+//            val file = File(root)
+//            if (!file.mkdirs()) file.createNewFile()//需要权限
+//            val fileOutputStream = FileOutputStream("$root/" + DateUtil.getDateTimeStr(EN_YMDHMS, Date()) + ".jpg")
+//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream)
+//            fileOutputStream.flush()
+//            fileOutputStream.close()
+//        } catch (ignored: Exception) {
+//        } finally {
+//            bitmap.recycle()
+//        }
         try {
-            val file = File(root)
-            if (!file.mkdirs()) file.createNewFile()//需要权限
-            filePath = "$root/" + DateUtil.getDateTimeStr(EN_YMDHMS, Date()) + ".jpg"
-            val fileOutputStream = FileOutputStream(filePath)
-            bitmap.compress(Bitmap.CompressFormat.PNG, quality, fileOutputStream)
+            val storeDir = File(root)
+            if (!storeDir.mkdirs()) storeDir.createNewFile()//需要权限
+            val file = File(storeDir, DateUtil.getDateTimeStr(EN_YMDHMS, Date()) + if (formatJpg) ".jpg" else ".png")
+            //通过io流的方式来压缩保存图片
+            val fileOutputStream = FileOutputStream(file)
+            val result = bitmap.compress(if (formatJpg) Bitmap.CompressFormat.JPEG else Bitmap.CompressFormat.PNG, quality, fileOutputStream)//png的话100不响应，但是可以维持图片透明度
             fileOutputStream.flush()
             fileOutputStream.close()
+            //保存图片后发送广播通知更新数据库
+            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
+            return result
         } catch (ignored: Exception) {
         } finally {
             bitmap.recycle()
         }
-//        val file = File(path)
-//        if (file.exists()) file.delete()
-//        return try {
-//            val fileOutputStream = FileOutputStream(file)
-//            bitmap.compress(Bitmap.CompressFormat.JPEG, quality, fileOutputStream)
-//            fileOutputStream.flush()
-//            fileOutputStream.close()
-//            LogUtil.i(TAG, "图片已经保存!")
-//            true
-//        } catch (e: FileNotFoundException) {
-//            LogUtil.e(TAG, "图片保存失败!")
-//            false
-//        } catch (e: IOException) {
-//            LogUtil.e(TAG, "图片保存失败!")
-//            false
-//        } finally {
-//            bitmap.recycle()
-//        }
+        return false
+    }
+
+    @JvmStatic
+    fun saveBitmap(context: Context, bitmap: Bitmap, quality: Int = 100): Boolean {
+        return saveBitmap(context, bitmap, Constants.APPLICATION_FILE_PATH + "/图片", true, quality)
     }
 
 }
