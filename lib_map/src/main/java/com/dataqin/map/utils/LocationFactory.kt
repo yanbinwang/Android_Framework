@@ -6,12 +6,10 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.location.LocationManager
 import android.os.Build
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.location.AMapLocationClient
 import com.amap.api.location.AMapLocationClientOption
@@ -115,16 +113,7 @@ class LocationFactory : AMapLocationListener {
      */
     fun start(locationSubscriber: LocationSubscriber) {
         this.locationSubscriber = locationSubscriber
-        var granted = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-        } else {
-            for (index in Permission.Group.LOCATION.indices) {
-                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context!!, Permission.Group.LOCATION[index])) granted = false
-            }
-        }
-        if (granted) {
+        if (PermissionHelper.with(context).getLocationGranted()) {
             locationClient?.startLocation()
         } else {
             locationSubscriber.onFailed()
@@ -133,7 +122,7 @@ class LocationFactory : AMapLocationListener {
 
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
-     * 必须具备定位权限！用于打卡，签到，地图矫正
+     * 必须具备定位权限,不区分安卓版本！用于打卡，签到，地图矫正
      */
     fun start(context: Context, locationSubscriber: LocationSubscriber? = null) {
         this.locationSubscriber = locationSubscriber

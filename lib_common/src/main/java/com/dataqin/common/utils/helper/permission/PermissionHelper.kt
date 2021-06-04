@@ -46,6 +46,8 @@ class PermissionHelper(context: Context) {
                     onPermissionCallBack?.onPermission(true)
                 }
                 .onDenied { permissions ->
+                    //权限申请失败回调
+                    onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
                     if (permissions.isNotEmpty()) {
@@ -56,16 +58,6 @@ class PermissionHelper(context: Context) {
                                 break
                             }
                         }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            var granted = true
-                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-                            if (granted && permissions.size == 1) {
-                                onPermissionCallBack?.onPermission(true)
-                                return@onDenied
-                            }
-                        }
-                        onPermissionCallBack?.onPermission(false)
                         when (permissionIndex) {
                             0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
                             1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
@@ -86,42 +78,7 @@ class PermissionHelper(context: Context) {
                                     override fun onCancel() {}
                                 }).show()
                         }
-                    } else onPermissionCallBack?.onPermission(false)
-
-//                    //权限申请失败回调
-//                    onPermissionCallBack?.onPermission(false)
-//                    //提示参数
-//                    var result: String? = null
-//                    if (permissions.isNotEmpty()) {
-//                        var permissionIndex = 0
-//                        for (i in permissionGroup.indices) {
-//                            if (listOf(*permissionGroup[i]).contains(permissions[0])) {
-//                                permissionIndex = i
-//                                break
-//                            }
-//                        }
-//                        when (permissionIndex) {
-//                            0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
-//                            1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
-//                            2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
-//                            3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
-//                        }
-//                    }
-//
-//                    //如果用户拒绝了开启权限
-//                    if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
-//                        AndDialog.with(weakContext.get())
-//                            .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
-//                            .setOnDialogListener(object : OnDialogListener {
-//                                override fun onConfirm() {
-//                                    val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
-//                                    val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
-//                                    weakContext.get()?.startActivity(intent)
-//                                }
-//
-//                                override fun onCancel() {}
-//                            }).show()
-//                    }
+                    }
                 }.start()
         } else onPermissionCallBack?.onPermission(true)
         return this
@@ -130,6 +87,25 @@ class PermissionHelper(context: Context) {
     fun setPermissionCallBack(onPermissionCallBack: OnPermissionCallBack): PermissionHelper {
         this.onPermissionCallBack = onPermissionCallBack
         return this
+    }
+
+    /**
+     * 定位权限在安卓10开始有些许变化
+     * 1.允许-前后台皆可定位
+     * 2.仅在使用中允许-前台可定位，后台被拒绝
+     * 3.拒绝-前后台都拒绝
+     */
+    fun getLocationGranted(): Boolean {
+        var granted = true
+        if (Build.VERSION.SDK_INT >= 29) {
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+        } else {
+            for (index in Permission.Group.LOCATION.indices) {
+                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.Group.LOCATION[index])) granted = false
+            }
+        }
+        return granted
     }
 
     companion object {
