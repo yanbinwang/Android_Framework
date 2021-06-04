@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
 import android.net.ConnectivityManager
+import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
@@ -72,8 +73,13 @@ object MapHelper {
                 //先移动到默认点再检测权限定位
                 moveCamera()
                 var granted = true
-                for (index in Permission.Group.LOCATION.indices) {
-                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) granted = false
+                if (Build.VERSION.SDK_INT >= 29) {
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.ACCESS_FINE_LOCATION)) granted = false
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.ACCESS_COARSE_LOCATION)) granted = false
+                } else {
+                    for (index in Permission.Group.LOCATION.indices) {
+                        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) granted = false
+                    }
                 }
                 if (granted) location(mapView.context)
             }
