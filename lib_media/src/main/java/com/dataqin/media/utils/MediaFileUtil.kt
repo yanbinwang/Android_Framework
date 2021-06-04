@@ -4,7 +4,6 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.DateUtil.EN_YMDHMS
@@ -20,6 +19,7 @@ import java.util.*
  *  相机文件管理工具类
  */
 object MediaFileUtil {
+    private val outputPatch = Constants.APPLICATION_FILE_PATH + "/文件"//保存位置
     private const val TAG = "MediaFileUtil"
 
     //获取对应文件类型的存储地址
@@ -35,29 +35,27 @@ object MediaFileUtil {
         when (type) {
             //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
-                prefix += "Image"
+                prefix += "拍照"
                 suffix = ".jpg"
             }
             //录像
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> {
-                prefix += "Video"
+                prefix += "录像"
                 suffix = ".mp4"
             }
             //录音
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> {
-                prefix += "Audio"
+                prefix += "录音"
                 suffix = ".wav"
             }
             //录屏
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> {
-                prefix += "PlayList"
+                prefix += "录屏"
                 suffix = ".mp4"
             }
         }
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            prefix
-        )
+//        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
+        val mediaStorageDir = File("$outputPatch/$prefix")
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
