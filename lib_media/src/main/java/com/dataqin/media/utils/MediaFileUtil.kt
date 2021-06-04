@@ -1,17 +1,11 @@
 package com.dataqin.media.utils
 
-import android.content.Context
-import android.content.Intent
-import android.graphics.Bitmap
-import android.net.Uri
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
-import com.dataqin.base.utils.DateUtil.EN_YMDHMS
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.SdcardUtil
 import com.dataqin.common.constant.Constants
 import java.io.File
-import java.io.FileOutputStream
 import java.util.*
 
 /**
@@ -24,7 +18,7 @@ object MediaFileUtil {
 
     //获取对应文件类型的存储地址
     @JvmStatic
-    fun getOutputMediaFile(type: Int): File? {
+    fun getOutputMediaFile(mimeType: Int): File? {
         if (!SdcardUtil.hasSdcard()) {
             LogUtil.e(TAG, "can not get sdcard!")
             return null
@@ -32,7 +26,7 @@ object MediaFileUtil {
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
         var prefix = Constants.APPLICATION_NAME + "/"
         var suffix = ""
-        when (type) {
+        when (mimeType) {
             //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
                 prefix += "拍照"
@@ -71,7 +65,7 @@ object MediaFileUtil {
      * 需有1G的默认大小的空间
      */
     @JvmStatic
-    fun scanDisk(space: Long = 1024): Boolean {
+    fun setScanDisk(space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSdcardAvailableCapacity()
         LogUtil.e(TAG, "sd availableSize: " + availableSize + "M")
