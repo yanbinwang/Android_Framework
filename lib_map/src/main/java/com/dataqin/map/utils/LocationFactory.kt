@@ -93,7 +93,7 @@ class LocationFactory : AMapLocationListener {
         }
         builder.setSmallIcon(R.mipmap.ic_launcher)
             .setContentTitle(Constants.APPLICATION_NAME)
-            .setContentText("正在后台运行")
+            .setContentText("正在定位...")
             .setWhen(System.currentTimeMillis())
         return builder.build()
     }

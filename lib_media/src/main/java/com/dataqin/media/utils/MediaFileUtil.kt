@@ -54,10 +54,8 @@ object MediaFileUtil {
                 suffix = ".mp4"
             }
         }
-        val mediaStorageDir = File(
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
-            prefix
-        )
+//        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
+        val mediaStorageDir = File(Constants.APPLICATION_FILE_PATH + prefix)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
@@ -85,7 +83,13 @@ object MediaFileUtil {
      * BitmapFactory.decodeResource(resources, R.mipmap.img_qr_code)
      */
     @JvmStatic
-    fun saveBitmap(context: Context, bitmap: Bitmap, root: String = Constants.APPLICATION_FILE_PATH + "/图片", formatJpg: Boolean = false, quality: Int = 100): Boolean {
+    fun saveBitmap(
+        context: Context,
+        bitmap: Bitmap,
+        root: String = Constants.APPLICATION_FILE_PATH + "/图片",
+        formatJpg: Boolean = false,
+        quality: Int = 100
+    ): Boolean {
 //        try {
 //            val file = File(root)
 //            if (!file.mkdirs()) file.createNewFile()//需要权限
@@ -100,10 +104,17 @@ object MediaFileUtil {
         try {
             val storeDir = File(root)
             if (!storeDir.mkdirs()) storeDir.createNewFile()//需要权限
-            val file = File(storeDir, DateUtil.getDateTimeStr(EN_YMDHMS, Date()) + if (formatJpg) ".jpg" else ".png")
+            val file = File(
+                storeDir,
+                DateUtil.getDateTimeStr(EN_YMDHMS, Date()) + if (formatJpg) ".jpg" else ".png"
+            )
             //通过io流的方式来压缩保存图片
             val fileOutputStream = FileOutputStream(file)
-            val result = bitmap.compress(if (formatJpg) Bitmap.CompressFormat.JPEG else Bitmap.CompressFormat.PNG, quality, fileOutputStream)//png的话100不响应，但是可以维持图片透明度
+            val result = bitmap.compress(
+                if (formatJpg) Bitmap.CompressFormat.JPEG else Bitmap.CompressFormat.PNG,
+                quality,
+                fileOutputStream
+            )//png的话100不响应，但是可以维持图片透明度
             fileOutputStream.flush()
             fileOutputStream.close()
             //保存图片后发送广播通知更新数据库
