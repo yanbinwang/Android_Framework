@@ -122,28 +122,20 @@ class LocationFactory : AMapLocationListener {
 
     /**
      * 开始定位(高德的isStart取到的不是实时的值,直接调取开始或停止内部api会做判断)
-     * 必须具备定位权限！用于打卡，签到，地图矫正
+     * 必须具备定位权限,不区分安卓版本！用于打卡，签到，地图矫正
      */
     fun start(context: Context, locationSubscriber: LocationSubscriber? = null) {
         this.locationSubscriber = locationSubscriber
-        if (Build.VERSION.SDK_INT >= 29) {
-            if (PermissionHelper.with(context).getLocationGranted()) {
-                locationClient?.startLocation()
-            } else {
-                locationSubscriber?.onFailed()
-            }
-        } else {
-            PermissionHelper.with(context)
-                .setPermissionCallBack(object : OnPermissionCallBack {
-                    override fun onPermission(isGranted: Boolean) {
-                        if (isGranted) {
-                            locationClient?.startLocation()
-                        } else {
-                            locationSubscriber?.onFailed()
-                        }
+        PermissionHelper.with(context)
+            .setPermissionCallBack(object : OnPermissionCallBack {
+                override fun onPermission(isGranted: Boolean) {
+                    if (isGranted) {
+                        locationClient?.startLocation()
+                    } else {
+                        locationSubscriber?.onFailed()
                     }
-                }).getPermissions(Permission.Group.LOCATION)
-        }
+                }
+            }).getPermissions(Permission.Group.LOCATION)
     }
 
     /**
