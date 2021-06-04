@@ -13,7 +13,6 @@ import java.util.*
  *  相机文件管理工具类
  */
 object MediaFileUtil {
-    private val outputPatch = Constants.APPLICATION_FILE_PATH + "/文件"//保存位置
     private const val TAG = "MediaFileUtil"
 
     //获取对应文件类型的存储地址
@@ -24,7 +23,7 @@ object MediaFileUtil {
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
-        var prefix = Constants.APPLICATION_NAME + "/"
+        var prefix = Constants.APPLICATION_FILE_PATH + "/文件/"
         var suffix = ""
         when (mimeType) {
             //拍照/抓拍
@@ -49,7 +48,7 @@ object MediaFileUtil {
             }
         }
 //        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
-        val mediaStorageDir = File("$outputPatch/$prefix")
+        val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
