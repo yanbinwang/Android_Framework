@@ -172,7 +172,7 @@ class CameraFactory {
             safe = false
             mCamera?.takePicture(null, null, object : Camera.PictureCallback {
                 override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
-                    val pictureFile = MediaFileUtil.getOutputMediaFile(FileColumns.MEDIA_TYPE_IMAGE)
+                    val pictureFile = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_IMAGE)
                     safe = true
                     if (pictureFile == null) {
                         LogUtil.e(TAG, "Error creating media file, check storage permissions")
@@ -218,7 +218,7 @@ class CameraFactory {
     }
 
     private fun prepareVideoRecorder(surface: Surface?): String {
-        var path = MediaFileUtil.getOutputMediaFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
+        var path = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
         mCamera?.unlock()
         mMediaRecorder = MediaRecorder()
         mMediaRecorder?.setCamera(mCamera)

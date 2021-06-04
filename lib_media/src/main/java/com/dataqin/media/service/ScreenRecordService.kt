@@ -71,7 +71,7 @@ class ScreenRecordService : Service() {
     }
 
     private fun createMediaRecorder(): MediaRecorder {
-        val file = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
+        val file = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
         filePath = file.toString()
         return MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)

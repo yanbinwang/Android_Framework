@@ -77,7 +77,7 @@ object CameraHelper {
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_IMAGE)
+                val pictureFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_IMAGE)
                 if (null != pictureFile) {
                     result.toFile(pictureFile) {
                         if (null != it) {
@@ -96,7 +96,7 @@ object CameraHelper {
      */
     @JvmStatic
     fun startRecorder() {
-        val videoFile = MediaFileUtil.getOutputMediaFile(MEDIA_TYPE_VIDEO)
+        val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
         if (null != videoFile) {
             cvFinder?.takeVideo(videoFile)
             cvFinder?.addCameraListener(object : CameraListener() {

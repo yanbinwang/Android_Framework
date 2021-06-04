@@ -23,7 +23,7 @@ object RecorderHelper {
     fun startRecord() {
         var filePath = ""
         try {
-            val destDir = MediaFileUtil.getOutputMediaFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
+            val destDir = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
 //            filePath = destDir?.path ?: ""
             filePath = destDir.toString()
             mediaRecorder = MediaRecorder()
