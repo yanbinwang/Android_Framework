@@ -9,10 +9,12 @@ import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import androidx.core.content.FileProvider
+import com.dataqin.base.utils.DateUtil
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
 import java.text.DecimalFormat
+import java.util.*
 
 /**
  * Created by WangYanBin on 2020/7/1.
@@ -147,6 +149,36 @@ object FileUtil {
             fileS < 1073741824 -> df.format(fileS.toDouble() / 1048576) + "M"
             else -> df.format(fileS.toDouble() / 1073741824) + "G"
         }
+    }
+
+    /**
+     * 将bitmap存成文件至指定目录下-读写权限
+     * BitmapFactory.decodeResource(resources, R.mipmap.img_qr_code)
+     */
+    @JvmStatic
+    fun saveBitmap(context: Context, bitmap: Bitmap, quality: Int = 100): Boolean {
+        return saveBitmap(context, bitmap, Constants.APPLICATION_FILE_PATH + "/图片", true, quality)
+    }
+
+    @JvmStatic
+    fun saveBitmap(context: Context, bitmap: Bitmap, root: String = Constants.APPLICATION_FILE_PATH + "/图片", formatJpg: Boolean = false, quality: Int = 100): Boolean {
+        try {
+            val storeDir = File(root)
+            if (!storeDir.mkdirs()) storeDir.createNewFile()//需要权限
+            val file = File(storeDir, DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS, Date()) + if (formatJpg) ".jpg" else ".png")
+            //通过io流的方式来压缩保存图片
+            val fileOutputStream = FileOutputStream(file)
+            val result = bitmap.compress(if (formatJpg) Bitmap.CompressFormat.JPEG else Bitmap.CompressFormat.PNG, quality, fileOutputStream)//png的话100不响应，但是可以维持图片透明度
+            fileOutputStream.flush()
+            fileOutputStream.close()
+            //保存图片后发送广播通知更新数据库
+            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
+            return result
+        } catch (ignored: Exception) {
+        } finally {
+            bitmap.recycle()
+        }
+        return false
     }
 
     /**
