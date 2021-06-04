@@ -2,11 +2,9 @@ package com.dataqin.common.utils.helper.permission
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
-import androidx.core.app.ActivityCompat
 import com.dataqin.common.R
 import com.dataqin.common.widget.dialog.AndDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
@@ -20,6 +18,9 @@ import java.text.MessageFormat
  * date: 2018/6/11.
  * 获取选项工具类
  * 根据项目需求哪取需要的权限组
+ * tips:定位权限在安卓10开始变为允许，仅在使用中允许，拒绝
+ * 1)允许-前后台皆可定位
+ * 2）仅在使用中允许-前台可定位，后台被拒绝
  */
 class PermissionHelper(context: Context) {
     private val weakContext = WeakReference(context)
@@ -46,8 +47,8 @@ class PermissionHelper(context: Context) {
                     onPermissionCallBack?.onPermission(true)
                 }
                 .onDenied { permissions ->
-//                    //权限申请失败回调
-//                    onPermissionCallBack?.onPermission(false)
+                    //权限申请失败回调
+                    onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
                     if (permissions.isNotEmpty()) {
@@ -59,17 +60,17 @@ class PermissionHelper(context: Context) {
                             }
                         }
 
-                        //安卓10及以上版本新增了在使用期间允许权限，只需允许前台定位的权限即可满足
-                        if (Build.VERSION.SDK_INT >= 29) {
-                            var granted = true
-                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-                            if (granted && permissions.size == 1) {
-                                onPermissionCallBack?.onPermission(true)
-                                return@onDenied
-                            }
-                        }
-                        onPermissionCallBack?.onPermission(false)
+//                        //安卓10及以上版本新增了在使用期间允许权限，只需允许前台定位的权限即可满足
+//                        if (Build.VERSION.SDK_INT >= 29) {
+//                            var granted = true
+//                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
+//                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+//                            if (granted && permissions.size == 1) {
+//                                onPermissionCallBack?.onPermission(true)
+//                                return@onDenied
+//                            }
+//                        }
+//                        onPermissionCallBack?.onPermission(false)
 
                         when (permissionIndex) {
                             0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)

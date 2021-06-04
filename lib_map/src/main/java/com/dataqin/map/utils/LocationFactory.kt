@@ -137,16 +137,27 @@ class LocationFactory : AMapLocationListener {
      */
     fun start(context: Context, locationSubscriber: LocationSubscriber? = null) {
         this.locationSubscriber = locationSubscriber
-        PermissionHelper.with(context)
-            .setPermissionCallBack(object : OnPermissionCallBack {
-                override fun onPermission(isGranted: Boolean) {
-                    if (isGranted) {
-                        locationClient?.startLocation()
-                    } else {
-                        locationSubscriber?.onFailed()
+        if (Build.VERSION.SDK_INT >= 29) {
+            var granted = true
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context, Permission.ACCESS_FINE_LOCATION)) granted = false
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(context, Permission.ACCESS_COARSE_LOCATION)) granted = false
+            if (granted) {
+                locationClient?.startLocation()
+            } else {
+                locationSubscriber?.onFailed()
+            }
+        } else {
+            PermissionHelper.with(context)
+                .setPermissionCallBack(object : OnPermissionCallBack {
+                    override fun onPermission(isGranted: Boolean) {
+                        if (isGranted) {
+                            locationClient?.startLocation()
+                        } else {
+                            locationSubscriber?.onFailed()
+                        }
                     }
-                }
-            }).getPermissions(Permission.Group.LOCATION)
+                }).getPermissions(Permission.Group.LOCATION)
+        }
     }
 
     /**
