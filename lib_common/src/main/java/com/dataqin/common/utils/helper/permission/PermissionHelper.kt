@@ -38,59 +38,58 @@ class PermissionHelper(context: Context) {
     fun getPermissions(vararg groups: Array<String>): PermissionHelper {
         //6.0+系统做特殊处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getLoopGranted()){
+            if(getLoopGranted()){
                 onPermissionCallBack?.onPermission(true)
-                return this
-            }
-            AndPermission.with(weakContext.get())
-                .runtime()
-                .permission(*groups)
-                .onGranted {
-                    //权限申请成功回调
-                    onPermissionCallBack?.onPermission(true)
-                }
-                .onDenied { permissions ->
-                    //权限申请失败回调
-//                    onPermissionCallBack?.onPermission(false)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        if (getLocationGranted() && permissions.size == 1 && listOf(*Permission.Group.LOCATION).contains(permissions[0])) {
-                            onPermissionCallBack?.onPermission(true)
-                            return@onDenied
-                        }
+            } else {
+                AndPermission.with(weakContext.get())
+                    .runtime()
+                    .permission(*groups)
+                    .onGranted {
+                        //权限申请成功回调
+                        onPermissionCallBack?.onPermission(true)
                     }
-                    onPermissionCallBack?.onPermission(false)
-                    //提示参数
-                    var result: String? = null
-                    if (permissions.isNotEmpty()) {
-                        var permissionIndex = 0
-                        for (i in permissionGroup.indices) {
-                            if (listOf(*permissionGroup[i]).contains(permissions[0])) {
-                                permissionIndex = i
-                                break
+                    .onDenied { permissions ->
+                        //权限申请失败回调-安卓Q定位为使用期间允许，此处做一次检测
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            if (getLocationGranted() && permissions.size == 1 && listOf(*Permission.Group.LOCATION).contains(permissions[0])) {
+                                onPermissionCallBack?.onPermission(true)
+                                return@onDenied
                             }
                         }
-                        when (permissionIndex) {
-                            0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
-                            1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
-                            2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
-                            3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
-                        }
-                        //如果用户拒绝了开启权限
-                        if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
-                            AndDialog.with(weakContext.get())
-                                .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
-                                .setOnDialogListener(object : OnDialogListener {
-                                    override fun onConfirm() {
-                                        val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
-                                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
-                                        weakContext.get()?.startActivity(intent)
-                                    }
+                        onPermissionCallBack?.onPermission(false)
+                        //提示参数
+                        var result: String? = null
+                        if (permissions.isNotEmpty()) {
+                            var permissionIndex = 0
+                            for (i in permissionGroup.indices) {
+                                if (listOf(*permissionGroup[i]).contains(permissions[0])) {
+                                    permissionIndex = i
+                                    break
+                                }
+                            }
+                            when (permissionIndex) {
+                                0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
+                                1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
+                                2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
+                                3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
+                            }
+                            //如果用户拒绝了开启权限
+                            if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
+                                AndDialog.with(weakContext.get())
+                                    .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
+                                    .setOnDialogListener(object : OnDialogListener {
+                                        override fun onConfirm() {
+                                            val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
+                                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
+                                            weakContext.get()?.startActivity(intent)
+                                        }
 
-                                    override fun onCancel() {}
-                                }).show()
+                                        override fun onCancel() {}
+                                    }).show()
+                            }
                         }
-                    }
-                }.start()
+                    }.start()
+            }
         } else onPermissionCallBack?.onPermission(true)
         return this
     }
