@@ -38,6 +38,10 @@ class PermissionHelper(context: Context) {
     fun getPermissions(vararg groups: Array<String>): PermissionHelper {
         //6.0+系统做特殊处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Build.VERSION.SDK_INT >= 29 && getLoopGranted()){
+                onPermissionCallBack?.onPermission(true)
+                return this
+            }
             AndPermission.with(weakContext.get())
                 .runtime()
                 .permission(*groups)
@@ -47,6 +51,13 @@ class PermissionHelper(context: Context) {
                 }
                 .onDenied { permissions ->
                     //权限申请失败回调
+//                    onPermissionCallBack?.onPermission(false)
+                    if (Build.VERSION.SDK_INT >= 29) {
+                        if (getLocationGranted() && permissions.size == 1) {
+                            onPermissionCallBack?.onPermission(true)
+                            return@onDenied
+                        }
+                    }
                     onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
@@ -58,19 +69,6 @@ class PermissionHelper(context: Context) {
                                 break
                             }
                         }
-
-//                        //安卓10及以上版本新增了在使用期间允许权限，只需允许前台定位的权限即可满足
-//                        if (Build.VERSION.SDK_INT >= 29) {
-//                            var granted = true
-//                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-//                            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-//                            if (granted && permissions.size == 1) {
-//                                onPermissionCallBack?.onPermission(true)
-//                                return@onDenied
-//                            }
-//                        }
-//                        onPermissionCallBack?.onPermission(false)
-
                         when (permissionIndex) {
                             0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
                             1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
@@ -99,6 +97,20 @@ class PermissionHelper(context: Context) {
     fun setPermissionCallBack(onPermissionCallBack: OnPermissionCallBack): PermissionHelper {
         this.onPermissionCallBack = onPermissionCallBack
         return this
+    }
+
+    private fun getLoopGranted(): Boolean {
+        var granted = true
+        for (groupIndex in permissionGroup.indices) {
+            if (0 == groupIndex) {
+                granted = getLocationGranted()
+            } else {
+                for (index in permissionGroup[groupIndex].indices) {
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, permissionGroup[groupIndex][index])) granted = false
+                }
+            }
+        }
+        return granted
     }
 
     /**
