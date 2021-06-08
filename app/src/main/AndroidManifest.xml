@@ -40,6 +40,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        tools:ignore="LockedOrientationActivity"
         tools:replace="android:allowBackup,android:icon,android:theme,android:label"
         tools:targetApi="m">
 
