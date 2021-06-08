@@ -38,6 +38,10 @@ class PermissionHelper(context: Context) {
     fun getPermissions(vararg groups: Array<String>): PermissionHelper {
         //6.0+系统做特殊处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && getLoopGranted()){
+                onPermissionCallBack?.onPermission(true)
+                return this
+            }
             AndPermission.with(weakContext.get())
                 .runtime()
                 .permission(*groups)
@@ -47,6 +51,13 @@ class PermissionHelper(context: Context) {
                 }
                 .onDenied { permissions ->
                     //权限申请失败回调
+//                    onPermissionCallBack?.onPermission(false)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        if (getLocationGranted() && permissions.size == 1) {
+                            onPermissionCallBack?.onPermission(true)
+                            return@onDenied
+                        }
+                    }
                     onPermissionCallBack?.onPermission(false)
                     //提示参数
                     var result: String? = null
@@ -87,6 +98,20 @@ class PermissionHelper(context: Context) {
     fun setPermissionCallBack(onPermissionCallBack: OnPermissionCallBack): PermissionHelper {
         this.onPermissionCallBack = onPermissionCallBack
         return this
+    }
+
+    private fun getLoopGranted(): Boolean {
+        var granted = true
+        for (groupIndex in permissionGroup.indices) {
+            if (0 == groupIndex) {
+                granted = getLocationGranted()
+            } else {
+                for (index in permissionGroup[groupIndex].indices) {
+                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, permissionGroup[groupIndex][index])) granted = false
+                }
+            }
+        }
+        return granted
     }
 
     /**
