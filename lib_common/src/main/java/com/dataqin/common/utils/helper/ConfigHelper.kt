@@ -139,7 +139,7 @@ object ConfigHelper {
     //获取当前设备的mac地址
     private fun getMac(): String? {
         try {
-            val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
+            val all = Collections.list(NetworkInterface.getNetworkInterfaces())
             for (nif in all) {
                 if (!nif.name.equals("wlan0", ignoreCase = true)) continue
                 val macBytes = nif.hardwareAddress ?: return null
@@ -147,9 +147,7 @@ object ConfigHelper {
                 for (b in macBytes) {
                     res1.append(String.format("%02X:", b))
                 }
-                if (res1.isNotEmpty()) {
-                    res1.deleteCharAt(res1.length - 1)
-                }
+                if (res1.isNotEmpty()) res1.deleteCharAt(res1.length - 1)
                 return res1.toString()
             }
         } catch (ignored: Exception) {
@@ -169,11 +167,6 @@ object ConfigHelper {
         } catch (e: SecurityException) {
             null
         }
-//        return try {
-//            (context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager).deviceId
-//        } catch (e: SecurityException) {
-//            null
-//        }
     }
 
     //获取当前app version code

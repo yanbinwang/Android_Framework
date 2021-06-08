@@ -24,7 +24,7 @@ object PushHelper {
         val runningTasks = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getRunningTasks(100)
         val packageName = context?.packageName
         for (tasks in runningTasks) {
-            if (tasks.topActivity.packageName == packageName || tasks.baseActivity.packageName == packageName) {
+            if (tasks.topActivity?.packageName == packageName || tasks.baseActivity?.packageName == packageName) {
                 return true
             }
         }
