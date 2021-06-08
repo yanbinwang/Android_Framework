@@ -29,7 +29,8 @@ import com.dataqin.media.utils.MobileSizeUtil.getWidth
  *  <service
  *      android:name="com.sqkj.home.service.ScreenRecordService"
  *      android:enabled="true"
- *      android:exported="false" />
+ *      android:exported="false"
+ *      android:foregroundServiceType="mediaProjection"--》 Q开始后台服务需要配置，否则录制不正常  />
  */
 class ScreenRecordService : Service() {
     private var filePath = ""
