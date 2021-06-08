@@ -53,7 +53,7 @@ class PermissionHelper(context: Context) {
                     //权限申请失败回调
 //                    onPermissionCallBack?.onPermission(false)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        if (getLocationGranted() && permissions.size == 1) {
+                        if (getLocationGranted() && permissions.size == 1 && listOf(*Permission.Group.LOCATION).contains(permissions[0])) {
                             onPermissionCallBack?.onPermission(true)
                             return@onDenied
                         }
