@@ -38,7 +38,7 @@ class PermissionHelper(context: Context) {
     fun getPermissions(vararg groups: Array<String>): PermissionHelper {
         //6.0+系统做特殊处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if(getLoopGranted()){
+            if (getLoopGranted()) {
                 onPermissionCallBack?.onPermission(true)
             } else {
                 AndPermission.with(weakContext.get())
@@ -57,36 +57,34 @@ class PermissionHelper(context: Context) {
                             }
                         }
                         onPermissionCallBack?.onPermission(false)
+                        var permissionIndex = 0
+                        for (i in permissionGroup.indices) {
+                            if (listOf(*permissionGroup[i]).contains(permissions[0])) {
+                                permissionIndex = i
+                                break
+                            }
+                        }
                         //提示参数
-                        var result: String? = null
-                        if (permissions.isNotEmpty()) {
-                            var permissionIndex = 0
-                            for (i in permissionGroup.indices) {
-                                if (listOf(*permissionGroup[i]).contains(permissions[0])) {
-                                    permissionIndex = i
-                                    break
-                                }
-                            }
-                            when (permissionIndex) {
-                                0 -> result = weakContext.get()?.getString(R.string.label_permissions_location)
-                                1 -> result = weakContext.get()?.getString(R.string.label_permissions_camera)
-                                2 -> result = weakContext.get()?.getString(R.string.label_permissions_microphone)
-                                3 -> result = weakContext.get()?.getString(R.string.label_permissions_storage)
-                            }
-                            //如果用户拒绝了开启权限
-                            if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
-                                AndDialog.with(weakContext.get())
-                                    .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
-                                    .setOnDialogListener(object : OnDialogListener {
-                                        override fun onConfirm() {
-                                            val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
-                                            val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
-                                            weakContext.get()?.startActivity(intent)
-                                        }
+                        val result = when (permissionIndex) {
+                            0 -> weakContext.get()?.getString(R.string.label_permissions_location)
+                            1 -> weakContext.get()?.getString(R.string.label_permissions_camera)
+                            2 -> weakContext.get()?.getString(R.string.label_permissions_microphone)
+                            3 -> weakContext.get()?.getString(R.string.label_permissions_storage)
+                            else -> null
+                        }
+                        //如果用户拒绝了开启权限
+                        if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), permissions)) {
+                            AndDialog.with(weakContext.get())
+                                .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
+                                .setOnDialogListener(object : OnDialogListener {
+                                    override fun onConfirm() {
+                                        val packageURI = Uri.parse("package:" + weakContext.get()?.packageName)
+                                        val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, packageURI)
+                                        weakContext.get()?.startActivity(intent)
+                                    }
 
-                                        override fun onCancel() {}
-                                    }).show()
-                            }
+                                    override fun onCancel() {}
+                                }).show()
                         }
                     }.start()
             }
@@ -123,7 +121,8 @@ class PermissionHelper(context: Context) {
         var granted = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)
+            ) granted = false
         } else {
             for (index in Permission.Group.LOCATION.indices) {
                 if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.Group.LOCATION[index])) granted = false
