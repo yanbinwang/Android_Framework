@@ -31,13 +31,13 @@ import java.util.*
 @SuppressLint("MissingPermission", "HardwareIds", "StaticFieldLeak")
 object ConfigHelper {
     private val mmkv by lazy { MMKV.defaultMMKV() }
-    private var context: Context? = null
+    private lateinit var context: Context
 
     fun initialize(application: Application) {
         context = application
         //在程序运行时取值，保证长宽静态变量不丢失
         val metric = DisplayMetrics()
-        val mWindowManager = context?.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+        val mWindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
         mWindowManager.defaultDisplay.getMetrics(metric)
         //屏幕宽度（像素）
         Constants.SCREEN_WIDTH = metric.widthPixels
@@ -46,7 +46,7 @@ object ConfigHelper {
         //屏幕比值 (dp)
         Constants.SCREEN_DENSITY = metric.densityDpi
         //获取手机的导航栏高度
-        Constants.STATUS_BAR_HEIGHT = context!!.resources.getDimensionPixelSize(context!!.resources.getIdentifier("status_bar_height", "dimen", "android"))
+        Constants.STATUS_BAR_HEIGHT = context.resources.getDimensionPixelSize(context.resources.getIdentifier("status_bar_height", "dimen", "android"))
         //获取手机的网络ip
         Constants.IP = getIp()
         //获取手机的Mac地址
@@ -98,7 +98,7 @@ object ConfigHelper {
 
     //获取当前设备ip地址
     private fun getIp(): String? {
-        val networkInfo = (context?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
+        val networkInfo = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
         if (networkInfo != null && networkInfo.isConnected) {
             //当前使用2G/3G/4G网络
             if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
@@ -119,7 +119,7 @@ object ConfigHelper {
                 }
                 //当前使用无线网络
             } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
-                val wifiManager = context?.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
                 val wifiInfo = wifiManager.connectionInfo
                 //得到IPV4地址
                 return initIp(wifiInfo.ipAddress)
@@ -157,7 +157,7 @@ object ConfigHelper {
 
     //获取当前设备的id
     private fun getDeviceId(): String? {
-        val telephonyManager = (context?.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
+        val telephonyManager = (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
         return try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 telephonyManager.imei
@@ -173,7 +173,7 @@ object ConfigHelper {
     private fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
         try {
-            val packageInfo = context!!.applicationContext.packageManager.getPackageInfo(context?.packageName!!, 0)
+            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName, 0)
             appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
@@ -188,7 +188,7 @@ object ConfigHelper {
     private fun getAppVersionName(): String {
         var appVersionName = ""
         try {
-            val packageInfo = context!!.applicationContext.packageManager.getPackageInfo(context?.packageName!!, 0)
+            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName, 0)
             appVersionName = packageInfo.versionName
         } catch (ignored: PackageManager.NameNotFoundException) {
         }
