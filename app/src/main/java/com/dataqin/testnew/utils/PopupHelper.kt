@@ -76,10 +76,10 @@ object PopupHelper {
      * 通知
      */
     private fun showNotification() {
-        if (!NotificationFactory.instance.isNotificationEnabled(weakActivity?.get()!!)) {
+        if (!NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
             AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
                 override fun onConfirm() {
-                    NotificationFactory.instance.settingNotification(weakActivity?.get()!!)
+                    NotificationFactory.instance.setting(weakActivity?.get()!!)
                     showAdvertisement()
                 }
 

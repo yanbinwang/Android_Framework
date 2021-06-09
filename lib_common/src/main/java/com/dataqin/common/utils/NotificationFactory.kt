@@ -81,20 +81,9 @@ class NotificationFactory private constructor() {
     }
 
     /**
-     * 判断当前是否开启通知，方便用户接受推送消息
-     */
-    fun isNotificationEnabled(context: Context): Boolean {
-        return try {
-            NotificationManagerCompat.from(context).areNotificationsEnabled()
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    /**
      * 跳转通知的设置界面
      */
-    fun settingNotification(activity: Activity) {
+    fun setting(activity: Activity) {
         val weakActivity = WeakReference(activity)
         val intent = Intent()
         when {
@@ -117,6 +106,17 @@ class NotificationFactory private constructor() {
         }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         weakActivity.get()?.startActivity(intent)
+    }
+
+    /**
+     * 判断当前是否开启通知，方便用户接受推送消息
+     */
+    fun isEnabled(context: Context): Boolean {
+        return try {
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        } catch (e: Exception) {
+            false
+        }
     }
 
 }
