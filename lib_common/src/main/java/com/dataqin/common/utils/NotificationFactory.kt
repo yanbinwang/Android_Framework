@@ -44,9 +44,8 @@ class NotificationFactory private constructor() {
             setSmallIcon(smallIcon)//状态栏显示的小图标
             setLargeIcon(BitmapFactory.decodeResource(context?.resources, largeIcon))//状态栏下拉显示的大图标
             setDefaults(NotificationCompat.DEFAULT_ALL)
+            setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))//intent为空说明此次为普通推送
         }
-        //intent为空说明此次为普通推送
-        builder.setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))
         val notification = builder.build()
         createChannel()
         notificationManager.notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
@@ -82,21 +81,9 @@ class NotificationFactory private constructor() {
     }
 
     /**
-     * 判断当前是否开启通知，方便用户接受推送消息
-     */
-    fun isNotificationEnabled(activity: Activity): Boolean {
-        val weakActivity = WeakReference(activity)
-        return try {
-            NotificationManagerCompat.from(weakActivity.get()!!).areNotificationsEnabled()
-        } catch (e: Exception) {
-            false
-        }
-    }
-
-    /**
      * 跳转通知的设置界面
      */
-    fun settingNotification(activity: Activity) {
+    fun setting(activity: Activity) {
         val weakActivity = WeakReference(activity)
         val intent = Intent()
         when {
@@ -119,6 +106,17 @@ class NotificationFactory private constructor() {
         }
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         weakActivity.get()?.startActivity(intent)
+    }
+
+    /**
+     * 判断当前是否开启通知，方便用户接受推送消息
+     */
+    fun isEnabled(context: Context): Boolean {
+        return try {
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
+        } catch (e: Exception) {
+            false
+        }
     }
 
 }
