@@ -94,13 +94,13 @@ object GSYVideoHelper {
 
                     override fun onPlayError(url: String?, vararg objects: Any?) {
                         super.onPlayError(url, *objects)
+                        //播放失败切换内核，3次重试
                         if (retryTimes != 3) {
-                            //播放失败切换内核
+                            retryTimes++
                             GSYVideoType.enableMediaCodecTexture()
                             PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
                             CacheFactory.setCacheManager(ProxyCacheManager::class.java)
                             player?.startPlayLogic()
-                            retryTimes++
                         }
                     }
                 }).build(player)
