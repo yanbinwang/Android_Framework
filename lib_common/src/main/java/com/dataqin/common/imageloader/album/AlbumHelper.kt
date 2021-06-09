@@ -22,7 +22,7 @@ import java.lang.ref.WeakReference
  * android:configChanges="orientation|keyboardHidden|screenSize"
  */
 class AlbumHelper(activity: Activity) {
-    private val weakActivity: WeakReference<Activity> = WeakReference(activity)
+    private val weakActivity = WeakReference(activity)
     private val outputPatch = Constants.APPLICATION_FILE_PATH + "/图片"//裁剪后图片保存位置
     private var onAlbumListener: OnAlbumListener? = null //单选回调监听
 
