@@ -189,8 +189,7 @@ object FileUtil {
     @JvmStatic
     fun getFileSize(file: File): Long {
         var size: Long = 0
-        val fileList = file.listFiles()
-        for (mFile in fileList) {
+        for (mFile in file.listFiles()) {
             size = if (mFile.isDirectory) {
                 size + getFileSize(mFile)
             } else {
