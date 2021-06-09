@@ -44,9 +44,8 @@ class NotificationFactory private constructor() {
             setSmallIcon(smallIcon)//状态栏显示的小图标
             setLargeIcon(BitmapFactory.decodeResource(context?.resources, largeIcon))//状态栏下拉显示的大图标
             setDefaults(NotificationCompat.DEFAULT_ALL)
+            setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))//intent为空说明此次为普通推送
         }
-        //intent为空说明此次为普通推送
-        builder.setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))
         val notification = builder.build()
         createChannel()
         notificationManager.notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
@@ -84,10 +83,9 @@ class NotificationFactory private constructor() {
     /**
      * 判断当前是否开启通知，方便用户接受推送消息
      */
-    fun isNotificationEnabled(activity: Activity): Boolean {
-        val weakActivity = WeakReference(activity)
+    fun isNotificationEnabled(context: Context): Boolean {
         return try {
-            NotificationManagerCompat.from(weakActivity.get()!!).areNotificationsEnabled()
+            NotificationManagerCompat.from(context).areNotificationsEnabled()
         } catch (e: Exception) {
             false
         }
