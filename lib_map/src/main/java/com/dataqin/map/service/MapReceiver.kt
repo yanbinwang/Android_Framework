@@ -30,7 +30,7 @@ class MapReceiver : BroadcastReceiver() {
         if (ConnectivityManager.CONNECTIVITY_ACTION == intent?.action) {
             val netWorkState = NetWorkUtil.getNetWorkState()
             if (-1 != netWorkState && null != context) {
-                if (PermissionHelper.with(context).getLocationGranted()) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
+                if (PermissionHelper.with(context).checkSelfLocation()) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
             }
         }
     }

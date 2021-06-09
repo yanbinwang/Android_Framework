@@ -38,7 +38,7 @@ class PermissionHelper(context: Context) {
     fun getPermissions(vararg groups: Array<String>): PermissionHelper {
         //6.0+系统做特殊处理
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (getLoopGranted()) {
+            if (checkSelfPermission()) {
                 onPermissionCallBack?.onPermission(true)
             } else {
                 AndPermission.with(weakContext.get())
@@ -51,7 +51,7 @@ class PermissionHelper(context: Context) {
                     .onDenied { permissions ->
                         //权限申请失败回调-安卓Q定位为使用期间允许，此处做一次检测
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            if (getLocationGranted() && permissions.size == 1 && listOf(*Permission.Group.LOCATION).contains(permissions[0])) {
+                            if (checkSelfLocation() && permissions.size == 1 && listOf(*Permission.Group.LOCATION).contains(permissions[0])) {
                                 onPermissionCallBack?.onPermission(true)
                                 return@onDenied
                             }
@@ -95,11 +95,11 @@ class PermissionHelper(context: Context) {
         return this
     }
 
-    private fun getLoopGranted(): Boolean {
+    private fun checkSelfPermission(): Boolean {
         var granted = true
         for (groupIndex in permissionGroup.indices) {
             if (0 == groupIndex) {
-                granted = getLocationGranted()
+                granted = checkSelfLocation()
             } else {
                 for (index in permissionGroup[groupIndex].indices) {
                     if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, permissionGroup[groupIndex][index])) granted = false
@@ -115,7 +115,7 @@ class PermissionHelper(context: Context) {
      * 2.仅在使用中允许-前台可定位，后台被拒绝
      * 3.拒绝-前后台都拒绝
      */
-    fun getLocationGranted(): Boolean {
+    fun checkSelfLocation(): Boolean {
         var granted = true
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
