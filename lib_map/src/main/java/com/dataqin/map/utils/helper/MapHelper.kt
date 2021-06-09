@@ -69,7 +69,7 @@ object MapHelper {
             aMap?.setOnMapLoadedListener {
                 //先移动到默认点再检测权限定位
                 moveCamera()
-                if (PermissionHelper.with(mapView.context).getLocationGranted()) location(mapView.context)
+                if (PermissionHelper.with(mapView.context).checkSelfLocation()) location(mapView.context)
             }
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)

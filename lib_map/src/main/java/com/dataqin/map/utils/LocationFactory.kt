@@ -113,7 +113,7 @@ class LocationFactory : AMapLocationListener {
      */
     fun start(locationSubscriber: LocationSubscriber) {
         this.locationSubscriber = locationSubscriber
-        if (PermissionHelper.with(context).getLocationGranted()) {
+        if (PermissionHelper.with(context).checkSelfLocation()) {
             locationClient?.startLocation()
         } else {
             locationSubscriber.onFailed()
