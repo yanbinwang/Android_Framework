@@ -32,9 +32,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         LogUtil.i(TAG, "surfaceChanged");
-        if (mHolder.getSurface() == null) {
-            return;
-        }
+        if (mHolder.getSurface() == null) return;
         try {
             if (CameraFactory.getInstance().getCamera() != null) CameraFactory.getInstance().getCamera().stopPreview();
         } catch (Exception ignored) {

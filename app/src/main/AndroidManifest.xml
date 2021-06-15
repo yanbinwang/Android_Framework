@@ -101,6 +101,9 @@
             android:screenOrientation="portrait"
             android:theme="@style/fullScreenTransTheme" />
 
+        <activity android:name=".activity.CameraActivity"
+            android:screenOrientation="portrait"/>
+
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />

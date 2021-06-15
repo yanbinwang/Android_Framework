@@ -140,16 +140,17 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                PermissionHelper.with(this)
-                    .setPermissionCallBack(object :OnPermissionCallBack{
-                        override fun onPermission(isGranted: Boolean) {
-                            if(isGranted){
-                                showToast("已经授权")
-                            }else{
-                                showToast("未授权")
-                            }
-                        }
-                    }).getPermissions()
+                navigation(ARouterPath.CameraActivity)
+//                PermissionHelper.with(this)
+//                    .setPermissionCallBack(object :OnPermissionCallBack{
+//                        override fun onPermission(isGranted: Boolean) {
+//                            if(isGranted){
+//                                showToast("已经授权")
+//                            }else{
+//                                showToast("未授权")
+//                            }
+//                        }
+//                    }).getPermissions()
 //                addressPopup.showPopup(v)
 //                navigation(ARouterPath.TransActivity)
 //                navigation(
