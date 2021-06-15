@@ -11,6 +11,7 @@ import android.media.MediaRecorder
 import android.media.projection.MediaProjection
 import android.media.projection.MediaProjectionManager
 import android.os.Build
+import android.os.Bundle
 import android.os.IBinder
 import android.provider.MediaStore
 import androidx.core.app.NotificationCompat
@@ -74,6 +75,7 @@ class ScreenRecordService : Service() {
     private fun createMediaRecorder(): MediaRecorder {
         val file = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
         filePath = file.toString()
+        postResult(true)
         return MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
             setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -114,8 +116,15 @@ class ScreenRecordService : Service() {
             mediaProjection = null
         } catch (ignored: Exception) {
         } finally {
-            RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE_CREATE, filePath))
+            postResult(false)
         }
+    }
+
+    private fun postResult(create: Boolean) {
+        val bundle = Bundle()
+        bundle.putString(Extras.FILE_PATH, filePath)
+        bundle.putBoolean(Extras.CREATE, create)
+        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE, bundle))
     }
 
 }
