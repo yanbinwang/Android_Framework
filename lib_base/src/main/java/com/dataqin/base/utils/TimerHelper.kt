@@ -60,7 +60,7 @@ object TimerHelper {
      * second-秒
      */
     @JvmStatic
-    fun startDownTask(onCountDownListener: OnCountDownListener? = null, second: Long = 1000) {
+    fun startDownTask(onCountDownListener: OnCountDownListener? = null, second: Long = 1) {
         var time = 0L
         if (null == downTimer) {
             downTimer = Timer()
