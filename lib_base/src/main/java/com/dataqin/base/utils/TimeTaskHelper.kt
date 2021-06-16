@@ -39,7 +39,7 @@ object TimeTaskHelper {
                     weakHandler.post { onTaskListener?.run() }
                 }
             }
-            timer?.schedule(timerTask, 0, millisecond)
+            timer?.schedule(timerTask, millisecond)
         }
     }
 
@@ -67,14 +67,14 @@ object TimeTaskHelper {
                 override fun run() {
                     time++
                     if (time == second) {
-                        stopCountDown()
                         weakHandler.post { onCountDownListener?.onFinish() }
+                        stopCountDown()
                     } else {
                         weakHandler.post { onCountDownListener?.onTick(second - time) }
                     }
                 }
             }
-            countDownTimer?.schedule(countDownTimerTask, 0, 1000)
+            countDownTimer?.schedule(countDownTimerTask, 1000)
         }
     }
 
