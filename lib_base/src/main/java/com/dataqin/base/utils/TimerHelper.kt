@@ -75,7 +75,7 @@ object TimerHelper {
                     }
                 }
             }
-            downTimer?.schedule(downTimerTask, 1000)
+            downTimer?.schedule(downTimerTask,  0, 1000)
         }
     }
 
