@@ -20,7 +20,7 @@ object TimerHelper {
      * 延时任务-容易造成内存泄漏
      */
     @JvmStatic
-    fun schedule(millisecond: Long = 1000, onTaskListener: OnTaskListener?) {
+    fun schedule(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 weakHandler.post { onTaskListener?.run() }
@@ -32,7 +32,7 @@ object TimerHelper {
      * 计时-开始
      */
     @JvmStatic
-    fun startTask(millisecond: Long = 1000, onTaskListener: OnTaskListener?) {
+    fun startTask(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
         if (timer == null) {
             timer = Timer()
             timerTask = object : TimerTask() {
@@ -60,7 +60,7 @@ object TimerHelper {
      * second-秒
      */
     @JvmStatic
-    fun startDownTask(second: Long, onCountDownListener: OnCountDownListener?) {
+    fun startDownTask(onCountDownListener: OnCountDownListener? = null, second: Long = 1000) {
         var time = 0L
         if (null == downTimer) {
             downTimer = Timer()

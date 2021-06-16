@@ -45,7 +45,7 @@ public class TimeTextView extends TextView {
     }
 
     public void countDown(long second) {
-        TimerHelper.startDownTask(second, new TimerHelper.OnCountDownListener() {
+        TimerHelper.startDownTask(new TimerHelper.OnCountDownListener() {
             @Override
             public void onFinish() {
                 setEnabled(true);
@@ -57,7 +57,7 @@ public class TimeTextView extends TextView {
                 setEnabled(false);
                 setText(MessageFormat.format("已发送{0}S", second));
             }
-        });
+        }, second);
     }
 
     @Override

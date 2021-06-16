@@ -67,7 +67,10 @@ class CameraFactory {
         params?.pictureFormat = PixelFormat.JPEG
         if (focusModes?.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)!!) {
             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-            LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+            LogUtil.i(
+                TAG,
+                "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+            )
         } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
             LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
@@ -129,7 +132,7 @@ class CameraFactory {
      */
     fun toggleCamera(view: View? = null) {
         view?.isEnabled = false
-        TimerHelper.schedule(1000, object : TimerHelper.OnTaskListener {
+        TimerHelper.schedule(object : TimerHelper.OnTaskListener {
             override fun run() {
                 view?.isEnabled = true
             }
@@ -247,7 +250,12 @@ class CameraFactory {
         }
     }
 
-    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size?): Rect {
+    private fun calculateTapArea(
+        x: Float,
+        y: Float,
+        coefficient: Float,
+        previewSize: Camera.Size?
+    ): Rect {
         val focusAreaSize = 300
         val areaSize = focusAreaSize * coefficient
         val centerX = (x / previewSize!!.width - 1000)
@@ -255,7 +263,12 @@ class CameraFactory {
         val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
         val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
         val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
-        return Rect(rectF.left.roundToInt(), rectF.top.roundToInt(), rectF.right.roundToInt(), rectF.bottom.roundToInt())
+        return Rect(
+            rectF.left.roundToInt(),
+            rectF.top.roundToInt(),
+            rectF.right.roundToInt(),
+            rectF.bottom.roundToInt()
+        )
     }
 
     private fun clamp(x: Int, min: Int, max: Int): Int {
