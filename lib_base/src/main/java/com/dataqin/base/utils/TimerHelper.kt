@@ -7,12 +7,13 @@ import java.util.*
  *  Created by wangyanbin
  *  时间工具类
  *  默认1秒，分计数和倒计时
+ *  一个页面计时和倒计时有且只有一个存在，多种可考虑使用rxjava自带
  */
-object TimeTaskHelper {
+object TimerHelper {
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
-    private var countDownTimer: Timer? = null
-    private var countDownTimerTask: TimerTask? = null
+    private var downTimer: Timer? = null
+    private var downTimerTask: TimerTask? = null
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
     /**
@@ -59,22 +60,22 @@ object TimeTaskHelper {
      * second-秒
      */
     @JvmStatic
-    fun startCountDown(second: Long, onCountDownListener: OnCountDownListener?) {
+    fun startDownTask(second: Long, onCountDownListener: OnCountDownListener?) {
         var time = 0L
-        if (null == countDownTimer) {
-            countDownTimer = Timer()
-            countDownTimerTask = object : TimerTask() {
+        if (null == downTimer) {
+            downTimer = Timer()
+            downTimerTask = object : TimerTask() {
                 override fun run() {
                     time++
                     if (time == second) {
                         weakHandler.post { onCountDownListener?.onFinish() }
-                        stopCountDown()
+                        stopDownTask()
                     } else {
                         weakHandler.post { onCountDownListener?.onTick(second - time) }
                     }
                 }
             }
-            countDownTimer?.schedule(countDownTimerTask, 1000)
+            downTimer?.schedule(downTimerTask, 1000)
         }
     }
 
@@ -82,11 +83,11 @@ object TimeTaskHelper {
      * 倒计时-结束
      */
     @JvmStatic
-    fun stopCountDown() {
-        countDownTimerTask?.cancel()
-        countDownTimer?.cancel()
-        countDownTimerTask = null
-        countDownTimer = null
+    fun stopDownTask() {
+        downTimerTask?.cancel()
+        downTimer?.cancel()
+        downTimerTask = null
+        downTimer = null
     }
 
     /**
@@ -95,7 +96,7 @@ object TimeTaskHelper {
     @JvmStatic
     fun destroy() {
         stopTask()
-        stopCountDown()
+        stopDownTask()
     }
 
     interface OnTaskListener {

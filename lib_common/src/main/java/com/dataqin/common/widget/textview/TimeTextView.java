@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 
-import com.dataqin.base.utils.TimeTaskHelper;
+import com.dataqin.base.utils.TimerHelper;
 
 import java.text.MessageFormat;
 
@@ -45,7 +45,7 @@ public class TimeTextView extends TextView {
     }
 
     public void countDown(long second) {
-        TimeTaskHelper.startCountDown(second, new TimeTaskHelper.OnCountDownListener() {
+        TimerHelper.startDownTask(second, new TimerHelper.OnCountDownListener() {
             @Override
             public void onFinish() {
                 setEnabled(true);
@@ -63,7 +63,7 @@ public class TimeTextView extends TextView {
     @Override
     protected void onDetachedFromWindow() {
         super.onDetachedFromWindow();
-        TimeTaskHelper.stopCountDown();
+        TimerHelper.stopDownTask();
     }
 
 }

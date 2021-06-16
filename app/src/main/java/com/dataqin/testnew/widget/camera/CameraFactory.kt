@@ -16,7 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.dataqin.base.utils.LogUtil
-import com.dataqin.base.utils.TimeTaskHelper
+import com.dataqin.base.utils.TimerHelper
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.testnew.widget.camera.callback.OnCameraListener
 import com.dataqin.testnew.widget.camera.callback.OnVideoRecordListener
@@ -129,7 +129,7 @@ class CameraFactory {
      */
     fun toggleCamera(view: View? = null) {
         view?.isEnabled = false
-        TimeTaskHelper.schedule(1000, object : TimeTaskHelper.OnTaskListener {
+        TimerHelper.schedule(1000, object : TimerHelper.OnTaskListener {
             override fun run() {
                 view?.isEnabled = true
             }
