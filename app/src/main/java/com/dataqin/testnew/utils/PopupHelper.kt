@@ -18,7 +18,7 @@ import java.util.concurrent.ConcurrentHashMap
 object PopupHelper {
     private var show = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
-    private val popupMap by lazy { ConcurrentHashMap<String, Any>() }//通知管理类，key-通知说明，value-通知对象
+    private val popupMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
 
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
@@ -65,11 +65,12 @@ object PopupHelper {
      */
     private fun showUpdate() {
         val model = popupMap[labelList[0]]
-        if (model is Any) {
-            showNotification()
-        } else {
 //            var versionModel = model as VersionModel
-        }
+//        if(null != versionModel) {
+//
+//        } else {
+//            showNotification()
+//        }
     }
 
     /**
