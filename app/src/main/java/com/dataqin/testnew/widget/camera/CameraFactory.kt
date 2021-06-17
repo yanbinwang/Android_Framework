@@ -67,10 +67,7 @@ class CameraFactory {
         params?.pictureFormat = PixelFormat.JPEG
         if (focusModes?.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)!!) {
             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-            LogUtil.i(
-                TAG,
-                "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-            )
+            LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
         } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
             params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
             LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)

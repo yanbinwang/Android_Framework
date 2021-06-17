@@ -34,15 +34,15 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(), View.OnClickListen
     override fun initView() {
         super.initView()
         statusBarBuilder.setTransparentStatus()
-        CameraFactory.instance.initialize(binding.flCameraPreview, cameraPreview)
-        binding.flCameraPreview.addView(cameraPreview)
+        CameraFactory.instance.initialize(binding.flPreview, cameraPreview)
+        binding.flPreview.addView(cameraPreview)
     }
 
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnReset, binding.btnToggle)
         cameraPreview.setOnTouchListener { _, event ->
-            CameraFactory.instance.focusOnTouch(event.x.toInt(), event.y.toInt(), binding.flCameraPreview)
+            CameraFactory.instance.focusOnTouch(event.x.toInt(), event.y.toInt(), binding.flPreview)
             false
         }
     }

@@ -1,7 +1,6 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -11,15 +10,10 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.common.widget.dialog.AppDialog
-import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
-import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
@@ -155,15 +149,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                AppDialog.with(this).setOnDialogListener(object : OnDialogListener{
-                    override fun onConfirm() {
-                    }
-
-                    override fun onCancel() {
-                    }
-
-                }).setParams("警告","内容","确定").show()
-//                navigation(ARouterPath.CameraActivity)
+                navigation(ARouterPath.CameraActivity)
 //                PermissionHelper.with(this)
 //                    .setPermissionCallBack(object :OnPermissionCallBack{
 //                        override fun onPermission(isGranted: Boolean) {
