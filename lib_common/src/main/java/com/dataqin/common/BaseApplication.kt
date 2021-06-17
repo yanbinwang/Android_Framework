@@ -5,7 +5,7 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
 import com.dataqin.base.utils.LogUtil.d
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
-import com.dataqin.common.imageloader.glide.callback.GlideAlbumLoader
+import com.dataqin.common.imageloader.album.AlbumGlideLoader
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
@@ -41,7 +41,7 @@ open class BaseApplication : Application() {
         //初始化图片库类
         Album.initialize(
             AlbumConfig.newBuilder(this)
-                .setAlbumLoader(GlideAlbumLoader()) //设置Album加载器。
+                .setAlbumLoader(AlbumGlideLoader()) //设置Album加载器。
                 .setLocale(Locale.CHINA) //强制设置在任何语言下都用中文显示。
                 .build())
         //x5内核初始化接口
