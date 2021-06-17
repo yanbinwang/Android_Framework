@@ -22,8 +22,8 @@ object PopupHelper {
 
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
-        "push_label",//推送
         "update_label",//更新
+        "push_label",//推送
         "advertisement_label",//广告
         "advertisement_label2"//广告2
     )
@@ -33,7 +33,7 @@ object PopupHelper {
         this.show = false
         this.weakActivity = WeakReference(activity)
         this.popupMap.clear()
-        this.popupMap[labelList[0]] = Any()//0留给推送
+        this.popupMap[labelList[1]] = Any()//1留给推送
     }
 
     /**
@@ -55,8 +55,20 @@ object PopupHelper {
             //检测当前的通知集合是否已经达到了配置的通知总数
             if (popupMap.size >= labelList.size) {
                 show = true
-                showNotification()
+                showUpdate()
             }
+        }
+    }
+
+    /**
+     * 更新
+     */
+    private fun showUpdate() {
+        val model = popupMap[labelList[0]]
+        if (model is Any) {
+            showNotification()
+        } else {
+//            var versionModel = model as VersionModel
         }
     }
 
@@ -68,22 +80,16 @@ object PopupHelper {
             AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
                 override fun onConfirm() {
                     NotificationFactory.instance.setting(weakActivity?.get()!!)
-                    showUpdate()
+                    showAdvertisement()
                 }
 
                 override fun onCancel() {
-                    showUpdate()
+                    showAdvertisement()
                 }
             }).setParams("提示", "是否开启推送通知", "确定", "取消").show()
-        } else showUpdate()
-    }
-
-    /**
-     * 更新
-     */
-    private fun showUpdate() {
-        val model = popupMap[labelList[1]]
-//        var versionModel = model as VersionModel
+        } else {
+            showAdvertisement()
+        }
     }
 
     /**
