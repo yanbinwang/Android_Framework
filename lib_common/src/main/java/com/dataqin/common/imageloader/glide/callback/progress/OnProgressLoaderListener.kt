@@ -6,6 +6,8 @@ package com.dataqin.common.imageloader.glide.callback.progress
  */
 interface OnProgressLoaderListener {
 
+    fun onStart()
+
     fun onProgress(progress: Int = 0)
 
     fun onComplete()

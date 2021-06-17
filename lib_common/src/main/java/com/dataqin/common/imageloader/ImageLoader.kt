@@ -64,13 +64,15 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
                     .diskCacheStrategy(DiskCacheStrategy.NONE))
             .addListener(object : GlideRequestListener<Drawable?>() {
                 override fun onStart() {
+                    progressListener?.onStart()
                 }
 
                 override fun onComplete(resource: Drawable?) {
                     ProgressInterceptor.removeListener(string)
                     progressListener?.onComplete()
                 }
-            }).into(view)
+            })
+            .into(view)
     }
 
     override fun displayImage(view: ImageView, string: String?) {
