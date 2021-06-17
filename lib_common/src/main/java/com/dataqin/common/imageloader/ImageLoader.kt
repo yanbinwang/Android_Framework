@@ -3,6 +3,7 @@ package com.dataqin.common.imageloader
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
 import com.bumptech.glide.request.RequestOptions
 import com.dataqin.common.BaseApplication
@@ -10,9 +11,13 @@ import com.dataqin.common.R
 import com.dataqin.common.imageloader.glide.callback.GlideImpl
 import com.dataqin.common.imageloader.glide.callback.GlideModule
 import com.dataqin.common.imageloader.glide.callback.GlideRequestListener
+import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
+import com.dataqin.common.imageloader.glide.callback.progress.ProgressInterceptor
+import com.dataqin.common.imageloader.glide.callback.progress.ProgressListener
 import com.dataqin.common.imageloader.glide.transform.CornerTransform
 import com.dataqin.common.imageloader.glide.transform.ZoomTransform
 import java.io.File
+
 
 /**
  * Created by WangYanBin on 2020/5/29.
@@ -44,6 +49,28 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .load(string)
             .dontAnimate()
             .into(view)
+    }
+
+    override fun displayProgressImage(view: ImageView, string: String, progressListener: OnProgressLoaderListener?) {
+        ProgressInterceptor.addListener(string, object : ProgressListener {
+            override fun onProgress(progress: Int) {
+                progressListener?.onProgress(progress)
+            }
+        })
+        manager
+            .load(string)
+            .apply(RequestOptions()
+                    .skipMemoryCache(true)
+                    .diskCacheStrategy(DiskCacheStrategy.NONE))
+            .addListener(object : GlideRequestListener<Drawable?>() {
+                override fun onStart() {
+                }
+
+                override fun onComplete(resource: Drawable?) {
+                    ProgressInterceptor.removeListener(string)
+                    progressListener?.onComplete()
+                }
+            }).into(view)
     }
 
     override fun displayImage(view: ImageView, string: String?) {

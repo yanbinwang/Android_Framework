@@ -9,6 +9,8 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.RequestCode
+import com.dataqin.common.imageloader.ImageLoader
+import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.helper.fadeIn
@@ -68,6 +70,14 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //        PopupHelper.addPopup(1,Any())
 //        PopupHelper.addPopup(2,Any())
 //        PopupHelper.addPopup(3,Any())
+
+        ImageLoader.instance.displayProgressImage(binding.ivLoading,"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F03%2F165526ophx4l6c6ll3cnpl.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626503458&t=0e2ad4aa991a1788dd91eed69ecf40b7",object :OnProgressLoaderListener{
+            override fun onProgress(progress: Int) {
+            }
+
+            override fun onComplete() {
+            }
+        })
     }
 
     override fun initEvent() {
