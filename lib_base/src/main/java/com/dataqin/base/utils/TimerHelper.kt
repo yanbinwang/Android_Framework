@@ -40,7 +40,7 @@ object TimerHelper {
                     weakHandler.post { onTaskListener?.run() }
                 }
             }
-            timer?.schedule(timerTask, millisecond)
+            timer?.schedule(timerTask, 0, millisecond)
         }
     }
 

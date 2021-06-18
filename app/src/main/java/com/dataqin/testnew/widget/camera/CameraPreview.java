@@ -36,8 +36,9 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         try {
             if (CameraFactory.getInstance().getCamera() != null) CameraFactory.getInstance().getCamera().stopPreview();
         } catch (Exception ignored) {
+        } finally {
+            startPreview(holder);
         }
-        startPreview(holder);
     }
 
     @Override
