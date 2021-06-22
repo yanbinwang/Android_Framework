@@ -1,5 +1,6 @@
 package com.dataqin.base.utils
 
+import android.os.CountDownTimer
 import android.os.Looper
 import java.util.*
 
@@ -12,8 +13,7 @@ import java.util.*
 object TimerHelper {
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
-    private var downTimer: Timer? = null
-    private var downTimerTask: TimerTask? = null
+    private var downTimer: CountDownTimer? = null
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
     /**
@@ -61,22 +61,19 @@ object TimerHelper {
      */
     @JvmStatic
     fun startDownTask(onCountDownListener: OnCountDownListener? = null, second: Long = 1) {
-        var time = 0L
         if (null == downTimer) {
-            downTimer = Timer()
-            downTimerTask = object : TimerTask() {
-                override fun run() {
-                    time++
-                    if (time == second) {
-                        weakHandler.post { onCountDownListener?.onFinish() }
-                        stopDownTask()
-                    } else {
-                        weakHandler.post { onCountDownListener?.onTick(second - time) }
-                    }
+            downTimer = object : CountDownTimer(second * 1000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    onCountDownListener?.onTick((millisUntilFinished / 1000))
+                }
+
+                override fun onFinish() {
+                    onCountDownListener?.onFinish()
+                    stopDownTask()
                 }
             }
-            downTimer?.schedule(downTimerTask,  0, 1000)
         }
+        downTimer?.start()
     }
 
     /**
@@ -84,9 +81,7 @@ object TimerHelper {
      */
     @JvmStatic
     fun stopDownTask() {
-        downTimerTask?.cancel()
         downTimer?.cancel()
-        downTimerTask = null
         downTimer = null
     }
 
