@@ -1,5 +1,6 @@
 package com.dataqin.media.utils
 
+import android.content.Context
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
@@ -64,9 +65,9 @@ object MediaFileUtil {
      * 需有1G的默认大小的空间
      */
     @JvmStatic
-    fun setScanDisk(space: Long = 1024): Boolean {
+    fun setScanDisk(context: Context, space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
-        val availableSize = SdcardUtil.getSdcardAvailableCapacity()
+        val availableSize = SdcardUtil.getSdcardAvailableCapacity(context)
         LogUtil.e(TAG, "sd availableSize: " + availableSize + "M")
         return availableSize > space
     }
