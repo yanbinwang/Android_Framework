@@ -33,50 +33,38 @@ object DataCleanManager {
      * 清除本应用内部缓存(/data/data/com.xxx.xxx/cache)
      */
     @JvmStatic
-    fun cleanInternalCache(context: Context) {
-        deleteFilesByDirectory(context.cacheDir)
-    }
+    fun cleanInternalCache(context: Context) = deleteFilesByDirectory(context.cacheDir)
 
     /**
      * 清除本应用所有数据库(/data/data/com.xxx.xxx/databases)
      */
     @JvmStatic
-    fun cleanDatabases(context: Context) {
-        deleteFilesByDirectory(File("/data/data/" + context.packageName + "/databases"))
-    }
+    fun cleanDatabases(context: Context) = deleteFilesByDirectory(File("/data/data/" + context.packageName + "/databases"))
 
     /**
      * 清除本应用SharedPreference(/data/data/com.xxx.xxx/shared_prefs)
      */
     @JvmStatic
-    fun cleanSharedPreference(context: Context) {
-        deleteFilesByDirectory(File("/data/data/" + context.packageName + "/shared_prefs"))
-    }
+    fun cleanSharedPreference(context: Context) = deleteFilesByDirectory(File("/data/data/" + context.packageName + "/shared_prefs"))
 
     /**
      * 按名字清除本应用数据库
      */
     @JvmStatic
-    fun cleanDatabaseByName(context: Context, dbName: String) {
-        context.deleteDatabase(dbName)
-    }
+    fun cleanDatabaseByName(context: Context, dbName: String) = context.deleteDatabase(dbName)
 
     /**
      * 清除/data/data/com.xxx.xxx/files下的内容
      */
     @JvmStatic
-    fun cleanFiles(context: Context) {
-        deleteFilesByDirectory(context.filesDir)
-    }
+    fun cleanFiles(context: Context) = deleteFilesByDirectory(context.filesDir)
 
     /**
      * 清除外部cache下的内容(/mnt/sdcard/android/data/com.xxx.xxx/cache)
      */
     @JvmStatic
     fun cleanExternalCache(context: Context) {
-        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) {
-            deleteFilesByDirectory(context.externalCacheDir!!)
-        }
+        if (Environment.getExternalStorageState() == Environment.MEDIA_MOUNTED) deleteFilesByDirectory(context.externalCacheDir!!)
     }
 
     /**
