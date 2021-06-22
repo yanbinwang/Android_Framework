@@ -66,7 +66,7 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
     public void onClick(View v) {
         if (v.getId() == R.id.tv_sure) {
             if (null != onDatePopupListener) {
-                onDatePopupListener.onCurrent(DateUtil.getDateTimeStr(DateUtil.EN_YMDHMS, binding.wdpChannel.getCurrentDate()));
+                onDatePopupListener.onCurrent(DateUtil.getDateTime(DateUtil.EN_YMDHMS, binding.wdpChannel.getCurrentDate()));
             }
             dismiss();
         } else if (v.getId() == R.id.tv_cancel) {

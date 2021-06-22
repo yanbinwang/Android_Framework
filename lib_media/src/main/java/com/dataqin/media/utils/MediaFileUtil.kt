@@ -57,7 +57,7 @@ object MediaFileUtil {
                 return null
             }
         } else LogUtil.i(TAG, "mkdirs,文件夹已存在： ${mediaStorageDir.path}")
-        return File(mediaStorageDir.path + File.separator + DateUtil.getDateTimeStr("yyyyMMdd_HHmmss", Date()) + suffix)
+        return File(mediaStorageDir.path + File.separator + DateUtil.getDateTime("yyyyMMdd_HHmmss", Date()) + suffix)
     }
 
     /**
