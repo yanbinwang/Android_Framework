@@ -67,7 +67,7 @@ public class EmptyLayout extends SimpleViewGroup {
             //进入加载中，并停止刷新动画
             showLoading();
             if (null != onEmptyRefreshListener) {
-                onEmptyRefreshListener.onEmptyRefresh();
+                onEmptyRefreshListener.onRefreshClick();
             }
         });
         contextView.setOnClickListener(null);
