@@ -71,9 +71,7 @@ object DataCleanManager {
      * 清除自定义路径下的文件，使用需小心，请不要误删。而且只支持目录下的文件删除
      */
     @JvmStatic
-    fun cleanCustomCache(filePath: String) {
-        deleteFilesByDirectory(File(filePath))
-    }
+    fun cleanCustomCache(filePath: String) = deleteFilesByDirectory(File(filePath))
 
     /**
      * 清除本应用所有的数据
