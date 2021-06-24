@@ -66,7 +66,4 @@ class NetworkCallbackImpl : ConnectivityManager.NetworkCallback() {
         }
     }
 
-
-
-
 }
