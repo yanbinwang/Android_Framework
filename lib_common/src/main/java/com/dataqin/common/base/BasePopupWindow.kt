@@ -80,8 +80,8 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
                 animationStyle = R.style.pushBottomAnimStyle
             }
         } else {
-            enterTransition = null
-            exitTransition = null
+//            enterTransition = null
+//            exitTransition = null
             animationStyle = -1
         }
     }
