@@ -1,6 +1,5 @@
 package com.dataqin.common.utils
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.wifi.WifiManager
 import com.dataqin.base.utils.LogUtil
@@ -12,7 +11,6 @@ import com.dataqin.common.base.proxy.NetworkCallbackImpl
  * date: 2018/8/13.
  * 网路监测类
  */
-@SuppressLint("StaticFieldLeak", "MissingPermission")
 object NetWorkUtil {
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
 
