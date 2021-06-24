@@ -38,12 +38,12 @@ object CompressUtil {
         val matrix = Matrix()
         if (width > 720) {
             size = 720f / width
-            e("w", bitmap.width.toString() + "")
-            e("h", bitmap.height.toString() + "")
+            e("w", bitmap.width.toString())
+            e("h", bitmap.height.toString())
         } else if (height > 1280) {
             size = 1280f / height
-            e("w", bitmap.width.toString() + "")
-            e("h", bitmap.height.toString() + "")
+            e("w", bitmap.width.toString())
+            e("h", bitmap.height.toString())
         }
         matrix.postScale(size, size)
         return Bitmap.createBitmap(bitmap, 0, 0, width, height, matrix, true)
