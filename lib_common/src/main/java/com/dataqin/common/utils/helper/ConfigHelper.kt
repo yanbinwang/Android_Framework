@@ -36,15 +36,22 @@ object ConfigHelper {
     fun initialize(application: Application) {
         context = application
         //在程序运行时取值，保证长宽静态变量不丢失
-        val metric = DisplayMetrics()
-        val mWindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-        mWindowManager.defaultDisplay.getMetrics(metric)
+//        val metric = DisplayMetrics()
+//        val mWindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
+//        mWindowManager.defaultDisplay.getMetrics(metric)
+//        //屏幕宽度（像素）
+//        Constants.SCREEN_WIDTH = metric.widthPixels
+//        //屏幕高度（像素）
+//        Constants.SCREEN_HEIGHT = metric.heightPixels
+//        //屏幕比值 (dp)
+//        Constants.SCREEN_DENSITY = metric.densityDpi
+        val metrics = context.resources.displayMetrics
         //屏幕宽度（像素）
-        Constants.SCREEN_WIDTH = metric.widthPixels
+        Constants.SCREEN_WIDTH = metrics.widthPixels
         //屏幕高度（像素）
-        Constants.SCREEN_HEIGHT = metric.heightPixels
+        Constants.SCREEN_HEIGHT = metrics.heightPixels
         //屏幕比值 (dp)
-        Constants.SCREEN_DENSITY = metric.densityDpi
+        Constants.SCREEN_DENSITY = metrics.densityDpi
         //获取手机的导航栏高度
         Constants.STATUS_BAR_HEIGHT = context.resources.getDimensionPixelSize(context.resources.getIdentifier("status_bar_height", "dimen", "android"))
         //获取手机的网络ip
