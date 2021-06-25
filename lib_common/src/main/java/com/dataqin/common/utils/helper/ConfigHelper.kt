@@ -11,10 +11,8 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.SystemClock
 import android.telephony.TelephonyManager
-import android.util.DisplayMetrics
 import android.view.MotionEvent
 import android.view.View
-import android.view.WindowManager
 import com.app.hubert.guide.NewbieGuide
 import com.app.hubert.guide.model.GuidePage
 import com.dataqin.common.constant.Constants
@@ -37,15 +35,6 @@ object ConfigHelper {
     fun initialize(application: Application) {
         context = application
         //在程序运行时取值，保证长宽静态变量不丢失
-//        val metric = DisplayMetrics()
-//        val mWindowManager = context.getSystemService(Context.WINDOW_SERVICE) as WindowManager
-//        mWindowManager.defaultDisplay.getMetrics(metric)
-//        //屏幕宽度（像素）
-//        Constants.SCREEN_WIDTH = metric.widthPixels
-//        //屏幕高度（像素）
-//        Constants.SCREEN_HEIGHT = metric.heightPixels
-//        //屏幕比值 (dp)
-//        Constants.SCREEN_DENSITY = metric.densityDpi
         val metrics = context.resources.displayMetrics
         //屏幕宽度（像素）
         Constants.SCREEN_WIDTH = metrics.widthPixels
@@ -107,53 +96,30 @@ object ConfigHelper {
     //获取当前设备ip地址
     private fun getIp(): String {
         val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (networkCapabilities != null) {
-                //当前使用2G/3G/4G网络
-                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                    return getMobileIp()
-                    //当前使用WIFI网络
-                } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                    return getWifiIp()
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+        if (networkCapabilities != null) {
+            //当前使用2G/3G/4G网络
+            if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                try {
+                    val enumeration = NetworkInterface.getNetworkInterfaces()
+                    while (enumeration.hasMoreElements()) {
+                        val inetAddresses = enumeration.nextElement().inetAddresses
+                        while (inetAddresses.hasMoreElements()) {
+                            val inetAddress = inetAddresses.nextElement()
+                            if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) return inetAddress.getHostAddress()
+                        }
+                    }
+                } catch (e: SocketException) {
+                    return ""
                 }
-            }
-        } else {
-            val networkInfo = connectivityManager.activeNetworkInfo
-            if (networkInfo != null && networkInfo.isConnected) {
-                //当前使用2G/3G/4G网络
-                if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
-                    return getMobileIp()
-                    //当前使用无线网络
-                } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
-                    return getWifiIp()
-                }
+                //当前使用WIFI网络
+            } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+                val wifiInfo = wifiManager.connectionInfo
+                return initIp(wifiInfo.ipAddress)
             }
         }
         return ""
-    }
-
-    private fun getMobileIp(): String {
-        try {
-            val enumeration = NetworkInterface.getNetworkInterfaces()
-            while (enumeration.hasMoreElements()) {
-                val networkInterface = enumeration.nextElement()
-                val inetAddresses = networkInterface.inetAddresses
-                while (inetAddresses.hasMoreElements()) {
-                    val inetAddress = inetAddresses.nextElement()
-                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) return inetAddress.getHostAddress()
-                }
-            }
-        } catch (e: SocketException) {
-            return ""
-        }
-        return ""
-    }
-
-    private fun getWifiIp(): String {
-        val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-        val wifiInfo = wifiManager.connectionInfo
-        return initIp(wifiInfo.ipAddress)
     }
 
     //将ip的整数形式转换成ip形式
@@ -169,7 +135,7 @@ object ConfigHelper {
         try {
             val all = Collections.list(NetworkInterface.getNetworkInterfaces())
             for (nif in all) {
-                if (!nif.name.equals("wlan0", ignoreCase = true)) continue
+                if (!nif.name.equals("wlan0")) continue
                 val macBytes = nif.hardwareAddress ?: return null
                 val res1 = StringBuilder()
                 for (b in macBytes) {
@@ -192,7 +158,7 @@ object ConfigHelper {
             } else {
                 telephonyManager.deviceId
             }
-        } catch (e: SecurityException) {
+        } catch (ignored: SecurityException) {
             null
         }
     }
@@ -201,7 +167,7 @@ object ConfigHelper {
     private fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
         try {
-            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName, 0)
+            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName!!, 0)
             appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 packageInfo.longVersionCode
             } else {
@@ -216,7 +182,7 @@ object ConfigHelper {
     private fun getAppVersionName(): String {
         var appVersionName = ""
         try {
-            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName, 0)
+            val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName!!, 0)
             appVersionName = packageInfo.versionName
         } catch (ignored: PackageManager.NameNotFoundException) {
         }
