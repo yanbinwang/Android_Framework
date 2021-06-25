@@ -160,7 +160,7 @@ object ConfigHelper {
      */
     private fun getMac(): String? {
         try {
-            val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
+            val all = Collections.list(NetworkInterface.getNetworkInterfaces())
             for (nif in all) {
                 if (!nif.name.equals("wlan0")) continue
                 val macBytes = nif.hardwareAddress ?: return null
