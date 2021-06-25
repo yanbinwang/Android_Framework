@@ -57,7 +57,9 @@ object ConfigHelper {
         Constants.APPLICATION_FILE_PATH = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME
     }
 
-    //遮罩引导
+    /**
+     * 遮罩引导
+     */
     fun showGuide(activity: Activity, label: String, vararg pages: GuidePage) {
         if (!obtainBehavior(label)) {
             storageBehavior(label, true)
@@ -72,17 +74,23 @@ object ConfigHelper {
         }
     }
 
-    //获取当前标签的行为-是否第一次启动，是否进入引导页等，针对用户的行为在用户类中单独管理
+    /**
+     * 获取当前标签的行为-是否第一次启动，是否进入引导页等，针对用户的行为在用户类中单独管理
+     */
     fun obtainBehavior(label: String): Boolean {
         return mmkv.decodeBool(label, false)
     }
 
-    //存储当前想标签行为
+    /**
+     * 存储当前标签行为
+     */
     fun storageBehavior(label: String, value: Boolean): Boolean {
         return mmkv.encode(label, value)
     }
 
-    //模拟触屏点击屏幕事件
+    /**
+     * 模拟触屏点击屏幕事件
+     */
     fun touch(view: View) {
         val downTime = SystemClock.uptimeMillis()
         val downEvent = MotionEvent.obtain(downTime, downTime, MotionEvent.ACTION_DOWN, 0f, 0f, 0)
@@ -93,7 +101,9 @@ object ConfigHelper {
         upEvent.recycle()
     }
 
-    //获取当前设备ip地址
+    /**
+     * 获取当前设备ip地址
+     */
     private fun getIp(): String {
         val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -138,18 +148,16 @@ object ConfigHelper {
     private fun getWifiIp(): String {
         val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
         val wifiInfo = wifiManager.connectionInfo
-        return initIp(wifiInfo.ipAddress)
-    }
-
-    //将ip的整数形式转换成ip形式
-    private fun initIp(ipInt: Int): String {
+        val ipInt = wifiInfo.ipAddress
         return (ipInt and 0xFF).toString() + "." +
                 (ipInt shr 8 and 0xFF) + "." +
                 (ipInt shr 16 and 0xFF) + "." +
                 (ipInt shr 24 and 0xFF)
     }
 
-    //获取当前设备的mac地址
+    /**
+     * 获取当前设备的mac地址
+     */
     private fun getMac(): String? {
         try {
             val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
@@ -168,7 +176,9 @@ object ConfigHelper {
         return null
     }
 
-    //获取当前设备的id
+    /**
+     * 获取当前设备的id
+     */
     private fun getDeviceId(): String? {
         val telephonyManager = (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
         return try {
@@ -182,7 +192,9 @@ object ConfigHelper {
         }
     }
 
-    //获取当前app version code
+    /**
+     * 获取当前app version code
+     */
     private fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
         try {
@@ -197,7 +209,9 @@ object ConfigHelper {
         return appVersionCode
     }
 
-    //获取当前app version name
+    /**
+     * 获取当前app version name
+     */
     private fun getAppVersionName(): String {
         var appVersionName = ""
         try {
