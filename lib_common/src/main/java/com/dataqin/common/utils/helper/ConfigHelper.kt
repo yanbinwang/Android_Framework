@@ -96,30 +96,49 @@ object ConfigHelper {
     //获取当前设备ip地址
     private fun getIp(): String {
         val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
-        val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-        if (networkCapabilities != null) {
-            //当前使用2G/3G/4G网络
-            if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                try {
-                    val enumeration = NetworkInterface.getNetworkInterfaces()
-                    while (enumeration.hasMoreElements()) {
-                        val inetAddresses = enumeration.nextElement().inetAddresses
-                        while (inetAddresses.hasMoreElements()) {
-                            val inetAddress = inetAddresses.nextElement()
-                            if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) return inetAddress.getHostAddress()
-                        }
-                    }
-                } catch (e: SocketException) {
-                    return ""
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (networkCapabilities != null) {
+                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return getMobileIp()
+                } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return getWifiIp()
                 }
-                //当前使用WIFI网络
-            } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                val wifiInfo = wifiManager.connectionInfo
-                return initIp(wifiInfo.ipAddress)
+            }
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            if (networkInfo != null && networkInfo.isConnected) {
+                if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
+                    return getMobileIp()
+                } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
+                    return getWifiIp()
+                }
             }
         }
         return ""
+    }
+
+    private fun getMobileIp(): String {
+        try {
+            val enumeration = NetworkInterface.getNetworkInterfaces()
+            while (enumeration.hasMoreElements()) {
+                val networkInterface = enumeration.nextElement()
+                val inetAddresses = networkInterface.inetAddresses
+                while (inetAddresses.hasMoreElements()) {
+                    val inetAddress = inetAddresses.nextElement()
+                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) return inetAddress.getHostAddress()
+                }
+            }
+        } catch (ignored: SocketException) {
+            return ""
+        }
+        return ""
+    }
+
+    private fun getWifiIp(): String {
+        val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = wifiManager.connectionInfo
+        return initIp(wifiInfo.ipAddress)
     }
 
     //将ip的整数形式转换成ip形式
@@ -133,7 +152,7 @@ object ConfigHelper {
     //获取当前设备的mac地址
     private fun getMac(): String? {
         try {
-            val all = Collections.list(NetworkInterface.getNetworkInterfaces())
+            val all: List<NetworkInterface> = Collections.list(NetworkInterface.getNetworkInterfaces())
             for (nif in all) {
                 if (!nif.name.equals("wlan0")) continue
                 val macBytes = nif.hardwareAddress ?: return null
