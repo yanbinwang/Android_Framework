@@ -11,7 +11,9 @@ import android.net.NetworkCapabilities
  */
 class NetworkCallbackImpl : ConnectivityManager.NetworkCallback() {
     companion object {
+        @Volatile
         var available = false
+        @Volatile
         var netState = -1//WIFI网络=0 蜂窝网络=1 其他网络（未知网络，包括蓝牙、VPN、LoWPAN）=-1
     }
 
