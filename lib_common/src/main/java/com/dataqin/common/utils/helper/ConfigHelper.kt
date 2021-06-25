@@ -6,6 +6,7 @@ import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.SystemClock
@@ -104,35 +105,55 @@ object ConfigHelper {
     }
 
     //获取当前设备ip地址
-    private fun getIp(): String? {
-        val networkInfo = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).activeNetworkInfo
-        if (networkInfo != null && networkInfo.isConnected) {
-            //当前使用2G/3G/4G网络
-            if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
-                try {
-                    val enumeration = NetworkInterface.getNetworkInterfaces()
-                    while (enumeration.hasMoreElements()) {
-                        val networkInterface = enumeration.nextElement()
-                        val inetAddresses = networkInterface.inetAddresses
-                        while (inetAddresses.hasMoreElements()) {
-                            val inetAddress = inetAddresses.nextElement()
-                            if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) {
-                                return inetAddress.getHostAddress()
-                            }
-                        }
-                    }
-                } catch (e: SocketException) {
-                    return null
+    private fun getIp(): String {
+        val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (networkCapabilities != null) {
+                //当前使用2G/3G/4G网络
+                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                    return getMobileIp()
+                    //当前使用WIFI网络
+                } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                    return getWifiIp()
                 }
-                //当前使用无线网络
-            } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
-                val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
-                val wifiInfo = wifiManager.connectionInfo
-                //得到IPV4地址
-                return initIp(wifiInfo.ipAddress)
+            }
+        } else {
+            val networkInfo = connectivityManager.activeNetworkInfo
+            if (networkInfo != null && networkInfo.isConnected) {
+                //当前使用2G/3G/4G网络
+                if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
+                    return getMobileIp()
+                    //当前使用无线网络
+                } else if (networkInfo.type == ConnectivityManager.TYPE_WIFI) {
+                    return getWifiIp()
+                }
             }
         }
-        return null
+        return ""
+    }
+
+    private fun getMobileIp(): String {
+        try {
+            val enumeration = NetworkInterface.getNetworkInterfaces()
+            while (enumeration.hasMoreElements()) {
+                val networkInterface = enumeration.nextElement()
+                val inetAddresses = networkInterface.inetAddresses
+                while (inetAddresses.hasMoreElements()) {
+                    val inetAddress = inetAddresses.nextElement()
+                    if (!inetAddress.isLoopbackAddress && inetAddress is Inet4Address) return inetAddress.getHostAddress()
+                }
+            }
+        } catch (e: SocketException) {
+            return ""
+        }
+        return ""
+    }
+
+    private fun getWifiIp(): String {
+        val wifiManager = context.applicationContext?.getSystemService(Context.WIFI_SERVICE) as WifiManager
+        val wifiInfo = wifiManager.connectionInfo
+        return initIp(wifiInfo.ipAddress)
     }
 
     //将ip的整数形式转换成ip形式
