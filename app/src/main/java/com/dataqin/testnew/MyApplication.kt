@@ -59,8 +59,7 @@ class MyApplication : BaseApplication() {
                 try {
                     Looper.loop()
                 } catch (e: Throwable) {
-                    val stackTraceString = Log.getStackTraceString(e)
-                    println("AppCatch -$stackTraceString")
+                    println("AppCatch -${Log.getStackTraceString(e)}")
                 }
             }
         }

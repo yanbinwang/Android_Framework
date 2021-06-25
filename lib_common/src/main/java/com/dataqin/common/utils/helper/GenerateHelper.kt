@@ -25,7 +25,7 @@ object GenerateHelper {
             try {
                 val bitmap = loadBitmap(view)
                 weakHandler.post { onGenerateListener?.onResult(bitmap!!) }
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
             } finally {
                 weakHandler.post { onGenerateListener?.onComplete() }
             }

@@ -167,7 +167,7 @@ object CompressUtil {
         var exifInterface: ExifInterface? = null
         try {
             exifInterface = ExifInterface(path)
-        } catch (e: IOException) {
+        } catch (ignored: IOException) {
         } finally {
             when (exifInterface?.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL)) {
                 ExifInterface.ORIENTATION_ROTATE_90 -> degree = 90f
