@@ -14,7 +14,7 @@ import java.io.File
  */
 class ScreenShotObserver : ContentObserver(null) {
     private var imageNum = 0
-    private var context = BaseApplication.instance?.applicationContext!!
+    private val context by lazy { BaseApplication.instance?.applicationContext!! }
     private val TAG = "ScreenShotObserver"
 
     companion object {
@@ -26,20 +26,11 @@ class ScreenShotObserver : ContentObserver(null) {
 
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
-        val columns = arrayOf(
-                MediaStore.MediaColumns.DATE_ADDED,
-                MediaStore.MediaColumns.DATA)
+        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA)
         var cursor: Cursor? = null
         try {
-            cursor = context.contentResolver.query(
-                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                    columns,
-                    null,
-                    null,
-                    MediaStore.MediaColumns.DATE_MODIFIED + " desc")
-            if (cursor == null) {
-                return
-            }
+            cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
+            if (cursor == null) return
             val count = cursor.count
             if (imageNum == 0) {
                 imageNum = count
@@ -59,27 +50,23 @@ class ScreenShotObserver : ContentObserver(null) {
                     e(TAG, "发送生成图片的路径广播:" + File(filePath).parent)
                 }
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         } finally {
-            if (cursor != null) {
-                try {
-                    cursor.close()
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
+            try {
+                cursor?.close()
+            } catch (ignored: Exception) {
             }
         }
     }
 
-    //注册监听
-    fun register() {
-        context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
-    }
+    /**
+     * 注册监听
+     */
+    fun register() = context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
 
-    //注销监听
-    fun unregister() {
-        context.contentResolver.unregisterContentObserver(this)
-    }
+    /**
+     * 注销监听
+     */
+    fun unregister() = context.contentResolver.unregisterContentObserver(this)
 
 }
