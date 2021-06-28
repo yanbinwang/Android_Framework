@@ -1,6 +1,7 @@
 package com.dataqin.common.utils
 
 import java.math.BigDecimal
+import java.text.DecimalFormat
 
 /**
  * author:wyb
@@ -65,3 +66,13 @@ object CalculationUtil {
     }
 
 }
+
+/**
+ * 当小数位不超过两位时，补0
+ */
+fun Double.completion() = DecimalFormat("0.00").format(this) ?: ""
+
+/**
+ * 当小数位超过两位时，只显示两位，但只有一位或没有，则不需要补0
+ */
+fun Double.rounding() = DecimalFormat("0.##").format(this) ?: ""

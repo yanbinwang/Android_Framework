@@ -6,18 +6,20 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.PixelFormat
-import android.media.MediaScannerConnection
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.Settings
 import androidx.core.content.FileProvider
 import com.dataqin.base.utils.DateUtil
+import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
 import java.text.DecimalFormat
 import java.util.*
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 /**
  * Created by WangYanBin on 2020/7/1.
@@ -25,6 +27,7 @@ import java.util.*
  */
 @SuppressLint("QueryPermissionsNeeded")
 object FileUtil {
+    private const val TAG = "FileUtil"
 
     /**
      * 是否安装了XXX应用
@@ -45,7 +48,7 @@ object FileUtil {
      */
     @JvmStatic
     fun isRoot(): Boolean {
-        var file :File
+        var file: File
         val paths = arrayOf("/system/bin/", "/system/xbin/", "/system/sbin/", "/sbin/", "/vendor/bin/")
         try {
             for (element in paths) {
@@ -118,6 +121,55 @@ object FileUtil {
             else if (file.isDirectory) deleteDirWithFile(file) //递规的方式删除文件夹
         }
         dir.delete() //删除目录本身
+    }
+
+    /**
+     * 将指定路径下的所有文件打成压缩包
+     * @param filePath 要压缩的文件或文件夹路径
+     * @param zipFilePath 压缩完成的Zip路径
+     */
+    @JvmStatic
+    fun zipFolder(filePath: String, zipFilePath: String) {
+        //创建ZIP
+        val outZip = ZipOutputStream(FileOutputStream(zipFilePath))
+        //创建文件
+        val file = File(filePath)
+        LogUtil.e(TAG, " \n---->${file.parent}===${file.absolutePath}")
+        //压缩
+        zipFiles(file.parent + File.separator, file.name, outZip)
+        //完成和关闭
+        outZip.finish()
+        outZip.close()
+    }
+
+    private fun zipFiles(folderPath: String, filePath: String, zipOutputSteam: ZipOutputStream?) {
+        LogUtil.e(TAG, " \nfolderPath:$folderPath\nfilePath$filePath")
+        if (zipOutputSteam == null) return
+        val file = File(folderPath + filePath)
+        if (file.isFile) {
+            val zipEntry = ZipEntry(filePath)
+            val inputStream = FileInputStream(file)
+            zipOutputSteam.putNextEntry(zipEntry)
+            var len: Int
+            val buffer = ByteArray(4096)
+            while (inputStream.read(buffer).also { len = it } != -1) {
+                zipOutputSteam.write(buffer, 0, len)
+            }
+            zipOutputSteam.closeEntry()
+        } else {
+            //文件夹
+            val fileList = file.list()
+            //没有子文件和压缩
+            if (fileList.isEmpty()) {
+                val zipEntry = ZipEntry(filePath + File.separator)
+                zipOutputSteam.putNextEntry(zipEntry)
+                zipOutputSteam.closeEntry()
+            }
+            //子文件和递归
+            for (i in fileList.indices) {
+                zipFiles("$folderPath$filePath/", fileList[i], zipOutputSteam)
+            }
+        }
     }
 
     /**
