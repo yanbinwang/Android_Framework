@@ -40,7 +40,7 @@
                 android:scrollHorizontally="true"
                 android:text="@string/label_title_album"
                 android:textColor="@color/white_00ffffff"
-                android:textSize="20sp" />
+                android:textSize="16mm" />
 
         </androidx.appcompat.widget.Toolbar>
 

@@ -33,7 +33,7 @@
             android:scrollHorizontally="true"
             android:text="@string/label_title_crop"
             android:textColor="@color/white"
-            android:textSize="20sp" />
+            android:textSize="16mm" />
 
     </androidx.appcompat.widget.Toolbar>
 
