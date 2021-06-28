@@ -125,6 +125,9 @@ object FileUtil {
 
     /**
      * 将指定路径下的所有文件打成压缩包
+     * File fileDir = new File(rootDir + "/DCIM/Screenshots");
+     * File zipFile = new File(rootDir + "/" + taskId + ".zip");
+     *
      * @param filePath 要压缩的文件或文件夹路径
      * @param zipFilePath 压缩完成的Zip路径
      */
