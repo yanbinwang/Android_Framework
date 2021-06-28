@@ -36,11 +36,11 @@ class AlbumHelper(activity: Activity) {
                         Album.camera(weakActivity.get())
                             //拍照
                             .image()
-                            .onResult { result ->
+                            .onResult {
                                 if (isTailor) {
-                                    toTailor(result)
+                                    toTailor(it)
                                 } else {
-                                    onAlbumListener?.onAlbum(result)
+                                    onAlbumListener?.onAlbum(it)
                                 }
                             }.start()
                     }
@@ -69,13 +69,13 @@ class AlbumHelper(activity: Activity) {
                                     .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)).build())
                             //页面列表的列数
                             .camera(isCamera).columnCount(3)
-                            .onResult { result ->
-                                val resultSize = result[0].size
+                            .onResult {
+                                val resultSize = it[0].size
                                 if (resultSize > 10 * 1024 * 1024) {
                                     ToastUtil.mackToastSHORT(weakActivity.get()!!.getString(R.string.toast_album_choice), weakActivity.get()!!.applicationContext)
                                     return@onResult
                                 }
-                                if (isTailor) toTailor(result[0].path) else onAlbumListener?.onAlbum(result[0].path)
+                                if (isTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
                             }.start()
                     }
                 }
