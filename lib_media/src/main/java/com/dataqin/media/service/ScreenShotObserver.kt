@@ -6,6 +6,9 @@ import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil.e
 import com.dataqin.common.BaseApplication
+import com.dataqin.common.bus.RxBus
+import com.dataqin.common.bus.RxEvent
+import com.dataqin.common.constant.Constants
 import java.io.File
 
 /**
@@ -48,6 +51,7 @@ class ScreenShotObserver : ContentObserver(null) {
                 BitmapFactory.decodeFile(filePath, options)
                 if (options.outWidth != -1) {
                     e(TAG, "发送生成图片的路径广播:" + File(filePath).parent)
+                    RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
                 }
             }
         } catch (ignored: Exception) {

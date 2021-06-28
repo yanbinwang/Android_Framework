@@ -4,11 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
+import android.os.Looper
 import android.provider.Settings
+import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
+import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
@@ -40,6 +44,8 @@ import java.io.File
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
     MainContract.View {
+    private var srcPath = ""
+
     //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
 
@@ -96,14 +102,22 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+        onClick(
+            this,
+            binding.btnTest,
+            binding.btnTest2,
+            binding.btnTest3,
+            binding.btnTest4,
+            binding.btnTest5
+        )
         ScreenShotObserver.instance.register()
 
-//        addDisposable(RxBus.instance.toFlowable {
-//            when (it.getAction()) {
+        addDisposable(RxBus.instance.toFlowable {
+            when (it.getAction()) {
 //                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
-//            }
-//        })
+                Constants.APP_SCREEN_SHOT_FILE -> srcPath = it.getStringExtra()
+            }
+        })
 
 //        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
 //            override fun onRefreshListener() {
@@ -157,21 +171,20 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //    }
 
     private fun startZip() {
-        showDialog()
-        val srcPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            ""//R版本必须在内置sd卡目录下，操作不了系统的截屏目录
-        } else {
-            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/Screenshots"
-        }
-        val fileDir = File(srcPath)
-        val zipFile = File("${Constants.SDCARD_PATH}/10086.zip")
-        try {
-            if (fileDir.exists()) FileUtil.zipFolder(fileDir.absolutePath, zipFile.absolutePath)
-        } catch (e: Exception) {
-            log("打包图片生成压缩文件异常: $e")
-        } finally {
-            hideDialog()
-        }
+        if (!TextUtils.isEmpty(srcPath)) {
+            showDialog()
+            Thread {
+                val fileDir = File(srcPath)
+                val zipFile = File("${Constants.SDCARD_PATH}/10086.zip")
+                try {
+                    if (fileDir.exists()) FileUtil.zipFolder(fileDir.absolutePath, zipFile.absolutePath)
+                } catch (e: Exception) {
+                    log("打包图片生成压缩文件异常: $e")
+                } finally {
+                    WeakHandler(Looper.getMainLooper()).post{ hideDialog() }
+                }
+            }.start()
+        } else showToast("先截图！")
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -243,9 +256,10 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun getOperation() {
     }
 
-//    override fun onDestroy() {
-//        super.onDestroy()
+    override fun onDestroy() {
+        super.onDestroy()
+        ScreenShotObserver.instance.unregister()
 //        LocationFactory.instance.stop()
-//    }
+    }
 
 }
