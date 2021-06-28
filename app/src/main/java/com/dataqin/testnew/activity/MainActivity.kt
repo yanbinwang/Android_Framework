@@ -21,12 +21,14 @@ import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
+import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.yanzhenjie.permission.runtime.Permission
 import java.io.File
+
 
 /**
  * Created by WangYanBin
@@ -94,14 +96,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(
-            this,
-            binding.btnTest,
-            binding.btnTest2,
-            binding.btnTest3,
-            binding.btnTest4,
-            binding.btnTest5
-        )
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+        ScreenShotObserver.instance.register()
 
 //        addDisposable(RxBus.instance.toFlowable {
 //            when (it.getAction()) {
