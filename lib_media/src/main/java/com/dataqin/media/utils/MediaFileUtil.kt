@@ -24,31 +24,30 @@ object MediaFileUtil {
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
-        var prefix = Constants.APPLICATION_FILE_PATH + "/文件"
+        var prefix = Constants.APPLICATION_FILE_PATH + "/文件/"
         var suffix = ""
         when (mimeType) {
             //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
-                prefix += "/拍照"
+                prefix += "拍照"
                 suffix = ".jpg"
             }
             //录像
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> {
-                prefix += "/录像"
+                prefix += "录像"
                 suffix = ".mp4"
             }
             //录音
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> {
-                prefix += "/录音"
+                prefix += "录音"
                 suffix = ".wav"
             }
             //录屏
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> {
-                prefix += "/录屏"
+                prefix += "录屏"
                 suffix = ".mp4"
             }
         }
-//        val mediaStorageDir = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), prefix)
         val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
