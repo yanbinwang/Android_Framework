@@ -1,16 +1,22 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
+import android.os.Environment
+import android.provider.Settings
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
-import com.dataqin.common.utils.NetWorkUtil
+import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
@@ -19,6 +25,8 @@ import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
+import com.yanzhenjie.permission.runtime.Permission
+import java.io.File
 
 /**
  * Created by WangYanBin
@@ -28,8 +36,9 @@ import com.dataqin.testnew.widget.popup.AddressPopup
  * cameraview_tts
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
-//    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
+    //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -68,21 +77,31 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //        PopupHelper.addPopup(2,Any())
 //        PopupHelper.addPopup(3,Any())
 
-        ImageLoader.instance.displayProgressImage(binding.ivLoading,"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F03%2F165526ophx4l6c6ll3cnpl.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626503458&t=0e2ad4aa991a1788dd91eed69ecf40b7",object :OnProgressLoaderListener{
-            override fun onStart() {
-            }
+        ImageLoader.instance.displayProgressImage(
+            binding.ivLoading,
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F03%2F165526ophx4l6c6ll3cnpl.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626503458&t=0e2ad4aa991a1788dd91eed69ecf40b7",
+            object : OnProgressLoaderListener {
+                override fun onStart() {
+                }
 
-            override fun onProgress(progress: Int) {
-            }
+                override fun onProgress(progress: Int) {
+                }
 
-            override fun onComplete() {
-            }
-        })
+                override fun onComplete() {
+                }
+            })
     }
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+        onClick(
+            this,
+            binding.btnTest,
+            binding.btnTest2,
+            binding.btnTest3,
+            binding.btnTest4,
+            binding.btnTest5
+        )
 
 //        addDisposable(RxBus.instance.toFlowable {
 //            when (it.getAction()) {
@@ -141,6 +160,24 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //        }
 //    }
 
+    private fun startZip() {
+        showDialog()
+        val srcPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            ""//R版本必须在内置sd卡目录下，操作不了系统的截屏目录
+        } else {
+            Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).absolutePath + "/Screenshots"
+        }
+        val fileDir = File(srcPath)
+        val zipFile = File("${Constants.SDCARD_PATH}/10086.zip")
+        try {
+            if (fileDir.exists()) FileUtil.zipFolder(fileDir.absolutePath, zipFile.absolutePath)
+        } catch (e: Exception) {
+            log("打包图片生成压缩文件异常: $e")
+        } finally {
+            hideDialog()
+        }
+    }
+
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onClick(v: View?) {
         when (v?.id) {
@@ -150,7 +187,24 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                log(NetWorkUtil.getWifiSecurity())
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    if (Environment.isExternalStorageManager()) {
+                        startZip()
+                    } else {
+                        val intent = Intent()
+                        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+                        intent.data = Uri.parse("package:" + Constants.APPLICATION_ID)
+                        startActivity(intent)
+                    }
+                } else {
+                    PermissionHelper.with(this).setPermissionCallBack(object :
+                        OnPermissionCallBack {
+                        override fun onPermission(isGranted: Boolean) {
+                            if (isGranted) startZip()
+                        }
+                    }).getPermissions(Permission.Group.STORAGE)
+                }
+//                log(NetWorkUtil.getWifiSecurity())
 //                navigation(ARouterPath.CameraActivity)
 //                PermissionHelper.with(this)
 //                    .setPermissionCallBack(object :OnPermissionCallBack{

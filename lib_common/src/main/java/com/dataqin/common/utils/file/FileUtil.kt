@@ -128,16 +128,16 @@ object FileUtil {
      * File fileDir = new File(rootDir + "/DCIM/Screenshots");
      * File zipFile = new File(rootDir + "/" + taskId + ".zip");
      *
-     * @param filePath 要压缩的文件或文件夹路径
+     * @param srcFilePath 要压缩的文件或文件夹路径
      * @param zipFilePath 压缩完成的Zip路径
      */
     @JvmStatic
-    fun zipFolder(filePath: String, zipFilePath: String) {
+    @Throws(Exception::class)
+    fun zipFolder(srcFilePath: String, zipFilePath: String) {
         //创建ZIP
         val outZip = ZipOutputStream(FileOutputStream(zipFilePath))
         //创建文件
-        val file = File(filePath)
-        LogUtil.e(TAG, " \n---->${file.parent}===${file.absolutePath}")
+        val file = File(srcFilePath)
         //压缩
         zipFiles(file.parent + File.separator, file.name, outZip)
         //完成和关闭
@@ -145,12 +145,13 @@ object FileUtil {
         outZip.close()
     }
 
-    private fun zipFiles(folderPath: String, filePath: String, zipOutputSteam: ZipOutputStream?) {
-        LogUtil.e(TAG, " \nfolderPath:$folderPath\nfilePath$filePath")
+    @Throws(Exception::class)
+    private fun zipFiles(folderPath: String, fileName: String, zipOutputSteam: ZipOutputStream?) {
+        LogUtil.e(TAG, " \n压缩路径:$folderPath\n压缩文件名:$fileName")
         if (zipOutputSteam == null) return
-        val file = File(folderPath + filePath)
+        val file = File(folderPath + fileName)
         if (file.isFile) {
-            val zipEntry = ZipEntry(filePath)
+            val zipEntry = ZipEntry(fileName)
             val inputStream = FileInputStream(file)
             zipOutputSteam.putNextEntry(zipEntry)
             var len: Int
@@ -164,13 +165,13 @@ object FileUtil {
             val fileList = file.list()
             //没有子文件和压缩
             if (fileList.isEmpty()) {
-                val zipEntry = ZipEntry(filePath + File.separator)
+                val zipEntry = ZipEntry(fileName + File.separator)
                 zipOutputSteam.putNextEntry(zipEntry)
                 zipOutputSteam.closeEntry()
             }
             //子文件和递归
             for (i in fileList.indices) {
-                zipFiles("$folderPath$filePath/", fileList[i], zipOutputSteam)
+                zipFiles("$folderPath$fileName/", fileList[i], zipOutputSteam)
             }
         }
     }
