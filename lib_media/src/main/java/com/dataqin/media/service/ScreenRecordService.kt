@@ -96,7 +96,6 @@ class ScreenRecordService : Service() {
 
     private fun createVirtualDisplay(): VirtualDisplay? {
         return mediaProjection?.createVirtualDisplay("mediaProjection", previewWidth, previewHeight, Constants.SCREEN_DENSITY, DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR, mediaRecorder?.surface, null, null)
-
     }
 
     override fun onBind(intent: Intent?): IBinder? {
