@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil.e
 import com.dataqin.common.BaseApplication
+import java.io.File
 
 /**
  *  Created by wangyanbin
@@ -53,9 +54,9 @@ class ScreenShotObserver : ContentObserver(null) {
                 //判断当前路径是否为图片，是的话捕获当前路径
                 val options = BitmapFactory.Options()
                 options.inJustDecodeBounds = true
-                BitmapFactory.decodeFile(filePath, options);
+                BitmapFactory.decodeFile(filePath, options)
                 if (options.outWidth != -1) {
-                    e(TAG, "发送生成图片的路径广播")
+                    e(TAG, "发送生成图片的路径广播:" + File(filePath).parent)
                 }
             }
         } catch (e: Exception) {
