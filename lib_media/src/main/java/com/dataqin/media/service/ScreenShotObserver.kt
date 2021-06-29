@@ -16,7 +16,7 @@ import java.io.File
  *  监听产生文件，获取对应路径
  */
 class ScreenShotObserver : ContentObserver(null) {
-    private var imagePath = ""
+    private var filePath = ""
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
     private val TAG = "ScreenShotObserver"
 
@@ -36,17 +36,18 @@ class ScreenShotObserver : ContentObserver(null) {
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
                     //获取监听的路径
-                    val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                    if(imagePath == filePath) return
-                    imagePath = filePath
-                    e(TAG, "filePath:$filePath")
-                    //判断当前路径是否为图片，是的话捕获当前路径
-                    val options = BitmapFactory.Options()
-                    options.inJustDecodeBounds = true
-                    BitmapFactory.decodeFile(filePath, options)
-                    if (options.outWidth != -1) {
-                        e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${File(filePath).parent}")
-                        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
+                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                    if (filePath != queryPath) {
+                        filePath = queryPath
+                        e(TAG, "queryPath:$queryPath")
+                        //判断当前路径是否为图片，是的话捕获当前路径
+                        val options = BitmapFactory.Options()
+                        options.inJustDecodeBounds = true
+                        BitmapFactory.decodeFile(queryPath, options)
+                        if (options.outWidth != -1) {
+                            e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${File(filePath).parent}")
+                            RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
+                        }
                     }
                 }
             }
