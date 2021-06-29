@@ -37,12 +37,11 @@ object PushHelper {
     }
 
     fun getAppPage(model: PushModel): String? {
-        var clazz: String? = null
-        when (model.sendType) {
-            "SCORE_FINE_IN", "SCORE_FINE_OUT" -> clazz = ARouterPath.StartActivity
-            "DISOBEY_FINE_IN", "DISOBEY_FINE_OUT" -> clazz = ARouterPath.CameraActivity
+        return when (model.sendType) {
+            "SCORE_FINE_IN", "SCORE_FINE_OUT" -> ARouterPath.StartActivity
+            "DISOBEY_FINE_IN", "DISOBEY_FINE_OUT" -> ARouterPath.CameraActivity
+            else -> null
         }
-        return clazz
     }
 
     /**
