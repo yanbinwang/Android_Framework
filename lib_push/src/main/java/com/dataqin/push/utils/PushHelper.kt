@@ -1,7 +1,6 @@
 package com.dataqin.push.utils
 
 import android.app.ActivityManager
-import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.text.TextUtils
@@ -9,7 +8,6 @@ import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.utils.NotificationFactory
-import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.push.activity.PushActivity
 import com.dataqin.push.model.PushModel
 
@@ -51,12 +49,17 @@ object PushHelper {
      * 100表示取的最大的任务数，info.topActivity表示当前正在运行的Activity，info.baseActivity表系统后台有此进程在运行
      */
     private fun isAppOnForeground(): Boolean {
-        val runningTasks = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getRunningTasks(100)
-        val packageName = context?.packageName
-        for (tasks in runningTasks) {
-            if (tasks.topActivity?.packageName == packageName || tasks.baseActivity?.packageName == packageName) {
-                return true
-            }
+//        val runningTasks = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getRunningTasks(100)
+//        val packageName = context?.packageName
+//        for (tasks in runningTasks) {
+//            if (tasks.topActivity?.packageName == packageName || tasks.baseActivity?.packageName == packageName) {
+//                return true
+//            }
+//        }
+//        return false
+        val processes = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
+        for (process in processes) {
+            if(process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context?.packageName)) return true
         }
         return false
     }
