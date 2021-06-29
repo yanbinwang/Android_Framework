@@ -64,11 +64,7 @@ class ScreenShotObserver : ContentObserver(null) {
     /**
      * 注册监听
      */
-    fun register() = context.contentResolver.registerContentObserver(
-        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-        true,
-        this
-    )
+    fun register() = context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
 
     /**
      * 注销监听
