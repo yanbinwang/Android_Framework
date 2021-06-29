@@ -16,8 +16,9 @@ import java.io.File
  *  监听产生文件，获取对应路径
  */
 class ScreenShotObserver : ContentObserver(null) {
-//    private var imageNum = 0
+    //    private var imageNum = 0
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
+    private val pathList by lazy { ArrayList<String>() }
     private val TAG = "ScreenShotObserver"
 
     companion object {
@@ -73,6 +74,7 @@ class ScreenShotObserver : ContentObserver(null) {
                     options.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(filePath, options)
                     if (options.outWidth != -1 && file.exists()) {
+                        if (!pathList.contains(filePath)) pathList.add(filePath)
                         e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${file.parent}")
                         RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, file.parent ?: ""))
                     }
@@ -87,11 +89,17 @@ class ScreenShotObserver : ContentObserver(null) {
     /**
      * 注册监听
      */
-    fun register() = context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
+    fun register() {
+        pathList.clear()
+        context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
+    }
 
     /**
      * 注销监听
      */
-    fun unregister() = context.contentResolver.unregisterContentObserver(this)
+    fun unregister() {
+        pathList.clear()
+        context.contentResolver.unregisterContentObserver(this)
+    }
 
 }
