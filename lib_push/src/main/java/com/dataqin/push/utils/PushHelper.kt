@@ -8,6 +8,7 @@ import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.utils.NotificationFactory
+import com.dataqin.push.R
 import com.dataqin.push.activity.PushActivity
 import com.dataqin.push.model.PushModel
 
@@ -24,11 +25,11 @@ object PushHelper {
         if (TextUtils.isEmpty(clazz)) return
         //如果得到的json返回类是属于普通消息，且APP处于开启状态，则直接点击后不跳转不做操作
         if (ARouterPath.StartActivity == clazz && isAppOnForeground()) {
-            NotificationFactory.instance.normal(model.title!!, model.content!!, 0, 0)
+            NotificationFactory.instance.normal(model.title!!, model.content!!, R.mipmap.push_small, R.mipmap.push)
         } else {
             val id = "xxxx"//服务器给的特定id
             NotificationFactory.instance.normal(
-                model.title!!, model.content!!, 0, 0,
+                model.title!!, model.content!!, R.mipmap.push_small, R.mipmap.push,
                 Intent(context, PushActivity::class.java)
                     .putExtra(Extras.IS_RUNNING, isAppOnForeground())
                     .putExtra(Extras.PAYLOAD, model), id)
@@ -59,7 +60,7 @@ object PushHelper {
 //        return false
         val processes = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
         for (process in processes) {
-            if(process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context?.packageName)) return true
+            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context?.packageName)) return true
         }
         return false
     }
