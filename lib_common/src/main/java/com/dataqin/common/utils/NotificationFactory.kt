@@ -47,8 +47,10 @@ class NotificationFactory private constructor() {
             setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))//intent为空说明此次为普通推送
         }
         val notification = builder.build()
-        createChannel()
-        notificationManager.notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
+        notificationManager.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
+            notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
+        }
     }
 
     /**
@@ -68,16 +70,10 @@ class NotificationFactory private constructor() {
         }
         val notification = builder.build()
         notification?.flags = Notification.FLAG_AUTO_CANCEL or Notification.FLAG_ONLY_ALERT_ONCE
-        createChannel()
-        notificationManager.notify(id.toInt(), notification)
-    }
-
-    /**
-     * 获取渠道
-     * 8.0+系统需要创建一个推送渠道
-     */
-    private fun createChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) notificationManager.createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
+        notificationManager.apply {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
+            notify(id.toInt(), notification)
+        }
     }
 
     /**
