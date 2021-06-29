@@ -115,7 +115,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         addDisposable(RxBus.instance.toFlowable {
             when (it.getAction()) {
 //                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
-                Constants.APP_SCREEN_SHOT_FILE -> srcPath = it.getStringExtra()
+                Constants.APP_SHOT_PATH -> srcPath = it.getStringExtra()
             }
         })
 

@@ -45,8 +45,9 @@ class ScreenShotObserver : ContentObserver(null) {
                         options.inJustDecodeBounds = true
                         BitmapFactory.decodeFile(queryPath, options)
                         if (options.outWidth != -1) {
-                            e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${File(filePath).parent}")
-                            RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
+                            val file = File(queryPath)
+                            e(TAG, " \n生成图片的路径:$queryPath\n手机截屏的路径：${file.parent}")
+                            RxBus.instance.post(RxEvent(Constants.APP_SHOT_PATH, file.parent ?: ""), RxEvent(Constants.APP_SHOT_IMAGE_PATH, queryPath))
                         }
                     }
                 }
