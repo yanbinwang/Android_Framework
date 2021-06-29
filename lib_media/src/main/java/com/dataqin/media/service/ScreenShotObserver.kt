@@ -33,40 +33,42 @@ class ScreenShotObserver : ContentObserver(null) {
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
-            if (cursor == null) return
-            val count = cursor.count
-            if (imageNum == 0) {
+            if (cursor != null) {
+                val count = cursor.count
+                if (imageNum == 0) {
+                    imageNum = count
+                } else if (imageNum >= count) {
+                    return
+                }
                 imageNum = count
-            } else if (imageNum >= count) {
-                return
-            }
-            imageNum = count
-            if (cursor.moveToFirst()) {
-                //获取监听的路径
-                val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                e(TAG, "filePath:$filePath")
-                //判断当前路径是否为图片，是的话捕获当前路径
-                val options = BitmapFactory.Options()
-                options.inJustDecodeBounds = true
-                BitmapFactory.decodeFile(filePath, options)
-                if (options.outWidth != -1) {
-                    e(TAG, "发送生成图片的路径广播:" + File(filePath).parent)
-                    RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
+                if (cursor.moveToFirst()) {
+                    //获取监听的路径
+                    val filePath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                    e(TAG, "filePath:$filePath")
+                    //判断当前路径是否为图片，是的话捕获当前路径
+                    val options = BitmapFactory.Options()
+                    options.inJustDecodeBounds = true
+                    BitmapFactory.decodeFile(filePath, options)
+                    if (options.outWidth != -1) {
+                        e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${File(filePath).parent}")
+                        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, File(filePath).parent ?: ""))
+                    }
                 }
             }
         } catch (ignored: Exception) {
         } finally {
-            try {
-                cursor?.close()
-            } catch (ignored: Exception) {
-            }
+            cursor?.close()
         }
     }
 
     /**
      * 注册监听
      */
-    fun register() = context.contentResolver.registerContentObserver(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, true, this)
+    fun register() = context.contentResolver.registerContentObserver(
+        MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+        true,
+        this
+    )
 
     /**
      * 注销监听
