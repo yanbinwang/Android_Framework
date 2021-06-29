@@ -2,6 +2,10 @@ package com.dataqin.push.service
 
 import android.content.Context
 import com.dataqin.base.utils.LogUtil
+import com.dataqin.common.BuildConfig
+import com.dataqin.common.utils.analysis.GsonUtil
+import com.dataqin.push.model.PushModel
+import com.dataqin.push.utils.PushHelper
 import com.igexin.sdk.GTIntentService
 import com.igexin.sdk.PushManager
 import com.igexin.sdk.message.GTCmdMessage
@@ -23,7 +27,7 @@ import com.igexin.sdk.message.GTTransmitMessage
  *     android:name="com.dataqin.push.service.GetuiIntentService"
  *     android:permission="android.permission.BIND_JOB_SERVICE"/>
  */
-class GetuiIntentService : GTIntentService(){
+class GetuiIntentService : GTIntentService() {
 
     override fun onReceiveServicePid(p0: Context?, p1: Int) {
     }
@@ -48,12 +52,17 @@ class GetuiIntentService : GTIntentService(){
         val result = PushManager.getInstance().sendFeedbackMessage(p0, taskid, messageid, 90001)
         LogUtil.d(TAG, "call sendFeedbackMessage = " + if (result) "success" else "failed")
         LogUtil.d(TAG, "onReceiveMessageData -> appid = $appid\ntaskid = $taskid\nmessageid = $messageid\npkg = $pkg\ncid = $cid")
-        if(null == payload){
+        if (null == payload) {
             LogUtil.e(TAG, "receiver payload = null")
-        }else{
+        } else {
             val data = String(payload)
             LogUtil.d(TAG, "receiver payload = $data")
             //将payload强转为对象，传到对应的工具类中
+            val pushModel = GsonUtil.jsonToObj(data, PushModel::class.java)
+            if (null != pushModel && !(BuildConfig.DEBUG && pushModel.env.equals("prod"))) {
+                LogUtil.d(TAG, "符合推送环境要求")
+                PushHelper.send(pushModel)
+            }
         }
     }
 

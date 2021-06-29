@@ -13,6 +13,10 @@ object Extras {
     const val PAGE_TYPE = "pageType" //页面类型
     const val FILE_PATH = "filePath" //文件路径
     const val CREATE = "create" //是否创建文件
+
+    const val PAYLOAD = "payLoad" //透传信息
+    const val IS_RUNNING = "isRunning" //是否正在运行
+
     const val WEB_URL = "webUrl" //网页链接
     const val WEB_STATE = "webState" //网页是否是深色
     const val WEB_COLOR = "webColor" //网页标题颜色
