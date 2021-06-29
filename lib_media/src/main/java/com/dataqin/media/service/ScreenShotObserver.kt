@@ -74,9 +74,11 @@ class ScreenShotObserver : ContentObserver(null) {
                     options.inJustDecodeBounds = true
                     BitmapFactory.decodeFile(filePath, options)
                     if (options.outWidth != -1 && file.exists()) {
-                        if (!pathList.contains(filePath)) pathList.add(filePath)
-                        e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${file.parent}")
-                        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, file.parent ?: ""))
+                        if (!pathList.contains(filePath)) {
+                            e(TAG, " \n生成图片的路径:$filePath\n手机截屏的路径：${file.parent}")
+                            pathList.add(filePath)
+                            RxBus.instance.post(RxEvent(Constants.APP_SCREEN_SHOT_FILE, file.parent ?: ""))
+                        }
                     }
                 }
             }
