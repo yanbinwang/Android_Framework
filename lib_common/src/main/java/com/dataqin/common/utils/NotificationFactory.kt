@@ -46,10 +46,9 @@ class NotificationFactory private constructor() {
             setDefaults(NotificationCompat.DEFAULT_ALL)
             setContentIntent(PendingIntent.getActivity(context, 1, intent ?: Intent(), PendingIntent.FLAG_ONE_SHOT))//intent为空说明此次为普通推送
         }
-        val notification = builder.build()
         notificationManager.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
-            notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), notification)
+            notify(if (TextUtils.isEmpty(id)) 0 else id.hashCode(), builder.build())
         }
     }
 
