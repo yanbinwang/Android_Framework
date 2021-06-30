@@ -81,9 +81,7 @@ class PermissionHelper(context: Context) {
                                                 ?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
                                     .setOnDialogListener(object : OnDialogListener {
                                         override fun onConfirm() {
-                                            weakContext.get()?.startActivity(
-                                                Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + weakContext.get()?.packageName))
-                                            )
+                                            weakContext.get()?.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + weakContext.get()?.packageName)))
                                         }
 
                                         override fun onCancel() {}
