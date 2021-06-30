@@ -45,7 +45,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     private var presenter: BasePresenter<*>? = null//P层
     private val rxManager by lazy { RxManager() } //事务管理器
     private val loadingDialog by lazy { LoadingDialog(this) }//刷新球控件，相当于加载动画
-    private val TAG = javaClass.simpleName.toLowerCase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
+    private val TAG = javaClass.simpleName.lowercase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected fun addDisposable(disposable: Disposable?) {
