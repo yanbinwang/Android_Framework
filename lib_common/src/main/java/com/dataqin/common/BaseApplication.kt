@@ -7,14 +7,12 @@ import android.net.ConnectivityManager
 import android.net.NetworkRequest
 import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
-import com.dataqin.base.utils.LogUtil.d
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
 import com.dataqin.common.base.proxy.NetworkCallbackImpl
 import com.dataqin.common.imageloader.album.AlbumGlideLoader
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.AlbumConfig
 import me.jessyan.autosize.AutoSizeConfig
@@ -51,14 +49,7 @@ open class BaseApplication : Application() {
                 .setLocale(Locale.CHINA) //强制设置在任何语言下都用中文显示。
                 .build())
         //x5内核初始化接口
-        QbSdk.initX5Environment(applicationContext, object : PreInitCallback {
-            override fun onViewInitFinished(arg0: Boolean) {
-                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                d(" onViewInitFinished is $arg0")
-            }
-
-            override fun onCoreInitFinished() {}
-        })
+        QbSdk.initX5Environment(applicationContext, null)
         //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         if (BuildConfig.ISDEBUG) {
             ARouter.openLog()//打印日志
