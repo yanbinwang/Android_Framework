@@ -199,7 +199,7 @@ class CameraFactory {
         val x = event.getX(0) - event.getX(1)
         val y = event.getY(0) - event.getY(1)
         LogUtil.e(TAG, "getFingerSpacing ，计算距离 = ${sqrt(x * x + y * y)}")
-        return sqrt(x * x + y * y);
+        return sqrt(x * x + y * y)
     }
 
     fun handleZoom(zoomIn: Boolean) {
@@ -212,10 +212,10 @@ class CameraFactory {
                 LogUtil.e(TAG, "进入放大方法zoom=$zoom")
                 zoom++
             } else if (zoom > 0) {
-                LogUtil.e(TAG, "进入缩小方法zoom=$zoom");
+                LogUtil.e(TAG, "进入缩小方法zoom=$zoom")
                 zoom--
             }
-            params.zoom = zoom;
+            params.zoom = zoom
             cameraPreview?.parameters = params
         } else LogUtil.e(TAG, "zoom not supported")
     }
@@ -230,29 +230,24 @@ class CameraFactory {
         if (params.maxNumFocusAreas > 0) {
             val focusAreas = ArrayList<Camera.Area>()
             focusAreas.add(Camera.Area(focusRect, 800))
-            params.focusAreas = focusAreas;
+            params.focusAreas = focusAreas
         } else LogUtil.e(TAG, "focus areas not supported")
         if (params.maxNumMeteringAreas > 0) {
             val meteringAreas = ArrayList<Camera.Area>()
             meteringAreas.add(Camera.Area(meteringRect, 800))
-            params.meteringAreas = meteringAreas;
+            params.meteringAreas = meteringAreas
         } else LogUtil.e(TAG, "metering areas not supported")
         val currentFocusMode = params.focusMode
         params.focusMode = Camera.Parameters.FOCUS_MODE_MACRO
-        cameraPreview?.parameters = params;
+        cameraPreview?.parameters = params
         cameraPreview?.autoFocus { _, camera ->
             val params1 = camera.parameters
-            params1.focusMode = currentFocusMode;
-            camera.parameters = params1;
+            params1.focusMode = currentFocusMode
+            camera.parameters = params1
         }
     }
 
-    private fun calculateTapArea(
-        x: Float,
-        y: Float,
-        coefficient: Float,
-        previewSize: Camera.Size?
-    ): Rect {
+    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size?): Rect {
         val focusAreaSize = 300
         val areaSize = focusAreaSize * coefficient
         val centerX = (x / previewSize!!.width - 1000)
@@ -260,12 +255,7 @@ class CameraFactory {
         val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
         val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
         val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
-        return Rect(
-            rectF.left.roundToInt(),
-            rectF.top.roundToInt(),
-            rectF.right.roundToInt(),
-            rectF.bottom.roundToInt()
-        )
+        return Rect(rectF.left.roundToInt(), rectF.top.roundToInt(), rectF.right.roundToInt(), rectF.bottom.roundToInt())
     }
 
     private fun clamp(x: Int, min: Int, max: Int): Int {
@@ -280,19 +270,17 @@ class CameraFactory {
     fun takePicture() {
         if (cameraPreview != null && safe) {
             safe = false
-            cameraPreview?.takePicture(null, null, object : Camera.PictureCallback {
-                override fun onPictureTaken(data: ByteArray?, camera: Camera?) {
-                    safe = true
-                    val pictureFile = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_IMAGE)
-                    if (pictureFile == null) {
-                        LogUtil.e(TAG, "Error creating media file, check storage permissions")
-                        onCameraListener?.onTakePictureFail(data)
-                        return
-                    }
+            cameraPreview?.takePicture(null, null, { data, _ ->
+                safe = true
+                val pictureFile = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_IMAGE)
+                if (pictureFile == null) {
+                    LogUtil.e(TAG, "Error creating media file, check storage permissions")
+                    onCameraListener?.onTakePictureFail(data)
+                } else {
                     try {
-                        val fos = FileOutputStream(pictureFile)
-                        fos.write(data)
-                        fos.close()
+                        val fileOutputStream = FileOutputStream(pictureFile)
+                        fileOutputStream.write(data)
+                        fileOutputStream.close()
                         onCameraListener?.onTakePictureSuccess(pictureFile)
                         //再次进入preview
                         cameraPreview?.startPreview()
@@ -315,44 +303,42 @@ class CameraFactory {
         } else {
             val path = prepareVideoRecorder(surface)
             if (!TextUtils.isEmpty(path)) {
-                mediaRecorder?.start()
                 recording = true
+                mediaRecorder?.start()
                 onVideoRecordListener?.onStartRecorder(path)
-            } else {
-                releaseMediaRecorder()
-            }
+            } else releaseMediaRecorder()
         }
     }
 
     private fun prepareVideoRecorder(surface: Surface?): String {
-        var path = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
-        cameraPreview?.unlock()
-        mediaRecorder = MediaRecorder()
-        mediaRecorder?.setCamera(cameraPreview)
-        mediaRecorder?.setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
-        mediaRecorder?.setVideoSource(MediaRecorder.VideoSource.CAMERA)
-        mediaRecorder?.setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
-        mediaRecorder?.setOutputFile(path)
-        mediaRecorder?.setPreviewDisplay(surface)
+        var videFilePath = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
         try {
-            mediaRecorder?.setOrientationHint(90)
-            mediaRecorder?.prepare()
+            cameraPreview?.unlock()
+            mediaRecorder = MediaRecorder()
+            mediaRecorder?.apply {
+                setCamera(cameraPreview)
+                setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
+                setVideoSource(MediaRecorder.VideoSource.CAMERA)
+                setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
+                setOutputFile(videFilePath)
+                setPreviewDisplay(surface)
+                setOrientationHint(90)
+                prepare()
+            }
         } catch (e: Exception) {
             LogUtil.d(TAG, "Exception preparing MediaRecorder: " + e.message)
-            path = ""
+            videFilePath = ""
             releaseMediaRecorder()
         } finally {
-            return path
+            return videFilePath
         }
     }
 
     private fun releaseMediaRecorder() {
-        if (mediaRecorder != null) {
-            mediaRecorder?.reset()
-            mediaRecorder?.release()
-            mediaRecorder = null
-            cameraPreview?.lock()
-        }
+        mediaRecorder?.reset()
+        mediaRecorder?.release()
+        mediaRecorder = null
+        cameraPreview?.lock()
     }
 
     /**
@@ -370,17 +356,19 @@ class CameraFactory {
     fun stopRecorder() {
         LogUtil.i("stopRecorder")
         if (!recording) return
+        recording = false
         try {
-            mediaRecorder?.setOnErrorListener(null)
-            mediaRecorder?.setOnInfoListener(null)
-            mediaRecorder?.setPreviewDisplay(null)
-            mediaRecorder?.stop()
+            mediaRecorder?.apply {
+                setOnErrorListener(null)
+                setOnInfoListener(null)
+                setPreviewDisplay(null)
+                stop()
+            }
         } catch (e: Exception) {
             LogUtil.e(Log.getStackTraceString(e))
         }
         releaseMediaRecorder()
         cameraPreview?.lock()
-        recording = false
         onVideoRecordListener?.onStopRecorder()
     }
 
@@ -389,10 +377,8 @@ class CameraFactory {
      */
     fun releaseCamera() {
         if (recording) stopRecorder()
-        if (cameraPreview != null) {
-            cameraPreview?.release()
-            cameraPreview = null
-        }
+        cameraPreview?.release()
+        cameraPreview = null
     }
 
     /**
