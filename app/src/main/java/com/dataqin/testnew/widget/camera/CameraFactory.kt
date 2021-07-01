@@ -334,10 +334,13 @@ class CameraFactory {
     }
 
     private fun releaseMediaRecorder() {
-        mediaRecorder?.reset()
-        mediaRecorder?.release()
-        mediaRecorder = null
-        camera?.lock()
+        try {
+            mediaRecorder?.reset()
+            mediaRecorder?.release()
+            mediaRecorder = null
+            camera?.lock()
+        } catch (ignored: Exception) {
+        }
     }
 
     /**
@@ -384,8 +387,10 @@ class CameraFactory {
      * 销毁稍镜头调整
      */
     fun onDestroy() {
-        viewGroup = null
+        releaseMediaRecorder()
         camera = null
+        cameraPreview = null
+        viewGroup = null
         cameraId = CameraInfo.CAMERA_FACING_BACK
     }
 
