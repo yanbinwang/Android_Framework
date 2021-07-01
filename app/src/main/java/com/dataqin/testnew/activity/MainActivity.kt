@@ -199,8 +199,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                         startActivity(intent)
                     }
                 } else {
-                    PermissionHelper.with(this).setPermissionCallBack(object :
-                        OnPermissionCallBack {
+                    PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
                         override fun onPermission(isGranted: Boolean) {
                             if (isGranted) startZip()
                         }
