@@ -102,14 +102,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun initEvent() {
         super.initEvent()
-        onClick(
-            this,
-            binding.btnTest,
-            binding.btnTest2,
-            binding.btnTest3,
-            binding.btnTest4,
-            binding.btnTest5
-        )
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
         ScreenShotObserver.instance.register()
 
         addDisposable(RxBus.instance.toFlowable {
