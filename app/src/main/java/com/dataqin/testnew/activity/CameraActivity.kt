@@ -7,6 +7,8 @@ import android.view.View
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
+import com.dataqin.common.constant.Constants
+import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityCameraBinding
 import com.dataqin.testnew.widget.camera.CameraFactory
@@ -35,22 +37,14 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(), View.OnClickListen
         super.initView()
         statusBarBuilder.setTransparentStatus()
         CameraFactory.instance.initialize(binding.flPreview, cameraPreview)
-        binding.flPreview.addView(cameraPreview)
     }
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnReset, binding.btnToggle)
+        onClick(this, binding.btnReset, binding.btnToggle, binding.btnTouch)
         cameraPreview.setOnTouchListener { _, event ->
             CameraFactory.instance.focusOnTouch(event.x.toInt(), event.y.toInt(), binding.flPreview)
             false
-        }
-    }
-
-    override fun onClick(v: View?) {
-        when (v?.id) {
-            R.id.btn_reset -> CameraFactory.instance.reset()
-            R.id.btn_toggle -> CameraFactory.instance.toggleCamera(v)
         }
     }
 
@@ -74,6 +68,14 @@ class CameraActivity : BaseActivity<ActivityCameraBinding>(), View.OnClickListen
             }
         }
         return true
+    }
+
+    override fun onClick(v: View?) {
+        when (v?.id) {
+            R.id.btn_reset -> CameraFactory.instance.reset()
+            R.id.btn_toggle -> CameraFactory.instance.toggleCamera(v)
+            R.id.btn_touch -> CameraFactory.instance.focusing()
+        }
     }
 
     override fun onPause() {

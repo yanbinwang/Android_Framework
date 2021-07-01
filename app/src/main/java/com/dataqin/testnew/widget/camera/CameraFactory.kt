@@ -17,6 +17,7 @@ import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.TimerHelper
+import com.dataqin.common.constant.Constants
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.testnew.widget.camera.callback.OnCameraListener
 import com.dataqin.testnew.widget.camera.callback.OnVideoRecordListener
@@ -53,9 +54,10 @@ class CameraFactory {
         }
     }
 
-    fun initialize(group: ViewGroup, preview: CameraPreview) {
-        this.viewGroup = group
-        this.cameraPreview = preview
+    fun initialize(viewGroup: ViewGroup, cameraPreview: CameraPreview) {
+        this.viewGroup = viewGroup
+        this.cameraPreview = cameraPreview
+        viewGroup.addView(cameraPreview)
     }
 
     fun initCamera() {
@@ -148,6 +150,13 @@ class CameraFactory {
     }
 
     /**
+     * 对焦
+     */
+    fun focusing() {
+        if (null != viewGroup) focusOnTouch(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT, viewGroup as FrameLayout)
+    }
+
+    /**
      * 复位
      */
     fun reset() {
@@ -188,7 +197,12 @@ class CameraFactory {
             try {
                 camera.cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
                 camera.parameters = parameters
-                camera.autoFocus { success: Boolean, _: Camera? -> LogUtil.i(TAG, "autoFocusCallback success:$success") }
+                camera.autoFocus { success: Boolean, _: Camera? ->
+                    LogUtil.i(
+                        TAG,
+                        "autoFocusCallback success:$success"
+                    )
+                }
             } catch (ignored: Exception) {
             }
         }

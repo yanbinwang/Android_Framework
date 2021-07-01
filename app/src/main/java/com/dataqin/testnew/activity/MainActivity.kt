@@ -189,24 +189,24 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        startZip()
-                    } else {
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-                        intent.data = Uri.parse("package:" + Constants.APPLICATION_ID)
-                        startActivity(intent)
-                    }
-                } else {
-                    PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
-                        override fun onPermission(isGranted: Boolean) {
-                            if (isGranted) startZip()
-                        }
-                    }).getPermissions(Permission.Group.STORAGE)
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    if (Environment.isExternalStorageManager()) {
+//                        startZip()
+//                    } else {
+//                        val intent = Intent()
+//                        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+//                        intent.data = Uri.parse("package:" + Constants.APPLICATION_ID)
+//                        startActivity(intent)
+//                    }
+//                } else {
+//                    PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
+//                        override fun onPermission(isGranted: Boolean) {
+//                            if (isGranted) startZip()
+//                        }
+//                    }).getPermissions(Permission.Group.STORAGE)
+//                }
 //                log(NetWorkUtil.getWifiSecurity())
-//                navigation(ARouterPath.CameraActivity)
+                navigation(ARouterPath.CameraActivity)
 //                PermissionHelper.with(this)
 //                    .setPermissionCallBack(object :OnPermissionCallBack{
 //                        override fun onPermission(isGranted: Boolean) {

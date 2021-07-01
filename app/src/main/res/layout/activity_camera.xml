@@ -34,6 +34,16 @@
             android:textColor="@color/black"
             android:textSize="28mm" />
 
+        <Button
+            android:id="@+id/btn_touch"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="20mm"
+            android:layout_weight="1"
+            android:text="对焦"
+            android:textColor="@color/black"
+            android:textSize="28mm" />
+
     </LinearLayout>
 
 </RelativeLayout>
