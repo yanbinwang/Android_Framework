@@ -38,9 +38,9 @@ class CameraFactory {
     private var safe = true
     private var recording = false
     private var mediaRecorder: MediaRecorder? = null
-    private var cameraPreview: Camera? = null
-    private var group: ViewGroup? = null
-    private var preview: CameraPreview? = null
+    private var camera: Camera? = null
+    private var viewGroup: ViewGroup? = null
+    private var cameraPreview: CameraPreview? = null
     private var cameraId = CameraInfo.CAMERA_FACING_BACK //前置或后置摄像头
     private val TAG = "CameraInterface"
     var onCameraListener: OnCameraListener? = null
@@ -54,53 +54,53 @@ class CameraFactory {
     }
 
     fun initialize(group: ViewGroup, preview: CameraPreview) {
-        this.group = group
-        this.preview = preview
+        this.viewGroup = group
+        this.cameraPreview = preview
     }
 
     fun initCamera() {
-        if (cameraPreview == null) cameraPreview = getCameraInstance()
-        if (cameraPreview == null) return
-        val params = cameraPreview?.parameters
-        val focusModes = params?.supportedFocusModes
-        //设置拍照后存储的图片格式
-        params?.pictureFormat = PixelFormat.JPEG
-        if (focusModes?.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)!!) {
-            params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-            LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
-        } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-            params.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
-            LogUtil.i(TAG, "params.setFocusMode : " + Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
-        }
-        //设置PreviewSize和PictureSize
-        var previewWidth = 0
-        var previewHeight = 0
-        try {
-            //选择合适的预览尺寸
-            val sizeList = params.supportedPreviewSizes
-            //如果sizeList只有一个我们也没有必要做什么了，因为就他一个别无选择
-            if (sizeList.size > 1) {
-                for (cur in sizeList) {
-                    if (cur.width >= previewWidth && cur.height >= previewHeight) {
-                        previewWidth = cur.width
-                        previewHeight = cur.height
-                        break
+        camera = instanceCamera()
+        if (null != camera) {
+            val parameters = camera?.parameters
+            //设置拍照后存储的图片格式
+            parameters?.pictureFormat = PixelFormat.JPEG
+            val focusModes = parameters?.supportedFocusModes
+            if (focusModes?.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)!!) {
+                parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
+                LogUtil.i(TAG, "params.setFocusMode : ${Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE}")
+            } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
+                LogUtil.i(TAG, "params.setFocusMode : ${Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO}")
+            }
+            //设置PreviewSize和PictureSize
+            var previewWidth = 0
+            var previewHeight = 0
+            try {
+                //选择合适的预览尺寸
+                val previewSizeList = parameters.supportedPreviewSizes
+                if (previewSizeList.size > 1) {
+                    for (cur in previewSizeList) {
+                        if (cur.width >= previewWidth && cur.height >= previewHeight) {
+                            previewWidth = cur.width
+                            previewHeight = cur.height
+                            break
+                        }
                     }
                 }
+                //获得摄像区域的大小
+                parameters.setPreviewSize(previewWidth, previewHeight)
+                //获得保存图片的大小
+                parameters.setPictureSize(previewWidth, previewHeight)
+                camera?.parameters = parameters
+            } catch (ignored: Exception) {
+            } finally {
+                //预览旋转90度
+                camera?.setDisplayOrientation(90)
             }
-            //获得摄像区域的大小
-            params.setPreviewSize(previewWidth, previewHeight)
-            //获得保存图片的大小
-            params.setPictureSize(previewWidth, previewHeight)
-            cameraPreview?.parameters = params
-        } catch (ignored: Exception) {
-        } finally {
-            //预览旋转90度
-            cameraPreview?.setDisplayOrientation(90)
         }
     }
 
-    private fun getCameraInstance(): Camera? {
+    private fun instanceCamera(): Camera? {
         var camera: Camera? = null
         try {
             camera = Camera.open(cameraId)
@@ -120,8 +120,8 @@ class CameraFactory {
      * 获取相机类
      */
     fun getCamera(): Camera? {
-        if (cameraPreview == null) cameraPreview = getCameraInstance()
-        return cameraPreview
+        if (camera == null) camera = instanceCamera()
+        return camera
     }
 
     /**
@@ -151,8 +151,8 @@ class CameraFactory {
      * 复位
      */
     fun reset() {
-        group?.removeAllViews()
-        group?.addView(preview)
+        viewGroup?.removeAllViews()
+        viewGroup?.addView(cameraPreview)
     }
 
     /**
@@ -173,23 +173,22 @@ class CameraFactory {
     }
 
     private fun focusOnRect(rect: Rect) {
-        if (getCamera() != null) {
+        val camera = getCamera()
+        if (camera != null) {
             //先获取当前相机的参数配置对象
-            val parameters = getCamera()!!.parameters
+            val parameters = camera.parameters
             //设置聚焦模式
             parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
             LogUtil.i(TAG, "parameters.getMaxNumFocusAreas() : " + parameters.maxNumFocusAreas)
             if (parameters.maxNumFocusAreas > 0) {
-                val focusAreas: MutableList<Camera.Area> = ArrayList()
+                val focusAreas = ArrayList<Camera.Area>()
                 focusAreas.add(Camera.Area(rect, 1000))
                 parameters.focusAreas = focusAreas
             }
             try {
-                getCamera()?.cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
-                getCamera()?.parameters = parameters
-                getCamera()?.autoFocus { success: Boolean, _: Camera? ->
-                    LogUtil.i(TAG, "autoFocusCallback success:$success")
-                }
+                camera.cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
+                camera.parameters = parameters
+                camera.autoFocus { success: Boolean, _: Camera? -> LogUtil.i(TAG, "autoFocusCallback success:$success") }
             } catch (ignored: Exception) {
             }
         }
@@ -204,7 +203,7 @@ class CameraFactory {
 
     fun handleZoom(zoomIn: Boolean) {
         LogUtil.e(TAG, "进入缩小放大方法")
-        val params = cameraPreview?.parameters
+        val params = camera?.parameters
         if (params!!.isZoomSupported) {
             val maxZoom = params.maxZoom
             var zoom = params.zoom
@@ -216,17 +215,17 @@ class CameraFactory {
                 zoom--
             }
             params.zoom = zoom
-            cameraPreview?.parameters = params
+            camera?.parameters = params
         } else LogUtil.e(TAG, "zoom not supported")
     }
 
     fun handleFocusMetering(event: MotionEvent) {
         LogUtil.e(TAG, "进入handleFocusMetering")
-        val params = cameraPreview?.parameters!!
+        val params = camera?.parameters!!
         val previewSize = params.previewSize
         val focusRect = calculateTapArea(event.x, event.y, 1f, previewSize)
         val meteringRect = calculateTapArea(event.x, event.y, 1.5f, previewSize)
-        cameraPreview?.cancelAutoFocus()
+        camera?.cancelAutoFocus()
         if (params.maxNumFocusAreas > 0) {
             val focusAreas = ArrayList<Camera.Area>()
             focusAreas.add(Camera.Area(focusRect, 800))
@@ -239,11 +238,11 @@ class CameraFactory {
         } else LogUtil.e(TAG, "metering areas not supported")
         val currentFocusMode = params.focusMode
         params.focusMode = Camera.Parameters.FOCUS_MODE_MACRO
-        cameraPreview?.parameters = params
-        cameraPreview?.autoFocus { _, camera ->
-            val params1 = camera.parameters
-            params1.focusMode = currentFocusMode
-            camera.parameters = params1
+        camera?.parameters = params
+        camera?.autoFocus { _, camera ->
+            val parameters = camera.parameters
+            parameters.focusMode = currentFocusMode
+            camera.parameters = parameters
         }
     }
 
@@ -268,9 +267,9 @@ class CameraFactory {
      * 开始拍照
      */
     fun takePicture() {
-        if (cameraPreview != null && safe) {
+        if (camera != null && safe) {
             safe = false
-            cameraPreview?.takePicture(null, null, { data, _ ->
+            camera?.takePicture(null, null, { data, _ ->
                 safe = true
                 val pictureFile = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_IMAGE)
                 if (pictureFile == null) {
@@ -283,10 +282,10 @@ class CameraFactory {
                         fileOutputStream.close()
                         onCameraListener?.onTakePictureSuccess(pictureFile)
                         //再次进入preview
-                        cameraPreview?.startPreview()
-                        cameraPreview?.cancelAutoFocus()
+                        camera?.startPreview()
+                        camera?.cancelAutoFocus()
                     } catch (e: Exception) {
-                        LogUtil.e(TAG, "Error: " + e.message)
+                        LogUtil.e(TAG, "Error: ${e.message}")
                         onCameraListener?.onTakePictureFail(data)
                     }
                 }
@@ -313,10 +312,10 @@ class CameraFactory {
     private fun prepareVideoRecorder(surface: Surface?): String {
         var videFilePath = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
         try {
-            cameraPreview?.unlock()
+            camera?.unlock()
             mediaRecorder = MediaRecorder()
             mediaRecorder?.apply {
-                setCamera(cameraPreview)
+                setCamera(camera)
                 setAudioSource(MediaRecorder.AudioSource.CAMCORDER)
                 setVideoSource(MediaRecorder.VideoSource.CAMERA)
                 setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
@@ -338,7 +337,7 @@ class CameraFactory {
         mediaRecorder?.reset()
         mediaRecorder?.release()
         mediaRecorder = null
-        cameraPreview?.lock()
+        camera?.lock()
     }
 
     /**
@@ -368,7 +367,7 @@ class CameraFactory {
             LogUtil.e(Log.getStackTraceString(e))
         }
         releaseMediaRecorder()
-        cameraPreview?.lock()
+        camera?.lock()
         onVideoRecordListener?.onStopRecorder()
     }
 
@@ -377,16 +376,16 @@ class CameraFactory {
      */
     fun releaseCamera() {
         if (recording) stopRecorder()
-        cameraPreview?.release()
-        cameraPreview = null
+        camera?.release()
+        camera = null
     }
 
     /**
      * 销毁稍镜头调整
      */
     fun onDestroy() {
-        group = null
-        cameraPreview = null
+        viewGroup = null
+        camera = null
         cameraId = CameraInfo.CAMERA_FACING_BACK
     }
 
