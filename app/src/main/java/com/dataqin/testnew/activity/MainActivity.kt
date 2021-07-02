@@ -30,6 +30,7 @@ import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
+import com.dataqin.testnew.widget.popup.EditPopup
 import com.yanzhenjie.permission.runtime.Permission
 import java.io.File
 
@@ -42,12 +43,12 @@ import java.io.File
  * cameraview_tts
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
-    MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
     private var srcPath = ""
 
     //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
+    private val editPopup by lazy { EditPopup(this) }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -189,6 +190,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
+                editPopup.showPopup(v)
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //                    if (Environment.isExternalStorageManager()) {
 //                        startZip()
@@ -206,7 +208,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                    }).getPermissions(Permission.Group.STORAGE)
 //                }
 //                log(NetWorkUtil.getWifiSecurity())
-                navigation(ARouterPath.CameraActivity)
+//                navigation(ARouterPath.CameraActivity)
 //                PermissionHelper.with(this)
 //                    .setPermissionCallBack(object :OnPermissionCallBack{
 //                        override fun onPermission(isGranted: Boolean) {

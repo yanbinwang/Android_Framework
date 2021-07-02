@@ -97,7 +97,8 @@
         <activity
             android:name=".activity.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/whiteTheme" />
+            android:theme="@style/whiteTheme"
+            android:windowSoftInputMode="adjustResize" />
 
         <activity
             android:name=".activity.ScaleActivity"
