@@ -37,6 +37,7 @@ public class EditPopup extends BasePopupWindow<ViewPopupEditBinding> implements 
     }
 
     public boolean showPopup(View view) {
+        binding.llContainer.setVisibility(View.VISIBLE);
         manager.hideSoftInputFromWindow(binding.etContainer.getWindowToken(), 0);
         new Timer().schedule(new TimerTask() {
             @Override
@@ -57,6 +58,7 @@ public class EditPopup extends BasePopupWindow<ViewPopupEditBinding> implements 
 
     @Override
     public void dismiss() {
+        binding.llContainer.setVisibility(View.GONE);
         super.dismiss();
         manager.hideSoftInputFromWindow(binding.etContainer.getWindowToken(), 0);
     }
