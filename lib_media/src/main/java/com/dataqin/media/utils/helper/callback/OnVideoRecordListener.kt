@@ -4,10 +4,21 @@ package com.dataqin.media.utils.helper.callback
  *  Created by wangyanbin
  *  录像监听
  */
-interface OnVideoRecordListener {
+abstract class OnVideoRecordListener {
 
-    fun onStartRecorder()
+    /**
+     * 开始录制
+     */
+    open fun onStartRecorder() {}
 
-    fun onStopRecorder(path: String?)
+    /**
+     * 调取停止录制时会有文件存储的过程，此时会调取当前回调
+     */
+    open fun onTakenRecorder() {}
+
+    /**
+     * 停止录制
+     */
+    open fun onStopRecorder(path: String?) {}
 
 }

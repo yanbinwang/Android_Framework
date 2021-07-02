@@ -4,6 +4,7 @@ import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
 import com.dataqin.base.utils.ToastUtil
+import com.dataqin.common.widget.dialog.MessageDialog
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
@@ -20,6 +21,7 @@ import com.otaliastudios.cameraview.controls.*
  */
 object CameraHelper {
     private var cvFinder: CameraView? = null
+    private var messageDialog: MessageDialog? = null
     var onTakePictureListener: OnTakePictureListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
 
@@ -33,6 +35,7 @@ object CameraHelper {
     @JvmStatic
     fun initialize(owner: LifecycleOwner, cvFinder: CameraView) {
         this.cvFinder = cvFinder
+        this.messageDialog = MessageDialog(cvFinder.context).setParams("正在生成视频,请勿频繁操作...")
         cvFinder.apply {
             setLifecycleOwner(owner)
             setExperimental(true)//拍照快门声
@@ -72,13 +75,17 @@ object CameraHelper {
             ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
             return
         }
-        onTakePictureListener?.onStart()
         if (snapshot) {
             cvFinder?.takePictureSnapshot()
         } else {
             cvFinder?.takePicture()
         }
         cvFinder?.addCameraListener(object : CameraListener() {
+            override fun onPictureShutter() {
+                super.onPictureShutter()
+                onTakePictureListener?.onStart()
+            }
+
             override fun onPictureTaken(result: PictureResult) {
                 super.onPictureTaken(result)
                 //在sd卡的Picture文件夹下创建对应的文件
@@ -113,6 +120,7 @@ object CameraHelper {
                 override fun onVideoTaken(result: VideoResult) {
                     super.onVideoTaken(result)
                     onVideoRecordListener?.onStopRecorder(result.file.path)
+                    messageDialog?.hide()
                 }
 
                 override fun onVideoRecordingStart() {
@@ -126,7 +134,10 @@ object CameraHelper {
 //                    onVideoRecordListener?.onStopRecorder()
 //                }
             })
-        } else onVideoRecordListener?.onStopRecorder(null)
+        } else {
+            onVideoRecordListener?.onStopRecorder(null)
+            messageDialog?.hide()
+        }
     }
 
     /**
@@ -134,6 +145,8 @@ object CameraHelper {
      */
     @JvmStatic
     fun stopRecorder() {
+        onVideoRecordListener?.onTakenRecorder()
+        messageDialog?.show(false)
         cvFinder?.stopVideo()
     }
 
