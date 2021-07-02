@@ -9,9 +9,14 @@ import java.io.File
 abstract class OnTakePictureListener {
 
     /**
-     * 开始捕获图像回调，即点击拍摄后开始回调
+     * 开始拍摄
      */
     open fun onStart() {}
+
+    /**
+     * 开始捕获图像回调，即点击拍摄后开始回调
+     */
+    open fun onShutter() {}
 
     /**
      * 点击拍摄后且成功拿到结果的回调

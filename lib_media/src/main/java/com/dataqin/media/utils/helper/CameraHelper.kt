@@ -75,6 +75,7 @@ object CameraHelper {
             ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
             return
         }
+        onTakePictureListener?.onStart()
         if (snapshot) {
             cvFinder?.takePictureSnapshot()
         } else {
@@ -83,7 +84,7 @@ object CameraHelper {
         cvFinder?.addCameraListener(object : CameraListener() {
             override fun onPictureShutter() {
                 super.onPictureShutter()
-                onTakePictureListener?.onStart()
+                onTakePictureListener?.onShutter()
             }
 
             override fun onPictureTaken(result: PictureResult) {
