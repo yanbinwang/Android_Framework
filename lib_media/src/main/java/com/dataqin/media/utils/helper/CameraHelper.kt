@@ -3,6 +3,7 @@ package com.dataqin.media.utils.helper
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
@@ -67,6 +68,10 @@ object CameraHelper {
      */
     @JvmStatic
     fun takePicture(snapshot: Boolean = false) {
+        if (cvFinder?.isTakingPicture == true) {
+            ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
+            return
+        }
         onTakePictureListener?.onStart()
         if (snapshot) {
             cvFinder?.takePictureSnapshot()
@@ -96,6 +101,10 @@ object CameraHelper {
      */
     @JvmStatic
     fun startRecorder() {
+        if (cvFinder?.isTakingVideo == true) {
+            ToastUtil.mackToastSHORT("正在生成视频,请勿频繁操作...", cvFinder?.context!!)
+            return
+        }
         val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
         if (null != videoFile) {
             cvFinder?.takeVideo(videoFile)
