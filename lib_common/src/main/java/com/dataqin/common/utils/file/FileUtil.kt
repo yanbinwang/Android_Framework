@@ -10,6 +10,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.provider.Settings
+import android.text.TextUtils
 import androidx.core.content.FileProvider
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
@@ -99,7 +100,8 @@ object FileUtil {
      * 删除文件
      */
     @JvmStatic
-    fun deleteFile(filePath: String) {
+    fun deleteFile(filePath: String?) {
+        if (TextUtils.isEmpty(filePath)) return
         val file = File(filePath)
         if (file.isFile && file.exists()) file.delete()
     }
