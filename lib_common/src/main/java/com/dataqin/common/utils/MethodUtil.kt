@@ -83,19 +83,19 @@ fun TextView.setState(textStr: String, colorRes: Int = R.color.blue_0d86ff) {
 /**
  * EditText输入密码是否可见(显隐)
  */
-fun EditText.inputTransformation(display: Boolean): Boolean {
+fun EditText.inputTransformation(): Boolean {
     try {
-        if (!display) {
-            transformationMethod = HideReturnsTransformationMethod.getInstance()
-            setSelection(text.length)
+        transformationMethod = if(transformationMethod == HideReturnsTransformationMethod.getInstance()) {
+            PasswordTransformationMethod.getInstance()
         } else {
-            transformationMethod = PasswordTransformationMethod.getInstance()
-            setSelection(text.length)
+            HideReturnsTransformationMethod.getInstance()
         }
+        setSelection(text.length)
+        postInvalidate()
     } catch (ignored: Exception) {
+    } finally {
+        return transformationMethod == HideReturnsTransformationMethod.getInstance()
     }
-    postInvalidate()
-    return !display
 }
 
 /**
