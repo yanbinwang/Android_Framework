@@ -73,6 +73,14 @@ fun TextView.setSpan(textStr: String, keyword: String, colorRes: Int = R.color.b
 }
 
 /**
+ * 设置显示内容和对应文本颜色
+ */
+fun TextView.setState(textStr: String, colorRes: Int = R.color.blue_0d86ff) {
+    text = textStr
+    setTextColor(ContextCompat.getColor(context, colorRes))
+}
+
+/**
  * EditText输入密码是否可见(显隐)
  */
 fun EditText.inputTransformation(display: Boolean): Boolean {
