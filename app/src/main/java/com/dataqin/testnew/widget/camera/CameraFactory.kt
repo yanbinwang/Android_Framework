@@ -1,5 +1,6 @@
 package com.dataqin.testnew.widget.camera
 
+import android.annotation.SuppressLint
 import android.graphics.PixelFormat
 import android.graphics.Rect
 import android.graphics.RectF
@@ -35,13 +36,14 @@ import kotlin.math.sqrt
  *  <uses-feature android:name="android.hardware.camera" />
  *  <uses-feature android:name="android.hardware.camera.autofocus" />
  */
+@SuppressLint("ClickableViewAccessibility")
 class CameraFactory {
     private var safe = true
     private var recording = false
-    private var mediaRecorder: MediaRecorder? = null
     private var camera: Camera? = null
     private var viewGroup: ViewGroup? = null
     private var cameraPreview: CameraPreview? = null
+    private var mediaRecorder: MediaRecorder? = null
     private var cameraId = CameraInfo.CAMERA_FACING_BACK //前置或后置摄像头
     private val TAG = "CameraInterface"
     var onCameraListener: OnCameraListener? = null
@@ -58,6 +60,10 @@ class CameraFactory {
         this.viewGroup = viewGroup
         this.cameraPreview = cameraPreview
         viewGroup.addView(cameraPreview)
+        cameraPreview.setOnTouchListener { _, event ->
+            focusOnTouch(event.x.toInt(), event.y.toInt(), viewGroup as FrameLayout)
+            false
+        }
     }
 
     fun initCamera() {
@@ -198,10 +204,7 @@ class CameraFactory {
                 camera.cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
                 camera.parameters = parameters
                 camera.autoFocus { success: Boolean, _: Camera? ->
-                    LogUtil.i(
-                        TAG,
-                        "autoFocusCallback success:$success"
-                    )
+                    LogUtil.i(TAG, "autoFocusCallback success:$success")
                 }
             } catch (ignored: Exception) {
             }
