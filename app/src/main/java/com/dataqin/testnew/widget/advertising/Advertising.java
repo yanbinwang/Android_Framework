@@ -38,14 +38,14 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
 public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     private boolean allow = true, scroll = true;//是否允许滑动
     private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
-    private ViewPager2 banner;//广告容器
     private Timer timer;//自动滚动的定时器
-    private LinearLayout ovalLayout;//圆点容器
-    private OnAdvertisingClickListener onAdvertisingClickListener;
     private List<String> list;//图片网络路径数组
-    private final int halfPosition = Integer.MAX_VALUE / 2;
+    private ViewPager2 banner;//广告容器
+    private LinearLayout ovalLayout;//圆点容器
+    private OnAdvertisingClickListener onAdvertisingClickListener;//监听
+    private final int halfPosition = Integer.MAX_VALUE / 2;//计算中心值
     private final AdvertisingAdapter adapter = new AdvertisingAdapter(new ArrayList<>());//图片适配器
-    private final WeakHandler weakHandler = new WeakHandler(Looper.getMainLooper());
+    private final WeakHandler weakHandler = new WeakHandler(Looper.getMainLooper());//切线程
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     public Advertising(Context context) {
