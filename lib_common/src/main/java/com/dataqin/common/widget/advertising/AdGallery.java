@@ -120,6 +120,12 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
         return false;
     }
 
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        stopTimer();
+    }
+
     //开始自动滚动任务 图片大于1张才滚动
     private void startTimer() {
         if (timer == null && imgList.size() > 1 && switchTime > 0) {
