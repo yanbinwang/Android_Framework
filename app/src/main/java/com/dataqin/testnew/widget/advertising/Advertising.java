@@ -110,16 +110,16 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     }
 
     public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
-        onStart(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect);
+        onStart(uriList, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10);
     }
 
     @Override
-    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId) {
+    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int focusedId, int normalId, int margin) {
         this.list = uriList;
         this.ovalLayout = ovalLayout;
-        this.margin = margin;
         this.focusedId = focusedId;
         this.normalId = normalId;
+        this.margin = margin;
         //设置数据
         initData();
 //        //自动滚动
