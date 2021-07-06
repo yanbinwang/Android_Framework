@@ -36,7 +36,7 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
  */
 @SuppressLint("ClickableViewAccessibility")
 public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
-    private boolean allow = true, scroll = true;//是否允许滑动
+    private boolean allow = true, scroll = true;//是否允许滑动，是否自动滚动
     private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private Timer timer;//自动滚动的定时器
     private List<String> list;//图片网络路径数组
