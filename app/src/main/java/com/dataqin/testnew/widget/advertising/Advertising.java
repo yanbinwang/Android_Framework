@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -35,13 +34,14 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
  * 广告控件
  */
 @SuppressLint("ClickableViewAccessibility")
-public class Advertising extends SimpleViewGroup implements AdvertisingImpl, View.OnTouchListener {
+public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     private int switchTime;//图片切换时间
     private int curIndex;//当前选中的数组索引
     private int oldIndex;//上次选中的数组索引
     private int margin;//左右边距
     private int focusedId;//圆点选中时的背景ID
     private int normalId;//圆点正常时的背景ID
+    private boolean allow = true;//是否允许滑动
     private ViewPager2 banner;
     private Timer timer;//自动滚动的定时器
     private LinearLayout ovalLayout;//圆点容器
@@ -82,17 +82,18 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Vie
                     oldIndex = curIndex;
                 }
             }
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                super.onPageScrolled(position, positionOffset, positionOffsetPixels);
+                allow = positionOffsetPixels == 0;
+            }
         });
     }
 
     @Override
     public void draw() {
         if (onDetectionInflate()) addView(banner);
-    }
-
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-        return false;
     }
 
     @Override
@@ -176,15 +177,17 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Vie
             timer = new Timer();
             timer.schedule(new TimerTask() {
                 public void run() {
-                    weakHandler.post(() -> {
-                        int current = banner.getCurrentItem();
-                        int position = current + 1;
-                        if (current == 0 || current == Integer.MAX_VALUE) {
-                            int halfPosition = Integer.MAX_VALUE / 2;
-                            position = halfPosition - (halfPosition % list.size());
-                        }
-                        banner.setCurrentItem(position);
-                    });
+                    if (allow) {
+                        weakHandler.post(() -> {
+                            int current = banner.getCurrentItem();
+                            int position = current + 1;
+                            if (current == 0 || current == Integer.MAX_VALUE) {
+                                int halfPosition = Integer.MAX_VALUE / 2;
+                                position = halfPosition - (halfPosition % list.size());
+                            }
+                            banner.setCurrentItem(position);
+                        });
+                    }
                 }
             }, switchTime, switchTime);
         }
