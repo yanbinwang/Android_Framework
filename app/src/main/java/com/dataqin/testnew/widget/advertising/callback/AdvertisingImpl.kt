@@ -1,6 +1,7 @@
 package com.dataqin.testnew.widget.advertising.callback
 
 import android.widget.LinearLayout
+import androidx.viewpager2.widget.ViewPager2
 
 /**
  *  Created by wangyanbin
@@ -32,6 +33,16 @@ interface AdvertisingImpl {
      * 设置自动滚动
      */
     fun setAutoScroll(scroll: Boolean = true)
+
+    /**
+     * 设置方向
+     */
+    fun setOrientation(orientation: Int = ViewPager2.ORIENTATION_HORIZONTAL)
+
+    /**
+     * 设置边距
+     */
+    fun setPageTransformer(marginPx: Int)
 
     /**
      * 设置监听

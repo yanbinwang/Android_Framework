@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.dataqin.base.utils.DisplayUtilKt;
@@ -178,8 +179,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
                         weakHandler.post(() -> {
                             int current = banner.getCurrentItem();
                             int position = current + 1;
-                            if (current == 0 || current == Integer.MAX_VALUE)
-                                position = halfPosition - (halfPosition % list.size());
+                            if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
                             banner.setCurrentItem(position);
                         });
                     }
@@ -209,6 +209,16 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     @Override
     public void setAutoScroll(boolean scroll) {
         this.scroll = scroll;
+    }
+
+    @Override
+    public void setOrientation(int orientation) {
+        banner.setOrientation(orientation);
+    }
+
+    @Override
+    public void setPageTransformer(int marginPx) {
+        banner.setPageTransformer(new MarginPageTransformer(DisplayUtilKt.dip2px(getContext(), marginPx)));
     }
 
     @Override
