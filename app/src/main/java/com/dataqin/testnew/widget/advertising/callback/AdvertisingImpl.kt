@@ -16,11 +16,26 @@ interface AdvertisingImpl {
      * @param normalId 圆点正常时的背景ID,圆点容器为空写0
      * @param switchTime 图片切换时间 写0 为不自动切换
      */
-    fun start(uriList: List<String>, ovalLayout: LinearLayout? = null, margin: Int, focusedId: Int, normalId: Int, switchTime: Int)
+    fun onStart(uriList: List<String>, ovalLayout: LinearLayout? = null, margin: Int, focusedId: Int, normalId: Int, switchTime: Int)
+
+    /**
+     * 开始滚动
+     */
+    fun onResume()
+
+    /**
+     * 停止滚动
+     */
+    fun onPause()
+
+    /**
+     * 设置自动滚动
+     */
+    fun setAutoScroll(scroll: Boolean = true)
 
     /**
      * 设置监听
      */
-    fun setOnAdvertisingItemClickListener(onAdvertisingItemClickListener: OnAdvertisingItemClickListener)
+    fun setOnAdvertisingClickListener(onAdvertisingClickListener: OnAdvertisingClickListener)
 
 }

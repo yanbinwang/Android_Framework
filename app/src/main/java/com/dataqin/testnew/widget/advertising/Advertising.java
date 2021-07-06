@@ -17,7 +17,7 @@ import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.testnew.R;
 import com.dataqin.testnew.widget.advertising.adapter.AdvertisingAdapter;
 import com.dataqin.testnew.widget.advertising.callback.AdvertisingImpl;
-import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingItemClickListener;
+import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingClickListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,11 +41,11 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     private int margin;//左右边距
     private int focusedId;//圆点选中时的背景ID
     private int normalId;//圆点正常时的背景ID
-    private boolean allow = true;//是否允许滑动
+    private boolean allow = true, scroll = true;//是否允许滑动
     private ViewPager2 banner;//广告容器
     private Timer timer;//自动滚动的定时器
     private LinearLayout ovalLayout;//圆点容器
-    private OnAdvertisingItemClickListener onAdvertisingItemClickListener;
+    private OnAdvertisingClickListener onAdvertisingClickListener;
     private List<String> list;//图片网络路径数组
     private final int halfPosition = Integer.MAX_VALUE / 2;
     private final AdvertisingAdapter adapter = new AdvertisingAdapter(new ArrayList<>());//图片适配器
@@ -105,16 +105,16 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="实现方法">
-    public void start(@NotNull List<String> uriList) {
-        start(uriList, null);
+    public void onStart(@NotNull List<String> uriList) {
+        onStart(uriList, null);
     }
 
-    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
-        start(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 3000);
+    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
+        onStart(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 3000);
     }
 
     @Override
-    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId, int switchTime) {
+    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId, int switchTime) {
         this.list = uriList;
         this.ovalLayout = ovalLayout;
         this.margin = margin;
@@ -159,8 +159,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
         //设置图片数据
         adapter.setData(list);
         adapter.setOnItemClickListener(position -> {
-            if (null != onAdvertisingItemClickListener) {
-                onAdvertisingItemClickListener.onItemClick(position);
+            if (null != onAdvertisingClickListener) {
+                onAdvertisingClickListener.onItemClick(position);
             }
         });
         //设置默认选中的起始位置
@@ -179,7 +179,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
                         weakHandler.post(() -> {
                             int current = banner.getCurrentItem();
                             int position = current + 1;
-                            if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
+                            if (current == 0 || current == Integer.MAX_VALUE)
+                                position = halfPosition - (halfPosition % list.size());
                             banner.setCurrentItem(position);
                         });
                     }
@@ -197,16 +198,23 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     }
 
     @Override
-    public void setOnAdvertisingItemClickListener(@NotNull OnAdvertisingItemClickListener onAdvertisingItemClickListener) {
-        this.onAdvertisingItemClickListener = onAdvertisingItemClickListener;
-    }
-
     public void onResume() {
-        startTimer();
+        if (scroll) startTimer();
     }
 
+    @Override
     public void onPause() {
-        stopTimer();
+        if (scroll) stopTimer();
+    }
+
+    @Override
+    public void setAutoScroll(boolean scroll) {
+        this.scroll = scroll;
+    }
+
+    @Override
+    public void setOnAdvertisingClickListener(@NotNull OnAdvertisingClickListener onAdvertisingClickListener) {
+        this.onAdvertisingClickListener = onAdvertisingClickListener;
     }
     // </editor-fold>
 

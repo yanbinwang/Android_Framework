@@ -1,11 +1,8 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Looper
-import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -19,8 +16,6 @@ import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
@@ -29,10 +24,9 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
-import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingItemClickListener
+import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingClickListener
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
-import com.yanzhenjie.permission.runtime.Permission
 import java.io.File
 
 
@@ -107,8 +101,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F1336313%2Ff%2F977802912.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=82da0c88197102345a628bc2239bcf50",
             "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30"
         )
-        binding.adGallery.start(list, binding.llPoint)
-        binding.adGallery.setOnAdvertisingItemClickListener(object :OnAdvertisingItemClickListener{
+        binding.adGallery.onStart(list, binding.llPoint)
+        binding.adGallery.setOnAdvertisingClickListener(object :OnAdvertisingClickListener{
             override fun onItemClick(index: Int) {
                 showToast("当前选中了${index}")
             }
