@@ -42,11 +42,12 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     private int focusedId;//圆点选中时的背景ID
     private int normalId;//圆点正常时的背景ID
     private boolean allow = true;//是否允许滑动
-    private ViewPager2 banner;
+    private ViewPager2 banner;//广告容器
     private Timer timer;//自动滚动的定时器
     private LinearLayout ovalLayout;//圆点容器
     private OnAdvertisingItemClickListener onAdvertisingItemClickListener;
     private List<String> list;//图片网络路径数组
+    private final int halfPosition = Integer.MAX_VALUE / 2;
     private final AdvertisingAdapter adapter = new AdvertisingAdapter(new ArrayList<>());//图片适配器
     private final WeakHandler weakHandler = new WeakHandler(Looper.getMainLooper());
 
@@ -164,10 +165,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
         });
         //设置默认选中的起始位置
         int position = 0;
-        if (list.size() > 1) {
-            int halfPosition = Integer.MAX_VALUE / 2;
-            position = halfPosition - (halfPosition % list.size());
-        }
+        if (list.size() > 1) position = halfPosition - (halfPosition % list.size());
         banner.setCurrentItem(position, false);
     }
 
@@ -181,10 +179,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
                         weakHandler.post(() -> {
                             int current = banner.getCurrentItem();
                             int position = current + 1;
-                            if (current == 0 || current == Integer.MAX_VALUE) {
-                                int halfPosition = Integer.MAX_VALUE / 2;
-                                position = halfPosition - (halfPosition % list.size());
-                            }
+                            if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
                             banner.setCurrentItem(position);
                         });
                     }
