@@ -15,9 +15,8 @@ interface AdvertisingImpl {
      * @param margin 左右边距，可为空写0
      * @param focusedId 圆点选中时的背景ID,圆点容器可为空写0
      * @param normalId 圆点正常时的背景ID,圆点容器为空写0
-     * @param switchTime 图片切换时间 写0 为不自动切换
      */
-    fun onStart(uriList: List<String>, ovalLayout: LinearLayout? = null, margin: Int, focusedId: Int, normalId: Int, switchTime: Int)
+    fun onStart(uriList: List<String>, ovalLayout: LinearLayout? = null, margin: Int, focusedId: Int, normalId: Int)
 
     /**
      * 开始滚动

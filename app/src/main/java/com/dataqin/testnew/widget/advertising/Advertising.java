@@ -37,7 +37,7 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
 @SuppressLint("ClickableViewAccessibility")
 public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     private boolean allow = true, scroll = true;//是否允许滑动
-    private int switchTime = 3000, curIndex, oldIndex, margin, focusedId, normalId;//图片切换时间,当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
+    private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private ViewPager2 banner;//广告容器
     private Timer timer;//自动滚动的定时器
     private LinearLayout ovalLayout;//圆点容器
@@ -110,17 +110,16 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
     }
 
     public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
-        onStart(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 3000);
+        onStart(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect);
     }
 
     @Override
-    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId, int switchTime) {
+    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId) {
         this.list = uriList;
         this.ovalLayout = ovalLayout;
         this.margin = margin;
         this.focusedId = focusedId;
         this.normalId = normalId;
-        this.switchTime = switchTime;
         //设置数据
         initData();
 //        //自动滚动
@@ -184,7 +183,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
                         });
                     }
                 }
-            }, switchTime, switchTime);
+            }, 3000, 3000);
         }
     }
 
