@@ -29,6 +29,7 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
+import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingItemClickListener
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import com.yanzhenjie.permission.runtime.Permission
@@ -107,18 +108,26 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30"
         )
         binding.adGallery.start(list, binding.llPoint)
+        binding.adGallery.setOnAdvertisingItemClickListener(object :OnAdvertisingItemClickListener{
+            override fun onItemClick(index: Int) {
+                showToast("当前选中了${index}")
+            }
+        })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.adGallery.onResume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.adGallery.onPause()
     }
 
     override fun initEvent() {
         super.initEvent()
-        onClick(
-            this,
-            binding.btnTest,
-            binding.btnTest2,
-            binding.btnTest3,
-            binding.btnTest4,
-            binding.btnTest5
-        )
+        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
         ScreenShotObserver.instance.register()
 
         addDisposable(RxBus.instance.toFlowable {

@@ -83,11 +83,29 @@
     <!--        android:layout_height="match_parent"/>-->
 
 
+<!--    <RelativeLayout-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="400mm">-->
+
+<!--        <com.dataqin.common.widget.advertising.AdGallery-->
+<!--            android:id="@+id/ad_gallery"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent" />-->
+
+<!--        <LinearLayout-->
+<!--            android:id="@+id/ll_point"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="80mm"-->
+<!--            android:layout_alignParentBottom="true"-->
+<!--            android:orientation="horizontal" />-->
+
+<!--    </RelativeLayout>-->
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="400mm">
 
-        <com.dataqin.common.widget.advertising.AdGallery
+        <com.dataqin.testnew.widget.advertising.Advertising
             android:id="@+id/ad_gallery"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
