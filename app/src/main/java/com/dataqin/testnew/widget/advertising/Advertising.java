@@ -35,13 +35,8 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
  */
 @SuppressLint("ClickableViewAccessibility")
 public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
-    private int switchTime;//图片切换时间
-    private int curIndex;//当前选中的数组索引
-    private int oldIndex;//上次选中的数组索引
-    private int margin;//左右边距
-    private int focusedId;//圆点选中时的背景ID
-    private int normalId;//圆点正常时的背景ID
     private boolean allow = true, scroll = true;//是否允许滑动
+    private int switchTime, curIndex, oldIndex, margin, focusedId, normalId;//图片切换时间,当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private ViewPager2 banner;//广告容器
     private Timer timer;//自动滚动的定时器
     private LinearLayout ovalLayout;//圆点容器
@@ -69,17 +64,21 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
 
     private void initialize() {
         banner = new ViewPager2(getContext());
-        banner.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);//去除水波纹
+        //去除水波纹
+        banner.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
         banner.setAdapter(adapter);
         banner.setOrientation(ORIENTATION_HORIZONTAL);
         banner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
+                //切换圆点
                 curIndex = position % list.size();
-                if (ovalLayout != null && list.size() > 1) {//切换圆点
-                    ovalLayout.getChildAt(oldIndex).setBackgroundResource(normalId);//圆点取消
-                    ovalLayout.getChildAt(curIndex).setBackgroundResource(focusedId);//圆点选中
+                if (ovalLayout != null && list.size() > 1) {
+                    //圆点取消
+                    ovalLayout.getChildAt(oldIndex).setBackgroundResource(normalId);
+                    //圆点选中
+                    ovalLayout.getChildAt(curIndex).setBackgroundResource(focusedId);
                     oldIndex = curIndex;
                 }
             }
