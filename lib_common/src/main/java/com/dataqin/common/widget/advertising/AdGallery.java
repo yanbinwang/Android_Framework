@@ -3,6 +3,7 @@ package com.dataqin.common.widget.advertising;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,13 +15,16 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import com.dataqin.base.utils.DisplayUtilKt;
 import com.dataqin.base.utils.WeakHandler;
+import com.dataqin.common.R;
 import com.dataqin.common.imageloader.ImageLoader;
 import com.dataqin.common.widget.advertising.adapter.AdAdapter;
 import com.dataqin.common.widget.advertising.callback.AdGalleryImpl;
 import com.dataqin.common.widget.advertising.callback.OnAdGalleryItemClickListener;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,9 +40,9 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
     private int switchTime;//图片切换时间
     private int curIndex;//当前选中的数组索引
     private int oldIndex;//上次选中的数组索引
+    private int margin;//左右边距
     private int focusedId;//圆点选中时的背景ID
     private int normalId;//圆点正常时的背景ID
-    private int[] adsId;//图片资源ID组
     private List<String> urisList;//图片网络路径数组
     private List<ImageView> imgList;//ImageView组
     private AdAdapter adapter;//图片适配器
@@ -124,7 +128,7 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
                 public void run() {
                     weakHandler.sendEmptyMessage(0);
                 }
-            }, switchTime, switchTime);
+            }, 0, switchTime);
         }
     }
 
@@ -146,16 +150,24 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="实现方法">
+    public void start(@NotNull List<String> uriList) {
+        start(uriList, null, 10, 0, 0, 5000);
+    }
+
+    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
+        start(uriList, ovalLayout, 10, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 5000);
+    }
+
     @Override
-    public void start(@NotNull List<String> uris, @NotNull int[] adsId, int switchTime, @NotNull LinearLayout ovalLayout, int focusedId, int normalId) {
-        this.urisList = uris;
-        this.adsId = adsId;
-        this.switchTime = switchTime;
+    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int margin, int focusedId, int normalId, int switchTime) {
+        this.urisList = uriList;
         this.ovalLayout = ovalLayout;
+        this.margin = margin;
         this.focusedId = focusedId;
         this.normalId = normalId;
-        initImages();// 初始化图片组
-        setAdapter(adapter);
+        this.switchTime = switchTime;
+        initImages();//初始化图片组
+        this.setAdapter(adapter);
         this.setOnItemClickListener(this);
         this.setOnTouchListener(this);
         this.setOnItemSelectedListener(this);
@@ -163,10 +175,10 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
         this.setAnimationDuration(700); //动画时间
         this.setUnselectedAlpha(1); //未选中项目的透明度
         //不包含spacing会导致onKeyDown()失效!!! 失效onKeyDown()前先调用onScroll(null,1,0)可处理
-        setSpacing(0);
+        this.setSpacing(0);
         //取靠近中间 图片数组的整倍数
-        setSelection((getCount() / 2 / imgList.size()) * imgList.size()); //默认选中中间位置为起始位置
-        setFocusableInTouchMode(true);
+        this.setSelection((getCount() / 2 / imgList.size()) * imgList.size()); //默认选中中间位置为起始位置
+        this.setFocusableInTouchMode(true);
         //初始化圆点
         initOvalLayout();
         //开始自动滚动任务
@@ -176,22 +188,15 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
     //初始化图片组
     private void initImages() {
         imgList = new ArrayList<>();
-        int length = urisList != null ? urisList.size() : adsId.length;
+        int length = urisList.size();
         for (int i = 0; i < length; i++) {
             //实例化ImageView的对象
             ImageView imageview = new ImageView(getContext());
             //设置缩放方式
             imageview.setScaleType(ImageView.ScaleType.FIT_XY);
             imageview.setLayoutParams(new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT));
-            // 本地加载图片
-            if (urisList == null) {
-                //为ImageView设置要显示的图片
-                imageview.setImageResource(adsId[i]);
-            } else {
-                // 网络加载图片
-                ImageLoader.getInstance().displayImage(imageview, urisList.get(i));
-//                Glide.with(getContext()).load(urisList.get(i)).into(imageview);
-            }
+            //加载图片
+            ImageLoader.getInstance().displayImage(imageview, urisList.get(i));
             imgList.add(imageview);
         }
         adapter = new AdAdapter(imgList);
@@ -202,20 +207,23 @@ public class AdGallery extends Gallery implements AdGalleryImpl, OnItemClickList
         if (ovalLayout != null && imgList.size() < 2) {// 如果只有一第图时不显示圆点容器
             ovalLayout.getLayoutParams().height = 0;
         } else if (ovalLayout != null) {
-            // 圆点的大小是 圆点窗口的 20%;
-            int ovalHeight = (int) (ovalLayout.getLayoutParams().height * 0.2);
-            // 圆点的左右外边距是 圆点窗口的 20%;
-//			int Ovalmargin = (int) (mOvalLayout.getLayoutParams().height * 0.2);
-            //去除边距
-            int ovalMargin = 0;
-            LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(ovalHeight * 5, ovalHeight);
-            layoutParams.setMargins(ovalMargin, 0, ovalMargin, 0);
+            ovalLayout.setGravity(Gravity.CENTER);
+            //如果true代表垂直，否则水平
+            boolean direction = ovalLayout.getLayoutParams().height > ovalLayout.getLayoutParams().width;
+            //左右边距
+            int ovalMargin = DisplayUtilKt.dip2px(getContext(), margin);
+            //添加圆点
             for (int i = 0; i < imgList.size(); i++) {
-                //圆点
-                View view = new View(getContext());
-                view.setLayoutParams(layoutParams);
-                view.setBackgroundResource(normalId);
-                ovalLayout.addView(view);
+                ImageView imageView = new ImageView(getContext());
+                ovalLayout.addView(imageView);
+                LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) imageView.getLayoutParams();
+                if (direction) {
+                    layoutParams.setMargins(ovalMargin, 0, ovalMargin, 0);
+                } else {
+                    layoutParams.setMargins(0, ovalMargin, 0, ovalMargin);
+                }
+                imageView.setLayoutParams(layoutParams);
+                imageView.setBackgroundResource(normalId);
             }
             //选中第一个
             ovalLayout.getChildAt(0).setBackgroundResource(focusedId);

@@ -43,7 +43,8 @@ import java.io.File
  * cameraview_tts
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
+    MainContract.View {
     private var srcPath = ""
 
     //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
@@ -99,11 +100,25 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 override fun onComplete() {
                 }
             })
+
+        val list = listOf(
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F04%2F20170804135156_metTN.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=d90a27b306f2d7ce4c0d18a6744bca86",
+            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F1336313%2Ff%2F977802912.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=82da0c88197102345a628bc2239bcf50",
+            "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30"
+        )
+        binding.adGallery.start(list, binding.llPoint)
     }
 
     override fun initEvent() {
         super.initEvent()
-        onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
+        onClick(
+            this,
+            binding.btnTest,
+            binding.btnTest2,
+            binding.btnTest3,
+            binding.btnTest4,
+            binding.btnTest5
+        )
         ScreenShotObserver.instance.register()
 
         addDisposable(RxBus.instance.toFlowable {
@@ -171,11 +186,14 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 val fileDir = File(srcPath)
                 val zipFile = File("${Constants.SDCARD_PATH}/10086.zip")
                 try {
-                    if (fileDir.exists()) FileUtil.zipFolder(fileDir.absolutePath, zipFile.absolutePath)
+                    if (fileDir.exists()) FileUtil.zipFolder(
+                        fileDir.absolutePath,
+                        zipFile.absolutePath
+                    )
                 } catch (e: Exception) {
                     log("打包图片生成压缩文件异常: $e")
                 } finally {
-                    WeakHandler(Looper.getMainLooper()).post{ hideDialog() }
+                    WeakHandler(Looper.getMainLooper()).post { hideDialog() }
                 }
             }.start()
         } else showToast("先截图！")
