@@ -1,4 +1,4 @@
-package com.dataqin.testnew.widget.advertising.callback
+package com.dataqin.common.widget.advertising.callback
 
 import android.widget.LinearLayout
 import androidx.viewpager2.widget.ViewPager2

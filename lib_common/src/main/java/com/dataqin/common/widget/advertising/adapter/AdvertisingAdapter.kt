@@ -1,4 +1,4 @@
-package com.dataqin.testnew.widget.advertising.adapter
+package com.dataqin.common.widget.advertising.adapter
 
 import android.view.ViewGroup
 import android.widget.ImageView

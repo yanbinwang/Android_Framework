@@ -1,4 +1,4 @@
-package com.dataqin.testnew.widget.advertising;
+package com.dataqin.common.widget.advertising;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -15,10 +15,10 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.dataqin.base.utils.DisplayUtilKt;
 import com.dataqin.base.utils.WeakHandler;
 import com.dataqin.base.widget.SimpleViewGroup;
-import com.dataqin.testnew.R;
-import com.dataqin.testnew.widget.advertising.adapter.AdvertisingAdapter;
-import com.dataqin.testnew.widget.advertising.callback.AdvertisingImpl;
-import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingClickListener;
+import com.dataqin.common.R;
+import com.dataqin.common.widget.advertising.adapter.AdvertisingAdapter;
+import com.dataqin.common.widget.advertising.callback.AdvertisingImpl;
+import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

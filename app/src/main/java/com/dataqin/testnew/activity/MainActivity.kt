@@ -24,7 +24,7 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
-import com.dataqin.testnew.widget.advertising.callback.OnAdvertisingClickListener
+import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import java.io.File
