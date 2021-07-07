@@ -19,6 +19,9 @@ import android.view.animation.OvershootInterpolator;
 import com.dataqin.base.utils.LogUtil;
 import com.dataqin.common.R;
 
+/**
+ * 侧滑按钮
+ */
 @SuppressLint("StaticFieldLeak")
 public class SwipeMenuLayout extends ViewGroup {
     //为了处理单击事件的冲突
@@ -115,7 +118,6 @@ public class SwipeMenuLayout extends ViewGroup {
         //适配GridLayoutManager，将以第一个子Item(即ContentItem)的宽度为控件宽度
         int contentWidth = 0;
         int childCount = getChildCount();
-
         //为了子View的高，可以matchParent(参考的FrameLayout 和LinearLayout的Horizontal)
         final boolean measureMatchParentChildren = MeasureSpec.getMode(heightMeasureSpec) != MeasureSpec.EXACTLY;
         boolean isNeedMeasureChildHeight = false;

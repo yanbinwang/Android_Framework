@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.dataqin.common.widget.xrecyclerview.DetectionRecyclerView
+        <com.dataqin.common.widget.xrecyclerview.DetectionLayout
             android:id="@+id/drv_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

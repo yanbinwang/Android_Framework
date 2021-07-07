@@ -14,10 +14,7 @@ class LooperLayoutManager : RecyclerView.LayoutManager() {
      * 给 itemView 设置默认的LayoutParams
      */
     override fun generateDefaultLayoutParams(): RecyclerView.LayoutParams {
-        return RecyclerView.LayoutParams(
-            ViewGroup.LayoutParams.WRAP_CONTENT,
-            ViewGroup.LayoutParams.WRAP_CONTENT
-        )
+        return RecyclerView.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT)
     }
 
     /**
@@ -36,7 +33,7 @@ class LooperLayoutManager : RecyclerView.LayoutManager() {
         if (state?.isPreLayout == true) return
         //将视图分离放入scrap缓存中，以准备重新对view进行排版
         detachAndScrapAttachedViews(recycler!!)
-        var autualWidth = 0
+        var actualWidth = 0
         for (i in 0 until itemCount) {
             //初始化，将在屏幕内的view填充
             val itemView = recycler.getViewForPosition(i)
@@ -46,22 +43,22 @@ class LooperLayoutManager : RecyclerView.LayoutManager() {
             val width = getDecoratedMeasuredWidth(itemView)
             val height = getDecoratedMeasuredHeight(itemView)
             //根据itemView的宽高进行布局
-            layoutDecorated(itemView, autualWidth, 0, autualWidth + width, height)
-            autualWidth += width
+            layoutDecorated(itemView, actualWidth, 0, actualWidth + width, height)
+            actualWidth += width
             //如果当前布局过的itemView的宽度总和大于RecyclerView的宽，则不再进行布局
-            if (autualWidth > getWidth()) break
+            if (actualWidth > getWidth()) break
         }
     }
 
     override fun scrollHorizontallyBy(dx: Int, recycler: RecyclerView.Recycler?, state: RecyclerView.State?): Int {
         //横向滑动的时候，对左右两边按顺序填充itemView
-        val travl = fill(dx, recycler)
-        if (travl == 0) return 0
+        val travel = fill(dx, recycler)
+        if (travel == 0) return 0
         //滑动
-        offsetChildrenHorizontal(-travl)
+        offsetChildrenHorizontal(-travel)
         //回收已经不可见的itemView
         recyclerHideView(dx, recycler)
-        return travl
+        return travel
     }
 
     /**
@@ -74,8 +71,7 @@ class LooperLayoutManager : RecyclerView.LayoutManager() {
             val lastPos = getPosition(lastView)
             //可见的最后一个itemView完全滑进来了，需要补充新的
             if (lastView.right < width) {
-                //判断可见的最后一个itemView的索引，
-                //如果是最后一个，则将下一个itemView设置为第一个，否则设置为当前索引的下一个
+                //判断可见的最后一个itemView的索引，如果是最后一个，则将下一个itemView设置为第一个，否则设置为当前索引的下一个
                 val scrap = if (lastPos == itemCount - 1) {
                     recycler?.getViewForPosition(0)
                 } else {

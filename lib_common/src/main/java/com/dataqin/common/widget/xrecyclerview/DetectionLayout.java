@@ -11,18 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
  * date: 2017/8/25.
  * 带检测数据是否为空的recyclerview
  */
-public class DetectionRecyclerView extends RecyclerView {
-    private View mEmptyView;//adapter没有数据的时候显示,类似于listView的emptyView
+public class DetectionLayout extends RecyclerView {
+    private View emptyView;//adapter没有数据的时候显示,类似于listView的emptyView
 
-    public DetectionRecyclerView(Context context) {
+    public DetectionLayout(Context context) {
         this(context, null);
     }
 
-    public DetectionRecyclerView(Context context, AttributeSet attrs) {
+    public DetectionLayout(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public DetectionRecyclerView(Context context, AttributeSet attrs, int defStyle) {
+    public DetectionLayout(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 
@@ -31,7 +31,7 @@ public class DetectionRecyclerView extends RecyclerView {
      * @param emptyView
      */
     public void setEmptyView(View emptyView) {
-        this.mEmptyView = emptyView;
+        this.emptyView = emptyView;
         checkIfEmpty();
     }
 
@@ -39,9 +39,9 @@ public class DetectionRecyclerView extends RecyclerView {
      * 检测内容是否为空
      */
     private void checkIfEmpty() {
-        if (mEmptyView != null && getAdapter() != null) {
+        if (emptyView != null && getAdapter() != null) {
             final boolean emptyViewVisible = getAdapter().getItemCount() == 0;
-            mEmptyView.setVisibility(emptyViewVisible ? VISIBLE : GONE);
+            emptyView.setVisibility(emptyViewVisible ? VISIBLE : GONE);
             setVisibility(emptyViewVisible ? GONE : VISIBLE);
         }
     }

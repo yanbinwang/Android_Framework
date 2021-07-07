@@ -36,7 +36,7 @@ import com.dataqin.common.widget.xrecyclerview.refresh.callback.SwipeRefreshLayo
 public class XRecyclerView extends SimpleViewGroup {
     private EmptyLayout empty;//自定义封装的空布局
     private XRefreshLayout refresh;//刷新控件 类型1才有
-    private DetectionRecyclerView recycler;//数据列表
+    private DetectionLayout recycler;//数据列表
     private OnEmptyClickListener onEmptyClickListener;//空布局点击
     private int refreshId, emptyId, directionId;//页面类型(0无刷新-1带刷新)刷新类型（0顶部-1底部-2全部）是否具有空布局（0无-1有）
 
@@ -154,7 +154,7 @@ public class XRecyclerView extends SimpleViewGroup {
     /**
      * 设置横向左右滑动的adapter
      */
-    public void setHorizontalAdapter(BaseAdapter adapter) {
+    public <T extends BaseAdapter> void setHorizontalAdapter(T adapter) {
         recycler.setLayoutManager(new LinearLayoutManager(getContext(), RecyclerView.HORIZONTAL, false));
         recycler.setAdapter(adapter);
     }
@@ -192,7 +192,7 @@ public class XRecyclerView extends SimpleViewGroup {
     /**
      * 返回页面整体
      */
-    public DetectionRecyclerView getRecyclerView() {
+    public DetectionLayout getRecyclerView() {
         return recycler;
     }
 
