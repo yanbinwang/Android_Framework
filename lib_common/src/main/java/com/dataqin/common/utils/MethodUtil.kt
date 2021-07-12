@@ -37,6 +37,10 @@ fun LinearLayout.topMargin() {
     layoutParams = params
 }
 
+fun RelativeLayout.topPadding() = setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0)
+
+fun LinearLayout.topPadding() = setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0)
+
 /**
  * 震动
  */
