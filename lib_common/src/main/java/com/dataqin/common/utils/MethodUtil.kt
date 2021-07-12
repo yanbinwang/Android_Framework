@@ -37,9 +37,7 @@ fun LinearLayout.topMargin() {
     layoutParams = params
 }
 
-fun RelativeLayout.topPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
-
-fun LinearLayout.topPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
+fun View.topPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
 
 /**
  * 震动
