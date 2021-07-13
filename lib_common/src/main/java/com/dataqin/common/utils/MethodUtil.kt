@@ -3,6 +3,7 @@ package com.dataqin.common.utils
 import android.annotation.SuppressLint
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Build
 import android.os.VibrationEffect
@@ -80,6 +81,14 @@ fun TextView.setSpan(textStr: String, keyword: String, colorRes: Int = R.color.b
 fun TextView.setState(textStr: String, colorRes: Int = R.color.blue_0d86ff) {
     text = textStr
     setTextColor(ContextCompat.getColor(context, colorRes))
+}
+
+/**
+ * 设置下划线，并抗锯齿
+ */
+fun TextView.setUnderline() {
+    paint.flags = Paint.UNDERLINE_TEXT_FLAG
+    paint.isAntiAlias = true
 }
 
 /**
