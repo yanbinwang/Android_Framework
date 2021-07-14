@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.graphics.Point
 import android.net.ConnectivityManager
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
 import com.amap.api.location.AMapLocation
@@ -47,9 +46,8 @@ object MapHelper {
         this.aMap = mapView.map
         this.initialize = initialize
         //默认地图经纬度-杭州
-        var json = Constants.LATLNG_JSON
-        if (TextUtils.isEmpty(json)) json = "{latitude:30.2780010000,longitude:120.1680690000}"
-        mapLatLng = GsonUtil.jsonToObj(json!!, LatLng::class.java)
+        val json = Constants.LATLNG_JSON ?: "{latitude:30.2780010000,longitude:120.1680690000}"
+        mapLatLng = GsonUtil.jsonToObj(json, LatLng::class.java)
         //在activity执行onCreate时执行mMapView.onCreate(savedInstanceState)创建地图
         mapView.onCreate(savedInstanceState)
         //更改地图view设置
