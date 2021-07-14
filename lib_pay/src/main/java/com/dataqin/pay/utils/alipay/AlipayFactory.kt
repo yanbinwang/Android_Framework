@@ -65,10 +65,10 @@ class AlipayFactory {
         if (!TextUtils.isEmpty(text)) ToastUtil.mackToastSHORT(text!!, weakActivity?.get()!!)
     }
 
-    private val weakHandler = WeakHandler { msg ->
-        when (msg.what) {
+    private val weakHandler = WeakHandler {
+        when (it.what) {
             SDK_PAY_FLAG -> {
-                val payResult = PayResult(msg.obj as String)
+                val payResult = PayResult(it.obj as String)
                 /**
                  * 同步返回的结果必须放置到服务端进行验证（验证的规则请看https://doc.open.alipay.com/docs/doc.htm?
                  * spm=a219a.7629140.0.0.M0HfOm&treeId=59&articleId=103671&docType=1) 建议商户依赖异步通知
