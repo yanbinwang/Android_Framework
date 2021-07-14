@@ -26,19 +26,19 @@ import com.dataqin.common.constant.Constants
 /**
  * 空出状态栏高度
  */
-fun RelativeLayout.topMargin() {
+fun RelativeLayout.topStatusMargin() {
     val params = layoutParams as RelativeLayout.LayoutParams
     params.topMargin = Constants.STATUS_BAR_HEIGHT
     layoutParams = params
 }
 
-fun LinearLayout.topMargin() {
+fun LinearLayout.topStatusMargin() {
     val params = layoutParams as LinearLayout.LayoutParams
     params.topMargin = Constants.STATUS_BAR_HEIGHT
     layoutParams = params
 }
 
-fun View.topPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
+fun View.topStatusPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
 
 /**
  * 震动
