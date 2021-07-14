@@ -74,14 +74,10 @@ class DownloadFactory private constructor() {
                             } finally {
                                 inputStream?.close()
                                 fileOutputStream?.close()
-                                weakHandler.post { onDownloadListener?.onComplete() }
                             }
                         }
                         executors.isShutdown
-                    } else {
-                        onDownloadListener?.onFailed(throwable)
-                        onDownloadListener?.onComplete()
-                    }
+                    } else onDownloadListener?.onFailed(throwable)
                 }
             })
     }
