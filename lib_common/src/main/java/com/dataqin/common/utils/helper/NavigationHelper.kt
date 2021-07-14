@@ -18,11 +18,12 @@ object NavigationHelper {
      */
     @JvmStatic
     fun initialize(navigationView: BottomNavigationView, ids: ArrayList<Int>) {
-        NavigationHelper.navigationView = navigationView
-        NavigationHelper.ids = ids
+        this.navigationView = navigationView
+        this.ids = ids
         //去除长按的toast提示
         for (position in ids.indices) {
-            (navigationView.getChildAt(0) as ViewGroup).getChildAt(position).findViewById<View>(ids[position]).setOnLongClickListener { true }
+            (navigationView.getChildAt(0) as ViewGroup).getChildAt(position)
+                .findViewById<View>(ids[position]).setOnLongClickListener { true }
         }
         //最多配置5个
         navigationView.setOnNavigationItemSelectedListener {
@@ -45,6 +46,41 @@ object NavigationHelper {
      */
     @JvmStatic
     fun selectedItem(index: Int) = navigationView?.menu?.getItem(index)?.itemId
+
+    /**
+     * 添加角标
+     * <?xml version="1.0" encoding="utf-8"?>
+     * <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     *      android:layout_width="match_parent"
+     *      android:layout_height="match_parent"
+     *      android:orientation="vertical">
+     *
+     * <TextView
+     *      android:id="@+id/tv_msg_count"
+     *      android:layout_width="15dp"
+     *      android:layout_height="15dp"
+     *      android:layout_gravity="center"
+     *      android:layout_marginLeft="@dimen/dp_10"
+     *      android:layout_marginTop="@dimen/dp_3"
+     *      android:background="@drawable/bg_red_circle_10"
+     *      android:gravity="center"
+     *      android:textColor="@color/white"
+     *      android:textSize="@dimen/sp_12"
+     *      android:visibility="gone" />
+     *
+     * </LinearLayout>
+     */
+    @JvmStatic
+    fun setMarker(index: Int) {
+//        //获取整个的NavigationView
+//        val menuView = navigationView?.getChildAt (0) as BottomNavigationMenuView
+//        //这里就是获取所添加的每一个Tab(或者叫menu)
+//        val tab = menuView.getChildAt(index) as BottomNavigationItemView
+//        //加载我们的角标View，新创建的一个布局
+//        val badge = LayoutInflater.from (navigationView?.context).inflate(R.layout.menu_badge, menuView, false)
+//        //添加到Tab上
+//        tab.addView(badge)
+    }
 
     interface OnNavigationItemSelectedListener {
 
