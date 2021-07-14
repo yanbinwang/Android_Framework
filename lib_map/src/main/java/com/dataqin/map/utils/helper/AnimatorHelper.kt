@@ -29,10 +29,7 @@ fun View.refresh() {
 /**
  * 打卡时间的：符号的动画
  */
-fun View.pass() {
-    val animation = AnimationUtils.loadAnimation(context, R.anim.set_sign_in)
-    startAnimation(animation)
-}
+fun View.pass() = startAnimation(AnimationUtils.loadAnimation(context, R.anim.set_sign_in))
 
 /**
  * 底部弹出
@@ -42,8 +39,7 @@ fun View.shown() {
     if(View.VISIBLE == visibility) return
     isEnabled = false
     visibility = View.VISIBLE
-    val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in)
-    startAnimation(animation)
+    startAnimation(AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in))
     weakHandler.postDelayed({
         isEnabled = true
     }, 500)
@@ -56,8 +52,7 @@ fun View.shown() {
 fun View.hidden() {
     if(View.GONE == visibility) return
     isEnabled = false
-    val animation = AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_out)
-    startAnimation(animation)
+    startAnimation(AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_out))
     weakHandler.postDelayed({
         isEnabled = true
         visibility = View.GONE
