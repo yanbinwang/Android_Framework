@@ -2,7 +2,6 @@ package com.dataqin.map.utils.helper
 
 import android.content.Context
 import android.content.IntentFilter
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Point
 import android.net.ConnectivityManager
@@ -10,7 +9,6 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.app.ActivityCompat
 import com.amap.api.location.AMapLocation
 import com.amap.api.maps.AMap
 import com.amap.api.maps.CameraUpdateFactory
@@ -21,11 +19,11 @@ import com.amap.api.maps.model.MarkerOptions
 import com.amap.api.maps.model.PolygonOptions
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.analysis.GsonUtil
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.map.service.MapReceiver
 import com.dataqin.map.utils.CoordinateTransUtil
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
-import com.yanzhenjie.permission.runtime.Permission
 import kotlin.math.roundToInt
 
 /**
@@ -71,12 +69,9 @@ object MapHelper {
             aMap?.setOnMapLoadedListener {
                 //先移动到默认点再检测权限定位
                 moveCamera()
-                var granted = true
-                for (index in Permission.Group.LOCATION.indices) {
-                    if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(mapView.context, Permission.Group.LOCATION[index])) granted = false
-                }
-                if (granted) location(mapView.context)
+                if (PermissionHelper.with(mapView.context).checkSelfLocation()) location(mapView.context)
             }
+            //可更替为application中的网络监听，再其内通过开关发送重新定位
             val intentFilter = IntentFilter()
             intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
             mapView.context.registerReceiver(mapReceiver, intentFilter)
