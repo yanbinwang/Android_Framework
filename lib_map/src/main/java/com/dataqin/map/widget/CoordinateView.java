@@ -37,7 +37,7 @@ public class CoordinateView extends ImageView {
 
     private void initialize() {
         setBackgroundResource(R.drawable.animation_coordinate);
-        animationDrawable = (AnimationDrawable) getBackground();
+        animationDrawable = (AnimationDrawable) getBackground();//getResources().getDrawable(R.anim.frame_animation);
     }
 
     @Override
