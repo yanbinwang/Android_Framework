@@ -22,52 +22,22 @@ public class CoordinateView extends ImageView {
 
     public CoordinateView(Context context) {
         super(context);
-//        initialize();
     }
 
     public CoordinateView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-//        initialize();
     }
 
     public CoordinateView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-//        initialize();
     }
 
-//    private void initialize() {
-//        setBackgroundResource(R.drawable.animation_coordinate);
-//        animationDrawable = (AnimationDrawable) getBackground();
-//    }
-
-//    @Override
-//    protected void onDetachedFromWindow() {
-//        super.onDetachedFromWindow();
-//        animationDrawable.stop();
-//        for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
-//            Drawable frame = animationDrawable.getFrame(i);
-//            if (frame instanceof BitmapDrawable) {
-//                ((BitmapDrawable) frame).getBitmap().recycle();
-//            }
-//            frame.setCallback(null);
-//        }
-//        animationDrawable.setCallback(null);
-//    }
-
-    public void start() {
-//        stop();
-//        animationDrawable.start();
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
         stop();
-        setBackgroundResource(R.drawable.animation_coordinate);
-        animationDrawable = (AnimationDrawable) getBackground();
-        animationDrawable.start();
-    }
-
-    public void stop() {
-//        animationDrawable.stop();
-//        animationDrawable.selectDrawable(0);
         if (null != animationDrawable) {
-            animationDrawable.stop();
+            setBackgroundResource(0);
             for (int i = 0; i < animationDrawable.getNumberOfFrames(); i++) {
                 Drawable frame = animationDrawable.getFrame(i);
                 if (frame instanceof BitmapDrawable) {
@@ -76,6 +46,23 @@ public class CoordinateView extends ImageView {
                 frame.setCallback(null);
             }
             animationDrawable.setCallback(null);
+            animationDrawable = null;
+        }
+    }
+
+    public void start() {
+        stop();
+        if (null == animationDrawable) {
+            setBackgroundResource(R.drawable.animation_coordinate);
+            animationDrawable = (AnimationDrawable) getBackground();
+        }
+        animationDrawable.start();
+    }
+
+    public void stop() {
+        if (null != animationDrawable) {
+            animationDrawable.stop();
+            animationDrawable.selectDrawable(0);
         }
     }
 
