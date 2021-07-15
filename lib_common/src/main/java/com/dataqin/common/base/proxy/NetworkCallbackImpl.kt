@@ -4,6 +4,11 @@ import android.net.ConnectivityManager
 import android.net.LinkProperties
 import android.net.Network
 import android.net.NetworkCapabilities
+import com.dataqin.common.BaseApplication
+import com.dataqin.common.bus.RxBus
+import com.dataqin.common.bus.RxEvent
+import com.dataqin.common.constant.Constants
+import com.dataqin.common.utils.helper.permission.PermissionHelper
 
 /**
  *  Created by wangyanbin
@@ -65,6 +70,7 @@ class NetworkCallbackImpl : ConnectivityManager.NetworkCallback() {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> 1
                 else -> -1
             }
+            if (-1 != netState) if (PermissionHelper.with(BaseApplication.instance?.applicationContext).checkSelfLocation()) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
         }
     }
 

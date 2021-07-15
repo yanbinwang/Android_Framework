@@ -1,10 +1,8 @@
 package com.dataqin.map.utils.helper
 
 import android.content.Context
-import android.content.IntentFilter
 import android.graphics.Color
 import android.graphics.Point
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
@@ -19,7 +17,6 @@ import com.amap.api.maps.model.PolygonOptions
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.analysis.GsonUtil
 import com.dataqin.common.utils.helper.permission.PermissionHelper
-import com.dataqin.map.service.MapReceiver
 import com.dataqin.map.utils.CoordinateTransUtil
 import com.dataqin.map.utils.LocationFactory
 import com.dataqin.map.utils.LocationSubscriber
@@ -30,8 +27,6 @@ import kotlin.math.roundToInt
  *  高德地图工具类
  */
 object MapHelper {
-    private val mapReceiver by lazy { MapReceiver() }
-    private var initialize = false
     private var mapView: MapView? = null
     private var mapLatLng: LatLng? = null//默认地图经纬度
     var aMap: AMap? = null
@@ -44,7 +39,6 @@ object MapHelper {
     fun initialize(savedInstanceState: Bundle?, mapView: MapView, initialize: Boolean = true) {
         this.mapView = mapView
         this.aMap = mapView.map
-        this.initialize = initialize
         //默认地图经纬度-杭州
         val json = Constants.LATLNG_JSON ?: "{latitude:30.2780010000,longitude:120.1680690000}"
         mapLatLng = GsonUtil.jsonToObj(json, LatLng::class.java)
@@ -69,10 +63,6 @@ object MapHelper {
                 moveCamera()
                 if (PermissionHelper.with(mapView.context).checkSelfLocation()) location(mapView.context)
             }
-            //可更替为application中的网络监听，再其内通过开关发送重新定位
-            val intentFilter = IntentFilter()
-            intentFilter.addAction(ConnectivityManager.CONNECTIVITY_ACTION)
-            mapView.context.registerReceiver(mapReceiver, intentFilter)
         }
     }
 
@@ -98,10 +88,7 @@ object MapHelper {
      * 销毁
      */
     @JvmStatic
-    fun destroy() {
-        if (initialize) mapView?.context?.unregisterReceiver(mapReceiver)
-        mapView?.onDestroy()
-    }
+    fun destroy() = mapView?.onDestroy()
 
     /**
      * 地图定位
