@@ -3,6 +3,7 @@ package com.dataqin.common.utils.helper
 import android.view.View
 import android.view.ViewGroup
 import com.dataqin.base.utils.getInAnimation
+import com.dataqin.common.utils.vibrate
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -39,7 +40,10 @@ object NavigationHelper {
                 else -> -1
             }
             onNavigationItemSelectedListener?.onNavigationItemSelected(index)
-            if(anim) getItemView(index).getChildAt(0).startAnimation(navigationView.context.getInAnimation())
+            if(anim) getItemView(index).getChildAt(0).apply {
+                startAnimation(context.getInAnimation())
+                vibrate(50)
+            }
             true
         }
     }
