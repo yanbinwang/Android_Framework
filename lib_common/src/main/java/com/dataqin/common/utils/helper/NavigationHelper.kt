@@ -2,6 +2,9 @@ package com.dataqin.common.utils.helper
 
 import android.view.View
 import android.view.ViewGroup
+import com.dataqin.base.utils.getInAnimation
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
+import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 /**
@@ -17,7 +20,7 @@ object NavigationHelper {
      * 初始化
      */
     @JvmStatic
-    fun initialize(navigationView: BottomNavigationView, ids: ArrayList<Int>) {
+    fun initialize(navigationView: BottomNavigationView, ids: ArrayList<Int>, anim: Boolean = true) {
         this.navigationView = navigationView
         this.ids = ids
         //去除长按的toast提示
@@ -27,16 +30,16 @@ object NavigationHelper {
         }
         //最多配置5个
         navigationView.setOnNavigationItemSelectedListener {
-            onNavigationItemSelectedListener?.onNavigationItemSelected(
-                when (it.itemId) {
-                    ids[0] -> 0
-                    ids[1] -> 1
-                    ids[2] -> 2
-                    ids[3] -> 3
-                    ids[4] -> 4
-                    else -> -1
-                }
-            )
+            val index = when (it.itemId) {
+                ids[0] -> 0
+                ids[1] -> 1
+                ids[2] -> 2
+                ids[3] -> 3
+                ids[4] -> 4
+                else -> -1
+            }
+            onNavigationItemSelectedListener?.onNavigationItemSelected(index)
+            if(anim) getItemView(index).getChildAt(0).startAnimation(navigationView.context.getInAnimation())
             true
         }
     }
@@ -46,6 +49,12 @@ object NavigationHelper {
      */
     @JvmStatic
     fun selectedItem(index: Int) = navigationView?.menu?.getItem(index)?.itemId
+
+    /**
+     * 获取下标item
+     */
+    @JvmStatic
+    fun getItemView(index: Int) = (navigationView?.getChildAt(0) as BottomNavigationMenuView).getChildAt(index) as BottomNavigationItemView
 
     /**
      * 添加角标
