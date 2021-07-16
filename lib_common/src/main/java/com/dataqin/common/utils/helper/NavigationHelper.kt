@@ -80,7 +80,7 @@ object NavigationHelper {
      * </LinearLayout>
      */
     @JvmStatic
-    fun setMarker(index: Int) {
+    fun setCount(index: Int) {
 //        //获取整个的NavigationView
 //        val menuView = navigationView?.getChildAt (0) as BottomNavigationMenuView
 //        //这里就是获取所添加的每一个Tab(或者叫menu)
