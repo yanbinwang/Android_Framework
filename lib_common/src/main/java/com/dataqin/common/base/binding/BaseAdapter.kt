@@ -9,7 +9,7 @@ import com.dataqin.common.widget.xrecyclerview.callback.OnItemClickListener
  */
 abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     //适配器类型-后续可扩展
-    private var itemType = BaseItemType.Model
+    private var itemType = BaseItemType.MODEL
 
     //数据类型为集合
     var data: MutableList<T> = ArrayList()
@@ -23,7 +23,6 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
             }
             notifyDataSetChanged()
         }
-
     //数据类型为对象
     var t: T? = null
         set(value) {
@@ -39,7 +38,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     constructor(model: T?) {
         if (t != null) {
             t = model
-            itemType = BaseItemType.Model
+            itemType = BaseItemType.MODEL
         }
     }
 
@@ -47,14 +46,14 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     constructor(list: MutableList<T>?) {
         if (list != null) {
             data = list
-            itemType = BaseItemType.List
+            itemType = BaseItemType.LIST
         }
     }
 
     override fun getItemCount(): Int {
         return when (itemType) {
-            BaseItemType.List -> data.size
-            BaseItemType.Model -> 0
+            BaseItemType.LIST -> data.size
+            BaseItemType.MODEL -> 0
         }
     }
 
@@ -62,8 +61,8 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
         //注意判断当前适配器是否具有头部view
         holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(holder.adapterPosition) }
         convert(holder, when (itemType) {
-                BaseItemType.List -> data[position]
-                BaseItemType.Model -> t
+                BaseItemType.LIST -> data[position]
+                BaseItemType.MODEL -> t
             })
     }
 
