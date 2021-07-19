@@ -2,7 +2,7 @@ package com.dataqin.common.imageloader.glide.callback
 
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
-import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
+import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import java.io.File
 
 /**
@@ -15,7 +15,7 @@ interface GlideImpl {
 
     fun displayCoverImage(view: ImageView, string: String?)
 
-    fun displayProgressImage(view: ImageView, string: String, progressListener: OnProgressLoaderListener?)
+    fun displayProgressImage(view: ImageView, string: String, listener: OnLoaderListener?)
 
     fun displayImage(view: ImageView, string: String?)
 

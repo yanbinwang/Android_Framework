@@ -11,7 +11,7 @@ import com.dataqin.common.R
 import com.dataqin.common.imageloader.glide.callback.GlideImpl
 import com.dataqin.common.imageloader.glide.callback.GlideModule
 import com.dataqin.common.imageloader.glide.callback.GlideRequestListener
-import com.dataqin.common.imageloader.glide.callback.progress.OnProgressLoaderListener
+import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.imageloader.glide.callback.progress.ProgressInterceptor
 import com.dataqin.common.imageloader.glide.callback.progress.ProgressListener
 import com.dataqin.common.imageloader.glide.transform.CornerTransform
@@ -51,10 +51,10 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .into(view)
     }
 
-    override fun displayProgressImage(view: ImageView, string: String, progressListener: OnProgressLoaderListener?) {
+    override fun displayProgressImage(view: ImageView, string: String, listener: OnLoaderListener?) {
         ProgressInterceptor.addListener(string, object : ProgressListener {
             override fun onProgress(progress: Int) {
-                progressListener?.onProgress(progress)
+                listener?.onProgress(progress)
             }
         })
         manager
@@ -64,12 +64,12 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
                     .diskCacheStrategy(DiskCacheStrategy.NONE))
             .addListener(object : GlideRequestListener<Drawable?>() {
                 override fun onStart() {
-                    progressListener?.onStart()
+                    listener?.onStart()
                 }
 
                 override fun onComplete(resource: Drawable?) {
                     ProgressInterceptor.removeListener(string)
-                    progressListener?.onComplete()
+                    listener?.onComplete()
                 }
             })
             .into(view)
