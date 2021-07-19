@@ -54,7 +54,10 @@ class DecimalInputFilter : InputFilter {
         if (destText.contains(point)) {
             if (!matcher.matches()) {
                 return ""
-            } else if (point == source.toString()) return ""//只能输入一个小数点
+                //只能输入一个小数点
+            } else if (point == source.toString()) {
+                return ""
+            }
             //验证小数点精度，保证小数点后只能输入两位
             val index = destText.indexOf(point)
             val length = dend - index
@@ -71,15 +74,14 @@ class DecimalInputFilter : InputFilter {
                 //首位不能输入小数点
                 if (point == source.toString() && TextUtils.isEmpty(destText)) {
                     return ""
-                //如果首位输入0，接下来只能输入小数点
+                    //如果首位输入0，接下来只能输入小数点
                 } else if (point != source.toString() && zero == destText) {
                     return ""
                 }
             }
         }
         //验证输入金额的大小
-        val sumText = (destText + sourceText).toDouble()
-        if (sumText > maxValue) return dest?.subSequence(dstart, dend)!!
+        if ((destText + sourceText).toDouble() > maxValue) return dest?.subSequence(dstart, dend)!!
         return dest?.subSequence(dstart, dend).toString() + sourceText
     }
 
