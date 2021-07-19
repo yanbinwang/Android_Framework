@@ -48,10 +48,8 @@ class ApplicationActivityLifecycleCallbacks : ActivityLifecycleCallbacks {
                     getClickListenerForView(view)
                     if (existAncestorRecycle) recycledContainerDeep++
                 } else recycledContainerDeep = 1
-                val childCount = view.childCount
-                for (i in 0 until childCount) {
-                    val child = view.getChildAt(i)
-                    proxyOnClick(child, recycledContainerDeep)
+                for (i in 0 until view.childCount) {
+                    proxyOnClick(view.getChildAt(i), recycledContainerDeep)
                 }
             } else getClickListenerForView(view)
         }

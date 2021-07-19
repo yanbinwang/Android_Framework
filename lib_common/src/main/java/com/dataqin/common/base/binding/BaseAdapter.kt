@@ -61,12 +61,10 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
     override fun onBindViewHolder(holder: BaseViewBindingHolder, position: Int) {
         //注意判断当前适配器是否具有头部view
         holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(holder.adapterPosition) }
-        convert(
-            holder, when (itemType) {
+        convert(holder, when (itemType) {
                 BaseItemType.List -> data[position]
                 BaseItemType.Model -> t
-            }
-        )
+            })
     }
 
     //统一回调
