@@ -14,6 +14,8 @@ import java.io.File
 /**
  *  Created by wangyanbin
  *  监听产生文件，获取对应路径
+ *  1.具备读写权限
+ *  2.安卓10开始已淘汰MediaStore.MediaColumns.DATA方法，没法捕获绝对路径，只有通过RELATIVE_PATH捕获相对路径，可通过uri判断是否新文件产生
  */
 class ScreenShotObserver : ContentObserver(null) {
     private var filePath = ""
@@ -30,17 +32,20 @@ class ScreenShotObserver : ContentObserver(null) {
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
         //Query [ 图片媒体集 ] 包括： DCIM/ 和 Pictures/ 目录
-        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA)
+        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
+//                    val contentUri = ContentUris.withAppendedId(
+//                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+//                        cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
+//                    )
                     //获取监听的路径
                     val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
                     if (filePath != queryPath) {
                         filePath = queryPath
-                        e(TAG, "queryPath:$queryPath")
                         //判断当前路径是否为图片，是的话捕获当前路径
                         val options = BitmapFactory.Options()
                         options.inJustDecodeBounds = true
