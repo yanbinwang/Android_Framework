@@ -41,7 +41,6 @@ class ScreenShotObserver : ContentObserver(null) {
         } else {
             arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
         }
-
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
@@ -53,9 +52,7 @@ class ScreenShotObserver : ContentObserver(null) {
 //                    )
                     //获取监听的路径
 //                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        "/storage/emulated/0/${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))}${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE))}"
-                    } else cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "/storage/emulated/0/${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))}${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE))}" else cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
                     if (filePath != queryPath) {
                         filePath = queryPath
                         //判断当前路径是否为图片，是的话捕获当前路径
