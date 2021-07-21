@@ -33,23 +33,23 @@ object GSYVideoHelper {
     private var player: StandardGSYVideoPlayer? = null
     private var orientationUtils: OrientationUtils? = null
     private val gSYSampleCallBack by lazy { object : GSYSampleCallBack() {
-            override fun onQuitFullscreen(url: String, vararg objects: Any) {
-                super.onQuitFullscreen(url, *objects)
-                orientationUtils?.backToProtVideo()
-            }
+        override fun onQuitFullscreen(url: String, vararg objects: Any) {
+            super.onQuitFullscreen(url, *objects)
+            if (videoType == VideoType.PC) orientationUtils?.backToProtVideo()
+        }
 
-            override fun onPlayError(url: String?, vararg objects: Any?) {
-                super.onPlayError(url, *objects)
-                //播放失败切换内核，3次重试
-                if (retryTimes != 3) {
-                    retryTimes++
-                    GSYVideoType.enableMediaCodecTexture()
-                    PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
-                    CacheFactory.setCacheManager(ProxyCacheManager::class.java)
-                    player?.startPlayLogic()
-                }
+        override fun onPlayError(url: String?, vararg objects: Any?) {
+            super.onPlayError(url, *objects)
+            //播放失败切换内核，3次重试
+            if (retryTimes != 3) {
+                retryTimes++
+                GSYVideoType.enableMediaCodecTexture()
+                PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+                CacheFactory.setCacheManager(ProxyCacheManager::class.java)
+                player?.startPlayLogic()
             }
         }
+    }
     }
 
     enum class VideoType {
@@ -71,7 +71,7 @@ object GSYVideoHelper {
         this.videoType = videoType
         this.imgCover = ImageView(weakActivity?.get())
         //屏幕展示效果
-        GSYVideoType.setShowType(if (videoType == VideoType.MOBILE && fullScreen) GSYVideoType.SCREEN_MATCH_FULL else GSYVideoType.SCREEN_TYPE_DEFAULT)
+        GSYVideoType.setShowType(if (videoType == VideoType.MOBILE && !fullScreen) GSYVideoType.SCREEN_MATCH_FULL else GSYVideoType.SCREEN_TYPE_DEFAULT)
         //底层渲染
         GSYVideoType.setRenderType(GSYVideoType.SUFRACE)
         //默认采用exo内核，播放报错则切内核
@@ -93,7 +93,7 @@ object GSYVideoHelper {
             }
             //直接横屏
             player?.fullscreenButton?.setOnClickListener {
-                if (videoType == VideoType.PC) orientationUtils?.resolveByClick()
+                orientationUtils?.resolveByClick()
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 player?.startWindowFullscreen(weakActivity?.get(), true, true)
             }
@@ -112,11 +112,10 @@ object GSYVideoHelper {
             if (videoType == VideoType.MOBILE) {
                 GSYVideoOptionBuilder()
                     .setIsTouchWiget(false)
-                    .setRotateViewAuto(true)
-                    .setLockLand(true)
-                    .setAutoFullWithSize(false)
+                    .setRotateViewAuto(false)
+                    .setAutoFullWithSize(true)
                     .setShowFullAnimation(false)
-                    .setNeedLockFull(true)
+                    .setNeedLockFull(false)
                     .setUrl(url)
                     .setCacheWithPlay(false)
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
