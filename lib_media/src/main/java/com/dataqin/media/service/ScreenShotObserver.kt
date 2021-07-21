@@ -1,11 +1,9 @@
 package com.dataqin.media.service
 
-import android.content.ContentUris
 import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.os.Build
-import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil.e
 import com.dataqin.common.BaseApplication
@@ -52,7 +50,7 @@ class ScreenShotObserver : ContentObserver(null) {
 //                    )
                     //获取监听的路径
 //                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "/storage/emulated/0/${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))}${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE))}" else cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "/storage/emulated/0/${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}" else getQueryResult(cursor, columns[1])
                     if (filePath != queryPath) {
                         filePath = queryPath
                         //判断当前路径是否为图片，是的话捕获当前路径
@@ -72,6 +70,8 @@ class ScreenShotObserver : ContentObserver(null) {
             cursor?.close()
         }
     }
+
+    private fun getQueryResult(cursor: Cursor, columnName: String) = cursor.getString(cursor.getColumnIndex(columnName))
 
     /**
      * 注册监听
