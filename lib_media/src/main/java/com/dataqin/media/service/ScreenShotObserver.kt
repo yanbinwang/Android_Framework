@@ -16,7 +16,7 @@ import java.io.File
  *  Created by wangyanbin
  *  监听产生文件，获取对应路径
  *  1.具备读写权限
- *  2.安卓10开始已淘汰MediaStore.MediaColumns.DATA方法，没法捕获绝对路径，只有通过RELATIVE_PATH捕获相对路径，可通过uri判断是否新文件产生
+ *  2.安卓10开始已淘汰MediaStore.MediaColumns.DATA方法，没法捕获绝对路径，只有通过RELATIVE_PATH捕获相对路径
  */
 class ScreenShotObserver : ContentObserver(null) {
     private var filePath = ""
@@ -50,7 +50,11 @@ class ScreenShotObserver : ContentObserver(null) {
 //                    )
                     //获取监听的路径
 //                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "/storage/emulated/0/${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}" else getQueryResult(cursor, columns[1])
+                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        val sdPath = context.getExternalFilesDir(null)?.absolutePath ?: ""
+                        "${sdPath.split("Android")[0]}${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}"
+//                        "/storage/emulated/0/${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}"
+                    } else getQueryResult(cursor, columns[1])
                     if (filePath != queryPath) {
                         filePath = queryPath
                         //判断当前路径是否为图片，是的话捕获当前路径
@@ -71,6 +75,9 @@ class ScreenShotObserver : ContentObserver(null) {
         }
     }
 
+    /**
+     * 返回查询结果
+     */
     private fun getQueryResult(cursor: Cursor, columnName: String) = cursor.getString(cursor.getColumnIndex(columnName))
 
     /**
