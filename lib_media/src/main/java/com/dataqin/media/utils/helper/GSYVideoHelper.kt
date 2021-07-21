@@ -33,23 +33,23 @@ object GSYVideoHelper {
     private var player: StandardGSYVideoPlayer? = null
     private var orientationUtils: OrientationUtils? = null
     private val gSYSampleCallBack by lazy { object : GSYSampleCallBack() {
-        override fun onQuitFullscreen(url: String, vararg objects: Any) {
-            super.onQuitFullscreen(url, *objects)
-            orientationUtils?.backToProtVideo()
-        }
+            override fun onQuitFullscreen(url: String, vararg objects: Any) {
+                super.onQuitFullscreen(url, *objects)
+                orientationUtils?.backToProtVideo()
+            }
 
-        override fun onPlayError(url: String?, vararg objects: Any?) {
-            super.onPlayError(url, *objects)
-            //播放失败切换内核，3次重试
-            if (retryTimes != 3) {
-                retryTimes++
-                GSYVideoType.enableMediaCodecTexture()
-                PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
-                CacheFactory.setCacheManager(ProxyCacheManager::class.java)
-                player?.startPlayLogic()
+            override fun onPlayError(url: String?, vararg objects: Any?) {
+                super.onPlayError(url, *objects)
+                //播放失败切换内核，3次重试
+                if (retryTimes != 3) {
+                    retryTimes++
+                    GSYVideoType.enableMediaCodecTexture()
+                    PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
+                    CacheFactory.setCacheManager(ProxyCacheManager::class.java)
+                    player?.startPlayLogic()
+                }
             }
         }
-    }
     }
 
     enum class VideoType {
