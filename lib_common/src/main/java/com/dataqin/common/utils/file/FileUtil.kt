@@ -126,7 +126,7 @@ object FileUtil {
     }
 
     /**
-     * 将指定路径下的所有文件打成压缩包
+     * 将指定路径下的所有文件打成压缩包,如果路径在sd卡下，安卓11需要获取外部操作
      * File fileDir = new File(rootDir + "/DCIM/Screenshots");
      * File zipFile = new File(rootDir + "/" + taskId + ".zip");
      *

@@ -1,8 +1,11 @@
 package com.dataqin.media.service
 
+import android.content.ContentUris
 import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.BitmapFactory
+import android.os.Build
+import android.provider.BaseColumns
 import android.provider.MediaStore
 import com.dataqin.base.utils.LogUtil.e
 import com.dataqin.common.BaseApplication
@@ -32,7 +35,13 @@ class ScreenShotObserver : ContentObserver(null) {
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
         //Query [ 图片媒体集 ] 包括： DCIM/ 和 Pictures/ 目录
-        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
+//        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
+        val columns = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.RELATIVE_PATH, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
+        } else {
+            arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
+        }
+
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
@@ -43,7 +52,10 @@ class ScreenShotObserver : ContentObserver(null) {
 //                        cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
 //                    )
                     //获取监听的路径
-                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+//                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
+                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        "/storage/emulated/0/${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.RELATIVE_PATH))}${cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.TITLE))}"
+                    } else cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
                     if (filePath != queryPath) {
                         filePath = queryPath
                         //判断当前路径是否为图片，是的话捕获当前路径
