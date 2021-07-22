@@ -34,11 +34,13 @@ class ScreenShotObserver : ContentObserver(null) {
         super.onChange(selfChange)
         //Query [ 图片媒体集 ] 包括： DCIM/ 和 Pictures/ 目录
 //        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
-        val columns = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.RELATIVE_PATH, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
-        } else {
-            arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
-        }
+        val columns = arrayOf(
+            MediaStore.MediaColumns.DATE_ADDED,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.MediaColumns.RELATIVE_PATH else MediaStore.MediaColumns.DATA,
+            MediaStore.Images.Media._ID,
+            MediaStore.Images.Media.TITLE,
+            MediaStore.Images.Media.MIME_TYPE,
+            MediaStore.Images.Media.SIZE)
         var cursor: Cursor? = null
         try {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
