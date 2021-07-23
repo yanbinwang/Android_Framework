@@ -2,7 +2,7 @@ package com.dataqin.common.utils.helper
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.dataqin.common.utils.builder.StatusBarBuilder
+import com.dataqin.common.utils.builder.StatusBarBuilder2
 import java.lang.ref.WeakReference
 
 /**
@@ -17,12 +17,12 @@ object FragmentHelper {
     var onTabClickListener: OnTabClickListener? = null
 
     @JvmStatic
-    fun initialize(activity: AppCompatActivity, containerViewId: Int, fragmentList: ArrayList<Fragment>, tabNum: Int = 0, isDark: Boolean = true) {
+    fun initialize(activity: AppCompatActivity, containerViewId: Int, fragmentList: ArrayList<Fragment>, tabNum: Int = 0, dark: Boolean = true) {
         this.weakActivity = WeakReference(activity)
         this.containerViewId = containerViewId
         this.fragmentList = fragmentList
         //默认选中下标以及导航栏颜色
-        StatusBarBuilder(activity).setTransparent(isDark)
+        StatusBarBuilder2(activity.window).setTransparent(dark)
         showFragment(tabNum, true)
     }
 

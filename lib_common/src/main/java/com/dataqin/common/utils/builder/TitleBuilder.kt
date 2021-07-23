@@ -11,7 +11,7 @@ import java.lang.ref.WeakReference
 @SuppressLint("InflateParams")
 class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding) {
     private val weakActivity by lazy { WeakReference(activity) }
-    private val statusBarBuilder by lazy { StatusBarBuilder(weakActivity.get()!!) }
+    private val statusBarBuilder by lazy { StatusBarBuilder2(activity.window) }
 
     init {
         statusBarBuilder.setStatusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.white))

@@ -23,7 +23,7 @@ import com.dataqin.common.bus.RxBus.Companion.instance
 import com.dataqin.common.bus.RxManager
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
-import com.dataqin.common.utils.builder.StatusBarBuilder
+import com.dataqin.common.utils.builder.StatusBarBuilder2
 import com.dataqin.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
 import me.jessyan.autosize.AutoSizeCompat
@@ -41,7 +41,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     protected lateinit var binding: VB
     protected val activity by lazy { WeakReference<Activity>(this) } //基类activity弱引用
     protected val context by lazy { WeakReference<Context>(this) }//基类context弱引用
-    protected val statusBarBuilder by lazy { StatusBarBuilder(this) }//状态栏工具类
+    protected val statusBarBuilder by lazy { StatusBarBuilder2(window) }//状态栏工具类
     private var presenter: BasePresenter<*>? = null//P层
     private val rxManager by lazy { RxManager() } //事务管理器
     private val loadingDialog by lazy { LoadingDialog(this) }//刷新球控件，相当于加载动画
