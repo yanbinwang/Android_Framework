@@ -21,6 +21,7 @@ import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
 import com.dataqin.common.utils.helper.permission.PermissionHelper
+import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
@@ -29,7 +30,6 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
-import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import com.yanzhenjie.permission.runtime.Permission
@@ -44,10 +44,8 @@ import java.io.File
  * cameraview_tts
  */
 @Route(path = ARouterPath.MainActivity)
-class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener,
-    MainContract.View {
+class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
     private var srcPath = ""
-
     //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
     private val editPopup by lazy { EditPopup(this) }

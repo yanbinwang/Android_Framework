@@ -104,6 +104,7 @@ dependencies {
     implementation project(':lib_map')
     implementation project(':lib_pay')
     implementation project(':lib_media')
+//    implementation 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     //页面路由
     implementation deps.alibaba.arouter
     kapt deps.alibaba.arouter_compiler
