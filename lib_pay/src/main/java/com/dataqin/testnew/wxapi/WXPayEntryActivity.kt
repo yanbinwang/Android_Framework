@@ -1,6 +1,7 @@
 package com.dataqin.testnew.wxapi
 
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.WindowManager
@@ -37,6 +38,7 @@ class WXPayEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
         iwxapi = WXAPIFactory.createWXAPI(this, Constants.WX_APP_ID)
         iwxapi?.handleIntent(intent, this)
         super.onCreate(savedInstanceState)
+//        window.statusBarColor = Color.TRANSPARENT
         window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
     }
 
