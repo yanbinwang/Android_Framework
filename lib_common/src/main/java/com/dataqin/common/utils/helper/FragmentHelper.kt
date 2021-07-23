@@ -2,7 +2,7 @@ package com.dataqin.common.utils.helper
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import com.dataqin.common.utils.builder.StatusBarBuilder2
+import com.dataqin.common.utils.builder.StatusBarBuilder
 import java.lang.ref.WeakReference
 
 /**
@@ -22,7 +22,7 @@ object FragmentHelper {
         this.containerViewId = containerViewId
         this.fragmentList = fragmentList
         //默认选中下标以及导航栏颜色
-        StatusBarBuilder2(activity.window).setTransparent(dark)
+        StatusBarBuilder(activity.window).setTransparent(dark)
         showFragment(tabNum, true)
     }
 
