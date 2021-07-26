@@ -103,6 +103,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
+        android:visibility="gone"
         android:layout_height="400mm">
 
         <com.dataqin.common.widget.advertising.Advertising
@@ -119,9 +120,9 @@
 
     </RelativeLayout>
 
-    <com.joanzapata.pdfview.PDFView
-        android:id="@+id/pdfview"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+<!--    <com.joanzapata.pdfview.PDFView-->
+<!--        android:id="@+id/pdfview"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"/>-->
 
 </RelativeLayout>
