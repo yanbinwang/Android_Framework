@@ -115,6 +115,11 @@
             android:screenOrientation="portrait" />
 
         <!-- ******************************************************服务****************************************************** -->
+        <service
+            android:name=".service.TimeTickService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection"/>
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->

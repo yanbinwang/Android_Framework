@@ -210,4 +210,36 @@ object DateUtil {
         }
     }
 
+    /**
+     * 处理时间
+     *
+     * @param timestamp 时间戳->秒
+     */
+    @Synchronized
+    @JvmStatic
+    fun getSecondFormat(timestamp: Long): String {
+        val result: String?
+        val hour: Long
+        val second: Long
+        var minute: Long
+        if (timestamp <= 0) return "00:00" else {
+            minute = timestamp / 60
+            if (minute < 60) {
+                second = timestamp % 60
+                result = unitFormat(minute) + ":" + unitFormat(second)
+            } else {
+                hour = minute / 60
+                if (hour > 99) return "99:59:59"
+                minute %= 60
+                second = timestamp - hour * 3600 - minute * 60
+                result = unitFormat(hour) + ":" + unitFormat(minute) + ":" + unitFormat(second)
+            }
+        }
+        return result
+    }
+
+    private fun unitFormat(time: Long): String {
+        return if (time in 0..9) "0$time" else "" + time
+    }
+
 }

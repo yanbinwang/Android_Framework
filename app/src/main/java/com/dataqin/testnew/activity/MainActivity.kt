@@ -30,6 +30,7 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
+import com.dataqin.testnew.service.TimeTickService
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import com.yanzhenjie.permission.runtime.Permission
@@ -215,23 +216,29 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
+//                val intent =  Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+//                intent.setData(Uri.parse("package:" + getPackageName()));
+//                startActivityForResult(intent, 10086);
+                val mIntent = Intent()
+                mIntent.setClass(this, TimeTickService::class.java)
+                startService(mIntent)
 //                editPopup.showPopup(v)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    if (Environment.isExternalStorageManager()) {
-                        startZip()
-                    } else {
-                        val intent = Intent()
-                        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
-                        intent.data = Uri.parse("package:" + Constants.APPLICATION_ID)
-                        startActivity(intent)
-                    }
-                } else {
-                    PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
-                        override fun onPermission(isGranted: Boolean) {
-                            if (isGranted) startZip()
-                        }
-                    }).getPermissions(Permission.Group.STORAGE)
-                }
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+//                    if (Environment.isExternalStorageManager()) {
+//                        startZip()
+//                    } else {
+//                        val intent = Intent()
+//                        intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
+//                        intent.data = Uri.parse("package:" + Constants.APPLICATION_ID)
+//                        startActivity(intent)
+//                    }
+//                } else {
+//                    PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
+//                        override fun onPermission(isGranted: Boolean) {
+//                            if (isGranted) startZip()
+//                        }
+//                    }).getPermissions(Permission.Group.STORAGE)
+//                }
 //                log(NetWorkUtil.getWifiSecurity())
 //                navigation(ARouterPath.CameraActivity)
 //                PermissionHelper.with(this)
