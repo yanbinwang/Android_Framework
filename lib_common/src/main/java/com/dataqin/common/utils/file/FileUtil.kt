@@ -8,12 +8,15 @@ import android.graphics.Canvas
 import android.graphics.PixelFormat
 import android.net.Uri
 import android.os.Build
+import android.os.Looper
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.TextUtils
 import androidx.core.content.FileProvider
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
+import com.dataqin.base.utils.ToastUtil
+import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.constant.Constants
 import java.io.*
 import java.lang.ref.SoftReference
@@ -28,6 +31,7 @@ import java.util.zip.ZipOutputStream
  */
 @SuppressLint("QueryPermissionsNeeded")
 object FileUtil {
+    private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private const val TAG = "FileUtil"
 
     /**
@@ -179,6 +183,26 @@ object FileUtil {
     }
 
     /**
+     * @param folderPath 要打成压缩包文件的路径
+     * @param zipFilePath 压缩完成的Zip路径（包含压缩文件名）-"${Constants.SDCARD_PATH}/10086.zip"
+     */
+    @JvmStatic
+    fun zipFolderThread(folderPath: String, zipFilePath: String, onThreadListener: OnThreadListener?) {
+        weakHandler.post { onThreadListener?.onStart() }
+        Thread {
+            val fileDir = File(folderPath)
+            val zipFile = File(zipFilePath)
+            try {
+                if (fileDir.exists()) zipFolder(fileDir.absolutePath, zipFile.absolutePath)
+            } catch (e: Exception) {
+                LogUtil.e(TAG, "打包图片生成压缩文件异常: $e")
+            } finally {
+                WeakHandler(Looper.getMainLooper()).post { weakHandler.post { onThreadListener?.onStop() } }
+            }
+        }.start()
+    }
+
+    /**
      * 将bitmap存成文件至指定目录下-读写权限
      * BitmapFactory.decodeResource(resources, R.mipmap.img_qr_code)
      */
@@ -209,6 +233,30 @@ object FileUtil {
             bitmap.recycle()
         }
         return false
+    }
+
+    @JvmStatic
+    fun saveBitmapThread(context: Context, bitmap: Bitmap, onThreadListener: OnThreadListener?) {
+        weakHandler.post { onThreadListener?.onStart() }
+        Thread {
+            val type = saveBitmap(context, bitmap)
+            weakHandler.post {
+                ToastUtil.mackToastSHORT(if (type) "保存成功" else "保存失败", context)
+                onThreadListener?.onStop()
+            }
+        }.start()
+    }
+
+    interface OnThreadListener {
+        /**
+         * 线程开始执行
+         */
+        fun onStart()
+
+        /**
+         * 线程停止执行
+         */
+        fun onStop()
     }
 
     /**
