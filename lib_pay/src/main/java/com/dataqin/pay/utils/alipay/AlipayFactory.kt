@@ -73,10 +73,6 @@ class AlipayFactory {
                  * 同步返回的结果必须放置到服务端进行验证（验证的规则请看https://doc.open.alipay.com/docs/doc.htm?
                  * spm=a219a.7629140.0.0.M0HfOm&treeId=59&articleId=103671&docType=1) 建议商户依赖异步通知
                  */
-                /**
-                 * 同步返回的结果必须放置到服务端进行验证（验证的规则请看https://doc.open.alipay.com/docs/doc.htm?
-                 * spm=a219a.7629140.0.0.M0HfOm&treeId=59&articleId=103671&docType=1) 建议商户依赖异步通知
-                 */
                 val resultStatus = payResult.resultStatus
                 //判断resultStatus 为“9000”则代表支付成功，具体状态码代表含义可参考接口文档
                 if (TextUtils.equals(resultStatus, "9000")) {
