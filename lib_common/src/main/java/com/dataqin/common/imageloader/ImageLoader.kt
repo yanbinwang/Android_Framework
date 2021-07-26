@@ -59,9 +59,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
         })
         manager
             .load(string)
-            .apply(RequestOptions()
-                    .skipMemoryCache(true)
-                    .diskCacheStrategy(DiskCacheStrategy.NONE))
+            .apply(RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
             .addListener(object : GlideRequestListener<Drawable?>() {
                 override fun onStart() {
                     listener?.onStart()
