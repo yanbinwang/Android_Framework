@@ -23,9 +23,8 @@ object RecorderHelper {
     fun startRecord() {
         var filePath = ""
         try {
-            val destDir = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
-//            filePath = destDir?.path ?: ""
-            filePath = destDir.toString()
+            val recorderFile = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO)
+            filePath = recorderFile.toString()
             mediaRecorder = MediaRecorder()
             mediaRecorder?.apply {
                 setAudioSource(MediaRecorder.AudioSource.MIC)//设置麦克风
@@ -33,9 +32,9 @@ object RecorderHelper {
                 setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
                 //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-                    setOutputFile(destDir.toString())
+                    setOutputFile(filePath)
                 } else {
-                    setOutputFile(destDir)
+                    setOutputFile(recorderFile)
                 }
                 prepare()
                 start()
@@ -82,9 +81,7 @@ object RecorderHelper {
      * 当前音频是否正在播放
      */
     @JvmStatic
-    fun isPlaying(): Boolean {
-        return mediaPlayer.isPlaying
-    }
+    fun isPlaying() = mediaPlayer.isPlaying
 
     /**
      * 开始播放
