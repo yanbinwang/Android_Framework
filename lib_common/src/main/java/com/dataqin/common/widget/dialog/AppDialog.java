@@ -1,9 +1,11 @@
 package com.dataqin.common.widget.dialog;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.View;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 
@@ -67,6 +69,11 @@ public class AppDialog extends BaseDialog<ViewDialogBinding> {
                 onDialogListener.onConfirm();
             }
         });
+        return this;
+    }
+
+    public AppDialog setType() {
+        getWindow().setType(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY : WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         return this;
     }
 
