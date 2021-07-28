@@ -21,8 +21,8 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.media.utils.ComponentsFactory
 import com.dataqin.media.utils.MediaFileUtil
-import com.dataqin.media.utils.helper.ScreenHelper.previewHeight
-import com.dataqin.media.utils.helper.ScreenHelper.previewWidth
+import com.dataqin.media.utils.helper.ScreenRecordHelper.previewHeight
+import com.dataqin.media.utils.helper.ScreenRecordHelper.previewWidth
 
 /**
  *  Created by wangyanbin

@@ -15,7 +15,7 @@ import java.lang.ref.WeakReference
  *  Created by wangyanbin
  *  录屏工具类
  */
-object ScreenHelper {
+object ScreenRecordHelper {
     private var weakActivity: WeakReference<Activity>? = null
     var previewWidth = 0
     var previewHeight = 0
