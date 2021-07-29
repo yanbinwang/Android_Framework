@@ -122,14 +122,14 @@ class PermissionHelper(context: Context) {
      */
     fun checkSelfLocation(): Boolean {
         var granted = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
             if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-        } else {
-            for (index in Permission.Group.LOCATION.indices) {
-                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.Group.LOCATION[index])) granted = false
-            }
-        }
+//        } else {
+//            for (index in Permission.Group.LOCATION.indices) {
+//                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.Group.LOCATION[index])) granted = false
+//            }
+//        }
         return granted
     }
 
