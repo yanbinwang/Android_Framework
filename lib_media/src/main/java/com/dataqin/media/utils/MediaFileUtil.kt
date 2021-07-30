@@ -1,11 +1,15 @@
 package com.dataqin.media.utils
 
 import android.content.Context
+import android.os.Looper
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.SdcardUtil
+import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.constant.Constants
+import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.media.utils.helper.VideoHelper
 import java.io.File
 import java.util.*
 
@@ -69,6 +73,31 @@ object MediaFileUtil {
         val availableSize = SdcardUtil.getSdcardAvailableCapacity(context)
         LogUtil.e(TAG, "sd availableSize: " + availableSize + "M")
         return availableSize > space
+    }
+
+    /**
+     * 传入视频原路径，并通过秒数集合，批量生成图片，并打包成压缩包保存到指定路径下
+     */
+    @JvmStatic
+    fun setHandleVideo(videoPath: String, secondList: MutableList<Int>, zipFilePath: String, onThreadListener: FileUtil.OnThreadListener?) {
+        onThreadListener?.onStart()
+        val savePath = Constants.APPLICATION_FILE_PATH + "/证据文件/视频抽帧"
+        val thumbPaths = ArrayList<String>()
+        for (i in secondList) {
+            val thumbPath = VideoHelper.getFrames(videoPath, savePath, i)
+            thumbPaths.add(thumbPath)
+        }
+        Thread {
+            try {
+                FileUtil.zipFolder(savePath, zipFilePath)
+            } catch (ignored: Exception) {
+            } finally {
+                for (thumbPath in thumbPaths) {
+                    FileUtil.deleteFile(thumbPath)
+                }
+                WeakHandler(Looper.getMainLooper()).post{ onThreadListener?.onStop() }
+            }
+        }.start()
     }
 
 }
