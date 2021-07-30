@@ -8,14 +8,14 @@ import androidx.appcompat.app.AppCompatActivity
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.media.service.ScreenRecordService
+import com.dataqin.media.service.ScreenService
 import java.lang.ref.WeakReference
 
 /**
  *  Created by wangyanbin
  *  录屏工具类
  */
-object ScreenRecordHelper {
+object ScreenHelper {
     private var weakActivity: WeakReference<Activity>? = null
     var previewWidth = 0
     var previewHeight = 0
@@ -56,7 +56,7 @@ object ScreenRecordHelper {
     @JvmStatic
     fun startScreenResult(resultCode: Int, data: Intent?) {
 //        stopScreen()
-        val service = Intent(weakActivity?.get()!!, ScreenRecordService::class.java)
+        val service = Intent(weakActivity?.get()!!, ScreenService::class.java)
         service.putExtra(Extras.RESULT_CODE, resultCode)
         service.putExtra(Extras.BUNDLE_BEAN, data)
         weakActivity?.get()?.startService(service)
@@ -68,7 +68,7 @@ object ScreenRecordHelper {
      */
     @JvmStatic
     fun stopScreen() {
-        weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ScreenRecordService::class.java))
+        weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ScreenService::class.java))
     }
 
 }

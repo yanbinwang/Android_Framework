@@ -21,20 +21,20 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.media.utils.ComponentsFactory
 import com.dataqin.media.utils.MediaFileUtil
-import com.dataqin.media.utils.helper.ScreenRecordHelper.previewHeight
-import com.dataqin.media.utils.helper.ScreenRecordHelper.previewWidth
+import com.dataqin.media.utils.helper.ScreenHelper.previewHeight
+import com.dataqin.media.utils.helper.ScreenHelper.previewWidth
 
 /**
  *  Created by wangyanbin
  *  录屏服务
  *  <!-- 屏幕录制 -->
  *  <service
- *      android:name="com.sqkj.home.service.ScreenRecordService"
+ *      android:name="com.sqkj.home.service.ScreenService"
  *      android:enabled="true"
  *      android:exported="false"
  *      android:foregroundServiceType="mediaProjection"--》 Q开始后台服务需要配置，否则录制不正常  />
  */
-class ScreenRecordService : Service() {
+class ScreenService : Service() {
     private var filePath = ""
     private var resultCode = 0
     private var resultData: Intent? = null
