@@ -197,7 +197,7 @@ object FileUtil {
             } catch (e: Exception) {
                 LogUtil.e(TAG, "打包图片生成压缩文件异常: $e")
             } finally {
-                WeakHandler(Looper.getMainLooper()).post { weakHandler.post { onThreadListener?.onStop() } }
+                weakHandler.post { onThreadListener?.onStop() }
             }
         }.start()
     }
