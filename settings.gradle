@@ -1,8 +1,3 @@
-//dependencyResolutionManagement {
-//    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-//    apply from: 'config.gradle'
-//    addRepos(repositories)
-//}
 include ':app'
 include ':lib_common'
 include ':lib_base'
@@ -12,4 +7,5 @@ include ':lib_certification'
 include ':lib_pay'
 include ':lib_push'
 include ':lib_media'
+include ':lib_livestream'
 rootProject.name = "Android_Framework"
