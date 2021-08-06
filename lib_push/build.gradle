@@ -40,6 +40,6 @@ dependencies {
     //框架库
     api project(':lib_common')
     //工具库直接写在当前文件不做过多依赖
-    api 'com.getui:gtsdk:3.1.4.0'  //个推SDK
-    api 'com.getui:gtc:3.1.0.0'  //个推核心组件
+    api 'com.getui:gtsdk:3.2.2.0'  //个推SDK
+    api 'com.getui:gtc:3.1.4.0'  //个推核心组件
 }

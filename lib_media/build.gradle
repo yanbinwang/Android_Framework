@@ -40,7 +40,6 @@ dependencies {
     //框架库
     api project(':lib_common')
     //工具库直接写在当前文件不做过多依赖
-    api 'com.shuyu:GSYVideoPlayer:8.0.0'
-    api 'com.shuyu:GSYVideoPlayer-exo2:8.0.0'
-    api 'com.otaliastudios:cameraview:2.7.0'
+    api 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer:v8.1.5-jitpack'
+    api 'com.otaliastudios:cameraview:2.7.1'
 }
