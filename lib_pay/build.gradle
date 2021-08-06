@@ -6,21 +6,21 @@ plugins {
 }
 
 android {
-    compileSdkVersion build_versions.compileSdkVersion
+    compileSdk build_versions.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion build_versions.minSdkVersion
-        targetSdkVersion build_versions.targetSdkVersion
+        minSdk build_versions.minSdkVersion
+        targetSdk build_versions.targetSdkVersion
         versionCode build_versions.versionCode
         versionName build_versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    repositories {
-        flatDir {
-            dirs 'libs'  // 声明添加libs文件夹为库
-        }
-    }
+//    repositories {
+//        flatDir {
+//            dirs 'libs'  // 声明添加libs文件夹为库
+//        }
+//    }
 
     buildFeatures.viewBinding = true
 
