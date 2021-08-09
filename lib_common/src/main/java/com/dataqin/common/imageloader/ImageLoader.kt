@@ -81,17 +81,17 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
         displayImage(view, string, R.drawable.shape_image_loading, errorId, null)
     }
 
-    override fun displayImage(view: ImageView, string: String?, requestListener: GlideRequestListener<Drawable?>?) {
-        displayImage(view, string, R.drawable.shape_image_loading, 0, requestListener)
+    override fun displayImage(view: ImageView, string: String?, listener: GlideRequestListener<Drawable?>?) {
+        displayImage(view, string, R.drawable.shape_image_loading, 0, listener)
     }
 
-    override fun displayImage(view: ImageView, string: String?, placeholderId: Int, errorId: Int, requestListener: GlideRequestListener<Drawable?>?) {
+    override fun displayImage(view: ImageView, string: String?, placeholderId: Int, errorId: Int, listener: GlideRequestListener<Drawable?>?) {
         manager
             .load(string)
             .placeholder(placeholderId)
             .error(errorId)
             .dontAnimate()
-            .listener(requestListener)
+            .listener(listener)
             .into(view)
     }
 
@@ -140,7 +140,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .into(view)
     }
 
-    override fun downloadImage(string: String?, width: Int, height: Int, requestListener: GlideRequestListener<File?>?) {
+    override fun downloadImage(string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?) {
 //        //创建保存的文件目录
 //        val destFile = File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"))
 //        //下载对应的图片文件
@@ -155,7 +155,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
         manager
             .asFile()
             .load(string)
-            .listener(requestListener)
+            .listener(listener)
             .submit(width, height)
     }
 

@@ -21,9 +21,9 @@ interface GlideImpl {
 
     fun displayImage(view: ImageView, string: String?, errorId: Int)
 
-    fun displayImage(view: ImageView, string: String?, requestListener: GlideRequestListener<Drawable?>?)
+    fun displayImage(view: ImageView, string: String?, listener: GlideRequestListener<Drawable?>?)
 
-    fun displayImage(view: ImageView, string: String?, placeholderId: Int, errorId: Int, requestListener: GlideRequestListener<Drawable?>?)
+    fun displayImage(view: ImageView, string: String?, placeholderId: Int, errorId: Int, listener: GlideRequestListener<Drawable?>?)
 
     //---------------------------------------------图片加载结束---------------------------------------------
 
@@ -44,7 +44,7 @@ interface GlideImpl {
     //---------------------------------------------圆形图片加载开始---------------------------------------------
 
     //---------------------------------------------图片库方法开始---------------------------------------------
-    fun downloadImage(string: String?, width: Int, height: Int, requestListener: GlideRequestListener<File?>?)
+    fun downloadImage(string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?)
 
     fun clearMemoryCache()
 
