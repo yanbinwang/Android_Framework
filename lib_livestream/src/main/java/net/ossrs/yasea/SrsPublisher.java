@@ -249,22 +249,44 @@ public class SrsPublisher {
     }
 
     /**
-     * 默认配置480P
-     * @param mWidth->640
-     * @param mHeight->480
+     * @param Width->720
+     * @param Height->480
      */
-    public void setConfigure(int mWidth, int mHeight){
+    public enum QUALITY {
+        QUALITY_480P,//720*480
+        QUALITY_720P,//1280*720
+        QUALITY_1080P//1920*1080
+    }
+
+    public void setConfigure(QUALITY quality) {
+        int width;
+        int height;
+        switch (quality) {
+            case QUALITY_480P: {
+                width = 720;
+                height = 480;
+            }
+            case QUALITY_720P: {
+                width = 1280;
+                height = 720;
+            }
+            default: {
+                width = 1920;
+                height = 1080;
+            }
+        }
+        setConfigure(width, height);
+    }
+
+    public void setConfigure(int mWidth, int mHeight) {
         mCameraView.setCameraId(Camera.CameraInfo.CAMERA_FACING_BACK);//默认后置摄像头
         setPreviewResolution(mWidth, mHeight);
         setOutputResolution(mHeight, mWidth);
         setVideoHDMode();
     }
 
-    /**
-     * 720P分辨率
-     */
-    public void setHDConfigure() {
-        setConfigure(1280,720);
+    public void setConfigure() {
+        setConfigure(QUALITY.QUALITY_720P);
     }
 
     public void setPreviewResolution(int width, int height) {
