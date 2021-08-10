@@ -8,9 +8,6 @@ import java.nio.ByteBuffer;
  * Undocumented atom in the gmhd atom of text tracks.
  */
 public class GenericMediaHeaderTextAtom extends AbstractBox {
-
-    public static final String TYPE = "text";
-
     int unknown_1 = 65536;
     int unknown_2;
     int unknown_3;
@@ -20,6 +17,7 @@ public class GenericMediaHeaderTextAtom extends AbstractBox {
     int unknown_7;
     int unknown_8;
     int unknown_9 = 1073741824;
+    public static final String TYPE = "text";
 
     public GenericMediaHeaderTextAtom() {
         super(TYPE);
@@ -127,4 +125,5 @@ public class GenericMediaHeaderTextAtom extends AbstractBox {
     public void setUnknown_9(int unknown_9) {
         this.unknown_9 = unknown_9;
     }
+
 }

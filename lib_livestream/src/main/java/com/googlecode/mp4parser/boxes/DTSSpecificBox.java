@@ -16,10 +16,6 @@ import java.nio.ByteBuffer;
  * To change this template use File | Settings | File Templates.
  */
 public class DTSSpecificBox extends AbstractBox {
-    
-    long DTSSamplingFrequency;
-    long maxBitRate;
-    long avgBitRate;
     int pcmSampleDepth;
     int frameDuration;
     int streamConstruction;
@@ -33,6 +29,9 @@ public class DTSSpecificBox extends AbstractBox {
     int LBRDurationMod;
     int reservedBoxPresent;
     int reserved;
+    long DTSSamplingFrequency;
+    long maxBitRate;
+    long avgBitRate;
 
     public DTSSpecificBox() {
         super("ddts");
@@ -62,7 +61,6 @@ public class DTSSpecificBox extends AbstractBox {
         LBRDurationMod = brb.readBits(1);
         reservedBoxPresent = brb.readBits(1);
         reserved = brb.readBits(5);
-
     }
 
     @Override
@@ -84,7 +82,6 @@ public class DTSSpecificBox extends AbstractBox {
         bwb.writeBits(LBRDurationMod, 1);
         bwb.writeBits(reservedBoxPresent, 1);
         bwb.writeBits(reserved, 5);
-
     }
 
     public long getAvgBitRate() {
@@ -214,4 +211,5 @@ public class DTSSpecificBox extends AbstractBox {
     public void setReservedBoxPresent(int reservedBoxPresent) {
         this.reservedBoxPresent = reservedBoxPresent;
     }
+
 }

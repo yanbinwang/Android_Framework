@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -36,22 +36,20 @@ import java.util.Date;
  * considered as a whole.
  */
 public class MovieHeaderBox extends AbstractFullBox {
-    private Date creationTime;
-    private Date modificationTime;
-    private long timescale;
-    private long duration;
-    private double rate = 1.0;
-    private float volume = 1.0f;
-    private Matrix matrix = Matrix.ROTATE_0;
-    private long nextTrackId;
-
     private int previewTime;
     private int previewDuration;
     private int posterTime;
     private int selectionTime;
     private int selectionDuration;
     private int currentTime;
-
+    private long timescale;
+    private long duration;
+    private long nextTrackId;
+    private float volume = 1.0f;
+    private double rate = 1.0;
+    private Date creationTime;
+    private Date modificationTime;
+    private Matrix matrix = Matrix.ROTATE_0;
 
     public static final String TYPE = "mvhd";
 
@@ -123,16 +121,13 @@ public class MovieHeaderBox extends AbstractFullBox {
         IsoTypeReader.readUInt32(content);
 
         matrix = Matrix.fromByteBuffer(content);
-
         previewTime = content.getInt();
         previewDuration = content.getInt();
         posterTime = content.getInt();
         selectionTime = content.getInt();
         selectionDuration = content.getInt();
         currentTime = content.getInt();
-
         nextTrackId = IsoTypeReader.readUInt32(content);
-
     }
 
     public String toString() {
@@ -157,7 +152,6 @@ public class MovieHeaderBox extends AbstractFullBox {
         return result.toString();
     }
 
-
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
@@ -179,17 +173,14 @@ public class MovieHeaderBox extends AbstractFullBox {
         IsoTypeWriter.writeUInt32(byteBuffer, 0);
 
         matrix.getContent(byteBuffer);
-
         byteBuffer.putInt(previewTime);
         byteBuffer.putInt(previewDuration);
         byteBuffer.putInt(posterTime);
         byteBuffer.putInt(selectionTime);
         byteBuffer.putInt(selectionDuration);
         byteBuffer.putInt(currentTime);
-
         IsoTypeWriter.writeUInt32(byteBuffer, nextTrackId);
     }
-
 
     public void setCreationTime(Date creationTime) {
         this.creationTime = creationTime;
@@ -270,4 +261,5 @@ public class MovieHeaderBox extends AbstractFullBox {
     public void setCurrentTime(int currentTime) {
         this.currentTime = currentTime;
     }
+
 }

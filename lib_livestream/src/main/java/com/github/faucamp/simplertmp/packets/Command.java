@@ -10,20 +10,18 @@ import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
 
 /**
  * Encapsulates an command/"invoke" RTMP packet
- * 
+ * <p>
  * Invoke/command packet structure (AMF encoded):
  * (String) <commmand name>
  * (Number) <Transaction ID>
  * (Mixed) <Argument> ex. Null, String, Object: {key1:value1, key2:value2 ... }
- * 
+ *
  * @author francois
  */
 public class Command extends VariableBodyRtmpPacket {
-
-    private static final String TAG = "Command";
-
+    private int transactionId;
     private String commandName;
-    private int transactionId;    
+    private static final String TAG = "Command";
 
     public Command(RtmpHeader header) {
         super(header);
@@ -34,7 +32,7 @@ public class Command extends VariableBodyRtmpPacket {
         this.commandName = commandName;
         this.transactionId = transactionId;
     }
-    
+
     public Command(String commandName, int transactionId) {
         super(new RtmpHeader(RtmpHeader.ChunkType.TYPE_0_FULL, ChunkStreamInfo.RTMP_CID_OVER_CONNECTION, RtmpHeader.MessageType.COMMAND_AMF0));
         this.commandName = commandName;
@@ -55,13 +53,13 @@ public class Command extends VariableBodyRtmpPacket {
 
     public void setTransactionId(int transactionId) {
         this.transactionId = transactionId;
-    }    
+    }
 
     @Override
     public void readBody(InputStream in) throws IOException {
         // The command name and transaction ID are always present (AMF string followed by number)
         commandName = AmfString.readStringFrom(in, false);
-        transactionId = (int) AmfNumber.readNumberFrom(in);        
+        transactionId = (int) AmfNumber.readNumberFrom(in);
         int bytesRead = AmfString.sizeOf(commandName, false) + AmfNumber.SIZE;
         readVariableData(in, bytesRead);
     }
@@ -88,4 +86,5 @@ public class Command extends VariableBodyRtmpPacket {
     public String toString() {
         return "RTMP Command (command: " + commandName + ", transaction ID: " + transactionId + ")";
     }
+
 }

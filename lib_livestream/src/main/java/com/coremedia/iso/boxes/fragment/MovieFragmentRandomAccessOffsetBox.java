@@ -29,8 +29,8 @@ import java.nio.ByteBuffer;
  * }
  */
 public class MovieFragmentRandomAccessOffsetBox extends AbstractFullBox {
-    public static final String TYPE = "mfro";
     private long mfraSize;
+    public static final String TYPE = "mfro";
 
     public MovieFragmentRandomAccessOffsetBox() {
         super(TYPE);
@@ -59,4 +59,5 @@ public class MovieFragmentRandomAccessOffsetBox extends AbstractFullBox {
     public void setMfraSize(long mfraSize) {
         this.mfraSize = mfraSize;
     }
+
 }

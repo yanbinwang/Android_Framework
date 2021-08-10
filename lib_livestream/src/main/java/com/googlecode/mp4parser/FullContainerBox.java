@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.googlecode.mp4parser;
@@ -34,12 +34,12 @@ import java.util.logging.Logger;
  * Abstract base class for a full iso box only containing ither boxes.
  */
 public abstract class FullContainerBox extends AbstractFullBox implements ContainerBox {
-    protected List<Box> boxes = new LinkedList<Box>();
-    private static Logger LOG = Logger.getLogger(FullContainerBox.class.getName());
+    private static final Logger LOG = Logger.getLogger(FullContainerBox.class.getName());
+    protected List<Box> boxes = new LinkedList<>();
     BoxParser boxParser;
 
     public void setBoxes(List<Box> boxes) {
-        this.boxes = new LinkedList<Box>(boxes);
+        this.boxes = new LinkedList<>(boxes);
     }
 
     @SuppressWarnings("unchecked")
@@ -54,7 +54,6 @@ public abstract class FullContainerBox extends AbstractFullBox implements Contai
             if (clazz == boxe.getClass()) {
                 boxesToBeReturned.add((T) boxe);
             }
-
             if (recursive && boxe instanceof ContainerBox) {
                 boxesToBeReturned.addAll((((ContainerBox) boxe).getBoxes(clazz, recursive)));
             }
@@ -108,7 +107,6 @@ public abstract class FullContainerBox extends AbstractFullBox implements Contai
             while (content.remaining() >= 8) { //  8 is the minimal size for a sane box
                 boxes.add(boxParser.parseBox(new ByteBufferByteChannel(content), this));
             }
-
             if (content.remaining() != 0) {
                 setDeadBytes(content.slice());
                 LOG.severe("Some sizes are wrong");
@@ -131,7 +129,6 @@ public abstract class FullContainerBox extends AbstractFullBox implements Contai
         return buffer.toString();
     }
 
-
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
         writeChildBoxes(byteBuffer);
@@ -146,7 +143,6 @@ public abstract class FullContainerBox extends AbstractFullBox implements Contai
                 // cannot happen since my WritableByteChannel won't throw any excpetion
                 throw new RuntimeException("Cannot happen.", e);
             }
-
         }
     }
 
@@ -157,4 +153,5 @@ public abstract class FullContainerBox extends AbstractFullBox implements Contai
         }
         return getSize() - sizeOfChildren;
     }
+
 }

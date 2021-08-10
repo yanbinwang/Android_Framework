@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes.h264;
@@ -39,7 +39,6 @@ public final class AvcConfigurationBox extends AbstractBox {
     public static final String TYPE = "avcC";
 
     public AVCDecoderConfigurationRecord avcDecoderConfigurationRecord = new AVCDecoderConfigurationRecord();
-
 
     public AvcConfigurationBox() {
         super(TYPE);
@@ -146,7 +145,6 @@ public final class AvcConfigurationBox extends AbstractBox {
         avcDecoderConfigurationRecord = new AVCDecoderConfigurationRecord(content);
     }
 
-
     @Override
     public long getContentSize() {
         return avcDecoderConfigurationRecord.getContentSize();
@@ -183,22 +181,15 @@ public final class AvcConfigurationBox extends AbstractBox {
         return avcDecoderConfigurationRecord;
     }
 
-
     public static class AVCDecoderConfigurationRecord {
         public int configurationVersion;
         public int avcProfileIndication;
         public int profileCompatibility;
         public int avcLevelIndication;
         public int lengthSizeMinusOne;
-        public List<byte[]> sequenceParameterSets = new ArrayList<byte[]>();
-        public List<byte[]> pictureParameterSets = new ArrayList<byte[]>();
-
-        public boolean hasExts = true;
         public int chromaFormat = 1;
         public int bitDepthLumaMinus8 = 0;
         public int bitDepthChromaMinus8 = 0;
-        public List<byte[]> sequenceParameterSetExts = new ArrayList<byte[]>();
-
         /**
          * Just for non-spec-conform encoders
          */
@@ -207,6 +198,10 @@ public final class AvcConfigurationBox extends AbstractBox {
         public int chromaFormatPaddingBits = 31;
         public int bitDepthLumaMinus8PaddingBits = 31;
         public int bitDepthChromaMinus8PaddingBits = 31;
+        public boolean hasExts = true;
+        public List<byte[]> sequenceParameterSets = new ArrayList<>();
+        public List<byte[]> pictureParameterSets = new ArrayList<>();
+        public List<byte[]> sequenceParameterSetExts = new ArrayList<>();
 
         public AVCDecoderConfigurationRecord() {
         }
@@ -223,7 +218,6 @@ public final class AvcConfigurationBox extends AbstractBox {
             int numberOfSeuqenceParameterSets = brb.readBits(5);
             for (int i = 0; i < numberOfSeuqenceParameterSets; i++) {
                 int sequenceParameterSetLength = IsoTypeReader.readUInt16(content);
-
                 byte[] sequenceParameterSetNALUnit = new byte[sequenceParameterSetLength];
                 content.get(sequenceParameterSetNALUnit);
                 sequenceParameterSets.add(sequenceParameterSetNALUnit);
@@ -282,7 +276,6 @@ public final class AvcConfigurationBox extends AbstractBox {
                 byteBuffer.put(pictureParameterSetNALUnit);
             }
             if (hasExts && (avcProfileIndication == 100 || avcProfileIndication == 110 || avcProfileIndication == 122 || avcProfileIndication == 144)) {
-
                 bwb = new BitWriterBuffer(byteBuffer);
                 bwb.writeBits(chromaFormatPaddingBits, 6);
                 bwb.writeBits(chromaFormat, 2);
@@ -316,12 +309,11 @@ public final class AvcConfigurationBox extends AbstractBox {
                     size += sequenceParameterSetExtNALUnit.length;
                 }
             }
-
             return size;
         }
 
         public String[] getPPS() {
-            ArrayList<String> l = new ArrayList<String>();
+            ArrayList<String> l = new ArrayList<>();
             for (byte[] pictureParameterSet : pictureParameterSets) {
                 String details = "not parsable";
                 try {
@@ -329,20 +321,18 @@ public final class AvcConfigurationBox extends AbstractBox {
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
-
                 l.add(details);
             }
             return l.toArray(new String[l.size()]);
         }
 
         public String[] getSPS() {
-            ArrayList<String> l = new ArrayList<String>();
+            ArrayList<String> l = new ArrayList<>();
             for (byte[] sequenceParameterSet : sequenceParameterSets) {
                 String detail = "not parsable";
                 try {
                     detail = SeqParameterSet.read(new ByteArrayInputStream(sequenceParameterSet)).toString();
                 } catch (IOException e) {
-
                 }
                 l.add(detail);
             }
@@ -350,7 +340,7 @@ public final class AvcConfigurationBox extends AbstractBox {
         }
 
         public List<String> getSequenceParameterSetsAsStrings() {
-            List <String> result = new ArrayList<String>(sequenceParameterSets.size());
+            List<String> result = new ArrayList<>(sequenceParameterSets.size());
             for (byte[] parameterSet : sequenceParameterSets) {
                 result.add(Hex.encodeHex(parameterSet));
             }
@@ -358,7 +348,7 @@ public final class AvcConfigurationBox extends AbstractBox {
         }
 
         public List<String> getSequenceParameterSetExtsAsStrings() {
-            List <String> result = new ArrayList<String>(sequenceParameterSetExts.size());
+            List<String> result = new ArrayList<>(sequenceParameterSetExts.size());
             for (byte[] parameterSet : sequenceParameterSetExts) {
                 result.add(Hex.encodeHex(parameterSet));
             }
@@ -366,13 +356,12 @@ public final class AvcConfigurationBox extends AbstractBox {
         }
 
         public List<String> getPictureParameterSetsAsStrings() {
-            List <String> result = new ArrayList<String>(pictureParameterSets.size());
+            List<String> result = new ArrayList<>(pictureParameterSets.size());
             for (byte[] parameterSet : pictureParameterSets) {
                 result.add(Hex.encodeHex(parameterSet));
             }
             return result;
         }
-
     }
-}
 
+}

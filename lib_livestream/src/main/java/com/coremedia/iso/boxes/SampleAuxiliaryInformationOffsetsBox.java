@@ -16,6 +16,8 @@
 
 package com.coremedia.iso.boxes;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.AbstractFullBox;
@@ -23,8 +25,6 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /*
 aligned(8) class SampleAuxiliaryInformationOffsetsBox
@@ -46,11 +46,10 @@ aligned(8) class SampleAuxiliaryInformationOffsetsBox
 }
  */
 public class SampleAuxiliaryInformationOffsetsBox extends AbstractFullBox {
-    public static final String TYPE = "saio";
-
-    private List<Long> offsets = new LinkedList<Long>();
     private long auxInfoType;
     private long auxInfoTypeParameter;
+    private List<Long> offsets = new LinkedList<>();
+    public static final String TYPE = "saio";
 
     public SampleAuxiliaryInformationOffsetsBox() {
         super(TYPE);
@@ -68,7 +67,6 @@ public class SampleAuxiliaryInformationOffsetsBox extends AbstractFullBox {
             IsoTypeWriter.writeUInt32(byteBuffer, auxInfoType);
             IsoTypeWriter.writeUInt32(byteBuffer, auxInfoTypeParameter);
         }
-
         IsoTypeWriter.writeUInt32(byteBuffer, offsets.size());
         for (Long offset : offsets) {
             if (getVersion() == 0) {
@@ -82,15 +80,12 @@ public class SampleAuxiliaryInformationOffsetsBox extends AbstractFullBox {
     @Override
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
-
         if ((getFlags() & 1) == 1) {
             auxInfoType = IsoTypeReader.readUInt32(content);
             auxInfoTypeParameter = IsoTypeReader.readUInt32(content);
         }
-
         int entryCount = l2i(IsoTypeReader.readUInt32(content));
         offsets.clear();
-
         for (int i = 0; i < entryCount; i++) {
             if (getVersion() == 0) {
                 offsets.add(IsoTypeReader.readUInt32(content));
@@ -99,7 +94,6 @@ public class SampleAuxiliaryInformationOffsetsBox extends AbstractFullBox {
             }
         }
     }
-
 
     public long getAuxInfoType() {
         return auxInfoType;
@@ -124,4 +118,5 @@ public class SampleAuxiliaryInformationOffsetsBox extends AbstractFullBox {
     public void setOffsets(List<Long> offsets) {
         this.offsets = offsets;
     }
+
 }

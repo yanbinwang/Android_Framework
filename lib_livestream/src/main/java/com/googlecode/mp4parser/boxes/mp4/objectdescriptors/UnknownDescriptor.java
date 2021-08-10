@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 
 public class UnknownDescriptor extends BaseDescriptor {
     private ByteBuffer data;
-    private static Logger log = Logger.getLogger(UnknownDescriptor.class.getName());
+    private static final Logger log = Logger.getLogger(UnknownDescriptor.class.getName());
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
@@ -39,4 +39,5 @@ public class UnknownDescriptor extends BaseDescriptor {
         sb.append('}');
         return sb.toString();
     }
+
 }

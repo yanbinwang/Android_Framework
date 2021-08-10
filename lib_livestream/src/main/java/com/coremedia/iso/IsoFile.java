@@ -1,27 +1,32 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso;
 
-import com.googlecode.mp4parser.AbstractContainerBox;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.MovieBox;
+import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.annotations.DoNotParseDetail;
 
-import java.io.*;
+import java.io.Closeable;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
@@ -33,8 +38,8 @@ import java.nio.channels.WritableByteChannel;
  */
 @DoNotParseDetail
 public class IsoFile extends AbstractContainerBox implements Closeable {
-    protected BoxParser boxParser = new PropertyBoxParserImpl();
     ReadableByteChannel byteChannel;
+    protected BoxParser boxParser = new PropertyBoxParserImpl();
 
     public IsoFile() {
         super("");
@@ -59,14 +64,11 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
         this.byteChannel = byteChannel;
         this.boxParser = boxParser;
         parse();
-
-
     }
 
     protected BoxParser createBoxParser() {
         return new PropertyBoxParserImpl();
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {
@@ -78,7 +80,6 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
     }
 
     private void parse() throws IOException {
-
         boolean done = false;
         while (!done) {
             try {
@@ -137,7 +138,6 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
         }
     }
 
-
     @Override
     public long getNumOfBytesToFirstChild() {
         return 0;
@@ -157,7 +157,6 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
         return this;
     }
 
-
     /**
      * Shortcut to get the MovieBox since it is often needed and present in
      * nearly all ISO 14496 files (at least if they are derived from MP4 ).
@@ -176,7 +175,6 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
 
     public void getBox(WritableByteChannel os) throws IOException {
         for (Box box : boxes) {
-
             if (os instanceof FileChannel) {
                 long startPos = ((FileChannel) os).position();
                 box.getBox(os);
@@ -185,11 +183,11 @@ public class IsoFile extends AbstractContainerBox implements Closeable {
             } else {
                 box.getBox(os);
             }
-
         }
     }
 
     public void close() throws IOException {
         this.byteChannel.close();
     }
+
 }

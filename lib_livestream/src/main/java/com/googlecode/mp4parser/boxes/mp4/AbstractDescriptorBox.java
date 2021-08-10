@@ -29,11 +29,9 @@ import java.util.logging.Logger;
  * ES Descriptor Box.
  */
 public class AbstractDescriptorBox extends AbstractFullBox {
-    private static Logger log = Logger.getLogger(AbstractDescriptorBox.class.getName());
-
-
-    public BaseDescriptor descriptor;
     public ByteBuffer data;
+    public BaseDescriptor descriptor;
+    private static final Logger log = Logger.getLogger(AbstractDescriptorBox.class.getName());
 
     public AbstractDescriptorBox(String type) {
         super(type);
@@ -82,7 +80,6 @@ public class AbstractDescriptorBox extends AbstractFullBox {
             log.log(Level.WARNING, "Error parsing ObjectDescriptor", e);
             //that's why we copied it ;)
         }
-
     }
 
 }

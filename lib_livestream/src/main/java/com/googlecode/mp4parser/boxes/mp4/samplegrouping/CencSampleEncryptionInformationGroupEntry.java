@@ -32,11 +32,10 @@ import java.util.Arrays;
  * fragment specifies which samples use which sample group description from the SampleGroupDescriptionBox.
  */
 public class CencSampleEncryptionInformationGroupEntry extends GroupEntry {
-    public static final String TYPE = "seig";
-
     private int isEncrypted;
     private byte ivSize;
     private byte[] kid = new byte[16];
+    public static final String TYPE = "seig";
 
     @Override
     public void parse(ByteBuffer byteBuffer) {
@@ -44,7 +43,6 @@ public class CencSampleEncryptionInformationGroupEntry extends GroupEntry {
         ivSize = (byte) IsoTypeReader.readUInt8(byteBuffer);
         kid = new byte[16];
         byteBuffer.get(kid);
-
     }
 
     @Override
@@ -99,9 +97,7 @@ public class CencSampleEncryptionInformationGroupEntry extends GroupEntry {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         CencSampleEncryptionInformationGroupEntry that = (CencSampleEncryptionInformationGroupEntry) o;
-
         if (isEncrypted != that.isEncrypted) {
             return false;
         }
@@ -111,7 +107,6 @@ public class CencSampleEncryptionInformationGroupEntry extends GroupEntry {
         if (!Arrays.equals(kid, that.kid)) {
             return false;
         }
-
         return true;
     }
 
@@ -122,4 +117,5 @@ public class CencSampleEncryptionInformationGroupEntry extends GroupEntry {
         result = 31 * result + (kid != null ? Arrays.hashCode(kid) : 0);
         return result;
     }
+
 }

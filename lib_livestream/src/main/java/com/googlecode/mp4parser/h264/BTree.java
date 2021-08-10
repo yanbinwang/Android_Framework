@@ -45,12 +45,10 @@ public class BTree {
         char charAt = path.charAt(0);
         BTree branch;
         if (charAt == '0') {
-            if (zero == null)
-                zero = new BTree();
+            if (zero == null) zero = new BTree();
             branch = zero;
         } else {
-            if (one == null)
-                one = new BTree();
+            if (one == null) one = new BTree();
             branch = one;
         }
         branch.addString(path.substring(1), value);
@@ -66,4 +64,5 @@ public class BTree {
     public Object getValue() {
         return value;
     }
+
 }

@@ -52,7 +52,6 @@ public class Matrix {
         if (o == null || getClass() != o.getClass()) return false;
 
         Matrix matrix = (Matrix) o;
-
         if (Double.compare(matrix.a, a) != 0) return false;
         if (Double.compare(matrix.b, b) != 0) return false;
         if (Double.compare(matrix.c, c) != 0) return false;
@@ -62,7 +61,6 @@ public class Matrix {
         if (Double.compare(matrix.u, u) != 0) return false;
         if (Double.compare(matrix.v, v) != 0) return false;
         if (Double.compare(matrix.w, w) != 0) return false;
-
         return true;
     }
 
@@ -122,16 +120,12 @@ public class Matrix {
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, a);
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, b);
         IsoTypeWriter.writeFixedPoint0230(byteBuffer, u);
-
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, c);
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, d);
         IsoTypeWriter.writeFixedPoint0230(byteBuffer, v);
-
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, tx);
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, ty);
         IsoTypeWriter.writeFixedPoint0230(byteBuffer, w);
-
     }
-
 
 }

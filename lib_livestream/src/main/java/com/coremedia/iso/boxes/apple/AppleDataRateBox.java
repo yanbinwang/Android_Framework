@@ -23,8 +23,8 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 
 public class AppleDataRateBox extends AbstractFullBox {
-    public static final String TYPE = "rmdr";
     private long dataRate;
+    public static final String TYPE = "rmdr";
 
     public AppleDataRateBox() {
         super(TYPE);
@@ -46,8 +46,8 @@ public class AppleDataRateBox extends AbstractFullBox {
         IsoTypeWriter.writeUInt32(byteBuffer, dataRate);
     }
 
-
     public long getDataRate() {
         return dataRate;
     }
+
 }

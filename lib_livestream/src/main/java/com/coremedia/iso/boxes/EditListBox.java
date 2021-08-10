@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -54,13 +54,12 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * <li>Media-Rate = 1</li>
  */
 public class EditListBox extends AbstractFullBox {
-    private List<Entry> entries = new LinkedList<Entry>();
+    private List<Entry> entries = new LinkedList<>();
     public static final String TYPE = "elst";
 
     public EditListBox() {
         super(TYPE);
     }
-
 
     public List<Entry> getEntries() {
         return entries;
@@ -77,7 +76,6 @@ public class EditListBox extends AbstractFullBox {
         } else {
             contentSize += entries.size() * 12;
         }
-
         return contentSize;
     }
 
@@ -85,10 +83,9 @@ public class EditListBox extends AbstractFullBox {
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
         int entryCount = l2i(IsoTypeReader.readUInt32(content));
-        entries = new LinkedList<Entry>();
+        entries = new LinkedList<>();
         for (int i = 0; i < entryCount; i++) {
             entries.add(new Entry(this, content));
-
         }
     }
 
@@ -209,12 +206,9 @@ public class EditListBox extends AbstractFullBox {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Entry entry = (Entry) o;
-
             if (mediaTime != entry.mediaTime) return false;
             if (segmentDuration != entry.segmentDuration) return false;
-
             return true;
         }
 
@@ -225,7 +219,7 @@ public class EditListBox extends AbstractFullBox {
             return result;
         }
 
-        public void getContent(ByteBuffer bb)  {
+        public void getContent(ByteBuffer bb) {
             if (editListBox.getVersion() == 1) {
                 IsoTypeWriter.writeUInt64(bb, segmentDuration);
                 IsoTypeWriter.writeUInt64(bb, mediaTime);
@@ -245,4 +239,5 @@ public class EditListBox extends AbstractFullBox {
                     '}';
         }
     }
+
 }

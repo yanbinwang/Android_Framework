@@ -15,6 +15,8 @@
  */
 package com.coremedia.iso;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.ContainerBox;
 import com.coremedia.iso.boxes.UserBox;
@@ -25,14 +27,11 @@ import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.util.logging.Logger;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 /**
  * This BoxParser handles the basic stuff like reading size and extracting box type.
  */
 public abstract class AbstractBoxParser implements BoxParser {
-
-    private static Logger LOG = Logger.getLogger(AbstractBoxParser.class.getName());
+    private static final Logger LOG = Logger.getLogger(AbstractBoxParser.class.getName());
 
     public abstract Box createBox(String type, byte[] userType, String parent);
 
@@ -45,17 +44,13 @@ public abstract class AbstractBoxParser implements BoxParser {
      * @throws java.io.IOException if reading from <code>in</code> fails
      */
     public Box parseBox(ReadableByteChannel byteChannel, ContainerBox parent) throws IOException {
-
-
         ByteBuffer header = ChannelHelper.readFully(byteChannel, 8);
-
         long size = IsoTypeReader.readUInt32(header);
         // do plausibility check
         if (size < 8 && size > 1) {
             LOG.severe("Plausibility check failed: size < 8 (size = " + size + "). Stop parsing!");
             return null;
         }
-
 
         String type = IsoTypeReader.read4cc(header);
         byte[] usertype = null;
@@ -89,7 +84,6 @@ public abstract class AbstractBoxParser implements BoxParser {
         LOG.finest("Parsing " + box.getType());
         // System.out.println("parsing " + Arrays.toString(box.getType()) + " " + box.getClass().getName() + " size=" + size);
 
-
         if (l2i(size - contentSize) == 8) {
             // default - no large box - no uuid
             // do nothing header's already correct
@@ -114,17 +108,13 @@ public abstract class AbstractBoxParser implements BoxParser {
             throw new RuntimeException("I didn't expect that");
         }
 
-
         box.parse(byteChannel, header, contentSize, this);
         // System.out.println("box = " + box);
-
-
         assert size == box.getSize() :
                 "Reconstructed Size is not x to the number of parsed bytes! (" +
                         box.getType() + ")"
                         + " Actual Box size: " + size + " Calculated size: " + box.getSize();
         return box;
     }
-
 
 }

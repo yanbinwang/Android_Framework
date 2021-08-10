@@ -26,4 +26,5 @@ import java.io.OutputStream;
 public abstract class BitstreamElement {
 
     public abstract void write(OutputStream out) throws IOException;
+
 }

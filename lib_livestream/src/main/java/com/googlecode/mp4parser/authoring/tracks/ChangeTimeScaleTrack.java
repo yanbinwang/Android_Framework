@@ -15,7 +15,12 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
 
@@ -31,12 +36,11 @@ import java.util.logging.Logger;
  * Changes the timescale of a track by wrapping the track.
  */
 public class ChangeTimeScaleTrack implements Track {
-    private static final Logger LOG = Logger.getLogger(ChangeTimeScaleTrack.class.getName());
-
+    long timeScale;
     Track source;
     List<CompositionTimeToSample.Entry> ctts;
     List<TimeToSampleBox.Entry> tts;
-    long timeScale;
+    private static final Logger LOG = Logger.getLogger(ChangeTimeScaleTrack.class.getName());
 
     /**
      * Changes the time scale of the source track to the target time scale and makes sure
@@ -57,14 +61,11 @@ public class ChangeTimeScaleTrack implements Track {
     private static long[] getTimes(Track track, long[] syncSamples, long targetTimeScale) {
         long[] syncSampleTimes = new long[syncSamples.length];
         Queue<TimeToSampleBox.Entry> timeQueue = new LinkedList<TimeToSampleBox.Entry>(track.getDecodingTimeEntries());
-
         int currentSample = 1;  // first syncsample is 1
         long currentDuration = 0;
         long currentDelta = 0;
         int currentSyncSampleIndex = 0;
         long left = 0;
-
-
         while (currentSample <= syncSamples[syncSamples.length - 1]) {
             if (currentSample++ == syncSamples[currentSyncSampleIndex]) {
                 syncSampleTimes[currentSyncSampleIndex++] = (currentDuration * targetTimeScale) / track.getTrackMetaData().getTimescale();
@@ -77,7 +78,6 @@ public class ChangeTimeScaleTrack implements Track {
             currentDuration += currentDelta;
         }
         return syncSampleTimes;
-
     }
 
     public SampleDescriptionBox getSampleDescriptionBox() {
@@ -130,7 +130,6 @@ public class ChangeTimeScaleTrack implements Track {
         return source.getSamples();
     }
 
-
     /**
      * Adjusting the composition times is easy. Just scale it by the factor - that's it. There is no rounding
      * error summing up.
@@ -152,17 +151,12 @@ public class ChangeTimeScaleTrack implements Track {
     }
 
     static List<TimeToSampleBox.Entry> adjustTts(List<TimeToSampleBox.Entry> source, double timeScaleFactor, long[] syncSample, long[] syncSampleTimes) {
-
         long[] sourceArray = TimeToSampleBox.blowupTimeToSamples(source);
         long summedDurations = 0;
-
         LinkedList<TimeToSampleBox.Entry> entries2 = new LinkedList<TimeToSampleBox.Entry>();
         for (int i = 1; i <= sourceArray.length; i++) {
             long duration = sourceArray[i - 1];
-
             long x = Math.round(timeScaleFactor * duration);
-
-
             TimeToSampleBox.Entry last = entries2.peekLast();
             int ssIndex;
             if ((ssIndex = Arrays.binarySearch(syncSample, i + 1)) >= 0) {
@@ -181,7 +175,6 @@ public class ChangeTimeScaleTrack implements Track {
             } else {
                 last.setCount(last.getCount() + 1);
             }
-
         }
         return entries2;
     }
@@ -200,4 +193,5 @@ public class ChangeTimeScaleTrack implements Track {
                 "source=" + source +
                 '}';
     }
+
 }

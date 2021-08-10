@@ -19,7 +19,6 @@ package com.coremedia.iso.boxes.fragment;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BitReaderBuffer;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BitWriterBuffer;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 /**
@@ -38,11 +37,10 @@ public class SampleFlags {
     private int sampleIsDependedOn;
     private int sampleHasRedundancy;
     private int samplePaddingValue;
-    private boolean sampleIsDifferenceSample;
     private int sampleDegradationPriority;
+    private boolean sampleIsDifferenceSample;
 
     public SampleFlags() {
-
     }
 
     public SampleFlags(ByteBuffer bb) {
@@ -55,7 +53,6 @@ public class SampleFlags {
         sampleIsDifferenceSample = brb.readBits(1) == 1;
         sampleDegradationPriority = brb.readBits(16);
     }
-
 
     public void getContent(ByteBuffer os) {
         BitWriterBuffer bitWriterBuffer = new BitWriterBuffer(os);
@@ -91,7 +88,6 @@ public class SampleFlags {
      * 2: this sample does not depend on others (I picture);
      * 3: reserved
      * </pre>
-     *
      */
     public void setSampleDependsOn(int sampleDependsOn) {
         this.sampleDependsOn = sampleDependsOn;
@@ -112,7 +108,6 @@ public class SampleFlags {
      * 2: no other sample depends on this one (disposable);
      * 3: reserved
      * </pre>
-     *
      */
     public void setSampleIsDependedOn(int sampleIsDependedOn) {
         this.sampleIsDependedOn = sampleIsDependedOn;
@@ -150,7 +145,6 @@ public class SampleFlags {
         return sampleIsDifferenceSample;
     }
 
-
     public void setSampleIsDifferenceSample(boolean sampleIsDifferenceSample) {
         this.sampleIsDifferenceSample = sampleIsDifferenceSample;
     }
@@ -179,9 +173,7 @@ public class SampleFlags {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         SampleFlags that = (SampleFlags) o;
-
         if (reserved != that.reserved) return false;
         if (sampleDegradationPriority != that.sampleDegradationPriority) return false;
         if (sampleDependsOn != that.sampleDependsOn) return false;
@@ -189,7 +181,6 @@ public class SampleFlags {
         if (sampleIsDependedOn != that.sampleIsDependedOn) return false;
         if (sampleIsDifferenceSample != that.sampleIsDifferenceSample) return false;
         if (samplePaddingValue != that.samplePaddingValue) return false;
-
         return true;
     }
 
@@ -204,4 +195,5 @@ public class SampleFlags {
         result = 31 * result + sampleDegradationPriority;
         return result;
     }
+
 }

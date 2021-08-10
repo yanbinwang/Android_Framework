@@ -16,9 +16,9 @@
 
 package com.coremedia.iso.boxes.fragment;
 
-import com.googlecode.mp4parser.AbstractContainerBox;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.googlecode.mp4parser.AbstractContainerBox;
 import com.googlecode.mp4parser.annotations.DoNotParseDetail;
 
 import java.util.ArrayList;
@@ -36,10 +36,8 @@ public class MovieFragmentBox extends AbstractContainerBox {
         super(TYPE);
     }
 
-
     public List<Long> getSyncSamples(SampleDependencyTypeBox sdtp) {
-        List<Long> result = new ArrayList<Long>();
-
+        List<Long> result = new ArrayList<>();
         final List<SampleDependencyTypeBox.Entry> sampleEntries = sdtp.getEntries();
         long i = 1;
         for (SampleDependencyTypeBox.Entry sampleEntry : sampleEntries) {
@@ -48,7 +46,6 @@ public class MovieFragmentBox extends AbstractContainerBox {
             }
             i++;
         }
-
         return result;
     }
 
@@ -68,7 +65,6 @@ public class MovieFragmentBox extends AbstractContainerBox {
         return offset;
     }
 
-
     public int getTrackCount() {
         return getBoxes(TrackFragmentBox.class, false).size();
     }
@@ -78,9 +74,7 @@ public class MovieFragmentBox extends AbstractContainerBox {
      *
      * @return the tracknumbers (IDs) of the tracks in their order of appearance in the file
      */
-
     public long[] getTrackNumbers() {
-
         List<TrackFragmentBox> trackBoxes = this.getBoxes(TrackFragmentBox.class, false);
         long[] trackNumbers = new long[trackBoxes.size()];
         for (int trackCounter = 0; trackCounter < trackBoxes.size(); trackCounter++) {
@@ -97,4 +91,5 @@ public class MovieFragmentBox extends AbstractContainerBox {
     public List<TrackRunBox> getTrackRunBoxes() {
         return getBoxes(TrackRunBox.class, true);
     }
+
 }

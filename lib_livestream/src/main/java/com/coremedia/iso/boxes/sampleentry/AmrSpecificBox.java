@@ -1,21 +1,20 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes.sampleentry;
-
 
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.IsoTypeReader;
@@ -30,13 +29,12 @@ import java.nio.ByteBuffer;
  * @see com.coremedia.iso.boxes.sampleentry.AudioSampleEntry
  */
 public class AmrSpecificBox extends AbstractBox {
-    public static final String TYPE = "damr";
-
-    private String vendor;
     private int decoderVersion;
     private int modeSet;
     private int modeChangePeriod;
     private int framesPerSample;
+    private String vendor;
+    public static final String TYPE = "damr";
 
     public AmrSpecificBox() {
         super(TYPE);
@@ -71,14 +69,11 @@ public class AmrSpecificBox extends AbstractBox {
         byte[] v = new byte[4];
         content.get(v);
         vendor = IsoFile.bytesToFourCC(v);
-
         decoderVersion = IsoTypeReader.readUInt8(content);
         modeSet = IsoTypeReader.readUInt16(content);
         modeChangePeriod = IsoTypeReader.readUInt8(content);
         framesPerSample = IsoTypeReader.readUInt8(content);
-
     }
-
 
     public void getContent(ByteBuffer byteBuffer) {
         byteBuffer.put(IsoFile.fourCCtoBytes(vendor));
@@ -98,4 +93,5 @@ public class AmrSpecificBox extends AbstractBox {
         buffer.append("]");
         return buffer.toString();
     }
+
 }

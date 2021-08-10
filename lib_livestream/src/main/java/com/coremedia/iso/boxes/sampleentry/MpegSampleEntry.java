@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 public class MpegSampleEntry extends SampleEntry implements ContainerBox {
-
     private BoxParser boxParser;
 
     public MpegSampleEntry(String type) {
@@ -19,7 +18,6 @@ public class MpegSampleEntry extends SampleEntry implements ContainerBox {
     public void _parseDetails(ByteBuffer content) {
         _parseReservedAndDataReferenceIndex(content);
         _parseChildBoxes(content);
-
     }
 
     @Override
@@ -40,4 +38,5 @@ public class MpegSampleEntry extends SampleEntry implements ContainerBox {
         _writeReservedAndDataReferenceIndex(byteBuffer);
         _writeChildBoxes(byteBuffer);
     }
+
 }

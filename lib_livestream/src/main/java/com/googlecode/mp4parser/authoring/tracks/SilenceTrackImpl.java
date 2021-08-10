@@ -1,7 +1,11 @@
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
-import com.googlecode.mp4parser.authoring.Mp4TrackImpl;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
 
@@ -15,9 +19,8 @@ import java.util.List;
  */
 public class SilenceTrackImpl implements Track {
     Track source;
-
-    List<ByteBuffer> samples = new LinkedList<ByteBuffer>();
     TimeToSampleBox.Entry entry;
+    List<ByteBuffer> samples = new LinkedList<>();
 
     public SilenceTrackImpl(Track ofType, long ms) {
         source = ofType;
@@ -25,14 +28,11 @@ public class SilenceTrackImpl implements Track {
             long numFrames = getTrackMetaData().getTimescale() * ms / 1000 / 1024;
             long standZeit = getTrackMetaData().getTimescale() * ms / numFrames / 1000;
             entry = new TimeToSampleBox.Entry(numFrames, standZeit);
-
-
             while (numFrames-- > 0) {
                 samples.add((ByteBuffer) ByteBuffer.wrap(new byte[]{
                         0x21, 0x10, 0x04, 0x60, (byte) 0x8c, 0x1c,
                 }).rewind());
             }
-
         } else {
             throw new RuntimeException("Tracks of type " + ofType.getClass().getSimpleName() + " are not supported");
         }
@@ -44,7 +44,6 @@ public class SilenceTrackImpl implements Track {
 
     public List<TimeToSampleBox.Entry> getDecodingTimeEntries() {
         return Collections.singletonList(entry);
-
     }
 
     public TrackMetaData getTrackMetaData() {

@@ -30,15 +30,10 @@ import com.googlecode.mp4parser.boxes.DTSSpecificBox;
 import com.googlecode.mp4parser.boxes.EC3SpecificBox;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
 import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.AudioSpecificConfig;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -46,6 +41,19 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 public class FlatManifestWriterImpl extends AbstractManifestWriter {
     private static final Logger LOG = Logger.getLogger(FlatManifestWriterImpl.class.getName());
@@ -65,13 +73,10 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
     }
 
     public String getManifest(Movie movie) throws IOException {
-
-        LinkedList<VideoQuality> videoQualities = new LinkedList<VideoQuality>();
+        LinkedList<VideoQuality> videoQualities = new LinkedList<>();
         long videoTimescale = -1;
-
-        LinkedList<AudioQuality> audioQualities = new LinkedList<AudioQuality>();
+        LinkedList<AudioQuality> audioQualities = new LinkedList<>();
         long audioTimescale = -1;
-
         for (Track track : movie.getTracks()) {
             if (track.getMediaHeaderBox() instanceof VideoMediaHeaderBox) {
                 videoFragmentsDurations = checkFragmentsAlign(videoFragmentsDurations, calculateFragmentDurations(track, movie));
@@ -92,7 +97,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
                 } else {
                     assert audioTimescale == track.getTrackMetaData().getTimescale();
                 }
-
             }
         }
         DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
@@ -103,15 +107,12 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
             throw new IOException(e);
         }
         Document document = documentBuilder.newDocument();
-
-
         Element smoothStreamingMedia = document.createElement("SmoothStreamingMedia");
         document.appendChild(smoothStreamingMedia);
         smoothStreamingMedia.setAttribute("MajorVersion", "2");
         smoothStreamingMedia.setAttribute("MinorVersion", "1");
 // silverlight ignores the timescale attr        smoothStreamingMedia.addAttribute(new Attribute("TimeScale", Long.toString(movieTimeScale)));
         smoothStreamingMedia.setAttribute("Duration", "0");
-
         smoothStreamingMedia.appendChild(document.createComment(Version.VERSION));
         Element videoStreamIndex = document.createElement("StreamIndex");
         videoStreamIndex.setAttribute("Type", "video");
@@ -149,7 +150,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
             audioStreamIndex.setAttribute("Url", "audio/{bitrate}/{start time}");
             audioStreamIndex.setAttribute("QualityLevels", Integer.toString(audioQualities.size()));
             smoothStreamingMedia.appendChild(audioStreamIndex);
-
             for (int i = 0; i < audioQualities.size(); i++) {
                 AudioQuality aq = audioQualities.get(i);
                 Element qualityLevel = document.createElement("QualityLevel");
@@ -188,8 +188,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
             throw new IOException(e);
         }
         return stringWriter.getBuffer().toString();
-
-
     }
 
     private AudioQuality getAudioQuality(Track track, AudioSampleEntry ase) {
@@ -202,7 +200,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         } else {
             throw new InternalError("I don't know what to do with audio of type " + getFormat(ase));
         }
-
     }
 
     private AudioQuality getAacAudioQuality(Track track, AudioSampleEntry ase) {
@@ -232,7 +229,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         if (ec3SpecificBox == null) {
             throw new RuntimeException("EC-3 track misses EC3SpecificBox!");
         }
-
         short nfchans = 0; //full bandwidth channels
         short lfechans = 0;
         byte dWChannelMaskFirstByte = 0;
@@ -340,7 +336,7 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
                     break;
             }
             if (entry.lfeon == 1) {
-                lfechans ++;
+                lfechans++;
                 dWChannelMaskFirstByte |= 0x10;
             }
         }
@@ -350,11 +346,9 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         waveformatex.put(dWChannelMaskFirstByte);
         waveformatex.put(dWChannelMaskSecondByte);
         waveformatex.put(new byte[]{0x00, 0x00}); //pad dwChannelMask to 32bit
-        waveformatex.put(new byte[]{(byte)0xAF, (byte)0x87, (byte)0xFB, (byte)0xA7, 0x02, 0x2D, (byte)0xFB, 0x42, (byte)0xA4, (byte)0xD4, 0x05, (byte)0xCD, (byte)0x93, (byte)0x84, 0x3B, (byte)0xDD}); //SubFormat - Dolby Digital Plus GUID
-
+        waveformatex.put(new byte[]{(byte) 0xAF, (byte) 0x87, (byte) 0xFB, (byte) 0xA7, 0x02, 0x2D, (byte) 0xFB, 0x42, (byte) 0xA4, (byte) 0xD4, 0x05, (byte) 0xCD, (byte) 0x93, (byte) 0x84, 0x3B, (byte) 0xDD}); //SubFormat - Dolby Digital Plus GUID
         final ByteBuffer dec3Content = ByteBuffer.allocate((int) ec3SpecificBox.getContentSize());
         ec3SpecificBox.getContent(dec3Content);
-
         AudioQuality l = new AudioQuality();
         l.fourCC = "EC-3";
         l.bitrate = getBitrate(track);
@@ -372,7 +366,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         if (dtsSpecificBox == null) {
             throw new RuntimeException("DTS track misses DTSSpecificBox!");
         }
-
         final ByteBuffer waveformatex = ByteBuffer.allocate(22);
         final int frameDuration = dtsSpecificBox.getFrameDuration();
         short samplesPerBlock = 0;
@@ -397,7 +390,7 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         waveformatex.put((byte) (dwChannelMask >>> 8));
         waveformatex.put((byte) (dwChannelMask >>> 16));
         waveformatex.put((byte) (dwChannelMask >>> 24));
-        waveformatex.put(new byte[]{(byte)0xAE, (byte)0xE4, (byte)0xBF, (byte)0x5E, (byte)0x61, (byte)0x5E, (byte)0x41, (byte)0x87, (byte)0x92, (byte)0xFC, (byte)0xA4, (byte)0x81, (byte)0x26, (byte)0x99, (byte)0x02, (byte)0x11}); //DTS-HD GUID
+        waveformatex.put(new byte[]{(byte) 0xAE, (byte) 0xE4, (byte) 0xBF, (byte) 0x5E, (byte) 0x61, (byte) 0x5E, (byte) 0x41, (byte) 0x87, (byte) 0x92, (byte) 0xFC, (byte) 0xA4, (byte) 0x81, (byte) 0x26, (byte) 0x99, (byte) 0x02, (byte) 0x11}); //DTS-HD GUID
 
         final ByteBuffer dtsCodecPrivateData = ByteBuffer.allocate(8);
         dtsCodecPrivateData.put((byte) dtsSpecificBox.getStreamConstruction());
@@ -423,7 +416,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         l.packetSize = track.getSamples().get(0).limit(); //assuming all are same size
         l.codecPrivateData = Hex.encodeHex(waveformatex.array()) + Hex.encodeHex(dtsCodecPrivateData.array());
         return l;
-
     }
 
     /* dwChannelMask
@@ -446,7 +438,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
     Chf SPEAKER_TOP_BACK_CENTER 0x00010000
     Rhr SPEAKER_TOP_BACK_RIGHT 0x00020000
     SPEAKER_RESERVED 0x80000000
-
     * if Lss, Rss exist, then this position is equivalent to Lsr, Rsr respectively
      */
     private int[] getNumChannelsAndMask(DTSSpecificBox dtsSpecificBox) {
@@ -583,7 +574,6 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         try {
             baos.write(new byte[]{0, 0, 0, 1});
-
             for (byte[] sp : sps) {
                 baos.write(sp);
             }
@@ -597,10 +587,10 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
         return baos.toByteArray();
     }
 
-    private class DependentSubstreamMask {
+    private static class DependentSubstreamMask {
         private byte dWChannelMaskFirstByte;
         private byte dWChannelMaskSecondByte;
-        private EC3SpecificBox.Entry entry;
+        private final EC3SpecificBox.Entry entry;
 
         public DependentSubstreamMask(byte dWChannelMaskFirstByte, byte dWChannelMaskSecondByte, EC3SpecificBox.Entry entry) {
             this.dWChannelMaskFirstByte = dWChannelMaskFirstByte;
@@ -640,4 +630,5 @@ public class FlatManifestWriterImpl extends AbstractManifestWriter {
             return this;
         }
     }
+
 }

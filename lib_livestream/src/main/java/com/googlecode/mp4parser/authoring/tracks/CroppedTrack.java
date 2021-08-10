@@ -15,7 +15,12 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
@@ -60,9 +65,7 @@ public class CroppedTrack extends AbstractTrack {
             long[] decodingTimes = TimeToSampleBox.blowupTimeToSamples(origTrack.getDecodingTimeEntries());
             long[] nuDecodingTimes = new long[toSample - fromSample];
             System.arraycopy(decodingTimes, fromSample, nuDecodingTimes, 0, toSample - fromSample);
-
             LinkedList<TimeToSampleBox.Entry> returnDecodingEntries = new LinkedList<TimeToSampleBox.Entry>();
-
             for (long nuDecodingTime : nuDecodingTimes) {
                 if (returnDecodingEntries.isEmpty() || returnDecodingEntries.getLast().getDelta() != nuDecodingTime) {
                     TimeToSampleBox.Entry e = new TimeToSampleBox.Entry(1, nuDecodingTime);
@@ -83,9 +86,7 @@ public class CroppedTrack extends AbstractTrack {
             int[] compositionTime = CompositionTimeToSample.blowupCompositionTimes(origTrack.getCompositionTimeEntries());
             int[] nuCompositionTimes = new int[toSample - fromSample];
             System.arraycopy(compositionTime, fromSample, nuCompositionTimes, 0, toSample - fromSample);
-
             LinkedList<CompositionTimeToSample.Entry> returnDecodingEntries = new LinkedList<CompositionTimeToSample.Entry>();
-
             for (int nuDecodingTime : nuCompositionTimes) {
                 if (returnDecodingEntries.isEmpty() || returnDecodingEntries.getLast().getOffset() != nuDecodingTime) {
                     CompositionTimeToSample.Entry e = new CompositionTimeToSample.Entry(1, nuDecodingTime);

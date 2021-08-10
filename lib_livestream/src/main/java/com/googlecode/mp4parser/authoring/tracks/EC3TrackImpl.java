@@ -1,6 +1,12 @@
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SoundMediaHeaderBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
@@ -23,19 +29,16 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public class EC3TrackImpl extends AbstractTrack {
-    TrackMetaData trackMetaData = new TrackMetaData();
-    SampleDescriptionBox sampleDescriptionBox;
-
     int samplerate;
     int bitrate;
     int frameSize;
-
-    List<BitStreamInfo> entries = new LinkedList<BitStreamInfo>();
-
+    List<BitStreamInfo> entries = new LinkedList<>();
+    List<TimeToSampleBox.Entry> stts = new LinkedList<>();
+    SampleDescriptionBox sampleDescriptionBox;
+    TrackMetaData trackMetaData = new TrackMetaData();
+    private String lang = "und";
     private BufferedInputStream inputStream;
     private List<ByteBuffer> samples;
-    List<TimeToSampleBox.Entry> stts = new LinkedList<TimeToSampleBox.Entry>();
-    private String lang = "und";
 
     public EC3TrackImpl(InputStream fin, String lang) throws IOException {
         this.lang = lang;
@@ -48,7 +51,6 @@ public class EC3TrackImpl extends AbstractTrack {
 
     private void parse(InputStream fin) throws IOException {
         inputStream = new BufferedInputStream(fin);
-
         boolean done = false;
         inputStream.mark(10000);
         while (!done) {
@@ -67,14 +69,11 @@ public class EC3TrackImpl extends AbstractTrack {
                 assert skipped == bsi.frameSize;
             }
         }
-
         inputStream.reset();
-
         if (entries.size() == 0) {
             throw new IOException();
         }
         samplerate = entries.get(0).samplerate;
-
         sampleDescriptionBox = new SampleDescriptionBox();
         AudioSampleEntry audioSampleEntry = new AudioSampleEntry("ec-3");
         audioSampleEntry.setChannelCount(2);  // According to  ETSI TS 102 366 Annex F
@@ -108,25 +107,20 @@ public class EC3TrackImpl extends AbstractTrack {
             bitrate += bsi.bitrate;
             frameSize += bsi.frameSize;
         }
-
         ec3.setDataRate(bitrate / 1000);
         audioSampleEntry.addBox(ec3);
         sampleDescriptionBox.addBox(audioSampleEntry);
-
         trackMetaData.setCreationTime(new Date());
         trackMetaData.setModificationTime(new Date());
         trackMetaData.setLanguage(lang);
         trackMetaData.setTimescale(samplerate); // Audio tracks always use samplerate as timescale
-
-        samples = new LinkedList<ByteBuffer>();
+        samples = new LinkedList<>();
         if (!readSamples()) {
             throw new IOException();
         }
     }
 
-
     public List<ByteBuffer> getSamples() {
-
         return samples;
     }
 
@@ -181,12 +175,10 @@ public class EC3TrackImpl extends AbstractTrack {
         }
 
         BitStreamInfo entry = new BitStreamInfo();
-
         entry.strmtyp = brb.readBits(2);
         entry.substreamid = brb.readBits(3);
         int frmsiz = brb.readBits(11);
         entry.frameSize = 2 * (frmsiz + 1);
-
         entry.fscod = brb.readBits(2);
         int fscod2 = -1;
         int numblkscod;
@@ -216,7 +208,6 @@ public class EC3TrackImpl extends AbstractTrack {
 
         }
         entry.frameSize *= (6 / numberOfBlocksPerSyncFrame);
-
         entry.acmod = brb.readBits(3);
         entry.lfeon = brb.readBits(1);
         entry.bsid = brb.readBits(5);
@@ -336,7 +327,6 @@ public class EC3TrackImpl extends AbstractTrack {
                                 }
                             }
                         }
-
                     }
                 }
             }
@@ -349,43 +339,34 @@ public class EC3TrackImpl extends AbstractTrack {
             case 0:
                 entry.samplerate = 48000;
                 break;
-
             case 1:
                 entry.samplerate = 44100;
                 break;
-
             case 2:
                 entry.samplerate = 32000;
                 break;
-
             case 3: {
                 switch (fscod2) {
                     case 0:
                         entry.samplerate = 24000;
                         break;
-
                     case 1:
                         entry.samplerate = 22050;
                         break;
-
                     case 2:
                         entry.samplerate = 16000;
                         break;
-
                     case 3:
                         entry.samplerate = 0;
                         break;
                 }
                 break;
             }
-
         }
         if (entry.samplerate == 0) {
             return null;
         }
-
         entry.bitrate = (int) (((double) entry.samplerate) / 1536.0 * entry.frameSize * 8);
-
         return entry;
     }
 
@@ -433,4 +414,5 @@ public class EC3TrackImpl extends AbstractTrack {
                 ", entries=" + entries +
                 '}';
     }
+
 }

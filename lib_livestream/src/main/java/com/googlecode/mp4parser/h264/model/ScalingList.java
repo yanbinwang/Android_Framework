@@ -33,7 +33,6 @@ import java.io.IOException;
  * @author Stanislav Vitvitskiy
  */
 public class ScalingList {
-
     public int[] scalingList;
     public boolean useDefaultScalingMatrixFlag;
 
@@ -42,7 +41,6 @@ public class ScalingList {
             out.writeSE(0, "SPS: ");
             return;
         }
-
         int lastScale = 8;
         int nextScale = 8;
         for (int j = 0; j < scalingList.length; j++) {
@@ -54,9 +52,7 @@ public class ScalingList {
         }
     }
 
-    public static ScalingList read(CAVLCReader is, int sizeOfScalingList)
-            throws IOException {
-
+    public static ScalingList read(CAVLCReader is, int sizeOfScalingList) throws IOException {
         ScalingList sl = new ScalingList();
         sl.scalingList = new int[sizeOfScalingList];
         int lastScale = 8;
@@ -80,4 +76,5 @@ public class ScalingList {
                 ", useDefaultScalingMatrixFlag=" + useDefaultScalingMatrixFlag +
                 '}';
     }
+
 }

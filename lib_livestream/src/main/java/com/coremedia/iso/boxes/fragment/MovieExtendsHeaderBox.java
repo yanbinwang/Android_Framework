@@ -32,8 +32,8 @@ import java.nio.ByteBuffer;
  * }
  */
 public class MovieExtendsHeaderBox extends AbstractFullBox {
-    public static final String TYPE = "mehd";
     private long fragmentDuration;
+    public static final String TYPE = "mehd";
 
     public MovieExtendsHeaderBox() {
         super(TYPE);
@@ -49,7 +49,6 @@ public class MovieExtendsHeaderBox extends AbstractFullBox {
         parseVersionAndFlags(content);
         fragmentDuration = getVersion() == 1 ? IsoTypeReader.readUInt64(content) : IsoTypeReader.readUInt32(content);
     }
-
 
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
@@ -68,4 +67,5 @@ public class MovieExtendsHeaderBox extends AbstractFullBox {
     public void setFragmentDuration(long fragmentDuration) {
         this.fragmentDuration = fragmentDuration;
     }
+
 }

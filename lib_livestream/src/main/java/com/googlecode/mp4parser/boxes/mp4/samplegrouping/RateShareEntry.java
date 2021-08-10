@@ -17,14 +17,14 @@
 
 package com.googlecode.mp4parser.boxes.mp4.samplegrouping;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * Each sample of a track may be associated to (zero or) one of a number of sample group descriptions, each of
@@ -45,15 +45,13 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * possibility is to estimate with linear interpolation.
  */
 public class RateShareEntry extends GroupEntry {
-    public static final String TYPE = "rash";
-
-    private short operationPointCut;
-    private short targetRateShare;
-    private List<Entry> entries = new LinkedList<Entry>();
     private int maximumBitrate;
     private int minimumBitrate;
+    private short operationPointCut;
+    private short targetRateShare;
     private short discardPriority;
-
+    private List<Entry> entries = new LinkedList<>();
+    public static final String TYPE = "rash";
 
     @Override
     public void parse(ByteBuffer byteBuffer) {
@@ -73,10 +71,10 @@ public class RateShareEntry extends GroupEntry {
 
     @Override
     public ByteBuffer get() {
-        ByteBuffer buf = ByteBuffer.allocate(operationPointCut == 1?13:(operationPointCut * 6 + 11 ));
+        ByteBuffer buf = ByteBuffer.allocate(operationPointCut == 1 ? 13 : (operationPointCut * 6 + 11));
         buf.putShort(operationPointCut);
         if (operationPointCut == 1) {
-            buf.putShort(targetRateShare );
+            buf.putShort(targetRateShare);
         } else {
             for (Entry entry : entries) {
                 buf.putInt(entry.getAvailableBitrate());
@@ -95,7 +93,6 @@ public class RateShareEntry extends GroupEntry {
             this.availableBitrate = availableBitrate;
             this.targetRateShare = targetRateShare;
         }
-
         int availableBitrate;
         short targetRateShare;
 
@@ -131,16 +128,13 @@ public class RateShareEntry extends GroupEntry {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-
             Entry entry = (Entry) o;
-
             if (availableBitrate != entry.availableBitrate) {
                 return false;
             }
             if (targetRateShare != entry.targetRateShare) {
                 return false;
             }
-
             return true;
         }
 
@@ -160,9 +154,7 @@ public class RateShareEntry extends GroupEntry {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         RateShareEntry that = (RateShareEntry) o;
-
         if (discardPriority != that.discardPriority) {
             return false;
         }
@@ -181,7 +173,6 @@ public class RateShareEntry extends GroupEntry {
         if (entries != null ? !entries.equals(that.entries) : that.entries != null) {
             return false;
         }
-
         return true;
     }
 
@@ -243,4 +234,5 @@ public class RateShareEntry extends GroupEntry {
     public void setDiscardPriority(short discardPriority) {
         this.discardPriority = discardPriority;
     }
+
 }

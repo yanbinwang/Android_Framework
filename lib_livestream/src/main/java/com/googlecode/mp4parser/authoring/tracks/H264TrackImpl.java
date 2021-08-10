@@ -1,6 +1,12 @@
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
+import com.coremedia.iso.boxes.VideoMediaHeaderBox;
 import com.coremedia.iso.boxes.h264.AvcConfigurationBox;
 import com.coremedia.iso.boxes.sampleentry.VisualSampleEntry;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
@@ -24,36 +30,30 @@ import java.util.logging.Logger;
  * Annex B file.
  */
 public class H264TrackImpl extends AbstractTrack {
-    private static final Logger LOG = Logger.getLogger(H264TrackImpl.class.getName());
-    
-    TrackMetaData trackMetaData = new TrackMetaData();
-    SampleDescriptionBox sampleDescriptionBox;
-
-    private ReaderWrapper reader;
-    private List<ByteBuffer> samples;
+    int frameNrInGop = 0;
     boolean readSamples = false;
-
     List<TimeToSampleBox.Entry> stts;
     List<CompositionTimeToSample.Entry> ctts;
     List<SampleDependencyTypeBox.Entry> sdtp;
     List<Integer> stss;
-
     SeqParameterSet seqParameterSet = null;
     PictureParameterSet pictureParameterSet = null;
-    LinkedList<byte[]> seqParameterSetList = new LinkedList<byte[]>();
-    LinkedList<byte[]> pictureParameterSetList = new LinkedList<byte[]>();
-
+    SampleDescriptionBox sampleDescriptionBox;
+    TrackMetaData trackMetaData = new TrackMetaData();
+    LinkedList<byte[]> seqParameterSetList = new LinkedList<>();
+    LinkedList<byte[]> pictureParameterSetList = new LinkedList<>();
     private int width;
     private int height;
     private int timescale;
     private int frametick;
     private int currentScSize;
     private int prevScSize;
-
-    private SEIMessage seiMessage;
-    int frameNrInGop = 0;
     private boolean determineFrameRate = true;
     private String lang = "und";
+    private ReaderWrapper reader;
+    private List<ByteBuffer> samples;
+    private SEIMessage seiMessage;
+    private static final Logger LOG = Logger.getLogger(H264TrackImpl.class.getName());
 
     public H264TrackImpl(InputStream inputStream, String lang, int timescale) throws IOException {
         this.lang = lang;
@@ -78,16 +78,14 @@ public class H264TrackImpl extends AbstractTrack {
 
     private void parse(InputStream inputStream) throws IOException {
         this.reader = new ReaderWrapper(inputStream);
-        stts = new LinkedList<TimeToSampleBox.Entry>();
-        ctts = new LinkedList<CompositionTimeToSample.Entry>();
-        sdtp = new LinkedList<SampleDependencyTypeBox.Entry>();
-        stss = new LinkedList<Integer>();
-
-        samples = new LinkedList<ByteBuffer>();
+        stts = new LinkedList<>();
+        ctts = new LinkedList<>();
+        sdtp = new LinkedList<>();
+        stss = new LinkedList<>();
+        samples = new LinkedList<>();
         if (!readSamples()) {
             throw new IOException();
         }
-
         if (!readVariables()) {
             throw new IOException();
         }
@@ -102,7 +100,6 @@ public class H264TrackImpl extends AbstractTrack {
         visualSampleEntry.setWidth(width);
         visualSampleEntry.setHeight(height);
         visualSampleEntry.setCompressorname("AVC Coding");
-
         AvcConfigurationBox avcConfigurationBox = new AvcConfigurationBox();
 
         avcConfigurationBox.setSequenceParameterSets(seqParameterSetList);
@@ -118,7 +115,6 @@ public class H264TrackImpl extends AbstractTrack {
 
         visualSampleEntry.addBox(avcConfigurationBox);
         sampleDescriptionBox.addBox(visualSampleEntry);
-
         trackMetaData.setCreationTime(new Date());
         trackMetaData.setModificationTime(new Date());
         trackMetaData.setLanguage(lang);
@@ -189,7 +185,6 @@ public class H264TrackImpl extends AbstractTrack {
                 cropUnitX = seqParameterSet.chroma_format_idc.getSubWidth();
                 cropUnitY = seqParameterSet.chroma_format_idc.getSubHeight() * mult;
             }
-
             width -= cropUnitX * (seqParameterSet.frame_crop_left_offset + seqParameterSet.frame_crop_right_offset);
             height -= cropUnitY * (seqParameterSet.frame_crop_top_offset + seqParameterSet.frame_crop_bottom_offset);
         }
@@ -198,7 +193,6 @@ public class H264TrackImpl extends AbstractTrack {
 
     private boolean findNextStartcode() throws IOException {
         byte[] test = new byte[]{-1, -1, -1, -1};
-
         int c;
         while ((c = reader.read()) != -1) {
             test[0] = test[1];
@@ -229,35 +223,28 @@ public class H264TrackImpl extends AbstractTrack {
         }
 
         readSamples = true;
-
-
         findNextStartcode();
         reader.mark();
         long pos = reader.getPos();
-
-        ArrayList<byte[]> buffered = new ArrayList<byte[]>();
-
+        ArrayList<byte[]> buffered = new ArrayList<>();
         int frameNr = 0;
-
         while (findNextStartcode()) {
             long newpos = reader.getPos();
             int size = (int) (newpos - pos - prevScSize);
             reader.reset();
-            byte[] data = new byte[size ];
+            byte[] data = new byte[size];
             reader.read(data);
             int type = data[0];
             int nal_ref_idc = (type >> 5) & 3;
             int nal_unit_type = type & 0x1f;
-            LOG.fine("Found startcode at " + (pos -4)  + " Type: " + nal_unit_type + " ref idc: " + nal_ref_idc + " (size " + size + ")");
+            LOG.fine("Found startcode at " + (pos - 4) + " Type: " + nal_unit_type + " ref idc: " + nal_ref_idc + " (size " + size + ")");
             NALActions action = handleNALUnit(nal_ref_idc, nal_unit_type, data);
             switch (action) {
                 case IGNORE:
                     break;
-
                 case BUFFER:
                     buffered.add(data);
                     break;
-
                 case STORE:
                     int stdpValue = 22;
                     frameNr++;
@@ -293,11 +280,8 @@ public class H264TrackImpl extends AbstractTrack {
                     sdtp.add(new SampleDependencyTypeBox.Entry(stdpValue));
                     frameNrInGop++;
                     break;
-
                 case END:
                     return true;
-
-
             }
             pos = newpos;
             reader.seek(currentScSize);
@@ -351,20 +335,16 @@ public class H264TrackImpl extends AbstractTrack {
             case 5:
                 action = NALActions.STORE; // Will only work in single slice per frame mode!
                 break;
-
             case 6:
                 seiMessage = new SEIMessage(cleanBuffer(data), seqParameterSet);
                 action = NALActions.BUFFER;
                 break;
-
             case 9:
 //                printAccessUnitDelimiter(data);
                 int type = data[1] >> 5;
                 LOG.fine("Access unit delimiter type: " + type);
                 action = NALActions.BUFFER;
                 break;
-
-
             case 7:
                 if (seqParameterSet == null) {
                     ByteArrayInputStream is = cleanBuffer(data);
@@ -375,7 +355,6 @@ public class H264TrackImpl extends AbstractTrack {
                 }
                 action = NALActions.IGNORE;
                 break;
-
             case 8:
                 if (pictureParameterSet == null) {
                     ByteArrayInputStream is = new ByteArrayInputStream(data);
@@ -385,18 +364,14 @@ public class H264TrackImpl extends AbstractTrack {
                 }
                 action = NALActions.IGNORE;
                 break;
-
             case 10:
             case 11:
                 action = NALActions.END;
                 break;
-
             default:
                 System.err.println("Unknown NAL unit type: " + nal_unit_type);
                 action = NALActions.IGNORE;
-
         }
-
         return action;
     }
 
@@ -448,34 +423,28 @@ public class H264TrackImpl extends AbstractTrack {
                 case 5:
                     slice_type = SliceType.P;
                     break;
-
                 case 1:
                 case 6:
                     slice_type = SliceType.B;
                     break;
-
                 case 2:
                 case 7:
                     slice_type = SliceType.I;
                     break;
-
                 case 3:
                 case 8:
                     slice_type = SliceType.SP;
                     break;
-
                 case 4:
                 case 9:
                     slice_type = SliceType.SI;
                     break;
-
             }
             pic_parameter_set_id = reader.readUE("SliceHeader: pic_parameter_set_id");
             if (sps.residual_color_transform_flag) {
                 colour_plane_id = reader.readU(2, "SliceHeader: colour_plane_id");
             }
             frame_num = reader.readU(sps.log2_max_frame_num_minus4 + 4, "SliceHeader: frame_num");
-
             if (!sps.frame_mbs_only_flag) {
                 field_pic_flag = reader.readBool("SliceHeader: field_pic_flag");
                 if (field_pic_flag) {
@@ -510,12 +479,10 @@ public class H264TrackImpl extends AbstractTrack {
         }
     }
 
-    private class ReaderWrapper {
-        private InputStream inputStream;
+    private static class ReaderWrapper {
         private long pos = 0;
-
         private long markPos = 0;
-
+        private final InputStream inputStream;
 
         private ReaderWrapper(InputStream inputStream) {
             this.inputStream = inputStream;
@@ -549,7 +516,6 @@ public class H264TrackImpl extends AbstractTrack {
             markPos = pos;
         }
 
-
         public void reset() throws IOException {
             long diff = pos - markPos;
             LOG.fine("Resetting to " + markPos + " (pos is " + pos + ") which makes the buffersize " + diff);
@@ -558,16 +524,11 @@ public class H264TrackImpl extends AbstractTrack {
         }
     }
 
-    public class SEIMessage {
-
+    public static class SEIMessage {
         int payloadType = 0;
         int payloadSize = 0;
-
-        boolean removal_delay_flag;
         int cpb_removal_delay;
         int dpb_removal_delay;
-
-        boolean clock_timestamp_flag;
         int pic_struct;
         int ct_type;
         int nuit_field_based_flag;
@@ -581,7 +542,8 @@ public class H264TrackImpl extends AbstractTrack {
         int hours_value;
         int time_offset_length;
         int time_offset;
-
+        boolean removal_delay_flag;
+        boolean clock_timestamp_flag;
         SeqParameterSet sps;
 
         public SEIMessage(InputStream is, SeqParameterSet sps) throws IOException {
@@ -602,7 +564,6 @@ public class H264TrackImpl extends AbstractTrack {
                 payloadType += last_payload_type_bytes;
                 int last_payload_size_bytes = is.read();
                 read++;
-
                 while (last_payload_size_bytes == 0xff) {
                     payloadSize += last_payload_size_bytes;
                     last_payload_size_bytes = is.read();
@@ -633,13 +594,11 @@ public class H264TrackImpl extends AbstractTrack {
                                     default:
                                         numClockTS = 1;
                                         break;
-
                                     case 3:
                                     case 4:
                                     case 7:
                                         numClockTS = 2;
                                         break;
-
                                     case 5:
                                     case 6:
                                     case 8:
@@ -684,7 +643,6 @@ public class H264TrackImpl extends AbstractTrack {
                                     }
                                 }
                             }
-
                         } else {
                             for (int i = 0; i < payloadSize; i++) {
                                 is.read();
@@ -711,7 +669,6 @@ public class H264TrackImpl extends AbstractTrack {
                     ", payloadSize=" + payloadSize;
             if (payloadType == 1) {
                 if (sps.vuiParams.nalHRDParams != null || sps.vuiParams.vclHRDParams != null) {
-
                     out += ", cpb_removal_delay=" + cpb_removal_delay +
                             ", dpb_removal_delay=" + dpb_removal_delay;
                 }
@@ -737,4 +694,5 @@ public class H264TrackImpl extends AbstractTrack {
             return out;
         }
     }
+
 }

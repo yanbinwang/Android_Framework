@@ -1,5 +1,7 @@
 package com.coremedia.iso.boxes;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.AbstractFullBox;
@@ -7,8 +9,6 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * aligned(8) class SubSampleInformationBox
@@ -37,10 +37,9 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * }
  */
 public class SubSampleInformationBox extends AbstractFullBox {
-    public static final String TYPE = "subs";
-
     private long entryCount;
     private List<SampleEntry> entries = new ArrayList<SampleEntry>();
+    public static final String TYPE = "subs";
 
     public SubSampleInformationBox() {
         super(TYPE);
@@ -68,9 +67,7 @@ public class SubSampleInformationBox extends AbstractFullBox {
     @Override
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
-
         entryCount = IsoTypeReader.readUInt32(content);
-
         for (int i = 0; i < entryCount; i++) {
             SampleEntry sampleEntry = new SampleEntry();
             sampleEntry.setSampleDelta(IsoTypeReader.readUInt32(content));
@@ -85,7 +82,6 @@ public class SubSampleInformationBox extends AbstractFullBox {
             }
             entries.add(sampleEntry);
         }
-
     }
 
     @Override
@@ -118,9 +114,9 @@ public class SubSampleInformationBox extends AbstractFullBox {
     }
 
     public static class SampleEntry {
-        private long sampleDelta;
         private int subsampleCount;
-        private List<SubsampleEntry> subsampleEntries = new ArrayList<SubsampleEntry>();
+        private long sampleDelta;
+        private final List<SubsampleEntry> subsampleEntries = new ArrayList<>();
 
         public long getSampleDelta() {
             return sampleDelta;
@@ -148,10 +144,10 @@ public class SubSampleInformationBox extends AbstractFullBox {
         }
 
         public static class SubsampleEntry {
-            private long subsampleSize;
-            private int subsamplePriority;
             private int discardable;
+            private int subsamplePriority;
             private long reserved;
+            private long subsampleSize;
 
             public long getSubsampleSize() {
                 return subsampleSize;
@@ -205,4 +201,5 @@ public class SubSampleInformationBox extends AbstractFullBox {
                     '}';
         }
     }
+
 }

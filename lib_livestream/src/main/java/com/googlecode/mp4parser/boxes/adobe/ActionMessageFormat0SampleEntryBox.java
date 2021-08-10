@@ -19,10 +19,8 @@ public class ActionMessageFormat0SampleEntryBox extends SampleEntry {
         for (Box box : boxes) {
             size += box.getSize();
         }
-
         return size;
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {
@@ -35,4 +33,5 @@ public class ActionMessageFormat0SampleEntryBox extends SampleEntry {
         _writeReservedAndDataReferenceIndex(byteBuffer);
         _writeChildBoxes(byteBuffer);
     }
+
 }

@@ -30,8 +30,8 @@ import java.nio.ByteBuffer;
  */
 
 public class MovieFragmentHeaderBox extends AbstractFullBox {
-    public static final String TYPE = "mfhd";
     private long sequenceNumber;
+    public static final String TYPE = "mfhd";
 
     public MovieFragmentHeaderBox() {
         super(TYPE);
@@ -46,7 +46,6 @@ public class MovieFragmentHeaderBox extends AbstractFullBox {
         writeVersionAndFlags(byteBuffer);
         IsoTypeWriter.writeUInt32(byteBuffer, sequenceNumber);
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {
@@ -69,4 +68,5 @@ public class MovieFragmentHeaderBox extends AbstractFullBox {
                 "sequenceNumber=" + sequenceNumber +
                 '}';
     }
+
 }

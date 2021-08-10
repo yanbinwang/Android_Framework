@@ -40,15 +40,13 @@ import java.util.List;
  * </pre>
  */
 public class SegmentIndexBox extends AbstractFullBox {
-    public static final String TYPE = "sidx";
-    List<Entry> entries = new ArrayList<Entry>();
-
+    int reserved;
     long referenceId;
     long timeScale;
     long earliestPresentationTime;
     long firstOffset;
-    int reserved;
-
+    List<Entry> entries = new ArrayList<>();
+    public static final String TYPE = "sidx";
 
     public SegmentIndexBox() {
         super(TYPE);
@@ -62,9 +60,7 @@ public class SegmentIndexBox extends AbstractFullBox {
         size += getVersion() == 0 ? 8 : 16;
         size += 2; // reserved
         size += 2; // reference count
-
         size += entries.size() * 12;
-
         return size;
     }
 
@@ -92,7 +88,6 @@ public class SegmentIndexBox extends AbstractFullBox {
             b.writeBits(entry.getSapType(), 3);
             b.writeBits(entry.getSapDeltaTime(), 28);
         }
-
     }
 
     @Override
@@ -122,7 +117,6 @@ public class SegmentIndexBox extends AbstractFullBox {
             entries.add(e);
         }
     }
-
 
     public List<Entry> getEntries() {
         return entries;
@@ -173,12 +167,12 @@ public class SegmentIndexBox extends AbstractFullBox {
     }
 
     public static class Entry {
-        byte referenceType;
         int referencedSize;
+        int sapDeltaTime;
         long subsegmentDuration;
+        byte referenceType;
         byte startsWithSap;
         byte sapType;
-        int sapDeltaTime;
 
         public Entry() {
         }
@@ -256,16 +250,13 @@ public class SegmentIndexBox extends AbstractFullBox {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Entry entry = (Entry) o;
-
             if (referenceType != entry.referenceType) return false;
             if (referencedSize != entry.referencedSize) return false;
             if (sapDeltaTime != entry.sapDeltaTime) return false;
             if (sapType != entry.sapType) return false;
             if (startsWithSap != entry.startsWithSap) return false;
             if (subsegmentDuration != entry.subsegmentDuration) return false;
-
             return true;
         }
 
@@ -280,4 +271,5 @@ public class SegmentIndexBox extends AbstractFullBox {
             return result;
         }
     }
+
 }

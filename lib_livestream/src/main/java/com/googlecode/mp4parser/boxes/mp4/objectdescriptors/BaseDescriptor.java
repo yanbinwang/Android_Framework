@@ -64,7 +64,6 @@ public abstract class BaseDescriptor {
 
     public final void parse(int tag, ByteBuffer bb) throws IOException {
         this.tag = tag;
-
         int i = 0;
         int tmp = IsoTypeReader.readUInt8(bb);
         i++;
@@ -79,13 +78,11 @@ public abstract class BaseDescriptor {
         ByteBuffer detailSource = bb.slice();
         detailSource.limit(sizeOfInstance);
         parseDetail(detailSource);
-        assert detailSource.remaining() == 0: this.getClass().getSimpleName() + " has not been fully parsed";
+        assert detailSource.remaining() == 0 : this.getClass().getSimpleName() + " has not been fully parsed";
         bb.position(bb.position() + sizeOfInstance);
     }
-    
+
     public abstract void parseDetail(ByteBuffer bb) throws IOException;
-
-
 
     @Override
     public String toString() {
@@ -96,4 +93,5 @@ public abstract class BaseDescriptor {
         sb.append('}');
         return sb.toString();
     }
+
 }

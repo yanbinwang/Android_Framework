@@ -4,6 +4,10 @@
  */
 package com.github.faucamp.simplertmp.packets;
 
+import com.github.faucamp.simplertmp.Util;
+import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
+import com.github.faucamp.simplertmp.io.RtmpSessionInfo;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -11,17 +15,12 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.github.faucamp.simplertmp.Util;
-import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
-import com.github.faucamp.simplertmp.io.RtmpSessionInfo;
-
 /**
- *
  * @author francois, leoma
  */
 public class RtmpHeader {
-
     private static final String TAG = "RtmpHeader";
+
     /**
      * RTMP packet/message type definitions.
      * Note: docstrings are adapted from the official Adobe RTMP spec:
@@ -34,14 +33,14 @@ public class RtmpHeader {
          * Set Chunk Size, is used to notify the peer a new maximum chunk size to use.
          */
         SET_CHUNK_SIZE(0x01),
-        /** 
+        /**
          * Protocol control message 2
          * Abort Message, is used to notify the peer if it is waiting for chunks
          * to complete a message, then to discard the partially received message
          * over a chunk stream and abort processing of that message.
          */
         ABORT(0x02),
-        /** 
+        /**
          * Protocol control message 3
          * The client or the server sends the acknowledgment to the peer after
          * receiving bytes equal to the window size. The window size is the
@@ -79,22 +78,22 @@ public class RtmpHeader {
         AUDIO(0x08),
         /**
          * RTMP video packet (0x09)
-         * The client or the server sends this message to send video data to the peer.         
+         * The client or the server sends this message to send video data to the peer.
          */
         VIDEO(0x09),
         /**
          * RTMP message type 0x0F
          * The client or the server sends this message to send Metadata or any
-         * user data to the peer. Metadata includes details about the data (audio, video etc.) 
+         * user data to the peer. Metadata includes details about the data (audio, video etc.)
          * like creation time, duration, theme and so on.
          * This is the AMF3-encoded version.
          */
         DATA_AMF3(0x0F),
         /**
-         * RTMP message type 0x10 
+         * RTMP message type 0x10
          * A shared object is a Flash object (a collection of name value pairs)
          * that are in synchronization across multiple clients, instances, and
-         * so on. 
+         * so on.
          * This is the AMF3 version: kMsgContainerEx=16 for AMF3.
          */
         SHARED_OBJECT_AMF3(0x10),
@@ -110,7 +109,7 @@ public class RtmpHeader {
         /**
          * RTMP message type 0x12
          * The client or the server sends this message to send Metadata or any
-         * user data to the peer. Metadata includes details about the data (audio, video etc.) 
+         * user data to the peer. Metadata includes details about the data (audio, video etc.)
          * like creation time, duration, theme and so on.
          * This is the AMF0-encoded version.
          */
@@ -125,11 +124,11 @@ public class RtmpHeader {
          */
         COMMAND_AMF0(0x14),
         /**
-         * RTMP message type 0x13 
+         * RTMP message type 0x13
          * A shared object is a Flash object (a collection of name value pairs)
          * that are in synchronization across multiple clients, instances, and
-         * so on. 
-         * This is the AMF0 version: kMsgContainer=19 for AMF0.         
+         * so on.
+         * This is the AMF0 version: kMsgContainer=19 for AMF0.
          */
         SHARED_OBJECT_AMF0(0x13),
         /**
@@ -137,7 +136,7 @@ public class RtmpHeader {
          * An aggregate message is a single message that contains a list of sub-messages.
          */
         AGGREGATE_MESSAGE(0x16);
-        private byte value;
+        private final byte value;
         private static final Map<Byte, MessageType> quickLookupMap = new HashMap<Byte, MessageType>();
 
         static {
@@ -150,7 +149,9 @@ public class RtmpHeader {
             this.value = (byte) value;
         }
 
-        /** Returns the value of this chunk type */
+        /**
+         * Returns the value of this chunk type
+         */
         public byte getValue() {
             return value;
         }
@@ -166,19 +167,31 @@ public class RtmpHeader {
 
     public enum ChunkType {
 
-        /** Full 12-byte RTMP chunk header */
+        /**
+         * Full 12-byte RTMP chunk header
+         */
         TYPE_0_FULL(0x00),
-        /** Relative 8-byte RTMP chunk header (message stream ID is not included) */
+        /**
+         * Relative 8-byte RTMP chunk header (message stream ID is not included)
+         */
         TYPE_1_RELATIVE_LARGE(0x01),
-        /** Relative 4-byte RTMP chunk header (only timestamp delta) */
+        /**
+         * Relative 4-byte RTMP chunk header (only timestamp delta)
+         */
         TYPE_2_RELATIVE_TIMESTAMP_ONLY(0x02),
-        /** Relative 1-byte RTMP chunk header (no "real" header, just the 1-byte indicating chunk header type & chunk stream ID) */
+        /**
+         * Relative 1-byte RTMP chunk header (no "real" header, just the 1-byte indicating chunk header type & chunk stream ID)
+         */
         TYPE_3_RELATIVE_SINGLE_BYTE(0x03);
-        /** The byte value of this chunk header type */
-        private byte value;
-        /** The full size (in bytes) of this RTMP header (including the basic header byte) */
+        /**
+         * The byte value of this chunk header type
+         */
+        private final byte value;
+        /**
+         * The full size (in bytes) of this RTMP header (including the basic header byte)
+         */
         private static final Map<Byte, ChunkType> quickLookupMap = new HashMap<Byte, ChunkType>();
-        
+
         static {
             for (ChunkType messageTypId : ChunkType.values()) {
                 quickLookupMap.put(messageTypId.getValue(), messageTypId);
@@ -189,7 +202,9 @@ public class RtmpHeader {
             this.value = (byte) byteValue;
         }
 
-        /** Returns the byte value of this chunk header type */
+        /**
+         * Returns the byte value of this chunk header type
+         */
         public byte getValue() {
             return value;
         }
@@ -202,14 +217,15 @@ public class RtmpHeader {
             }
         }
     }
-    private ChunkType chunkType;
+
     private int chunkStreamId;
     private int absoluteTimestamp;
-    private int timestampDelta = -1;
     private int packetLength;
-    private MessageType messageType;
     private int messageStreamId;
     private int extendedTimestamp;
+    private int timestampDelta = -1;
+    private ChunkType chunkType;
+    private MessageType messageType;
 
     public RtmpHeader() {
     }
@@ -227,14 +243,12 @@ public class RtmpHeader {
     }
 
     private void readHeaderImpl(InputStream in, RtmpSessionInfo rtmpSessionInfo) throws IOException {
-
         int basicHeaderByte = in.read();
         if (basicHeaderByte == -1) {
             throw new EOFException("Unexpected EOF while reading RTMP packet basic header");
         }
         // Read byte 0: chunk type and chunk stream ID
         parseBasicHeader((byte) basicHeaderByte);
-
         switch (chunkType) {
             case TYPE_0_FULL: { //  b00 = 12 byte header (full header) 
                 // Read bytes 1-3: Absolute timestamp
@@ -356,7 +370,9 @@ public class RtmpHeader {
         chunkStreamId = basicHeaderByte & 0x3F; // 6 least significant bits define chunk stream ID
     }
 
-    /** @return the RTMP chunk stream ID (channel ID) for this chunk */
+    /**
+     * @return the RTMP chunk stream ID (channel ID) for this chunk
+     */
     public int getChunkStreamId() {
         return chunkStreamId;
     }
@@ -393,7 +409,9 @@ public class RtmpHeader {
         this.timestampDelta = timestampDelta;
     }
 
-    /** Sets the RTMP chunk stream ID (channel ID) for this chunk */
+    /**
+     * Sets the RTMP chunk stream ID (channel ID) for this chunk
+     */
     public void setChunkStreamId(int channelId) {
         this.chunkStreamId = channelId;
     }
@@ -413,4 +431,5 @@ public class RtmpHeader {
     public void setPacketLength(int packetLength) {
         this.packetLength = packetLength;
     }
+
 }

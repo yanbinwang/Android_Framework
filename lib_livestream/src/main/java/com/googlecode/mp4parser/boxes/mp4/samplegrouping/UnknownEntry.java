@@ -20,9 +20,6 @@ import com.coremedia.iso.Hex;
 
 import java.nio.ByteBuffer;
 
-/**
- *
- */
 public class UnknownEntry extends GroupEntry {
     private ByteBuffer content;
 
@@ -66,13 +63,10 @@ public class UnknownEntry extends GroupEntry {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         UnknownEntry that = (UnknownEntry) o;
-
         if (content != null ? !content.equals(that.content) : that.content != null) {
             return false;
         }
-
         return true;
     }
 
@@ -80,4 +74,5 @@ public class UnknownEntry extends GroupEntry {
     public int hashCode() {
         return content != null ? content.hashCode() : 0;
     }
+
 }

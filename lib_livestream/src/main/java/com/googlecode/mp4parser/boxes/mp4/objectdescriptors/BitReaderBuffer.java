@@ -3,10 +3,9 @@ package com.googlecode.mp4parser.boxes.mp4.objectdescriptors;
 import java.nio.ByteBuffer;
 
 public class BitReaderBuffer {
-
-    private ByteBuffer buffer;
     int initialPos;
     int position;
+    private final ByteBuffer buffer;
 
     public BitReaderBuffer(ByteBuffer buffer) {
         this.buffer = buffer;
@@ -48,4 +47,5 @@ public class BitReaderBuffer {
     public int remainingBits() {
         return buffer.limit() * 8 - position;
     }
+
 }

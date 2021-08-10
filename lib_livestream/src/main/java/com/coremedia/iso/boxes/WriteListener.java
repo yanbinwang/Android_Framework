@@ -6,5 +6,7 @@ package com.coremedia.iso.boxes;
  * later needs an offset.
  */
 public interface WriteListener {
-    public void beforeWrite(long offset);
+
+    void beforeWrite(long offset);
+
 }

@@ -38,7 +38,6 @@ public class AssetInformationBox extends AbstractFullBox {
         return Utf8.utf8StringLengthInBytes(apid) + 9;
     }
 
-
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
@@ -46,7 +45,6 @@ public class AssetInformationBox extends AbstractFullBox {
         byteBuffer.put(Utf8.convert(apid));
         byteBuffer.put((byte) 0);
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {
@@ -72,4 +70,5 @@ public class AssetInformationBox extends AbstractFullBox {
         assert profileVersion != null && profileVersion.length() == 4;
         this.profileVersion = profileVersion;
     }
+
 }

@@ -23,7 +23,8 @@ package com.googlecode.mp4parser.h264;
 import java.nio.ShortBuffer;
 
 public class Debug {
-    public final static void print8x8(int[] output) {
+
+    public static void print8x8(int[] output) {
         int i = 0;
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
@@ -34,7 +35,7 @@ public class Debug {
         }
     }
 
-    public final static void print8x8(short[] output) {
+    public static void print8x8(short[] output) {
         int i = 0;
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
@@ -45,7 +46,7 @@ public class Debug {
         }
     }
 
-    public final static void print8x8(ShortBuffer output) {
+    public static void print8x8(ShortBuffer output) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
                 System.out.printf("%3d, ", output.get());
@@ -85,4 +86,5 @@ public class Debug {
         if (debug)
             System.out.println(string);
     }
+
 }

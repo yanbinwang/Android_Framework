@@ -12,8 +12,8 @@ import java.nio.ByteBuffer;
  * @see AppleGenericBox
  */
 public final class AppleNameBox extends AbstractFullBox {
-    public static final String TYPE = "name";
     private String name;
+    public static final String TYPE = "name";
 
     public AppleNameBox() {
         super(TYPE);
@@ -42,4 +42,5 @@ public final class AppleNameBox extends AbstractFullBox {
         writeVersionAndFlags(byteBuffer);
         byteBuffer.put(Utf8.convert(name));
     }
+
 }

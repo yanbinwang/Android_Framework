@@ -15,6 +15,8 @@
  */
 package com.coremedia.iso;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import java.io.EOFException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -23,12 +25,9 @@ import java.nio.channels.ReadableByteChannel;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.WritableByteChannel;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 
 public class ChannelHelper {
     public static ByteBuffer readFully(final ReadableByteChannel channel, long size) throws IOException {
-
         if (channel instanceof FileChannel && size > 1024 * 1024) {
             ByteBuffer bb = ((FileChannel) channel).map(FileChannel.MapMode.READ_ONLY, ((FileChannel) channel).position(), size);
             ((FileChannel) channel).position(((FileChannel) channel).position() + size);
@@ -38,20 +37,15 @@ public class ChannelHelper {
             readFully(channel, buf, buf.limit());
             buf.rewind();
             assert buf.limit() == size;
-
             return buf;
         }
-
     }
 
-
-    public static void readFully(final ReadableByteChannel channel, final ByteBuffer buf)
-            throws IOException {
+    public static void readFully(final ReadableByteChannel channel, final ByteBuffer buf) throws IOException {
         readFully(channel, buf, buf.remaining());
     }
 
-    public static int readFully(final ReadableByteChannel channel, final ByteBuffer buf, final int length)
-            throws IOException {
+    public static int readFully(final ReadableByteChannel channel, final ByteBuffer buf, final int length) throws IOException {
         int n, count = 0;
         while (-1 != (n = channel.read(buf))) {
             count += n;
@@ -65,9 +59,7 @@ public class ChannelHelper {
         return count;
     }
 
-
-    public static void writeFully(final WritableByteChannel channel, final ByteBuffer buf)
-            throws IOException {
+    public static void writeFully(final WritableByteChannel channel, final ByteBuffer buf) throws IOException {
         do {
             int written = channel.write(buf);
             if (written < 0) {
@@ -76,15 +68,12 @@ public class ChannelHelper {
         } while (buf.hasRemaining());
     }
 
-
     public static void close(SelectionKey key) {
         try {
             key.channel().close();
         } catch (IOException e) {
             // nop
         }
-
     }
-
 
 }

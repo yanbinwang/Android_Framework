@@ -3,7 +3,6 @@ package com.coremedia.iso.boxes;
 import java.nio.ByteBuffer;
 
 public class SubtitleMediaHeaderBox extends AbstractMediaHeaderBox {
-
     public static final String TYPE = "sthd";
 
     public SubtitleMediaHeaderBox() {
@@ -27,4 +26,5 @@ public class SubtitleMediaHeaderBox extends AbstractMediaHeaderBox {
     public String toString() {
         return "SubtitleMediaHeaderBox";
     }
+
 }

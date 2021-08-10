@@ -26,14 +26,13 @@ package com.googlecode.mp4parser.h264.model;
  * @author Stanislav Vitvitskiy
  */
 public class ChromaFormat {
+    private final int id;
+    private final int subWidth;
+    private final int subHeight;
     public static ChromaFormat MONOCHROME = new ChromaFormat(0, 0, 0);
     public static ChromaFormat YUV_420 = new ChromaFormat(1, 2, 2);
     public static ChromaFormat YUV_422 = new ChromaFormat(2, 2, 1);
     public static ChromaFormat YUV_444 = new ChromaFormat(3, 1, 1);
-
-    private int id;
-    private int subWidth;
-    private int subHeight;
 
     public ChromaFormat(int id, int subWidth, int subHeight) {
         this.id = id;
@@ -74,4 +73,5 @@ public class ChromaFormat {
                 " subHeight=" + subHeight +
                 '}';
     }
+
 }

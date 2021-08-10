@@ -32,7 +32,7 @@ public class ProfileLevelIndicationDescriptor extends BaseDescriptor {
     int profileLevelIndicationIndex;
 
     @Override
-    public void parseDetail( ByteBuffer bb) throws IOException {
+    public void parseDetail(ByteBuffer bb) throws IOException {
         profileLevelIndicationIndex = IsoTypeReader.readUInt8(bb);
     }
 
@@ -55,11 +55,9 @@ public class ProfileLevelIndicationDescriptor extends BaseDescriptor {
         }
 
         ProfileLevelIndicationDescriptor that = (ProfileLevelIndicationDescriptor) o;
-
         if (profileLevelIndicationIndex != that.profileLevelIndicationIndex) {
             return false;
         }
-
         return true;
     }
 
@@ -67,4 +65,5 @@ public class ProfileLevelIndicationDescriptor extends BaseDescriptor {
     public int hashCode() {
         return profileLevelIndicationIndex;
     }
+
 }

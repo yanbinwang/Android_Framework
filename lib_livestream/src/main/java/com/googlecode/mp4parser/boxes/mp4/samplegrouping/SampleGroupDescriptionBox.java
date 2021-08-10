@@ -16,6 +16,8 @@
 
 package com.googlecode.mp4parser.boxes.mp4.samplegrouping;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.AbstractFullBox;
@@ -23,8 +25,6 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * This description table gives information about the characteristics of sample groups. The descriptive
@@ -40,12 +40,11 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * For video tracks, an abstract VisualSampleGroupEntry is used with similar types for audio and hint tracks.
  */
 public class SampleGroupDescriptionBox extends AbstractFullBox {
-    public static final String TYPE = "sgpd";
-
-    private String groupingType;
     private int defaultLength;
-    private List<GroupEntry> groupEntries = new LinkedList<GroupEntry>();
     private int descriptionLength;
+    private String groupingType;
+    private List<GroupEntry> groupEntries = new LinkedList<>();
+    public static final String TYPE = "sgpd";
 
     public SampleGroupDescriptionBox() {
         super(TYPE);
@@ -110,7 +109,6 @@ public class SampleGroupDescriptionBox extends AbstractFullBox {
             groupEntries.add(parseGroupEntry(parseMe, groupingType));
             content.position(finalPos);
         }
-
     }
 
     private GroupEntry parseGroupEntry(ByteBuffer content, String groupingType) {
@@ -131,7 +129,6 @@ public class SampleGroupDescriptionBox extends AbstractFullBox {
         groupEntry.parse(content);
         return groupEntry;
     }
-
 
     public String getGroupingType() {
         return groupingType;
@@ -165,9 +162,7 @@ public class SampleGroupDescriptionBox extends AbstractFullBox {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         SampleGroupDescriptionBox that = (SampleGroupDescriptionBox) o;
-
         if (defaultLength != that.defaultLength) {
             return false;
         }
@@ -177,7 +172,6 @@ public class SampleGroupDescriptionBox extends AbstractFullBox {
         if (groupingType != null ? !groupingType.equals(that.groupingType) : that.groupingType != null) {
             return false;
         }
-
         return true;
     }
 
@@ -197,4 +191,5 @@ public class SampleGroupDescriptionBox extends AbstractFullBox {
                 ", groupEntries=" + groupEntries +
                 '}';
     }
+
 }

@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes.sampleentry;
@@ -48,28 +48,23 @@ import java.nio.ByteBuffer;
  * Format-specific informationis appened as boxes after the data described in ISO/IEC 14496-12 chapter 8.16.2.
  */
 public class VisualSampleEntry extends SampleEntry implements ContainerBox {
+    private int width;
+    private int height;
+    private int frameCount = 1;
+    private int depth = 24;
+    private double horizresolution = 72;
+    private double vertresolution = 72;
+    private String compressorname;
+    private long[] predefined = new long[3];
     public static final String TYPE1 = "mp4v";
     public static final String TYPE2 = "s263";
     public static final String TYPE3 = "avc1";
-
-
     /**
      * Identifier for an encrypted video track.
      *
      * @see com.coremedia.iso.boxes.ProtectionSchemeInformationBox
      */
     public static final String TYPE_ENCRYPTED = "encv";
-
-
-    private int width;
-    private int height;
-    private double horizresolution = 72;
-    private double vertresolution = 72;
-    private int frameCount = 1;
-    private String compressorname;
-    private int depth = 24;
-
-    private long[] predefined = new long[3];
 
     public VisualSampleEntry(String type) {
         super(type);
@@ -164,11 +159,8 @@ public class VisualSampleEntry extends SampleEntry implements ContainerBox {
         depth = IsoTypeReader.readUInt16(content);
         tmp = IsoTypeReader.readUInt16(content);
         assert 0xFFFF == tmp;
-
         _parseChildBoxes(content);
-
     }
-
 
     protected long getContentSize() {
         long contentSize = 78;
@@ -189,10 +181,8 @@ public class VisualSampleEntry extends SampleEntry implements ContainerBox {
 
         IsoTypeWriter.writeUInt16(byteBuffer, getWidth());
         IsoTypeWriter.writeUInt16(byteBuffer, getHeight());
-
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, getHorizresolution());
         IsoTypeWriter.writeFixedPoint1616(byteBuffer, getVertresolution());
-
 
         IsoTypeWriter.writeUInt32(byteBuffer, 0);
         IsoTypeWriter.writeUInt16(byteBuffer, getFrameCount());
@@ -205,9 +195,7 @@ public class VisualSampleEntry extends SampleEntry implements ContainerBox {
         }
         IsoTypeWriter.writeUInt16(byteBuffer, getDepth());
         IsoTypeWriter.writeUInt16(byteBuffer, 0xFFFF);
-
         _writeChildBoxes(byteBuffer);
-
     }
 
 }

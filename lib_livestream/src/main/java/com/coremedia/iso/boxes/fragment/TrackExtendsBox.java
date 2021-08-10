@@ -32,12 +32,12 @@ import java.nio.ByteBuffer;
  * }
  */
 public class TrackExtendsBox extends AbstractFullBox {
-    public static final String TYPE = "trex";
     private long trackId;
     private long defaultSampleDescriptionIndex;
     private long defaultSampleDuration;
     private long defaultSampleSize;
     private SampleFlags defaultSampleFlags;
+    public static final String TYPE = "trex";
 
     public TrackExtendsBox() {
         super(TYPE);
@@ -112,4 +112,5 @@ public class TrackExtendsBox extends AbstractFullBox {
         this.defaultSampleFlags = defaultSampleFlags;
 
     }
+
 }

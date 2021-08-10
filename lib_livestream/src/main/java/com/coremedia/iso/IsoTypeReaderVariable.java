@@ -34,6 +34,6 @@ public final class IsoTypeReaderVariable {
             default:
                 throw new RuntimeException("I don't know how to read " + bytes + " bytes");
         }
-
     }
+
 }

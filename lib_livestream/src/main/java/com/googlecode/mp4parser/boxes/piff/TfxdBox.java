@@ -41,8 +41,7 @@ public class TfxdBox extends AbstractFullBox {
 
     @Override
     public byte[] getUserType() {
-        return new byte[]{(byte) 0x6d, (byte) 0x1d, (byte) 0x9b, (byte) 0x05, (byte) 0x42, (byte) 0xd5, (byte) 0x44,
-                (byte) 0xe6, (byte) 0x80, (byte) 0xe2, 0x14, (byte) 0x1d, (byte) 0xaf, (byte) 0xf7, (byte) 0x57, (byte) 0xb2};
+        return new byte[]{(byte) 0x6d, (byte) 0x1d, (byte) 0x9b, (byte) 0x05, (byte) 0x42, (byte) 0xd5, (byte) 0x44, (byte) 0xe6, (byte) 0x80, (byte) 0xe2, 0x14, (byte) 0x1d, (byte) 0xaf, (byte) 0xf7, (byte) 0x57, (byte) 0xb2};
     }
 
     @Override
@@ -53,7 +52,6 @@ public class TfxdBox extends AbstractFullBox {
     @Override
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
-
         if (getVersion() == 0x01) {
             fragmentAbsoluteTime = IsoTypeReader.readUInt64(content);
             fragmentAbsoluteDuration = IsoTypeReader.readUInt64(content);
@@ -82,4 +80,5 @@ public class TfxdBox extends AbstractFullBox {
     public long getFragmentAbsoluteDuration() {
         return fragmentAbsoluteDuration;
     }
+
 }

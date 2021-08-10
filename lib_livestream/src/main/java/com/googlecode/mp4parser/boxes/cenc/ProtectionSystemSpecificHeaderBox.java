@@ -1,17 +1,12 @@
 package com.googlecode.mp4parser.boxes.cenc;
 
-import com.coremedia.iso.BoxParser;
-import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
-import com.coremedia.iso.boxes.Box;
 import com.googlecode.mp4parser.AbstractFullBox;
 import com.googlecode.mp4parser.util.UUIDConverter;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.UUID;
-
 
 
 /**
@@ -32,14 +27,11 @@ import java.util.UUID;
  * system.
  */
 public class ProtectionSystemSpecificHeaderBox extends AbstractFullBox {
-    public static final String TYPE = "pssh";
-
-    public static byte[] OMA2_SYSTEM_ID = UUIDConverter.convert(UUID.fromString("A2B55680-6F43-11E0-9A3F-0002A5D5C51B"));
-    public static byte[] PLAYREADY_SYSTEM_ID = UUIDConverter.convert(UUID.fromString("9A04F079-9840-4286-AB92-E65BE0885F95"));
-
     byte[] content;
     byte[] systemId;
-
+    public static byte[] OMA2_SYSTEM_ID = UUIDConverter.convert(UUID.fromString("A2B55680-6F43-11E0-9A3F-0002A5D5C51B"));
+    public static byte[] PLAYREADY_SYSTEM_ID = UUIDConverter.convert(UUID.fromString("9A04F079-9840-4286-AB92-E65BE0885F95"));
+    public static final String TYPE = "pssh";
 
     public byte[] getSystemId() {
         return systemId;
@@ -86,4 +78,5 @@ public class ProtectionSystemSpecificHeaderBox extends AbstractFullBox {
         content.get(this.content);
         assert length == this.content.length;
     }
+
 }

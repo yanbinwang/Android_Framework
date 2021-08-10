@@ -11,16 +11,15 @@ import java.nio.ByteBuffer;
  * Location Information Box as specified in TS 26.244.
  */
 public class LocationInformationBox extends AbstractFullBox {
-    public static final String TYPE = "loci";
-
-    private String language;
-    private String name = "";
     private int role;
     private double longitude;
     private double latitude;
     private double altitude;
+    private String language;
+    private String name = "";
     private String astronomicalBody = "";
     private String additionalNotes = "";
+    public static final String TYPE = "loci";
 
     public LocationInformationBox() {
         super(TYPE);
@@ -107,7 +106,6 @@ public class LocationInformationBox extends AbstractFullBox {
         additionalNotes = IsoTypeReader.readString(content);
     }
 
-
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
@@ -123,4 +121,5 @@ public class LocationInformationBox extends AbstractFullBox {
         byteBuffer.put(Utf8.convert(additionalNotes));
         byteBuffer.put((byte) 0);
     }
+
 }

@@ -70,7 +70,7 @@ public class SLConfigDescriptor extends BaseDescriptor {
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
-        predefined =  IsoTypeReader.readUInt8(bb);
+        predefined = IsoTypeReader.readUInt8(bb);
     }
 
     public int serializedSize() {
@@ -102,13 +102,10 @@ public class SLConfigDescriptor extends BaseDescriptor {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         SLConfigDescriptor that = (SLConfigDescriptor) o;
-
         if (predefined != that.predefined) {
             return false;
         }
-
         return true;
     }
 
@@ -116,4 +113,5 @@ public class SLConfigDescriptor extends BaseDescriptor {
     public int hashCode() {
         return predefined;
     }
+
 }

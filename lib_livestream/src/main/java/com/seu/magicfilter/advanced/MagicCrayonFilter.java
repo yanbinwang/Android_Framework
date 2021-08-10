@@ -3,17 +3,17 @@ package com.seu.magicfilter.advanced;
 import android.opengl.GLES20;
 
 import com.seu.magicfilter.utils.MagicFilterType;
+
 import net.ossrs.yasea.R;
 
 import com.seu.magicfilter.base.gpuimage.GPUImageFilter;
 
-public class MagicCrayonFilter extends GPUImageFilter{
-    
+public class MagicCrayonFilter extends GPUImageFilter {
     private int mSingleStepOffsetLocation;
     //1.0 - 5.0
     private int mStrengthLocation;
-    
-    public MagicCrayonFilter(){
+
+    public MagicCrayonFilter() {
         super(MagicFilterType.CRAYON, R.raw.crayon);
     }
 
@@ -31,13 +31,14 @@ public class MagicCrayonFilter extends GPUImageFilter{
     }
 
     @Override
-    protected void onInitialized(){
+    protected void onInitialized() {
         super.onInitialized();
         setFloat(mStrengthLocation, 0.5f);
     }
 
     @Override
     public void onInputSizeChanged(final int width, final int height) {
-        setFloatVec2(mSingleStepOffsetLocation, new float[] {1.0f / width, 1.0f / height});
+        setFloatVec2(mSingleStepOffsetLocation, new float[]{1.0f / width, 1.0f / height});
     }
+
 }

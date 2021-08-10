@@ -56,26 +56,26 @@ public class PictureParameterSet extends BitstreamElement {
     }
 
     public boolean entropy_coding_mode_flag;
+    public boolean pic_order_present_flag;
+    public boolean weighted_pred_flag;
+    public boolean deblocking_filter_control_present_flag;
+    public boolean constrained_intra_pred_flag;
+    public boolean redundant_pic_cnt_present_flag;
+    public boolean slice_group_change_direction_flag;
     public int num_ref_idx_l0_active_minus1;
     public int num_ref_idx_l1_active_minus1;
     public int slice_group_change_rate_minus1;
     public int pic_parameter_set_id;
     public int seq_parameter_set_id;
-    public boolean pic_order_present_flag;
     public int num_slice_groups_minus1;
     public int slice_group_map_type;
-    public boolean weighted_pred_flag;
     public int weighted_bipred_idc;
     public int pic_init_qp_minus26;
     public int pic_init_qs_minus26;
     public int chroma_qp_index_offset;
-    public boolean deblocking_filter_control_present_flag;
-    public boolean constrained_intra_pred_flag;
-    public boolean redundant_pic_cnt_present_flag;
     public int[] top_left;
     public int[] bottom_right;
     public int[] run_length_minus1;
-    public boolean slice_group_change_direction_flag;
     public int[] slice_group_id;
     public PPSExt extended;
 
@@ -86,38 +86,29 @@ public class PictureParameterSet extends BitstreamElement {
     public static PictureParameterSet read(InputStream is) throws IOException {
         CAVLCReader reader = new CAVLCReader(is);
         PictureParameterSet pps = new PictureParameterSet();
-
         pps.pic_parameter_set_id = reader.readUE("PPS: pic_parameter_set_id");
         pps.seq_parameter_set_id = reader.readUE("PPS: seq_parameter_set_id");
-        pps.entropy_coding_mode_flag = reader
-                .readBool("PPS: entropy_coding_mode_flag");
-        pps.pic_order_present_flag = reader
-                .readBool("PPS: pic_order_present_flag");
-        pps.num_slice_groups_minus1 = reader
-                .readUE("PPS: num_slice_groups_minus1");
+        pps.entropy_coding_mode_flag = reader.readBool("PPS: entropy_coding_mode_flag");
+        pps.pic_order_present_flag = reader.readBool("PPS: pic_order_present_flag");
+        pps.num_slice_groups_minus1 = reader.readUE("PPS: num_slice_groups_minus1");
         if (pps.num_slice_groups_minus1 > 0) {
-            pps.slice_group_map_type = reader
-                    .readUE("PPS: slice_group_map_type");
+            pps.slice_group_map_type = reader.readUE("PPS: slice_group_map_type");
             pps.top_left = new int[pps.num_slice_groups_minus1 + 1];
             pps.bottom_right = new int[pps.num_slice_groups_minus1 + 1];
             pps.run_length_minus1 = new int[pps.num_slice_groups_minus1 + 1];
             if (pps.slice_group_map_type == 0)
                 for (int iGroup = 0; iGroup <= pps.num_slice_groups_minus1; iGroup++)
-                    pps.run_length_minus1[iGroup] = reader
-                            .readUE("PPS: run_length_minus1");
+                    pps.run_length_minus1[iGroup] = reader.readUE("PPS: run_length_minus1");
             else if (pps.slice_group_map_type == 2)
                 for (int iGroup = 0; iGroup < pps.num_slice_groups_minus1; iGroup++) {
                     pps.top_left[iGroup] = reader.readUE("PPS: top_left");
-                    pps.bottom_right[iGroup] = reader
-                            .readUE("PPS: bottom_right");
+                    pps.bottom_right[iGroup] = reader.readUE("PPS: bottom_right");
                 }
             else if (pps.slice_group_map_type == 3
                     || pps.slice_group_map_type == 4
                     || pps.slice_group_map_type == 5) {
-                pps.slice_group_change_direction_flag = reader
-                        .readBool("PPS: slice_group_change_direction_flag");
-                pps.slice_group_change_rate_minus1 = reader
-                        .readUE("PPS: slice_group_change_rate_minus1");
+                pps.slice_group_change_direction_flag = reader.readBool("PPS: slice_group_change_direction_flag");
+                pps.slice_group_change_rate_minus1 = reader.readUE("PPS: slice_group_change_rate_minus1");
             } else if (pps.slice_group_map_type == 6) {
                 int NumberBitsPerSliceGroupId;
                 if (pps.num_slice_groups_minus1 + 1 > 4)
@@ -126,73 +117,52 @@ public class PictureParameterSet extends BitstreamElement {
                     NumberBitsPerSliceGroupId = 2;
                 else
                     NumberBitsPerSliceGroupId = 1;
-                int pic_size_in_map_units_minus1 = reader
-                        .readUE("PPS: pic_size_in_map_units_minus1");
+                int pic_size_in_map_units_minus1 = reader.readUE("PPS: pic_size_in_map_units_minus1");
                 pps.slice_group_id = new int[pic_size_in_map_units_minus1 + 1];
                 for (int i = 0; i <= pic_size_in_map_units_minus1; i++) {
-                    pps.slice_group_id[i] = reader.readU(
-                            NumberBitsPerSliceGroupId, "PPS: slice_group_id ["
-                            + i + "]f");
+                    pps.slice_group_id[i] = reader.readU(NumberBitsPerSliceGroupId, "PPS: slice_group_id [" + i + "]f");
                 }
             }
         }
-        pps.num_ref_idx_l0_active_minus1 = reader
-                .readUE("PPS: num_ref_idx_l0_active_minus1");
-        pps.num_ref_idx_l1_active_minus1 = reader
-                .readUE("PPS: num_ref_idx_l1_active_minus1");
+        pps.num_ref_idx_l0_active_minus1 = reader.readUE("PPS: num_ref_idx_l0_active_minus1");
+        pps.num_ref_idx_l1_active_minus1 = reader.readUE("PPS: num_ref_idx_l1_active_minus1");
         pps.weighted_pred_flag = reader.readBool("PPS: weighted_pred_flag");
-        pps.weighted_bipred_idc = (int) reader.readNBit(2,
-                "PPS: weighted_bipred_idc");
+        pps.weighted_bipred_idc = (int) reader.readNBit(2, "PPS: weighted_bipred_idc");
         pps.pic_init_qp_minus26 = reader.readSE("PPS: pic_init_qp_minus26");
         pps.pic_init_qs_minus26 = reader.readSE("PPS: pic_init_qs_minus26");
-        pps.chroma_qp_index_offset = reader
-                .readSE("PPS: chroma_qp_index_offset");
-        pps.deblocking_filter_control_present_flag = reader
-                .readBool("PPS: deblocking_filter_control_present_flag");
-        pps.constrained_intra_pred_flag = reader
-                .readBool("PPS: constrained_intra_pred_flag");
-        pps.redundant_pic_cnt_present_flag = reader
-                .readBool("PPS: redundant_pic_cnt_present_flag");
+        pps.chroma_qp_index_offset = reader.readSE("PPS: chroma_qp_index_offset");
+        pps.deblocking_filter_control_present_flag = reader.readBool("PPS: deblocking_filter_control_present_flag");
+        pps.constrained_intra_pred_flag = reader.readBool("PPS: constrained_intra_pred_flag");
+        pps.redundant_pic_cnt_present_flag = reader.readBool("PPS: redundant_pic_cnt_present_flag");
         if (reader.moreRBSPData()) {
             pps.extended = new PictureParameterSet.PPSExt();
-            pps.extended.transform_8x8_mode_flag = reader
-                    .readBool("PPS: transform_8x8_mode_flag");
-            boolean pic_scaling_matrix_present_flag = reader
-                    .readBool("PPS: pic_scaling_matrix_present_flag");
+            pps.extended.transform_8x8_mode_flag = reader.readBool("PPS: transform_8x8_mode_flag");
+            boolean pic_scaling_matrix_present_flag = reader.readBool("PPS: pic_scaling_matrix_present_flag");
             if (pic_scaling_matrix_present_flag) {
-                for (int i = 0; i < 6 + 2 * (pps.extended.transform_8x8_mode_flag ? 1
-                        : 0); i++) {
-                    boolean pic_scaling_list_present_flag = reader
-                            .readBool("PPS: pic_scaling_list_present_flag");
+                for (int i = 0; i < 6 + 2 * (pps.extended.transform_8x8_mode_flag ? 1 : 0); i++) {
+                    boolean pic_scaling_list_present_flag = reader.readBool("PPS: pic_scaling_list_present_flag");
                     if (pic_scaling_list_present_flag) {
                         pps.extended.scalindMatrix.ScalingList4x4 = new ScalingList[8];
                         pps.extended.scalindMatrix.ScalingList8x8 = new ScalingList[8];
                         if (i < 6) {
-                            pps.extended.scalindMatrix.ScalingList4x4[i] = ScalingList
-                                    .read(reader, 16);
+                            pps.extended.scalindMatrix.ScalingList4x4[i] = ScalingList.read(reader, 16);
                         } else {
-                            pps.extended.scalindMatrix.ScalingList8x8[i - 6] = ScalingList
-                                    .read(reader, 64);
+                            pps.extended.scalindMatrix.ScalingList8x8[i - 6] = ScalingList.read(reader, 64);
                         }
                     }
                 }
             }
-            pps.extended.second_chroma_qp_index_offset = reader
-                    .readSE("PPS: second_chroma_qp_index_offset");
+            pps.extended.second_chroma_qp_index_offset = reader.readSE("PPS: second_chroma_qp_index_offset");
         }
-
         reader.readTrailingBits();
-
         return pps;
     }
 
     public void write(OutputStream out) throws IOException {
         CAVLCWriter writer = new CAVLCWriter(out);
-
         writer.writeUE(pic_parameter_set_id, "PPS: pic_parameter_set_id");
         writer.writeUE(seq_parameter_set_id, "PPS: seq_parameter_set_id");
-        writer.writeBool(entropy_coding_mode_flag,
-                "PPS: entropy_coding_mode_flag");
+        writer.writeBool(entropy_coding_mode_flag, "PPS: entropy_coding_mode_flag");
         writer.writeBool(pic_order_present_flag, "PPS: pic_order_present_flag");
         writer.writeUE(num_slice_groups_minus1, "PPS: num_slice_groups_minus1");
         if (num_slice_groups_minus1 > 0) {
@@ -209,12 +179,9 @@ public class PictureParameterSet extends BitstreamElement {
                     writer.writeUE(top_left[iGroup], "PPS: ");
                     writer.writeUE(bottom_right[iGroup], "PPS: ");
                 }
-            } else if (slice_group_map_type == 3 || slice_group_map_type == 4
-                    || slice_group_map_type == 5) {
-                writer.writeBool(slice_group_change_direction_flag,
-                        "PPS: slice_group_change_direction_flag");
-                writer.writeUE(slice_group_change_rate_minus1,
-                        "PPS: slice_group_change_rate_minus1");
+            } else if (slice_group_map_type == 3 || slice_group_map_type == 4 || slice_group_map_type == 5) {
+                writer.writeBool(slice_group_change_direction_flag, "PPS: slice_group_change_direction_flag");
+                writer.writeUE(slice_group_change_rate_minus1, "PPS: slice_group_change_rate_minus1");
             } else if (slice_group_map_type == 6) {
                 int NumberBitsPerSliceGroupId;
                 if (num_slice_groups_minus1 + 1 > 4)
@@ -229,54 +196,36 @@ public class PictureParameterSet extends BitstreamElement {
                 }
             }
         }
-        writer.writeUE(num_ref_idx_l0_active_minus1,
-                "PPS: num_ref_idx_l0_active_minus1");
-        writer.writeUE(num_ref_idx_l1_active_minus1,
-                "PPS: num_ref_idx_l1_active_minus1");
+        writer.writeUE(num_ref_idx_l0_active_minus1, "PPS: num_ref_idx_l0_active_minus1");
+        writer.writeUE(num_ref_idx_l1_active_minus1, "PPS: num_ref_idx_l1_active_minus1");
         writer.writeBool(weighted_pred_flag, "PPS: weighted_pred_flag");
         writer.writeNBit(weighted_bipred_idc, 2, "PPS: weighted_bipred_idc");
         writer.writeSE(pic_init_qp_minus26, "PPS: pic_init_qp_minus26");
         writer.writeSE(pic_init_qs_minus26, "PPS: pic_init_qs_minus26");
         writer.writeSE(chroma_qp_index_offset, "PPS: chroma_qp_index_offset");
-        writer.writeBool(deblocking_filter_control_present_flag,
-                "PPS: deblocking_filter_control_present_flag");
-        writer.writeBool(constrained_intra_pred_flag,
-                "PPS: constrained_intra_pred_flag");
-        writer.writeBool(redundant_pic_cnt_present_flag,
-                "PPS: redundant_pic_cnt_present_flag");
+        writer.writeBool(deblocking_filter_control_present_flag, "PPS: deblocking_filter_control_present_flag");
+        writer.writeBool(constrained_intra_pred_flag, "PPS: constrained_intra_pred_flag");
+        writer.writeBool(redundant_pic_cnt_present_flag, "PPS: redundant_pic_cnt_present_flag");
         if (extended != null) {
-            writer.writeBool(extended.transform_8x8_mode_flag,
-                    "PPS: transform_8x8_mode_flag");
-            writer.writeBool(extended.scalindMatrix != null,
-                    "PPS: scalindMatrix");
+            writer.writeBool(extended.transform_8x8_mode_flag, "PPS: transform_8x8_mode_flag");
+            writer.writeBool(extended.scalindMatrix != null, "PPS: scalindMatrix");
             if (extended.scalindMatrix != null) {
-                for (int i = 0; i < 6 + 2 * (extended.transform_8x8_mode_flag ? 1
-                        : 0); i++) {
+                for (int i = 0; i < 6 + 2 * (extended.transform_8x8_mode_flag ? 1 : 0); i++) {
                     if (i < 6) {
-                        writer
-                                .writeBool(
-                                        extended.scalindMatrix.ScalingList4x4[i] != null,
-                                        "PPS: ");
+                        writer.writeBool(extended.scalindMatrix.ScalingList4x4[i] != null, "PPS: ");
                         if (extended.scalindMatrix.ScalingList4x4[i] != null) {
-                            extended.scalindMatrix.ScalingList4x4[i]
-                                    .write(writer);
+                            extended.scalindMatrix.ScalingList4x4[i].write(writer);
                         }
-
                     } else {
-                        writer
-                                .writeBool(
-                                        extended.scalindMatrix.ScalingList8x8[i - 6] != null,
-                                        "PPS: ");
+                        writer.writeBool(extended.scalindMatrix.ScalingList8x8[i - 6] != null, "PPS: ");
                         if (extended.scalindMatrix.ScalingList8x8[i - 6] != null) {
-                            extended.scalindMatrix.ScalingList8x8[i - 6]
-                                    .write(writer);
+                            extended.scalindMatrix.ScalingList8x8[i - 6].write(writer);
                         }
                     }
                 }
             }
             writer.writeSE(extended.second_chroma_qp_index_offset, "PPS: ");
         }
-
         writer.writeTrailingBits();
     }
 
@@ -287,11 +236,9 @@ public class PictureParameterSet extends BitstreamElement {
         result = prime * result + Arrays.hashCode(bottom_right);
         result = prime * result + chroma_qp_index_offset;
         result = prime * result + (constrained_intra_pred_flag ? 1231 : 1237);
-        result = prime * result
-                + (deblocking_filter_control_present_flag ? 1231 : 1237);
+        result = prime * result + (deblocking_filter_control_present_flag ? 1231 : 1237);
         result = prime * result + (entropy_coding_mode_flag ? 1231 : 1237);
-        result = prime * result
-                + ((extended == null) ? 0 : extended.hashCode());
+        result = prime * result + ((extended == null) ? 0 : extended.hashCode());
         result = prime * result + num_ref_idx_l0_active_minus1;
         result = prime * result + num_ref_idx_l1_active_minus1;
         result = prime * result + num_slice_groups_minus1;
@@ -299,12 +246,10 @@ public class PictureParameterSet extends BitstreamElement {
         result = prime * result + pic_init_qs_minus26;
         result = prime * result + (pic_order_present_flag ? 1231 : 1237);
         result = prime * result + pic_parameter_set_id;
-        result = prime * result
-                + (redundant_pic_cnt_present_flag ? 1231 : 1237);
+        result = prime * result + (redundant_pic_cnt_present_flag ? 1231 : 1237);
         result = prime * result + Arrays.hashCode(run_length_minus1);
         result = prime * result + seq_parameter_set_id;
-        result = prime * result
-                + (slice_group_change_direction_flag ? 1231 : 1237);
+        result = prime * result + (slice_group_change_direction_flag ? 1231 : 1237);
         result = prime * result + slice_group_change_rate_minus1;
         result = prime * result + Arrays.hashCode(slice_group_id);
         result = prime * result + slice_group_map_type;
@@ -403,4 +348,5 @@ public class PictureParameterSet extends BitstreamElement {
                 ",\n       extended=" + extended +
                 '}';
     }
+
 }

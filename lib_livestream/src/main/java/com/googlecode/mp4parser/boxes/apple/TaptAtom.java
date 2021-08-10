@@ -12,5 +12,4 @@ public class TaptAtom extends AbstractContainerBox {
         super(TYPE);
     }
 
-
 }

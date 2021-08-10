@@ -16,8 +16,6 @@
 
 package com.googlecode.mp4parser.boxes.mp4.samplegrouping;
 
-import com.coremedia.iso.IsoTypeReader;
-
 import java.nio.ByteBuffer;
 
 /**
@@ -27,9 +25,9 @@ import java.nio.ByteBuffer;
  *
  */
 public class VisualRandomAccessEntry extends GroupEntry {
-    public static final String TYPE = "rap ";
     private boolean numLeadingSamplesKnown;
     private short numLeadingSamples;
+    public static final String TYPE = "rap ";
 
     public boolean isNumLeadingSamplesKnown() {
         return numLeadingSamplesKnown;
@@ -66,12 +64,9 @@ public class VisualRandomAccessEntry extends GroupEntry {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         VisualRandomAccessEntry that = (VisualRandomAccessEntry) o;
-
         if (numLeadingSamples != that.numLeadingSamples) return false;
         if (numLeadingSamplesKnown != that.numLeadingSamplesKnown) return false;
-
         return true;
     }
 
@@ -91,4 +86,5 @@ public class VisualRandomAccessEntry extends GroupEntry {
         sb.append('}');
         return sb.toString();
     }
+
 }

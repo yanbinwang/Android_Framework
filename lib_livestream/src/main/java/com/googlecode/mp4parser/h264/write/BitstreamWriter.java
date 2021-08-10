@@ -31,10 +31,9 @@ import java.io.OutputStream;
  * @author Stanislav Vitvitskiy
  */
 public class BitstreamWriter {
-
-    private final OutputStream os;
-    private int[] curByte = new int[8];
     private int curBit;
+    private final OutputStream os;
+    private final int[] curByte = new int[8];
 
     public BitstreamWriter(OutputStream out) {
         this.os = out;
@@ -42,7 +41,7 @@ public class BitstreamWriter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see ua.org.jplayer.javcodec.h264.H264BitOutputStream#flush()
      */
     public void flush() throws IOException {
@@ -62,7 +61,7 @@ public class BitstreamWriter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see ua.org.jplayer.javcodec.h264.H264BitOutputStream#write1Bit(int)
      */
     public void write1Bit(int value) throws IOException {
@@ -76,7 +75,7 @@ public class BitstreamWriter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see ua.org.jplayer.javcodec.h264.H264BitOutputStream#writeNBit(long,
      * int)
      */
@@ -88,7 +87,7 @@ public class BitstreamWriter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * ua.org.jplayer.javcodec.h264.H264BitOutputStream#writeRemainingZero()
      */
@@ -98,11 +97,11 @@ public class BitstreamWriter {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see ua.org.jplayer.javcodec.h264.H264BitOutputStream#writeByte(int)
      */
     public void writeByte(int b) throws IOException {
         os.write(b);
-
     }
+
 }

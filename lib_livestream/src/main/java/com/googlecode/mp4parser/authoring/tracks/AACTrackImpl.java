@@ -15,24 +15,49 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SoundMediaHeaderBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.sampleentry.AudioSampleEntry;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
-import com.googlecode.mp4parser.boxes.AC3SpecificBox;
 import com.googlecode.mp4parser.boxes.mp4.ESDescriptorBox;
-import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.*;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.AudioSpecificConfig;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.BitReaderBuffer;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.DecoderConfigDescriptor;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.ESDescriptor;
+import com.googlecode.mp4parser.boxes.mp4.objectdescriptors.SLConfigDescriptor;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
-/**
- */
 public class AACTrackImpl extends AbstractTrack {
-    public static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<Integer, Integer>();
+    int samplerate;
+    int bitrate;
+    int channelCount;
+    int channelconfig;
+    int bufferSizeDB;
+    long maxBitRate;
+    long avgBitRate;
+    boolean readSamples = false;
+    private BufferedInputStream inputStream;
+    private List<ByteBuffer> samples;
+    private String lang = "und";
+    List<TimeToSampleBox.Entry> stts;
+    SampleDescriptionBox sampleDescriptionBox;
+    TrackMetaData trackMetaData = new TrackMetaData();
+    public static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<>();
 
     static {
         samplingFrequencyIndexMap.put(96000, 0);
@@ -61,52 +86,30 @@ public class AACTrackImpl extends AbstractTrack {
         samplingFrequencyIndexMap.put(0xb, 8000);
     }
 
-    TrackMetaData trackMetaData = new TrackMetaData();
-    SampleDescriptionBox sampleDescriptionBox;
-
-    int samplerate;
-    int bitrate;
-    int channelCount;
-    int channelconfig;
-
-    int bufferSizeDB;
-    long maxBitRate;
-    long avgBitRate;
-
-    private BufferedInputStream inputStream;
-    private List<ByteBuffer> samples;
-    boolean readSamples = false;
-    List<TimeToSampleBox.Entry> stts;
-    private String lang = "und";
-
-
     public AACTrackImpl(InputStream inputStream, String lang) throws IOException {
         this.lang = lang;
         parse(inputStream);
-     }
+    }
 
     public AACTrackImpl(InputStream inputStream) throws IOException {
         parse(inputStream);
-     }
+    }
 
     private void parse(InputStream inputStream) throws IOException {
         this.inputStream = new BufferedInputStream(inputStream);
-        stts = new LinkedList<TimeToSampleBox.Entry>();
-
+        stts = new LinkedList<>();
         if (!readVariables()) {
             throw new IOException();
         }
-
-        samples = new LinkedList<ByteBuffer>();
+        samples = new LinkedList<>();
         if (!readSamples()) {
             throw new IOException();
         }
 
-        double packetsPerSecond = (double)samplerate / 1024.0;
+        double packetsPerSecond = (double) samplerate / 1024.0;
         double duration = samples.size() / packetsPerSecond;
-
         long dataSize = 0;
-        LinkedList<Integer> queue = new LinkedList<Integer>();
+        LinkedList<Integer> queue = new LinkedList<>();
         for (int i = 0; i < samples.size(); i++) {
             int size = samples.get(i).capacity();
             dataSize += size;
@@ -116,27 +119,24 @@ public class AACTrackImpl extends AbstractTrack {
             }
             if (queue.size() == (int) packetsPerSecond) {
                 int currSize = 0;
-                for (int j = 0 ; j < queue.size(); j++) {
+                for (int j = 0; j < queue.size(); j++) {
                     currSize += queue.get(j);
                 }
                 double currBitrate = 8.0 * currSize / queue.size() * packetsPerSecond;
                 if (currBitrate > maxBitRate) {
-                    maxBitRate = (int)currBitrate;
+                    maxBitRate = (int) currBitrate;
                 }
             }
         }
 
         avgBitRate = (int) (8 * dataSize / duration);
-
         bufferSizeDB = 1536; /* TODO: Calcultate this somehow! */
-
         sampleDescriptionBox = new SampleDescriptionBox();
         AudioSampleEntry audioSampleEntry = new AudioSampleEntry("mp4a");
         audioSampleEntry.setChannelCount(2);
         audioSampleEntry.setSampleRate(samplerate);
         audioSampleEntry.setDataReferenceIndex(1);
         audioSampleEntry.setSampleSize(16);
-
 
         ESDescriptorBox esds = new ESDescriptorBox();
         ESDescriptor descriptor = new ESDescriptor();
@@ -158,7 +158,6 @@ public class AACTrackImpl extends AbstractTrack {
         audioSpecificConfig.setSamplingFrequencyIndex(samplingFrequencyIndexMap.get(samplerate));
         audioSpecificConfig.setChannelConfiguration(channelconfig);
         decoderConfigDescriptor.setAudioSpecificInfo(audioSpecificConfig);
-
         descriptor.setDecoderConfigDescriptor(decoderConfigDescriptor);
 
         ByteBuffer data = descriptor.serialize();
@@ -235,7 +234,6 @@ public class AACTrackImpl extends AbstractTrack {
         int original = brb.readBits(1);
         int home = brb.readBits(1);
         int emphasis = brb.readBits(2);
-
         return true;
     }
 
@@ -243,7 +241,6 @@ public class AACTrackImpl extends AbstractTrack {
         if (readSamples) {
             return true;
         }
-
         readSamples = true;
         byte[] header = new byte[15];
         boolean ret = false;
@@ -288,5 +285,5 @@ public class AACTrackImpl extends AbstractTrack {
                 ", channelconfig=" + channelconfig +
                 '}';
     }
-}
 
+}

@@ -8,10 +8,9 @@ import java.nio.ByteBuffer;
  * Most stupid box of the world. Encapsulates actual data within
  */
 public final class AppleDataBox extends AbstractFullBox {
-    public static final String TYPE = "data";
-
-    private byte[] fourBytes = new byte[4];
     private byte[] data;
+    private byte[] fourBytes = new byte[4];
+    public static final String TYPE = "data";
 
     private static AppleDataBox getEmpty() {
         AppleDataBox appleDataBox = new AppleDataBox();
@@ -74,7 +73,6 @@ public final class AppleDataBox extends AbstractFullBox {
         content.get(data);
     }
 
-
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
@@ -89,4 +87,5 @@ public final class AppleDataBox extends AbstractFullBox {
     public byte[] getData() {
         return data;
     }
+
 }

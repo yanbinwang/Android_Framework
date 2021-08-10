@@ -1,18 +1,18 @@
 package com.coremedia.iso.boxes;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 
 import java.nio.ByteBuffer;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 /**
  * Abstract Chunk Offset Box
  */
 public class ChunkOffset64BitBox extends ChunkOffsetBox {
-    public static final String TYPE = "co64";
     private long[] chunkOffsets;
+    public static final String TYPE = "co64";
 
     public ChunkOffset64BitBox() {
         super(TYPE);
@@ -46,6 +46,5 @@ public class ChunkOffset64BitBox extends ChunkOffsetBox {
             IsoTypeWriter.writeUInt64(byteBuffer, chunkOffset);
         }
     }
-
 
 }

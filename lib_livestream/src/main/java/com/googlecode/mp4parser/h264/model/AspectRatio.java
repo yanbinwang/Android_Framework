@@ -28,10 +28,8 @@ package com.googlecode.mp4parser.h264.model;
  * @author Stanislav Vitvitskiy
  */
 public class AspectRatio {
-
+    private final int value;
     public static final AspectRatio Extended_SAR = new AspectRatio(255);
-
-    private int value;
 
     private AspectRatio(int value) {
         this.value = value;
@@ -47,4 +45,5 @@ public class AspectRatio {
     public int getValue() {
         return value;
     }
+
 }

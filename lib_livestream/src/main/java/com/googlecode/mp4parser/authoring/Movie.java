@@ -18,11 +18,8 @@ package com.googlecode.mp4parser.authoring;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- */
 public class Movie {
-    List<Track> tracks = new LinkedList<Track>();
+    List<Track> tracks = new LinkedList<>();
 
     public List<Track> getTracks() {
         return tracks;
@@ -42,14 +39,12 @@ public class Movie {
         tracks.add(nuTrack);
     }
 
-
     @Override
     public String toString() {
         String s = "Movie{ ";
         for (Track track : tracks) {
             s += "track_" + track.getTrackMetaData().getTrackId() + " (" + track.getHandler() + ") ";
         }
-
         s += '}';
         return s;
     }
@@ -62,7 +57,6 @@ public class Movie {
         return ++nextTrackId;
     }
 
-
     public Track getTrackByTrackId(long trackId) {
         for (Track track : tracks) {
             if (track.getTrackMetaData().getTrackId() == trackId) {
@@ -71,7 +65,6 @@ public class Movie {
         }
         return null;
     }
-
 
     public long getTimescale() {
         long timescale = this.getTracks().iterator().next().getTrackMetaData().getTimescale();

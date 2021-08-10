@@ -26,6 +26,7 @@ import java.io.LineNumberReader;
  * Parses a .srt file and creates a Track for it.
  */
 public class SrtParser {
+
     public static TextTrackImpl parse(InputStream is) throws IOException {
         LineNumberReader r = new LineNumberReader(new InputStreamReader(is, "UTF-8"));
         TextTrackImpl track = new TextTrackImpl();
@@ -37,12 +38,9 @@ public class SrtParser {
             while (!((s = r.readLine()) == null || s.trim().equals(""))) {
                 lineString += s + "\n";
             }
-
             long startTime = parse(timeString.split("-->")[0]);
             long endTime = parse(timeString.split("-->")[1]);
-
             track.getSubs().add(new TextTrackImpl.Line(startTime, endTime, lineString));
-
         }
         return track;
     }
@@ -52,8 +50,7 @@ public class SrtParser {
         long minutes = Long.parseLong(in.split(":")[1].trim());
         long seconds = Long.parseLong(in.split(":")[2].split(",")[0].trim());
         long millies = Long.parseLong(in.split(":")[2].split(",")[1].trim());
-
         return hours * 60 * 60 * 1000 + minutes * 60 * 1000 + seconds * 1000 + millies;
-
     }
+
 }

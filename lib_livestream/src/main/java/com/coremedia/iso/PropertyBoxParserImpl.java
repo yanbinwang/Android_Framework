@@ -15,8 +15,8 @@
  */
 package com.coremedia.iso;
 
-import com.googlecode.mp4parser.AbstractBox;
 import com.coremedia.iso.boxes.Box;
+import com.googlecode.mp4parser.AbstractBox;
 
 import java.io.BufferedInputStream;
 import java.io.IOException;
@@ -99,7 +99,6 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
             Class[] constructorArgsClazz = new Class[param.length];
             Object[] constructorArgs = new Object[param.length];
             for (int i = 0; i < param.length; i++) {
-
                 if ("userType".equals(param[i])) {
                     constructorArgs[i] = userType;
                     constructorArgsClazz[i] = byte[].class;
@@ -112,8 +111,6 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
                 } else {
                     throw new InternalError("No such param: " + param[i]);
                 }
-
-
             }
             Constructor<AbstractBox> constructorObject;
             try {
@@ -122,7 +119,6 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
                 } else {
                     constructorObject = clazz.getConstructor();
                 }
-
                 return constructorObject.newInstance(constructorArgs);
             } catch (NoSuchMethodException e) {
                 throw new RuntimeException(e);
@@ -133,19 +129,17 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             }
-
-
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
     }
 
     private class FourCcToBox {
-        private String type;
-        private byte[] userType;
-        private String parent;
         private String clazzName;
         private String[] param;
+        private final byte[] userType;
+        private final String type;
+        private final String parent;
 
         public FourCcToBox(String type, byte[] userType, String parent) {
             this.type = type;
@@ -196,4 +190,5 @@ public class PropertyBoxParserImpl extends AbstractBoxParser {
             return this;
         }
     }
+
 }

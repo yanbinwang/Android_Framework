@@ -6,11 +6,9 @@ package com.coremedia.iso.boxes.apple;
 public class AppleAlbumArtistBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "aART";
 
-
     public AppleAlbumArtistBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getStringAppleDataBox();
     }
-
 
 }

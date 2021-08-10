@@ -36,9 +36,8 @@ import java.util.List;
  * }
  */
 public class SampleDependencyTypeBox extends AbstractFullBox {
+    private List<Entry> entries = new ArrayList<>();
     public static final String TYPE = "sdtp";
-
-    private List<Entry> entries = new ArrayList<Entry>();
 
     public static class Entry {
 
@@ -47,7 +46,6 @@ public class SampleDependencyTypeBox extends AbstractFullBox {
         }
 
         private int value;
-
 
         public int getReserved() {
             return (value >> 6) & 0x03;
@@ -133,4 +131,5 @@ public class SampleDependencyTypeBox extends AbstractFullBox {
         sb.append('}');
         return sb.toString();
     }
+
 }

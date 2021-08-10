@@ -28,6 +28,7 @@ import java.util.List;
  * Shortcut to build a movie from an MP4 file.
  */
 public class MovieCreator {
+
     public static Movie build(ReadableByteChannel channel) throws IOException {
         IsoFile isoFile = new IsoFile(channel);
         Movie m = new Movie();
@@ -37,4 +38,5 @@ public class MovieCreator {
         }
         return m;
     }
+
 }

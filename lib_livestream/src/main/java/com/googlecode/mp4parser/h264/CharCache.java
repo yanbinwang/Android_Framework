@@ -21,8 +21,8 @@ OR OTHER DEALINGS IN THE SOFTWARE.
 package com.googlecode.mp4parser.h264;
 
 public class CharCache {
-    private char[] cache;
     private int pos;
+    private final char[] cache;
 
     public CharCache(int capacity) {
         cache = new char[capacity];
@@ -54,4 +54,5 @@ public class CharCache {
     public int length() {
         return pos;
     }
+
 }

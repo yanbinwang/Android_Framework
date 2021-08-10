@@ -25,24 +25,19 @@ public final class IsoTypeWriter {
 
     public static void writeUInt32(ByteBuffer bb, long u) {
         bb.putInt((int) u);
-
     }
 
     public static void writeUInt32BE(ByteBuffer bb, long u) {
         assert u >= 0 && u <= 1L << 32 : "The given long is not in the range of uint32 (" + u + ")";
         writeUInt16BE(bb, (int) u & 0xFFFF);
         writeUInt16BE(bb, (int) ((u >> 16) & 0xFFFF));
-
     }
-
 
     public static void writeUInt24(ByteBuffer bb, int i) {
         i = i & 0xFFFFFF;
         writeUInt16(bb, i >> 8);
         writeUInt8(bb, i);
-
     }
-
 
     public static void writeUInt16(ByteBuffer bb, int i) {
         i = i & 0xFFFF;
@@ -60,7 +55,6 @@ public final class IsoTypeWriter {
         i = i & 0xFF;
         bb.put((byte) i);
     }
-
 
     public static void writeFixedPoint1616(ByteBuffer bb, double v) {
         int result = (int) (v * 65536);
@@ -96,8 +90,8 @@ public final class IsoTypeWriter {
     }
 
     public static void writeUtf8String(ByteBuffer bb, String string) {
-
         bb.put(Utf8.convert(string));
         writeUInt8(bb, 0);
     }
+
 }

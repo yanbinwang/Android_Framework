@@ -6,12 +6,10 @@ package com.coremedia.iso.boxes.apple;
 public final class AppleTempBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "tmpo";
 
-
     public AppleTempBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getUint16AppleDataBox();
     }
-
 
     public int getTempo() {
         return appleDataBox.getData()[1];
@@ -25,4 +23,5 @@ public final class AppleTempBox extends AbstractAppleMetaDataBox {
         appleDataBox.setData(new byte[]{0, (byte) (tempo & 0xFF)});
 
     }
+
 }

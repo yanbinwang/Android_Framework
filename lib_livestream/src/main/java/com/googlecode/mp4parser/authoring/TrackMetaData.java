@@ -23,18 +23,16 @@ import java.util.Date;
  *
  */
 public class TrackMetaData implements Cloneable {
-    private String language;
+    private int group = 0;
     private long timescale;
-    private Date modificationTime = new Date();
-    private Date creationTime = new Date();
+    private long trackId = 1; // zero is not allowed
+    private float volume;
     private double width;
     private double height;
-    private float volume;
-    private long trackId = 1; // zero is not allowed
-    private int group = 0;
+    private String language;
+    private Date modificationTime = new Date();
+    private Date creationTime = new Date();
     private Matrix matrix = Matrix.ROTATE_0;
-
-
     /**
      * specifies the front-to-back ordering of video tracks; tracks with lower
      * numbers are closer to the viewer. 0 is the normal value, and -1 would be

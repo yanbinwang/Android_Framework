@@ -6,11 +6,9 @@ package com.coremedia.iso.boxes.apple;
 public final class AppleTrackNumberBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "trkn";
 
-
     public AppleTrackNumberBox() {
         super(TYPE);
     }
-
 
     /**
      * @param track the actual track number
@@ -43,6 +41,5 @@ public final class AppleTrackNumberBox extends AbstractAppleMetaDataBox {
         content[3] = trackNumber;
         appleDataBox.setData(content);
     }
-
 
 }

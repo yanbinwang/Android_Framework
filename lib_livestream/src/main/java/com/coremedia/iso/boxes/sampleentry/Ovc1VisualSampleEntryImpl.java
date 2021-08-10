@@ -10,11 +10,9 @@ public class Ovc1VisualSampleEntryImpl extends SampleEntry {
     private byte[] vc1Content;
     public static final String TYPE = "ovc1";
 
-
     @Override
     protected long getContentSize() {
         long size = 8;
-
         for (Box box : boxes) {
             size += box.getSize();
         }
@@ -27,7 +25,6 @@ public class Ovc1VisualSampleEntryImpl extends SampleEntry {
         _parseReservedAndDataReferenceIndex(content);
         vc1Content = new byte[content.remaining()];
         content.get(vc1Content);
-
     }
 
     @Override
@@ -36,7 +33,6 @@ public class Ovc1VisualSampleEntryImpl extends SampleEntry {
         IsoTypeWriter.writeUInt16(byteBuffer, getDataReferenceIndex());
         byteBuffer.put(vc1Content);
     }
-
 
     protected Ovc1VisualSampleEntryImpl() {
         super(TYPE);

@@ -10,8 +10,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class ProgressiveDownloadInformationBox extends AbstractFullBox {
-
-
     List<Entry> entries = Collections.emptyList();
 
     public ProgressiveDownloadInformationBox() {
@@ -49,7 +47,6 @@ public class ProgressiveDownloadInformationBox extends AbstractFullBox {
             entries.add(entry);
         }
     }
-
 
     public static class Entry {
         long rate;

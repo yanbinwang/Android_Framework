@@ -12,5 +12,4 @@ public final class AppleWaveBox extends AbstractContainerBox {
         super(TYPE);
     }
 
-
 }

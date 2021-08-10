@@ -60,30 +60,24 @@ ExtensionDescriptor extDescr[0 .. 255];
  */
 @Descriptor(tags = {0x03})
 public class ESDescriptor extends BaseDescriptor {
-    private static Logger log = Logger.getLogger(ESDescriptor.class.getName());
-
     int esId;
     int streamDependenceFlag;
     int URLFlag;
     int oCRstreamFlag;
     int streamPriority;
-
-
     int URLLength = 0;
-    String URLString;
     int remoteODFlag;
-
     int dependsOnEsId;
     int oCREsId;
-
+    String URLString;
     DecoderConfigDescriptor decoderConfigDescriptor;
     SLConfigDescriptor slConfigDescriptor;
-    List<BaseDescriptor> otherDescriptors = new ArrayList<BaseDescriptor>();
+    List<BaseDescriptor> otherDescriptors = new ArrayList<>();
+    private static final Logger log = Logger.getLogger(ESDescriptor.class.getName());
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
         esId = IsoTypeReader.readUInt16(bb);
-
         int data = IsoTypeReader.readUInt8(bb);
         streamDependenceFlag = data >>> 7;
         URLFlag = (data >>> 6) & 0x1;
@@ -102,7 +96,6 @@ public class ESDescriptor extends BaseDescriptor {
         }
 
         int baseSize = 1 /*tag*/ + getSizeBytes() + 2 + 1 + (streamDependenceFlag == 1 ? 2 : 0) + (URLFlag == 1 ? 1 + URLLength : 0) + (oCRstreamFlag == 1 ? 2 : 0);
-
         int begin = bb.position();
         if (getSize() > baseSize + 2) {
             BaseDescriptor descriptor = ObjectDescriptorFactory.createFrom(-1, bb);
@@ -154,6 +147,7 @@ public class ESDescriptor extends BaseDescriptor {
             otherDescriptors.add(descriptor);
         }
     }
+
     public int serializedSize() {
         int out = 5;
         if (streamDependenceFlag > 0) {
@@ -165,12 +159,9 @@ public class ESDescriptor extends BaseDescriptor {
         if (oCRstreamFlag > 0) {
             out += 2;
         }
-
         out += decoderConfigDescriptor.serializedSize();
         out += slConfigDescriptor.serializedSize();
-
         // Doesn't handle other descriptors yet
-
         return out;
     }
 
@@ -191,14 +182,11 @@ public class ESDescriptor extends BaseDescriptor {
         if (oCRstreamFlag > 0) {
             IsoTypeWriter.writeUInt16(out, oCREsId);
         }
-
         ByteBuffer dec = decoderConfigDescriptor.serialize();
         ByteBuffer sl = slConfigDescriptor.serialize();
         out.put(dec.array());
         out.put(sl.array());
-
         // Doesn't handle other descriptors yet
-
         return out;
     }
 
@@ -333,9 +321,7 @@ public class ESDescriptor extends BaseDescriptor {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         ESDescriptor that = (ESDescriptor) o;
-
         if (URLFlag != that.URLFlag) return false;
         if (URLLength != that.URLLength) return false;
         if (dependsOnEsId != that.dependsOnEsId) return false;
@@ -345,14 +331,14 @@ public class ESDescriptor extends BaseDescriptor {
         if (remoteODFlag != that.remoteODFlag) return false;
         if (streamDependenceFlag != that.streamDependenceFlag) return false;
         if (streamPriority != that.streamPriority) return false;
-        if (URLString != null ? !URLString.equals(that.URLString) : that.URLString != null) return false;
+        if (URLString != null ? !URLString.equals(that.URLString) : that.URLString != null)
+            return false;
         if (decoderConfigDescriptor != null ? !decoderConfigDescriptor.equals(that.decoderConfigDescriptor) : that.decoderConfigDescriptor != null)
             return false;
         if (otherDescriptors != null ? !otherDescriptors.equals(that.otherDescriptors) : that.otherDescriptors != null)
             return false;
         if (slConfigDescriptor != null ? !slConfigDescriptor.equals(that.slConfigDescriptor) : that.slConfigDescriptor != null)
             return false;
-
         return true;
     }
 
@@ -373,4 +359,5 @@ public class ESDescriptor extends BaseDescriptor {
         result = 31 * result + (otherDescriptors != null ? otherDescriptors.hashCode() : 0);
         return result;
     }
+
 }

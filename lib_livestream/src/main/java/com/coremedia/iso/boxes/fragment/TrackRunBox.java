@@ -16,6 +16,8 @@
 
 package com.coremedia.iso.boxes.fragment;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.coremedia.iso.boxes.MovieBox;
@@ -24,8 +26,6 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * aligned(8) class TrackRunBox
@@ -45,21 +45,20 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  */
 
 public class TrackRunBox extends AbstractFullBox {
-    public static final String TYPE = "trun";
     private int dataOffset;
     private SampleFlags firstSampleFlags;
-    private List<Entry> entries = new ArrayList<Entry>();
-
+    private List<Entry> entries = new ArrayList<>();
+    public static final String TYPE = "trun";
 
     public List<Entry> getEntries() {
         return entries;
     }
 
     public static class Entry {
+        private int sampleCompositionTimeOffset;
         private long sampleDuration;
         private long sampleSize;
         private SampleFlags sampleFlags;
-        private int sampleCompositionTimeOffset;
 
         public Entry() {
         }
@@ -141,7 +140,6 @@ public class TrackRunBox extends AbstractFullBox {
         if (movieBoxes.size() == 0) {
             return null;
         }
-
         final List<TrackExtendsBox> trexBoxes = movieBoxes.get(0).getBoxes(TrackExtendsBox.class, true);
         TrackExtendsBox trex = null;
         for (TrackExtendsBox aTrex : trexBoxes) {
@@ -159,14 +157,12 @@ public class TrackRunBox extends AbstractFullBox {
     protected long getContentSize() {
         long size = 8;
         int flags = getFlags();
-
         if ((flags & 0x1) == 0x1) { //dataOffsetPresent
             size += 4;
         }
         if ((flags & 0x4) == 0x4) { //firstSampleFlagsPresent
             size += 4;
         }
-
         long entrySize = 0;
         if ((flags & 0x100) == 0x100) { //sampleDurationPresent
             entrySize += 4;
@@ -188,14 +184,12 @@ public class TrackRunBox extends AbstractFullBox {
         writeVersionAndFlags(byteBuffer);
         IsoTypeWriter.writeUInt32(byteBuffer, entries.size());
         int flags = getFlags();
-
         if ((flags & 0x1) == 1) { //dataOffsetPresent
             IsoTypeWriter.writeUInt32(byteBuffer, dataOffset);
         }
         if ((flags & 0x4) == 0x4) { //firstSampleFlagsPresent
             firstSampleFlags.getContent(byteBuffer);
         }
-
         for (Entry entry : entries) {
             if ((flags & 0x100) == 0x100) { //sampleDurationPresent
                 IsoTypeWriter.writeUInt32(byteBuffer, entry.sampleDuration);
@@ -216,7 +210,6 @@ public class TrackRunBox extends AbstractFullBox {
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
         long sampleCount = IsoTypeReader.readUInt32(content);
-
         if ((getFlags() & 0x1) == 1) { //dataOffsetPresent
             dataOffset = l2i(IsoTypeReader.readUInt32(content));
         } else {
@@ -225,7 +218,6 @@ public class TrackRunBox extends AbstractFullBox {
         if ((getFlags() & 0x4) == 0x4) { //firstSampleFlagsPresent
             firstSampleFlags = new SampleFlags(content);
         }
-
         for (int i = 0; i < sampleCount; i++) {
             Entry entry = new Entry();
             if ((getFlags() & 0x100) == 0x100) { //sampleDurationPresent
@@ -242,7 +234,6 @@ public class TrackRunBox extends AbstractFullBox {
             }
             entries.add(entry);
         }
-
     }
 
     public long getSampleCount() {
@@ -256,7 +247,6 @@ public class TrackRunBox extends AbstractFullBox {
     public boolean isFirstSampleFlagsPresent() {
         return (getFlags() & 0x4) == 0x4;
     }
-
 
     public boolean isSampleSizePresent() {
         return (getFlags() & 0x200) == 0x200;
@@ -352,4 +342,5 @@ public class TrackRunBox extends AbstractFullBox {
     public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
+
 }

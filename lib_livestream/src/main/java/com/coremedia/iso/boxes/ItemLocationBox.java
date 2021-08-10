@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -23,7 +23,6 @@ import com.coremedia.iso.IsoTypeWriter;
 import com.coremedia.iso.IsoTypeWriterVariable;
 import com.googlecode.mp4parser.AbstractFullBox;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
@@ -62,8 +61,7 @@ public class ItemLocationBox extends AbstractFullBox {
     public int lengthSize = 8;
     public int baseOffsetSize = 8;
     public int indexSize = 0;
-    public List<Item> items = new LinkedList<Item>();
-
+    public List<Item> items = new LinkedList<>();
     public static final String TYPE = "iloc";
 
     public ItemLocationBox() {
@@ -78,7 +76,6 @@ public class ItemLocationBox extends AbstractFullBox {
         }
         return size;
     }
-
 
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
@@ -103,7 +100,6 @@ public class ItemLocationBox extends AbstractFullBox {
         lengthSize = tmp & 0xf;
         tmp = IsoTypeReader.readUInt8(content);
         baseOffsetSize = tmp >>> 4;
-
         if (getVersion() == 1) {
             indexSize = tmp & 0xf;
         }
@@ -112,7 +108,6 @@ public class ItemLocationBox extends AbstractFullBox {
             items.add(new Item(content));
         }
     }
-
 
     public int getOffsetSize() {
         return offsetSize;
@@ -154,7 +149,6 @@ public class ItemLocationBox extends AbstractFullBox {
         this.items = items;
     }
 
-
     public Item createItem(int itemId, int constructionMethod, int dataReferenceIndex, long baseOffset, List<Extent> extents) {
         return new Item(itemId, constructionMethod, dataReferenceIndex, baseOffset, extents);
     }
@@ -168,16 +162,14 @@ public class ItemLocationBox extends AbstractFullBox {
         public int constructionMethod;
         public int dataReferenceIndex;
         public long baseOffset;
-        public List<Extent> extents = new LinkedList<Extent>();
+        public List<Extent> extents = new LinkedList<>();
 
         public Item(ByteBuffer in) {
             itemId = IsoTypeReader.readUInt16(in);
-
             if (getVersion() == 1) {
                 int tmp = IsoTypeReader.readUInt16(in);
                 constructionMethod = tmp & 0xf;
             }
-
             dataReferenceIndex = IsoTypeReader.readUInt16(in);
             if (baseOffsetSize > 0) {
                 baseOffset = IsoTypeReaderVariable.read(in, baseOffsetSize);
@@ -185,8 +177,6 @@ public class ItemLocationBox extends AbstractFullBox {
                 baseOffset = 0;
             }
             int extentCount = IsoTypeReader.readUInt16(in);
-
-
             for (int i = 0; i < extentCount; i++) {
                 extents.add(new Extent(in));
             }
@@ -202,16 +192,12 @@ public class ItemLocationBox extends AbstractFullBox {
 
         public int getSize() {
             int size = 2;
-
             if (getVersion() == 1) {
                 size += 2;
             }
-
             size += 2;
             size += baseOffsetSize;
             size += 2;
-
-
             for (Extent extent : extents) {
                 size += extent.getSize();
             }
@@ -222,20 +208,16 @@ public class ItemLocationBox extends AbstractFullBox {
             this.baseOffset = baseOffset;
         }
 
-        public void getContent(ByteBuffer bb)  {
+        public void getContent(ByteBuffer bb) {
             IsoTypeWriter.writeUInt16(bb, itemId);
-
             if (getVersion() == 1) {
                 IsoTypeWriter.writeUInt16(bb, constructionMethod);
             }
-
-
             IsoTypeWriter.writeUInt16(bb, dataReferenceIndex);
             if (baseOffsetSize > 0) {
                 IsoTypeWriterVariable.write(baseOffset, bb, baseOffsetSize);
             }
             IsoTypeWriter.writeUInt16(bb, extents.size());
-
             for (Extent extent : extents) {
                 extent.getContent(bb);
             }
@@ -245,15 +227,13 @@ public class ItemLocationBox extends AbstractFullBox {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Item item = (Item) o;
-
             if (baseOffset != item.baseOffset) return false;
             if (constructionMethod != item.constructionMethod) return false;
             if (dataReferenceIndex != item.dataReferenceIndex) return false;
             if (itemId != item.itemId) return false;
-            if (extents != null ? !extents.equals(item.extents) : item.extents != null) return false;
-
+            if (extents != null ? !extents.equals(item.extents) : item.extents != null)
+                return false;
             return true;
         }
 
@@ -279,7 +259,6 @@ public class ItemLocationBox extends AbstractFullBox {
         }
     }
 
-
     public Extent createExtent(long extentOffset, long extentLength, long extentIndex) {
         return new Extent(extentOffset, extentLength, extentIndex);
     }
@@ -287,7 +266,6 @@ public class ItemLocationBox extends AbstractFullBox {
     Extent createExtent(ByteBuffer bb) {
         return new Extent(bb);
     }
-
 
     public class Extent {
         public long extentOffset;
@@ -300,7 +278,6 @@ public class ItemLocationBox extends AbstractFullBox {
             this.extentIndex = extentIndex;
         }
 
-
         public Extent(ByteBuffer in) {
             if ((getVersion() == 1) && indexSize > 0) {
                 extentIndex = IsoTypeReaderVariable.read(in, indexSize);
@@ -309,7 +286,7 @@ public class ItemLocationBox extends AbstractFullBox {
             extentLength = IsoTypeReaderVariable.read(in, lengthSize);
         }
 
-        public void getContent(ByteBuffer os)  {
+        public void getContent(ByteBuffer os) {
             if ((getVersion() == 1) && indexSize > 0) {
                 IsoTypeWriterVariable.write(extentIndex, os, indexSize);
             }
@@ -321,18 +298,14 @@ public class ItemLocationBox extends AbstractFullBox {
             return (indexSize > 0 ? indexSize : 0) + offsetSize + lengthSize;
         }
 
-
         @Override
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Extent extent = (Extent) o;
-
             if (extentIndex != extent.extentIndex) return false;
             if (extentLength != extent.extentLength) return false;
             if (extentOffset != extent.extentOffset) return false;
-
             return true;
         }
 
@@ -355,6 +328,5 @@ public class ItemLocationBox extends AbstractFullBox {
             return sb.toString();
         }
     }
-
 
 }

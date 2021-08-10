@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes.sampleentry;
@@ -19,9 +19,9 @@ package com.coremedia.iso.boxes.sampleentry;
 import com.coremedia.iso.BoxParser;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
-import com.googlecode.mp4parser.AbstractBox;
 import com.coremedia.iso.boxes.Box;
 import com.coremedia.iso.boxes.ContainerBox;
+import com.googlecode.mp4parser.AbstractBox;
 import com.googlecode.mp4parser.util.ByteBufferByteChannel;
 
 import java.io.ByteArrayOutputStream;
@@ -42,12 +42,9 @@ import java.util.List;
  * @see com.coremedia.iso.boxes.sampleentry.TextSampleEntry
  */
 public abstract class SampleEntry extends AbstractBox implements ContainerBox {
-
-
     private int dataReferenceIndex = 1;
-    protected List<Box> boxes = new LinkedList<Box>();
     private BoxParser boxParser;
-
+    protected List<Box> boxes = new LinkedList<>();
 
     protected SampleEntry(String type) {
         super(type);
@@ -90,7 +87,6 @@ public abstract class SampleEntry extends AbstractBox implements ContainerBox {
             if (clazz == boxe.getClass()) {
                 boxesToBeReturned.add((T) boxe);
             }
-
             if (recursive && boxe instanceof ContainerBox) {
                 boxesToBeReturned.addAll(((ContainerBox) boxe).getBoxes(clazz, recursive));
             }
@@ -109,9 +105,7 @@ public abstract class SampleEntry extends AbstractBox implements ContainerBox {
     public void parse(ReadableByteChannel readableByteChannel, ByteBuffer header, long contentSize, BoxParser boxParser) throws IOException {
         this.boxParser = boxParser;
         super.parse(readableByteChannel, header, contentSize, boxParser);
-
     }
-
 
     public void _parseReservedAndDataReferenceIndex(ByteBuffer content) {
         content.get(new byte[6]); // ignore 6 reserved bytes;
@@ -125,7 +119,6 @@ public abstract class SampleEntry extends AbstractBox implements ContainerBox {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-
         }
         setDeadBytes(content.slice());
     }

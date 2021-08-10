@@ -25,9 +25,9 @@ import java.nio.ByteBuffer;
  *
  */
 public class TemporalLevelEntry extends GroupEntry {
-    public static final String TYPE = "tele";
-    private boolean levelIndependentlyDecodable;
     private short reserved;
+    private boolean levelIndependentlyDecodable;
+    public static final String TYPE = "tele";
 
     public boolean isLevelIndependentlyDecodable() {
         return levelIndependentlyDecodable;
@@ -55,12 +55,9 @@ public class TemporalLevelEntry extends GroupEntry {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-
         TemporalLevelEntry that = (TemporalLevelEntry) o;
-
         if (levelIndependentlyDecodable != that.levelIndependentlyDecodable) return false;
         if (reserved != that.reserved) return false;
-
         return true;
     }
 
@@ -79,4 +76,5 @@ public class TemporalLevelEntry extends GroupEntry {
         sb.append('}');
         return sb.toString();
     }
+
 }

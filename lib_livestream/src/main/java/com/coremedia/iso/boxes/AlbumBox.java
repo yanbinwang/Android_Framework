@@ -30,11 +30,10 @@ import java.nio.ByteBuffer;
  * @see com.coremedia.iso.boxes.UserDataBox
  */
 public class AlbumBox extends AbstractFullBox {
-    public static final String TYPE = "albm";
-
+    private int trackNumber;
     private String language;
     private String albumTitle;
-    private int trackNumber;
+    public static final String TYPE = "albm";
 
     public AlbumBox() {
         super(TYPE);
@@ -80,7 +79,6 @@ public class AlbumBox extends AbstractFullBox {
         parseVersionAndFlags(content);
         language = IsoTypeReader.readIso639(content);
         albumTitle = IsoTypeReader.readString(content);
-
         if (content.remaining() > 0) {
             trackNumber = IsoTypeReader.readUInt8(content);
         } else {
@@ -109,4 +107,5 @@ public class AlbumBox extends AbstractFullBox {
         buffer.append("]");
         return buffer.toString();
     }
+
 }

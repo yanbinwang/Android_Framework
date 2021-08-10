@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -30,17 +30,15 @@ import java.nio.ByteBuffer;
  * PG13or FSK16.
  */
 public class RatingBox extends AbstractFullBox {
-    public static final String TYPE = "rtng";
-
     private String ratingEntity;
     private String ratingCriteria;
     private String language;
     private String ratingInfo;
+    public static final String TYPE = "rtng";
 
     public RatingBox() {
         super(TYPE);
     }
-
 
     public void setRatingEntity(String ratingEntity) {
         this.ratingEntity = ratingEntity;
@@ -98,7 +96,6 @@ public class RatingBox extends AbstractFullBox {
         ratingCriteria = IsoTypeReader.read4cc(content);
         language = IsoTypeReader.readIso639(content);
         ratingInfo = IsoTypeReader.readString(content);
-
     }
 
     @Override
@@ -121,4 +118,5 @@ public class RatingBox extends AbstractFullBox {
         buffer.append("]");
         return buffer.toString();
     }
+
 }

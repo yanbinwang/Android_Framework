@@ -30,6 +30,6 @@ public interface Mp4Builder {
      * @param movie data source
      * @return the freshly built IsoFile
      */
-    public IsoFile build(Movie movie);
+    IsoFile build(Movie movie);
 
 }

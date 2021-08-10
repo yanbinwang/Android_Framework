@@ -51,30 +51,24 @@ ExtensionDescriptor extDescr[0 .. 255];
 */
 //@Descriptor(tags = {0x02, 0x10})
 public class InitialObjectDescriptor extends ObjectDescriptorBase {
-    private int objectDescriptorId;
     int urlFlag;
-    int includeInlineProfileLevelFlag;
-
     int urlLength;
-    String urlString;
-
+    int includeInlineProfileLevelFlag;
     int oDProfileLevelIndication;
     int sceneProfileLevelIndication;
     int audioProfileLevelIndication;
     int visualProfileLevelIndication;
     int graphicsProfileLevelIndication;
-
-    List<ESDescriptor> esDescriptors = new ArrayList<ESDescriptor>();
-
-    List<ExtensionDescriptor> extensionDescriptors = new ArrayList<ExtensionDescriptor>();
-
-    List<BaseDescriptor> unknownDescriptors = new ArrayList<BaseDescriptor>();
+    private int objectDescriptorId;
+    String urlString;
+    List<ESDescriptor> esDescriptors = new ArrayList<>();
+    List<ExtensionDescriptor> extensionDescriptors = new ArrayList<>();
+    List<BaseDescriptor> unknownDescriptors = new ArrayList<>();
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
         int data = IsoTypeReader.readUInt16(bb);
         objectDescriptorId = (data & 0xFFC0) >> 6;
-
         urlFlag = (data & 0x3F) >> 5;
         includeInlineProfileLevelFlag = (data & 0x1F) >> 4;
 
@@ -91,7 +85,6 @@ public class InitialObjectDescriptor extends ObjectDescriptorBase {
             graphicsProfileLevelIndication = IsoTypeReader.readUInt8(bb);
 
             sizeLeft = sizeLeft - 5;
-
             if (sizeLeft > 2) {
                 final BaseDescriptor descriptor = ObjectDescriptorFactory.createFrom(-1, bb);
                 sizeLeft = sizeLeft - descriptor.getSize();
@@ -133,4 +126,5 @@ public class InitialObjectDescriptor extends ObjectDescriptorBase {
         sb.append('}');
         return sb.toString();
     }
+
 }

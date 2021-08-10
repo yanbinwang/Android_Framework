@@ -25,29 +25,22 @@ import java.nio.ByteBuffer;
  * Entry type for timed text samples defined in the timed text specification (ISO/IEC 14496-17).
  */
 public class QuicktimeTextSampleEntry extends SampleEntry {
-
-    public static final String TYPE = "text";
-
     int displayFlags;
     int textJustification;
-
     int backgroundR;
     int backgroundG;
     int backgroundB;
-
-    long defaultTextBox;
-    long reserved1;
-
-    short fontNumber;
-    short fontFace;
-    byte reserved2;
-    short reserved3;
-
     int foregroundR = 65535;
     int foregroundG = 65535;
     int foregroundB = 65535;
-
+    long defaultTextBox;
+    long reserved1;
+    short fontNumber;
+    short fontFace;
+    short reserved3;
+    byte reserved2;
     String fontName = "";
+    public static final String TYPE = "text";
 
     public QuicktimeTextSampleEntry() {
         super(TYPE);
@@ -56,7 +49,6 @@ public class QuicktimeTextSampleEntry extends SampleEntry {
     @Override
     public void _parseDetails(ByteBuffer content) {
         _parseReservedAndDataReferenceIndex(content);
-
         displayFlags = content.getInt();
         textJustification = content.getInt();
         backgroundR = IsoTypeReader.readUInt16(content);
@@ -82,11 +74,9 @@ public class QuicktimeTextSampleEntry extends SampleEntry {
         }
     }
 
-
     protected long getContentSize() {
         return 52 + (fontName != null ? fontName.length() : 0);
     }
-
 
     public int getDisplayFlags() {
         return displayFlags;
@@ -230,8 +220,6 @@ public class QuicktimeTextSampleEntry extends SampleEntry {
             IsoTypeWriter.writeUInt8(byteBuffer, fontName.length());
             byteBuffer.put(fontName.getBytes());
         }
-
     }
-
 
 }

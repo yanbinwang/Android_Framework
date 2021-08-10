@@ -28,8 +28,8 @@ import java.nio.ByteBuffer;
  * no recovery roll is needed.
  */
 public class RollRecoveryEntry extends GroupEntry {
-    public static final String TYPE = "roll";
     private short rollDistance;
+    public static final String TYPE = "roll";
 
     public short getRollDistance() {
         return rollDistance;
@@ -60,13 +60,10 @@ public class RollRecoveryEntry extends GroupEntry {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         RollRecoveryEntry entry = (RollRecoveryEntry) o;
-
         if (rollDistance != entry.rollDistance) {
             return false;
         }
-
         return true;
     }
 
@@ -74,4 +71,5 @@ public class RollRecoveryEntry extends GroupEntry {
     public int hashCode() {
         return (int) rollDistance;
     }
+
 }

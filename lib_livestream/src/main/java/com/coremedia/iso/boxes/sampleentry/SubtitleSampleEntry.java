@@ -13,14 +13,11 @@ import java.nio.ByteBuffer;
  * To change this template use File | Settings | File Templates.
  */
 public class SubtitleSampleEntry extends SampleEntry {
-
-    public static final String TYPE1 = "stpp";
-
-    public static final String TYPE_ENCRYPTED = ""; // This is not known!
-
     private String namespace;
     private String schemaLocation;
     private String imageMimeType;
+    public static final String TYPE1 = "stpp";
+    public static final String TYPE_ENCRYPTED = ""; // This is not known!
 
     public SubtitleSampleEntry(String type) {
         super(type);
@@ -72,5 +69,5 @@ public class SubtitleSampleEntry extends SampleEntry {
     public void setImageMimeType(String imageMimeType) {
         this.imageMimeType = imageMimeType;
     }
-}
 
+}

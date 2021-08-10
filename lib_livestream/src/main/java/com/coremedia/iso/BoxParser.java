@@ -28,4 +28,5 @@ public interface BoxParser {
     Class<? extends Box> getClassForFourCc(String type, byte[] userType, String parent);
 
     Box parseBox(ReadableByteChannel in, ContainerBox parent) throws IOException;
+
 }

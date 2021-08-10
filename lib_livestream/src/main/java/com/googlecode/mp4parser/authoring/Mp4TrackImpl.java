@@ -15,8 +15,25 @@
  */
 package com.googlecode.mp4parser.authoring;
 
-import com.coremedia.iso.boxes.*;
-import com.coremedia.iso.boxes.fragment.*;
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
+import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.MediaHeaderBox;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SampleTableBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
+import com.coremedia.iso.boxes.TrackBox;
+import com.coremedia.iso.boxes.TrackHeaderBox;
+import com.coremedia.iso.boxes.fragment.MovieExtendsBox;
+import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
+import com.coremedia.iso.boxes.fragment.SampleFlags;
+import com.coremedia.iso.boxes.fragment.TrackExtendsBox;
+import com.coremedia.iso.boxes.fragment.TrackFragmentBox;
+import com.coremedia.iso.boxes.fragment.TrackFragmentHeaderBox;
+import com.coremedia.iso.boxes.fragment.TrackRunBox;
 import com.coremedia.iso.boxes.mdat.SampleList;
 
 import java.nio.ByteBuffer;
@@ -24,21 +41,19 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 /**
  * Represents a single track of an MP4 file.
  */
 public class Mp4TrackImpl extends AbstractTrack {
-    private List<ByteBuffer> samples;
-    private SampleDescriptionBox sampleDescriptionBox;
-    private List<TimeToSampleBox.Entry> decodingTimeEntries;
-    private List<CompositionTimeToSample.Entry> compositionTimeEntries;
     private long[] syncSamples = new long[0];
-    private List<SampleDependencyTypeBox.Entry> sampleDependencies;
-    private TrackMetaData trackMetaData = new TrackMetaData();
-    private String handler;
-    private AbstractMediaHeaderBox mihd;
+    private final String handler;
+    private final List<ByteBuffer> samples;
+    private final List<TimeToSampleBox.Entry> decodingTimeEntries;
+    private final List<CompositionTimeToSample.Entry> compositionTimeEntries;
+    private final List<SampleDependencyTypeBox.Entry> sampleDependencies;
+    private final AbstractMediaHeaderBox mihd;
+    private final SampleDescriptionBox sampleDescriptionBox;
+    private final TrackMetaData trackMetaData = new TrackMetaData();
 
     public Mp4TrackImpl(TrackBox trackBox) {
         final long trackId = trackBox.getTrackHeaderBox().getTrackId();
@@ -47,10 +62,9 @@ public class Mp4TrackImpl extends AbstractTrack {
         handler = trackBox.getMediaBox().getHandlerBox().getHandlerType();
 
         mihd = trackBox.getMediaBox().getMediaInformationBox().getMediaHeaderBox();
-        decodingTimeEntries = new LinkedList<TimeToSampleBox.Entry>();
-        compositionTimeEntries = new LinkedList<CompositionTimeToSample.Entry>();
-        sampleDependencies = new LinkedList<SampleDependencyTypeBox.Entry>();
-
+        decodingTimeEntries = new LinkedList<>();
+        compositionTimeEntries = new LinkedList<>();
+        sampleDependencies = new LinkedList<>();
         decodingTimeEntries.addAll(stbl.getTimeToSampleBox().getEntries());
         if (stbl.getCompositionTimeToSample() != null) {
             compositionTimeEntries.addAll(stbl.getCompositionTimeToSample().getEntries());
@@ -62,7 +76,6 @@ public class Mp4TrackImpl extends AbstractTrack {
             syncSamples = stbl.getSyncSampleBox().getSampleNumber();
         }
 
-
         sampleDescriptionBox = stbl.getSampleDescriptionBox();
         final List<MovieExtendsBox> movieExtendsBoxes = trackBox.getParent().getBoxes(MovieExtendsBox.class);
         if (movieExtendsBoxes.size() > 0) {
@@ -70,8 +83,7 @@ public class Mp4TrackImpl extends AbstractTrack {
                 final List<TrackExtendsBox> trackExtendsBoxes = mvex.getBoxes(TrackExtendsBox.class);
                 for (TrackExtendsBox trex : trackExtendsBoxes) {
                     if (trex.getTrackId() == trackId) {
-                        List<Long> syncSampleList = new LinkedList<Long>();
-
+                        List<Long> syncSampleList = new LinkedList<>();
                         long sampleNumber = 1;
                         for (MovieFragmentBox movieFragmentBox : trackBox.getIsoFile().getBoxes(MovieFragmentBox.class)) {
                             List<TrackFragmentBox> trafs = movieFragmentBox.getBoxes(TrackFragmentBox.class);
@@ -83,8 +95,7 @@ public class Mp4TrackImpl extends AbstractTrack {
                                         boolean first = true;
                                         for (TrackRunBox.Entry entry : trun.getEntries()) {
                                             if (trun.isSampleDurationPresent()) {
-                                                if (decodingTimeEntries.size() == 0 ||
-                                                        decodingTimeEntries.get(decodingTimeEntries.size() - 1).getDelta() != entry.getSampleDuration()) {
+                                                if (decodingTimeEntries.size() == 0 || decodingTimeEntries.get(decodingTimeEntries.size() - 1).getDelta() != entry.getSampleDuration()) {
                                                     decodingTimeEntries.add(new TimeToSampleBox.Entry(1, entry.getSampleDuration()));
                                                 } else {
                                                     TimeToSampleBox.Entry e = decodingTimeEntries.get(decodingTimeEntries.size() - 1);
@@ -99,8 +110,7 @@ public class Mp4TrackImpl extends AbstractTrack {
                                             }
 
                                             if (trun.isSampleCompositionTimeOffsetPresent()) {
-                                                if (compositionTimeEntries.size() == 0 ||
-                                                        compositionTimeEntries.get(compositionTimeEntries.size() - 1).getOffset() != entry.getSampleCompositionTimeOffset()) {
+                                                if (compositionTimeEntries.size() == 0 || compositionTimeEntries.get(compositionTimeEntries.size() - 1).getOffset() != entry.getSampleCompositionTimeOffset()) {
                                                     compositionTimeEntries.add(new CompositionTimeToSample.Entry(1, l2i(entry.getSampleCompositionTimeOffset())));
                                                 } else {
                                                     CompositionTimeToSample.Entry e = compositionTimeEntries.get(compositionTimeEntries.size() - 1);
@@ -161,7 +171,6 @@ public class Mp4TrackImpl extends AbstractTrack {
         System.err.println(DateHelper.convert(mdhd.getModificationTime()));
         System.err.println(DateHelper.convert(DateHelper.convert(mdhd.getModificationTime())));
         System.err.println(DateHelper.convert(DateHelper.convert(DateHelper.convert(mdhd.getModificationTime()))));*/
-
         trackMetaData.setModificationTime(mdhd.getModificationTime());
         trackMetaData.setTimescale(mdhd.getTimescale());
         trackMetaData.setHeight(tkhd.getHeight());
@@ -173,7 +182,6 @@ public class Mp4TrackImpl extends AbstractTrack {
     public List<ByteBuffer> getSamples() {
         return samples;
     }
-
 
     public SampleDescriptionBox getSampleDescriptionBox() {
         return sampleDescriptionBox;
@@ -217,4 +225,5 @@ public class Mp4TrackImpl extends AbstractTrack {
                 "handler='" + handler + '\'' +
                 '}';
     }
+
 }

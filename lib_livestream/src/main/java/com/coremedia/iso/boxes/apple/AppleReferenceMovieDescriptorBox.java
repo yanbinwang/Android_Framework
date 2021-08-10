@@ -24,4 +24,5 @@ public class AppleReferenceMovieDescriptorBox extends AbstractContainerBox {
     public AppleReferenceMovieDescriptorBox() {
         super(TYPE);
     }
+
 }

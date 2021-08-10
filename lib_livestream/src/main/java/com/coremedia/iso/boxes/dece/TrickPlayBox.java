@@ -64,7 +64,6 @@ public class TrickPlayBox extends AbstractFullBox {
             value = (dependencyLevel & 0x3f) | value;
         }
 
-
         @Override
         public String toString() {
             final StringBuilder sb = new StringBuilder();
@@ -105,4 +104,5 @@ public class TrickPlayBox extends AbstractFullBox {
         sb.append('}');
         return sb.toString();
     }
+
 }

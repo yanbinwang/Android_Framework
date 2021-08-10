@@ -22,7 +22,10 @@ import com.coremedia.iso.boxes.VideoMediaHeaderBox;
 import com.coremedia.iso.boxes.fragment.MovieFragmentBox;
 import com.googlecode.mp4parser.authoring.Movie;
 import com.googlecode.mp4parser.authoring.Track;
-import com.googlecode.mp4parser.authoring.builder.*;
+import com.googlecode.mp4parser.authoring.builder.DefaultMp4Builder;
+import com.googlecode.mp4parser.authoring.builder.FragmentIntersectionFinder;
+import com.googlecode.mp4parser.authoring.builder.FragmentedMp4Builder;
+import com.googlecode.mp4parser.authoring.builder.SyncSampleIntersectFinderImpl;
 import com.googlecode.mp4parser.authoring.tracks.ChangeTimeScaleTrack;
 
 import java.io.File;
@@ -34,13 +37,12 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 
 public class FlatPackageWriterImpl implements PackageWriter {
-    private static Logger LOG = Logger.getLogger(FlatPackageWriterImpl.class.getName());
     long timeScale = 10000000;
-
-    private File outputDirectory;
-    private boolean debugOutput;
-    private FragmentedMp4Builder ismvBuilder;
     ManifestWriter manifestWriter;
+    private boolean debugOutput;
+    private File outputDirectory;
+    private FragmentedMp4Builder ismvBuilder;
+    private static final Logger LOG = Logger.getLogger(FlatPackageWriterImpl.class.getName());
 
     public FlatPackageWriterImpl() {
         ismvBuilder = new FragmentedMp4Builder();
@@ -53,6 +55,7 @@ public class FlatPackageWriterImpl implements PackageWriter {
      * Creates a factory for a smooth streaming package. A smooth streaming package is
      * a collection of files that can be served by a webserver as a smooth streaming
      * stream.
+     *
      * @param minFragmentDuration the smallest allowable duration of a fragment (0 == no restriction).
      */
     public FlatPackageWriterImpl(int minFragmentDuration) {
@@ -65,7 +68,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
     public void setOutputDirectory(File outputDirectory) {
         assert outputDirectory.isDirectory();
         this.outputDirectory = outputDirectory;
-
     }
 
     public void setDebugOutput(boolean debugOutput) {
@@ -89,7 +91,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
      * @throws IOException
      */
     public void write(Movie source) throws IOException {
-
         if (debugOutput) {
             outputDirectory.mkdirs();
             DefaultMp4Builder defaultMp4Builder = new DefaultMp4Builder();
@@ -118,7 +119,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
             allQualis.close();
         }
 
-
         for (Track track : movieWithAdjustedTimescale.getTracks()) {
             String bitrate = Long.toString(manifestWriter.getBitrate(track));
             long trackId = track.getTrackMetaData().getTrackId();
@@ -126,7 +126,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
             File mediaOutDir;
             if (track.getMediaHeaderBox() instanceof SoundMediaHeaderBox) {
                 mediaOutDir = new File(outputDirectory, "audio");
-
             } else if (track.getMediaHeaderBox() instanceof VideoMediaHeaderBox) {
                 mediaOutDir = new File(outputDirectory, "video");
             } else {
@@ -136,7 +135,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
             File bitRateOutputDir = new File(mediaOutDir, bitrate);
             bitRateOutputDir.mkdirs();
             LOG.finer("Created : " + bitRateOutputDir.getCanonicalPath());
-
             long[] fragmentTimes = manifestWriter.calculateFragmentDurations(track, movieWithAdjustedTimescale);
             long startTime = 0;
             int currentFragment = 0;
@@ -156,13 +154,11 @@ public class FlatPackageWriterImpl implements PackageWriter {
                         fc.close();
                     }
                 }
-
             }
         }
         FileWriter fw = new FileWriter(new File(outputDirectory, "Manifest"));
         fw.write(manifestWriter.getManifest(movieWithAdjustedTimescale));
         fw.close();
-
     }
 
     private Movie removeUnknownTracks(Movie source) {
@@ -177,7 +173,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
         return nuMovie;
     }
 
-
     /**
      * Returns a new <code>Movie</code> in that all tracks have the timescale 10000000. CTS & DTS are modified
      * in a way that even with more than one framerate the fragments exactly begin at the same time.
@@ -191,7 +186,6 @@ public class FlatPackageWriterImpl implements PackageWriter {
             nuMovie.addTrack(new ChangeTimeScaleTrack(track, timeScale, ismvBuilder.getFragmentIntersectionFinder().sampleNumbers(track, movie)));
         }
         return nuMovie;
-
     }
 
 }

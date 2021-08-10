@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -29,14 +29,12 @@ import java.util.Date;
  * considered as a whole.
  */
 public class MediaHeaderBox extends AbstractFullBox {
-    public static final String TYPE = "mdhd";
-
-
+    private long duration;
+    private long timescale;
+    private String language;
     private Date creationTime;
     private Date modificationTime;
-    private long timescale;
-    private long duration;
-    private String language;
+    public static final String TYPE = "mdhd";
 
     public MediaHeaderBox() {
         super(TYPE);
@@ -72,7 +70,6 @@ public class MediaHeaderBox extends AbstractFullBox {
         contentSize += 2;
         contentSize += 2;
         return contentSize;
-
     }
 
     public void setCreationTime(Date creationTime) {
@@ -113,7 +110,6 @@ public class MediaHeaderBox extends AbstractFullBox {
         IsoTypeReader.readUInt16(content);
     }
 
-
     public String toString() {
         StringBuilder result = new StringBuilder();
         result.append("MediaHeaderBox[");
@@ -146,4 +142,5 @@ public class MediaHeaderBox extends AbstractFullBox {
         IsoTypeWriter.writeIso639(byteBuffer, language);
         IsoTypeWriter.writeUInt16(byteBuffer, 0);
     }
+
 }

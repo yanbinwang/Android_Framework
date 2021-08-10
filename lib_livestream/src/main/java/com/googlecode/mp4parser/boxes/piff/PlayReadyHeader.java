@@ -1,13 +1,8 @@
 package com.googlecode.mp4parser.boxes.piff;
 
-import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
-import com.googlecode.mp4parser.util.Path;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -48,29 +43,22 @@ public class PlayReadyHeader extends ProtectionSpecificHeader {
     public void parse(ByteBuffer byteBuffer) {
         /*
    Length DWORD 32
-
    PlayReady Record Count WORD 16
-
    PlayReady Records See Text Varies
-
         */
-
         length = IsoTypeReader.readUInt32BE(byteBuffer);
         int recordCount = IsoTypeReader.readUInt16BE(byteBuffer);
-
         records = PlayReadyRecord.createFor(byteBuffer, recordCount);
     }
 
     @Override
     public ByteBuffer getData() {
-
         int size = 4 + 2;
         for (PlayReadyRecord record : records) {
             size += 2 + 2;
             size += record.getValue().rewind().limit();
         }
         ByteBuffer byteBuffer = ByteBuffer.allocate(size);
-
         IsoTypeWriter.writeUInt32BE(byteBuffer, size);
         IsoTypeWriter.writeUInt16BE(byteBuffer, records.size());
         for (PlayReadyRecord record : records) {
@@ -79,7 +67,6 @@ public class PlayReadyHeader extends ProtectionSpecificHeader {
             ByteBuffer tmp4debug = record.getValue();
             byteBuffer.put(tmp4debug);
         }
-
         return byteBuffer;
     }
 
@@ -105,14 +92,12 @@ public class PlayReadyHeader extends ProtectionSpecificHeader {
     public static abstract class PlayReadyRecord {
         int type;
 
-
         public PlayReadyRecord(int type) {
             this.type = type;
         }
 
         public static List<PlayReadyRecord> createFor(ByteBuffer byteBuffer, int recordCount) {
             List<PlayReadyRecord> records = new ArrayList<PlayReadyRecord>(recordCount);
-
             for (int i = 0; i < recordCount; i++) {
                 PlayReadyRecord record;
                 int type = IsoTypeReader.readUInt16BE(byteBuffer);
@@ -134,7 +119,6 @@ public class PlayReadyHeader extends ProtectionSpecificHeader {
                 byteBuffer.position(byteBuffer.position() + length);
                 records.add(record);
             }
-
             return records;
         }
 
@@ -247,7 +231,6 @@ public class PlayReadyHeader extends ProtectionSpecificHeader {
             }
 
         }
-
     }
 
 }

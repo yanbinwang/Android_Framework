@@ -1,26 +1,22 @@
 package com.github.faucamp.simplertmp.amf;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.lang.String;
-
 import android.util.Log;
 
 import com.github.faucamp.simplertmp.Util;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
+
 /**
- *
  * @author francois
  */
 public class AmfString implements AmfData {
-
-    private static final String TAG = "AmfString";
-	
-    private String value;
-    private boolean key;
     private int size = -1;
+    private boolean key;
+    private String value;
+    private static final String TAG = "AmfString";
 
     public AmfString() {
     }
@@ -117,7 +113,9 @@ public class AmfString implements AmfData {
         return size;
     }
 
-    /** @return the byte size of the resulting AMF string of the specified value */
+    /**
+     * @return the byte size of the resulting AMF string of the specified value
+     */
     public static int sizeOf(String string, boolean isKey) {
         try {
             int size = (isKey ? 0 : 1) + 2 + string.getBytes("ASCII").length;
@@ -127,4 +125,5 @@ public class AmfString implements AmfData {
             throw new RuntimeException(ex);
         }
     }
+
 }

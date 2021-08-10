@@ -12,9 +12,9 @@ import java.util.List;
  *
  */
 public class EC3SpecificBox extends AbstractBox {
-    List<Entry> entries = new LinkedList<Entry>();
     int dataRate;
     int numIndSub;
+    List<Entry> entries = new LinkedList<>();
 
     public EC3SpecificBox() {
         super("dec3");
@@ -40,8 +40,6 @@ public class EC3SpecificBox extends AbstractBox {
         numIndSub = brb.readBits(3) + 1;
         // This field indicates the number of independent substreams that are present in the Enhanced AC-3 bitstream. The value
         // of this field is one less than the number of independent substreams present.
-
-
         for (int i = 0; i < numIndSub; i++) {
             Entry e = new Entry();
             e.fscod = brb.readBits(2);
@@ -80,7 +78,6 @@ public class EC3SpecificBox extends AbstractBox {
             }
         }
     }
-
 
     public List<Entry> getEntries() {
         return entries;
@@ -121,7 +118,6 @@ public class EC3SpecificBox extends AbstractBox {
         public int chan_loc;
         public int reserved2;
 
-
         @Override
         public String toString() {
             return "Entry{" +
@@ -137,4 +133,5 @@ public class EC3SpecificBox extends AbstractBox {
                     '}';
         }
     }
+
 }

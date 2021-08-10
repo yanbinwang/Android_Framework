@@ -1,21 +1,20 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
-
 
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
@@ -36,20 +35,17 @@ import java.util.Date;
  * to 0, so that they are ignored for local playback and preview.
  */
 public class TrackHeaderBox extends AbstractFullBox {
-
-    public static final String TYPE = "tkhd";
-
-    private Date creationTime;
-    private Date modificationTime;
     private long trackId;
     private long duration;
     private int layer;
     private int alternateGroup;
     private float volume;
-    private Matrix matrix = Matrix.ROTATE_0;
     private double width;
     private double height;
-
+    private Matrix matrix = Matrix.ROTATE_0;
+    private Date creationTime;
+    private Date modificationTime;
+    public static final String TYPE = "tkhd";
 
     public TrackHeaderBox() {
         super(TYPE);
@@ -226,7 +222,6 @@ public class TrackHeaderBox extends AbstractFullBox {
         this.height = height;
     }
 
-
     public boolean isEnabled() {
         return (getFlags() & 1) > 0;
     }
@@ -274,4 +269,5 @@ public class TrackHeaderBox extends AbstractFullBox {
             setFlags(getFlags() & ~8);
         }
     }
+
 }

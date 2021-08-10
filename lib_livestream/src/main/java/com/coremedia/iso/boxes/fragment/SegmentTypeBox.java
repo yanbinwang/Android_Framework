@@ -33,11 +33,10 @@ import java.util.List;
  * identifies a precise specification.
  */
 public class SegmentTypeBox extends AbstractBox {
-    public static final String TYPE = "styp";
-
-    private String majorBrand;
     private long minorVersion;
+    private String majorBrand;
     private List<String> compatibleBrands = Collections.emptyList();
+    public static final String TYPE = "styp";
 
     public SegmentTypeBox() {
         super(TYPE);
@@ -52,7 +51,6 @@ public class SegmentTypeBox extends AbstractBox {
 
     protected long getContentSize() {
         return 8 + compatibleBrands.size() * 4;
-
     }
 
     @Override
@@ -73,7 +71,6 @@ public class SegmentTypeBox extends AbstractBox {
         for (String compatibleBrand : compatibleBrands) {
             byteBuffer.put(IsoFile.fourCCtoBytes(compatibleBrand));
         }
-
     }
 
     /**
@@ -140,4 +137,5 @@ public class SegmentTypeBox extends AbstractBox {
         result.append("]");
         return result.toString();
     }
+
 }

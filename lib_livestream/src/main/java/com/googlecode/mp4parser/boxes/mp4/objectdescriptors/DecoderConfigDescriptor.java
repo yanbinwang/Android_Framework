@@ -44,34 +44,27 @@ import java.util.logging.Logger;
  */
 @Descriptor(tags = {0x04})
 public class DecoderConfigDescriptor extends BaseDescriptor {
-    private static Logger log = Logger.getLogger(DecoderConfigDescriptor.class.getName());
-
-
     int objectTypeIndication;
     int streamType;
     int upStream;
     int bufferSizeDB;
     long maxBitRate;
     long avgBitRate;
-
+    byte[] configDescriptorDeadBytes;
     DecoderSpecificInfo decoderSpecificInfo;
     AudioSpecificConfig audioSpecificInfo;
     List<ProfileLevelIndicationDescriptor> profileLevelIndicationDescriptors = new ArrayList<ProfileLevelIndicationDescriptor>();
-    byte[] configDescriptorDeadBytes;
+    private static final Logger log = Logger.getLogger(DecoderConfigDescriptor.class.getName());
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
         objectTypeIndication = IsoTypeReader.readUInt8(bb);
-
         int data = IsoTypeReader.readUInt8(bb);
         streamType = data >>> 2;
         upStream = (data >> 1) & 0x1;
-
         bufferSizeDB = IsoTypeReader.readUInt24(bb);
         maxBitRate = IsoTypeReader.readUInt32(bb);
         avgBitRate = IsoTypeReader.readUInt32(bb);
-
-
 
         BaseDescriptor descriptor;
         if (bb.remaining() > 2) { //1byte tag + at least 1byte size
@@ -105,6 +98,7 @@ public class DecoderConfigDescriptor extends BaseDescriptor {
             }
         }
     }
+
     public int serializedSize() {
         return 15 + audioSpecificInfo.serializedSize();
     }

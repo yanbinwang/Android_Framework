@@ -1,19 +1,18 @@
 package com.github.faucamp.simplertmp.packets;
 
+import com.github.faucamp.simplertmp.Util;
+import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import com.github.faucamp.simplertmp.Util;
-import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
-
 /**
  * A "Set chunk size" RTMP message, received on chunk stream ID 2 (control channel)
- * 
+ *
  * @author francois
  */
 public class SetChunkSize extends RtmpPacket {
-
     private int chunkSize;
 
     public SetChunkSize(RtmpHeader header) {
@@ -53,4 +52,5 @@ public class SetChunkSize extends RtmpPacket {
     protected int size() {
         return 0;
     }
+
 }

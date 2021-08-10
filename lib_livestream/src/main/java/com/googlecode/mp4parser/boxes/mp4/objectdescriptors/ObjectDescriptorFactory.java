@@ -120,13 +120,11 @@ import java.util.logging.Logger;
 0xFF no object type specified h
  */
 public class ObjectDescriptorFactory {
+    protected static Map<Integer, Map<Integer, Class<? extends BaseDescriptor>>> descriptorRegistry = new HashMap<>();
     protected static Logger log = Logger.getLogger(ObjectDescriptorFactory.class.getName());
-
-    protected static Map<Integer, Map<Integer, Class<? extends BaseDescriptor>>> descriptorRegistry = new HashMap<Integer, Map<Integer, Class<? extends BaseDescriptor>>>();
 
     static {
         Set<Class<? extends BaseDescriptor>> annotated = new HashSet<Class<? extends BaseDescriptor>>();
-
         annotated.add(DecoderSpecificInfo.class);
         annotated.add(SLConfigDescriptor.class);
         annotated.add(BaseDescriptor.class);
@@ -138,15 +136,13 @@ public class ObjectDescriptorFactory {
         annotated.add(ESDescriptor.class);
         annotated.add(DecoderConfigDescriptor.class);
         //annotated.add(ObjectDescriptor.class);
-
         for (Class<? extends BaseDescriptor> clazz : annotated) {
             final Descriptor descriptor = clazz.getAnnotation(Descriptor.class);
             final int[] tags = descriptor.tags();
             final int objectTypeInd = descriptor.objectTypeIndication();
-
             Map<Integer, Class<? extends BaseDescriptor>> tagMap = descriptorRegistry.get(objectTypeInd);
             if (tagMap == null) {
-                tagMap = new HashMap<Integer, Class<? extends BaseDescriptor>>();
+                tagMap = new HashMap<>();
             }
             for (int tag : tags) {
                 tagMap.put(tag, clazz);
@@ -157,7 +153,6 @@ public class ObjectDescriptorFactory {
 
     public static BaseDescriptor createFrom(int objectTypeIndication, ByteBuffer bb) throws IOException {
         int tag = IsoTypeReader.readUInt8(bb);
-
         Map<Integer, Class<? extends BaseDescriptor>> tagMap = descriptorRegistry.get(objectTypeIndication);
         if (tagMap == null) {
             tagMap = descriptorRegistry.get(-1);
@@ -172,8 +167,7 @@ public class ObjectDescriptorFactory {
 
         BaseDescriptor baseDescriptor;
         if (aClass == null || aClass.isInterface() || Modifier.isAbstract(aClass.getModifiers())) {
-            log.warning("No ObjectDescriptor found for objectTypeIndication " + Integer.toHexString(objectTypeIndication) +
-                    " and tag " + Integer.toHexString(tag) + " found: " + aClass);
+            log.warning("No ObjectDescriptor found for objectTypeIndication " + Integer.toHexString(objectTypeIndication) + " and tag " + Integer.toHexString(tag) + " found: " + aClass);
             baseDescriptor = new UnknownDescriptor();
         } else {
             try {
@@ -186,4 +180,5 @@ public class ObjectDescriptorFactory {
         baseDescriptor.parse(tag, bb);
         return baseDescriptor;
     }
+
 }

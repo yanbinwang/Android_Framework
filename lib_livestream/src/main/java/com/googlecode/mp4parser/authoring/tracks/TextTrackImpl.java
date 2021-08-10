@@ -15,7 +15,13 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.AbstractMediaHeaderBox;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.NullMediaHeaderBox;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.coremedia.iso.boxes.sampleentry.TextSampleEntry;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
@@ -34,9 +40,9 @@ import java.util.List;
  *
  */
 public class TextTrackImpl extends AbstractTrack {
+    List<Line> subs = new LinkedList<>();
     TrackMetaData trackMetaData = new TrackMetaData();
     SampleDescriptionBox sampleDescriptionBox;
-    List<Line> subs = new LinkedList<Line>();
 
     public List<Line> getSubs() {
         return subs;
@@ -52,20 +58,16 @@ public class TextTrackImpl extends AbstractTrack {
 
         FontTableBox ftab = new FontTableBox();
         ftab.setEntries(Collections.singletonList(new FontTableBox.FontRecord(1, "Serif")));
-
         tx3g.addBox(ftab);
-
 
         trackMetaData.setCreationTime(new Date());
         trackMetaData.setModificationTime(new Date());
         trackMetaData.setTimescale(1000); // Text tracks use millieseconds
-
-
     }
 
 
     public List<ByteBuffer> getSamples() {
-        List<ByteBuffer> samples = new LinkedList<ByteBuffer>();
+        List<ByteBuffer> samples = new LinkedList<>();
         long lastEnd = 0;
         for (Line sub : subs) {
             long silentTime = sub.from - lastEnd;
@@ -129,12 +131,10 @@ public class TextTrackImpl extends AbstractTrack {
         return "sbtl";
     }
 
-
     public static class Line {
         long from;
         long to;
         String text;
-
 
         public Line(long from, long to, String text) {
             this.from = from;
@@ -162,4 +162,5 @@ public class TextTrackImpl extends AbstractTrack {
     public SubSampleInformationBox getSubsampleInformationBox() {
         return null;
     }
+
 }

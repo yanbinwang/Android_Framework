@@ -14,7 +14,6 @@ import com.googlecode.mp4parser.boxes.AbstractTrackEncryptionBox;
  */
 public class PiffTrackEncryptionBox extends AbstractTrackEncryptionBox {
 
-
     public PiffTrackEncryptionBox() {
         super("uuid");
     }
@@ -29,6 +28,5 @@ public class PiffTrackEncryptionBox extends AbstractTrackEncryptionBox {
     public int getFlags() {
         return 0;
     }
-
 
 }

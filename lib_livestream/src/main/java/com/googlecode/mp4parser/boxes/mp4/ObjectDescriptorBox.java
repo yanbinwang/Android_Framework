@@ -42,5 +42,4 @@ public class ObjectDescriptorBox extends AbstractDescriptorBox {
         super(TYPE);
     }
 
-
 }

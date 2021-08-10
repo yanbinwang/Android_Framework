@@ -97,4 +97,5 @@ public class CAVLCWriter extends BitstreamWriter {
     public void writeSliceTrailingBits() {
         throw new IllegalStateException("todo");
     }
+
 }

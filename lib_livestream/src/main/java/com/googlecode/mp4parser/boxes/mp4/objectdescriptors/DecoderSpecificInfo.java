@@ -47,7 +47,6 @@ public class DecoderSpecificInfo extends BaseDescriptor {
 
     public ByteBuffer serialize() {
         ByteBuffer out = ByteBuffer.wrap(bytes);
-
         return out;
     }
 
@@ -68,13 +67,10 @@ public class DecoderSpecificInfo extends BaseDescriptor {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         DecoderSpecificInfo that = (DecoderSpecificInfo) o;
-
         if (!Arrays.equals(bytes, that.bytes)) {
             return false;
         }
-
         return true;
     }
 
@@ -82,4 +78,5 @@ public class DecoderSpecificInfo extends BaseDescriptor {
     public int hashCode() {
         return bytes != null ? Arrays.hashCode(bytes) : 0;
     }
+
 }

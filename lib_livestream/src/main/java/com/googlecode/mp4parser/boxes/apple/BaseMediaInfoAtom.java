@@ -7,14 +7,13 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 
 public class BaseMediaInfoAtom extends AbstractFullBox {
-    public static final String TYPE = "gmin";
-
-    short graphicsMode = 64;
     int opColorR = 32768;
     int opColorG = 32768;
     int opColorB = 32768;
+    short graphicsMode = 64;
     short balance;
     short reserved;
+    public static final String TYPE = "gmin";
 
     public BaseMediaInfoAtom() {
         super(TYPE);
@@ -30,8 +29,8 @@ public class BaseMediaInfoAtom extends AbstractFullBox {
         writeVersionAndFlags(byteBuffer);
         byteBuffer.putShort(graphicsMode);
         IsoTypeWriter.writeUInt16(byteBuffer, opColorR);
-        IsoTypeWriter.writeUInt16(byteBuffer,opColorG );
-        IsoTypeWriter.writeUInt16(byteBuffer,opColorB );
+        IsoTypeWriter.writeUInt16(byteBuffer, opColorG);
+        IsoTypeWriter.writeUInt16(byteBuffer, opColorB);
         byteBuffer.putShort(balance);
         byteBuffer.putShort(reserved);
     }
@@ -45,7 +44,6 @@ public class BaseMediaInfoAtom extends AbstractFullBox {
         opColorB = IsoTypeReader.readUInt16(content);
         balance = content.getShort();
         reserved = content.getShort();
-
     }
 
     public short getGraphicsMode() {
@@ -107,4 +105,5 @@ public class BaseMediaInfoAtom extends AbstractFullBox {
                 ", reserved=" + reserved +
                 '}';
     }
+
 }

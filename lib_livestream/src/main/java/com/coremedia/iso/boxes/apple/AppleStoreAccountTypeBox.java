@@ -6,7 +6,6 @@ package com.coremedia.iso.boxes.apple;
 public class AppleStoreAccountTypeBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "akID";
 
-
     public AppleStoreAccountTypeBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getUint8AppleDataBox();
@@ -22,6 +21,6 @@ public class AppleStoreAccountTypeBox extends AbstractAppleMetaDataBox {
             default:
                 return "unknown Account";
         }
-
     }
+
 }

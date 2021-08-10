@@ -34,7 +34,6 @@ public class PiffSampleEncryptionBox extends AbstractSampleEncryptionBox {
      */
     public PiffSampleEncryptionBox() {
         super("uuid");
-
     }
 
     @Override

@@ -6,7 +6,6 @@ package com.coremedia.iso.boxes.apple;
 public final class AppleGroupingBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "\u00a9grp";
 
-
     public AppleGroupingBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getStringAppleDataBox();

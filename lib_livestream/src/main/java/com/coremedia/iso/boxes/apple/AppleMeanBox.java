@@ -12,8 +12,8 @@ import java.nio.ByteBuffer;
  * @see com.coremedia.iso.boxes.apple.AppleGenericBox
  */
 public final class AppleMeanBox extends AbstractFullBox {
-    public static final String TYPE = "mean";
     private String meaning;
+    public static final String TYPE = "mean";
 
     public AppleMeanBox() {
         super(TYPE);
@@ -42,6 +42,5 @@ public final class AppleMeanBox extends AbstractFullBox {
     public void setMeaning(String meaning) {
         this.meaning = meaning;
     }
-
 
 }

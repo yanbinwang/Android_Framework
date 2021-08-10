@@ -35,7 +35,7 @@ import java.util.List;
  * TfrfBoxChildren = *( VendorExtensionUUIDBox )
  */
 public class TfrfBox extends AbstractFullBox {
-    public List<Entry> entries = new ArrayList<Entry>();
+    public List<Entry> entries = new ArrayList<>();
 
     public TfrfBox() {
         super("uuid");
@@ -43,8 +43,7 @@ public class TfrfBox extends AbstractFullBox {
 
     @Override
     public byte[] getUserType() {
-        return new byte[]{(byte) 0xd4, (byte) 0x80, (byte) 0x7e, (byte) 0xf2, (byte) 0xca, (byte) 0x39, (byte) 0x46,
-                (byte) 0x95, (byte) 0x8e, (byte) 0x54, 0x26, (byte) 0xcb, (byte) 0x9e, (byte) 0x46, (byte) 0xa7, (byte) 0x9f};
+        return new byte[]{(byte) 0xd4, (byte) 0x80, (byte) 0x7e, (byte) 0xf2, (byte) 0xca, (byte) 0x39, (byte) 0x46, (byte) 0x95, (byte) 0x8e, (byte) 0x54, 0x26, (byte) 0xcb, (byte) 0x9e, (byte) 0x46, (byte) 0xa7, (byte) 0x9f};
     }
 
     @Override
@@ -72,7 +71,6 @@ public class TfrfBox extends AbstractFullBox {
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
         int fragmentCount = IsoTypeReader.readUInt8(content);
-
         for (int i = 0; i < fragmentCount; i++) {
             Entry entry = new Entry();
             if (getVersion() == 0x01) {
@@ -85,7 +83,6 @@ public class TfrfBox extends AbstractFullBox {
             entries.add(entry);
         }
     }
-
 
     public long getFragmentCount() {
         return entries.size();
@@ -104,7 +101,7 @@ public class TfrfBox extends AbstractFullBox {
         return sb.toString();
     }
 
-    public class Entry {
+    public static class Entry {
         long fragmentAbsoluteTime;
         long fragmentAbsoluteDuration;
 
@@ -126,4 +123,5 @@ public class TfrfBox extends AbstractFullBox {
             return sb.toString();
         }
     }
+
 }

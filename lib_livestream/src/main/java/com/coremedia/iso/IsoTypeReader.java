@@ -20,21 +20,18 @@ import java.nio.ByteBuffer;
 
 public final class IsoTypeReader {
 
-
     public static long readUInt32BE(ByteBuffer bb) {
         long ch1 = readUInt8(bb);
         long ch2 = readUInt8(bb);
         long ch3 = readUInt8(bb);
         long ch4 = readUInt8(bb);
         return ((ch4 << 24) + (ch3 << 16) + (ch2 << 8) + (ch1 << 0));
-
     }
-
 
     public static long readUInt32(ByteBuffer bb) {
         long i = bb.getInt();
         if (i < 0) {
-            i += 1l<<32;
+            i += 1l << 32;
         }
         return i;
     }
@@ -45,7 +42,6 @@ public final class IsoTypeReader {
         result += byte2int(bb.get());
         return result;
     }
-
 
     public static int readUInt16(ByteBuffer bb) {
         int result = 0;
@@ -69,7 +65,6 @@ public final class IsoTypeReader {
         return b < 0 ? b + 256 : b;
     }
 
-
     /**
      * Reads a zero terminated UTF-8 string.
      *
@@ -78,7 +73,6 @@ public final class IsoTypeReader {
      * @throws Error in case of an error in the underlying stream
      */
     public static String readString(ByteBuffer byteBuffer) {
-
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         int read;
         while ((read = byteBuffer.get()) != 0) {
@@ -91,7 +85,6 @@ public final class IsoTypeReader {
         byte[] buffer = new byte[length];
         byteBuffer.get(buffer);
         return Utf8.convert(buffer);
-
     }
 
     public static long readUInt64(ByteBuffer byteBuffer) {
@@ -102,34 +95,29 @@ public final class IsoTypeReader {
             throw new RuntimeException("I don't know how to deal with UInt64! long is not sufficient and I don't want to use BigInt");
         }
         result += readUInt32(byteBuffer);
-
         return result;
     }
 
     public static double readFixedPoint1616(ByteBuffer bb) {
         byte[] bytes = new byte[4];
         bb.get(bytes);
-
         int result = 0;
         result |= ((bytes[0] << 24) & 0xFF000000);
         result |= ((bytes[1] << 16) & 0xFF0000);
         result |= ((bytes[2] << 8) & 0xFF00);
         result |= ((bytes[3]) & 0xFF);
         return ((double) result) / 65536;
-
     }
 
     public static double readFixedPoint0230(ByteBuffer bb) {
         byte[] bytes = new byte[4];
         bb.get(bytes);
-
         int result = 0;
         result |= ((bytes[0] << 24) & 0xFF000000);
         result |= ((bytes[1] << 16) & 0xFF0000);
         result |= ((bytes[2] << 8) & 0xFF00);
         result |= ((bytes[3]) & 0xFF);
         return ((double) result) / (1 << 30);
-
     }
 
     public static float readFixedPoint88(ByteBuffer bb) {

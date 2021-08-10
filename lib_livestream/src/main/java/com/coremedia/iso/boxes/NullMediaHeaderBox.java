@@ -40,4 +40,5 @@ public class NullMediaHeaderBox extends AbstractMediaHeaderBox {
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
     }
+
 }

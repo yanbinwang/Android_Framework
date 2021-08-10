@@ -8,7 +8,6 @@ import java.nio.ByteBuffer;
 
 
 public class MLPSpecificBox extends AbstractBox {
-
     int format_info;
     int peak_data_rate;
     int reserved;
@@ -73,4 +72,5 @@ public class MLPSpecificBox extends AbstractBox {
     public void setReserved2(int reserved2) {
         this.reserved2 = reserved2;
     }
+
 }

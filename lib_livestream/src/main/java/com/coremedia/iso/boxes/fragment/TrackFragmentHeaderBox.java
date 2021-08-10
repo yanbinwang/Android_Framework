@@ -35,15 +35,14 @@ import java.nio.ByteBuffer;
  * }
  */
 public class TrackFragmentHeaderBox extends AbstractFullBox {
-    public static final String TYPE = "tfhd";
-
     private long trackId;
     private long baseDataOffset = -1;
     private long sampleDescriptionIndex;
     private long defaultSampleDuration = -1;
     private long defaultSampleSize = -1;
-    private SampleFlags defaultSampleFlags;
     private boolean durationIsEmpty;
+    private SampleFlags defaultSampleFlags;
+    public static final String TYPE = "tfhd";
 
     public TrackFragmentHeaderBox() {
         super(TYPE);
@@ -70,11 +69,9 @@ public class TrackFragmentHeaderBox extends AbstractFullBox {
         return size;
     }
 
-
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
         IsoTypeWriter.writeUInt32(byteBuffer, trackId);
-
         if ((getFlags() & 0x1) == 1) { //baseDataOffsetPresent
             IsoTypeWriter.writeUInt64(byteBuffer, getBaseDataOffset());
         }

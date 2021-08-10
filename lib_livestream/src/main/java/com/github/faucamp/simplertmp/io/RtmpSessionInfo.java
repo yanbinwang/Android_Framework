@@ -1,29 +1,35 @@
 package com.github.faucamp.simplertmp.io;
 
+import com.github.faucamp.simplertmp.packets.RtmpPacket;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.github.faucamp.simplertmp.packets.RtmpPacket;
-
 /**
- *
  * @author francois
  */
 public class RtmpSessionInfo {
-
-    /** The (total) number of bytes read for this window (resets to 0 if the agreed-upon RTMP window acknowledgement size is reached) */
+    /**
+     * The (total) number of bytes read for this window (resets to 0 if the agreed-upon RTMP window acknowledgement size is reached)
+     */
     private int windowBytesRead;
-    /** The window acknowledgement size for this RTMP session, in bytes; default to max to avoid unnecessary "Acknowledgment" messages from being sent */
+    /**
+     * The window acknowledgement size for this RTMP session, in bytes; default to max to avoid unnecessary "Acknowledgment" messages from being sent
+     */
     private int acknowledgementWindowSize = Integer.MAX_VALUE;
-    /** Used internally to store the total number of bytes read (used when sending Acknowledgement messages) */
+    /**
+     * Used internally to store the total number of bytes read (used when sending Acknowledgement messages)
+     */
     private int totalBytesRead = 0;
-    
-    /** Default chunk size is 128 bytes */
+
+    /**
+     * Default chunk size is 128 bytes
+     */
     private int rxChunkSize = 128;
     private int txChunkSize = 128;
-    private Map<Integer, ChunkStreamInfo> chunkChannels = new HashMap<Integer, ChunkStreamInfo>();
-    private Map<Integer, String> invokedMethods = new ConcurrentHashMap<Integer, String>();
+    private final Map<Integer, ChunkStreamInfo> chunkChannels = new HashMap<>();
+    private final Map<Integer, String> invokedMethods = new ConcurrentHashMap<>();
 
     public ChunkStreamInfo getChunkStreamInfo(int chunkStreamId) {
         ChunkStreamInfo chunkStreamInfo = chunkChannels.get(chunkStreamId);
@@ -67,16 +73,18 @@ public class RtmpSessionInfo {
     }
 
     /**
-     * Add the specified amount of bytes to the total number of bytes read for this RTMP window;     
+     * Add the specified amount of bytes to the total number of bytes read for this RTMP window;
+     *
      * @param numBytes the number of bytes to add
      * @return <code>true</code> if an "acknowledgement" packet should be sent, <code>false</code> otherwise
      */
     public final void addToWindowBytesRead(final int numBytes, final RtmpPacket packet) throws WindowAckRequired {
         windowBytesRead += numBytes;
         totalBytesRead += numBytes;
-        if (windowBytesRead >= acknowledgementWindowSize) {            
-            windowBytesRead -= acknowledgementWindowSize;                       
+        if (windowBytesRead >= acknowledgementWindowSize) {
+            windowBytesRead -= acknowledgementWindowSize;
             throw new WindowAckRequired(totalBytesRead, packet);
         }
-    }       
+    }
+
 }

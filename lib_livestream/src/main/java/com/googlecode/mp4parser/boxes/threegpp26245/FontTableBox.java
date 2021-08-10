@@ -10,11 +10,8 @@ import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
 
-/**
- *
- */
 public class FontTableBox extends AbstractBox {
-    List<FontRecord> entries = new LinkedList<FontRecord>();
+    List<FontRecord> entries = new LinkedList<>();
 
     public FontTableBox() {
         super("ftab");
@@ -28,7 +25,6 @@ public class FontTableBox extends AbstractBox {
         }
         return size;
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {
@@ -92,4 +88,5 @@ public class FontTableBox extends AbstractBox {
                     '}';
         }
     }
+
 }

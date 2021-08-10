@@ -23,8 +23,8 @@ import java.util.UUID;
  * UUID from/to byte array.
  */
 public class UUIDConverter {
-    public static byte[] convert(UUID uuid) {
 
+    public static byte[] convert(UUID uuid) {
         long msb = uuid.getMostSignificantBits();
         long lsb = uuid.getLeastSignificantBits();
         byte[] buffer = new byte[16];
@@ -35,9 +35,7 @@ public class UUIDConverter {
         for (int i = 8; i < 16; i++) {
             buffer[i] = (byte) (lsb >>> 8 * (7 - i));
         }
-
         return buffer;
-
     }
 
     public static UUID convert(byte[] uuidBytes) {
@@ -45,4 +43,5 @@ public class UUIDConverter {
         b.order(ByteOrder.BIG_ENDIAN);
         return new UUID(b.getLong(), b.getLong());
     }
+
 }

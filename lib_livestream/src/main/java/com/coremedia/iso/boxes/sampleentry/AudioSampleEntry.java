@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes.sampleentry;
@@ -30,6 +30,20 @@ import java.nio.ByteBuffer;
  */
 public class AudioSampleEntry extends SampleEntry implements ContainerBox {
 
+    private int channelCount;
+    private int sampleSize;
+    private int soundVersion;
+    private int compressionId;
+    private int packetSize;
+    private int reserved1;
+    private long sampleRate;
+    private long samplesPerPacket;
+    private long bytesPerPacket;
+    private long bytesPerFrame;
+    private long bytesPerSample;
+    private long reserved2;
+    private byte[] soundVersion2Data;
+    private BoxParser boxParser;
     public static final String TYPE1 = "samr";
     public static final String TYPE2 = "sawb";
     public static final String TYPE3 = "mp4a";
@@ -42,29 +56,12 @@ public class AudioSampleEntry extends SampleEntry implements ContainerBox {
     public static final String TYPE11 = "dtsl";
     public static final String TYPE12 = "dtsh";
     public static final String TYPE13 = "dtse";
-
     /**
      * Identifier for an encrypted audio track.
      *
      * @see com.coremedia.iso.boxes.ProtectionSchemeInformationBox
      */
     public static final String TYPE_ENCRYPTED = "enca";
-
-    private int channelCount;
-    private int sampleSize;
-    private long sampleRate;
-    private int soundVersion;
-    private int compressionId;
-    private int packetSize;
-    private long samplesPerPacket;
-    private long bytesPerPacket;
-    private long bytesPerFrame;
-    private long bytesPerSample;
-
-    private int reserved1;
-    private long reserved2;
-    private byte[] soundVersion2Data;
-    private BoxParser boxParser;
 
     public AudioSampleEntry(String type) {
         super(type);
@@ -184,11 +181,9 @@ public class AudioSampleEntry extends SampleEntry implements ContainerBox {
         // 8 bytes already parsed
         //reserved bits - used by qt
         soundVersion = IsoTypeReader.readUInt16(content);
-
         //reserved
         reserved1 = IsoTypeReader.readUInt16(content);
         reserved2 = IsoTypeReader.readUInt32(content);
-
         channelCount = IsoTypeReader.readUInt16(content);
         sampleSize = IsoTypeReader.readUInt16(content);
         //reserved bits - used by qt
@@ -200,7 +195,6 @@ public class AudioSampleEntry extends SampleEntry implements ContainerBox {
         if (!type.equals("mlpa")) {
             sampleRate = sampleRate >>> 16;
         }
-
         //more qt stuff - see http://mp4v2.googlecode.com/svn-history/r388/trunk/src/atom_sound.cpp
         if (soundVersion > 0) {
             samplesPerPacket = IsoTypeReader.readUInt32(content);
@@ -209,14 +203,11 @@ public class AudioSampleEntry extends SampleEntry implements ContainerBox {
             bytesPerSample = IsoTypeReader.readUInt32(content);
         }
         if (soundVersion == 2) {
-
             soundVersion2Data = new byte[20];
             content.get(20);
         }
         _parseChildBoxes(content);
-
     }
-
 
     @Override
     protected long getContentSize() {
@@ -262,17 +253,16 @@ public class AudioSampleEntry extends SampleEntry implements ContainerBox {
         } else {
             IsoTypeWriter.writeUInt32(byteBuffer, getSampleRate() << 16);
         }
-
         if (soundVersion > 0) {
             IsoTypeWriter.writeUInt32(byteBuffer, samplesPerPacket);
             IsoTypeWriter.writeUInt32(byteBuffer, bytesPerPacket);
             IsoTypeWriter.writeUInt32(byteBuffer, bytesPerFrame);
             IsoTypeWriter.writeUInt32(byteBuffer, bytesPerSample);
         }
-
         if (soundVersion == 2) {
             byteBuffer.put(soundVersion2Data);
         }
         _writeChildBoxes(byteBuffer);
     }
+
 }

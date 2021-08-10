@@ -6,7 +6,6 @@ package com.coremedia.iso.boxes.apple;
 public final class AppleEncoderBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "\u00a9too";
 
-
     public AppleEncoderBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getStringAppleDataBox();

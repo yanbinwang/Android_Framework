@@ -266,10 +266,6 @@ import java.util.Map;
 
 @Descriptor(tags = 0x5, objectTypeIndication = 0x40)
 public class AudioSpecificConfig extends BaseDescriptor {
-    byte[] configBytes;
-
-    public static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<Integer, Integer>();
-    public static Map<Integer, String> audioObjectTypeMap = new HashMap<Integer, String>();
     int audioObjectType;
     int samplingFrequencyIndex;
     int samplingFrequency;
@@ -285,7 +281,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
     int epConfig;
     int directMapping;
     int syncExtensionType;
-
     //GASpecificConfig
     int frameLengthFlag;
     int dependsOnCoreCoder;
@@ -298,8 +293,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
     int aacScalefactorDataResilienceFlag;
     int aacSpectralDataResilienceFlag;
     int extensionFlag3;
-    boolean gaSpecificConfig;
-
     //ParametricSpecificConfig
     int isBaseLayer;
     int paraMode;
@@ -315,19 +308,21 @@ public class AudioSpecificConfig extends BaseDescriptor {
     int hilnContMode;
     int hilnEnhaLayer;
     int hilnEnhaQuantMode;
+    boolean gaSpecificConfig;
     boolean parametricSpecificConfig;
+    byte[] configBytes;
+    public static Map<Integer, Integer> samplingFrequencyIndexMap = new HashMap<>();
+    public static Map<Integer, String> audioObjectTypeMap = new HashMap<>();
 
     @Override
     public void parseDetail(ByteBuffer bb) throws IOException {
         ByteBuffer configBytes = bb.slice();
         configBytes.limit(sizeOfInstance);
         bb.position(bb.position() + sizeOfInstance);
-
         //copy original bytes to internal array for constructing codec config strings (todo until writing of the config is supported)
         this.configBytes = new byte[sizeOfInstance];
         configBytes.get(this.configBytes);
         configBytes.rewind();
-
         BitReaderBuffer bitReaderBuffer = new BitReaderBuffer(configBytes);
         audioObjectType = getAudioObjectType(bitReaderBuffer);
         samplingFrequencyIndex = bitReaderBuffer.readBits(4);
@@ -335,22 +330,17 @@ public class AudioSpecificConfig extends BaseDescriptor {
         if (samplingFrequencyIndex == 0xf) {
             samplingFrequency = bitReaderBuffer.readBits(24);
         }
-
         channelConfiguration = bitReaderBuffer.readBits(4);
-
-        if (audioObjectType == 5 ||
-                audioObjectType == 29) {
+        if (audioObjectType == 5 || audioObjectType == 29) {
             extensionAudioObjectType = 5;
             sbrPresentFlag = 1;
             if (audioObjectType == 29) {
                 psPresentFlag = 1;
             }
             extensionSamplingFrequencyIndex = bitReaderBuffer.readBits(4);
-            if (extensionSamplingFrequencyIndex == 0xf)
-                extensionSamplingFrequency = bitReaderBuffer.readBits(24);
+            if (extensionSamplingFrequencyIndex == 0xf) extensionSamplingFrequency = bitReaderBuffer.readBits(24);
             audioObjectType = getAudioObjectType(bitReaderBuffer);
-            if (audioObjectType == 22)
-                extensionChannelConfiguration = bitReaderBuffer.readBits(4);
+            if (audioObjectType == 22) extensionChannelConfiguration = bitReaderBuffer.readBits(4);
         } else {
             extensionAudioObjectType = 0;
         }
@@ -529,9 +519,7 @@ public class AudioSpecificConfig extends BaseDescriptor {
             throw new UnsupportedOperationException("can't serialize that yet");
         }
         bwb.writeBits(channelConfiguration, 4);
-
         // Don't support any extensions, unusual GASpecificConfig other than the default or anything...
-
         return out;
     }
 
@@ -566,8 +554,7 @@ public class AudioSpecificConfig extends BaseDescriptor {
                 numOfSubFrame = in.readBits(5);
                 layer_length = in.readBits(11);
             }
-            if (audioObjectType == 17 || audioObjectType == 19 ||
-                    audioObjectType == 20 || audioObjectType == 23) {
+            if (audioObjectType == 17 || audioObjectType == 19 || audioObjectType == 20 || audioObjectType == 23) {
                 aacSectionDataResilienceFlag = in.readBits(1);
                 aacScalefactorDataResilienceFlag = in.readBits(1);
                 aacSpectralDataResilienceFlag = in.readBits(1);
@@ -618,14 +605,12 @@ public class AudioSpecificConfig extends BaseDescriptor {
         }
         */
         paraMode = in.readBits(2);
-
         if (paraMode != 1) {
             parseErHvxcConfig(samplingFrequencyIndex, channelConfiguration, audioObjectType, in);
         }
         if (paraMode != 0) {
             parseHilnConfig(samplingFrequencyIndex, channelConfiguration, audioObjectType, in);
         }
-
         paraExtensionFlag = in.readBits(1);
         parametricSpecificConfig = true;
     }
@@ -645,7 +630,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
         hvxcVarMode = in.readBits(1);
         hvxcRateMode = in.readBits(2);
         erHvxcExtensionFlag = in.readBits(1);
-
         if (erHvxcExtensionFlag == 1) {
             var_ScalableFlag = in.readBits(1);
         }
@@ -969,10 +953,8 @@ public class AudioSpecificConfig extends BaseDescriptor {
      0x80 - 0xFD user private -
      0xFE no audio profile specified -
      0xFF no audio capability required -
-
         */
     }
-
 
     public int getSamplingFrequency() {
         return samplingFrequencyIndex == 0xf ? samplingFrequency : samplingFrequencyIndexMap.get(samplingFrequencyIndex);
@@ -990,9 +972,7 @@ public class AudioSpecificConfig extends BaseDescriptor {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-
         AudioSpecificConfig that = (AudioSpecificConfig) o;
-
         if (aacScalefactorDataResilienceFlag != that.aacScalefactorDataResilienceFlag) {
             return false;
         }
@@ -1122,7 +1102,6 @@ public class AudioSpecificConfig extends BaseDescriptor {
         if (!Arrays.equals(configBytes, that.configBytes)) {
             return false;
         }
-
         return true;
     }
 
@@ -1173,4 +1152,5 @@ public class AudioSpecificConfig extends BaseDescriptor {
         result = 31 * result + (parametricSpecificConfig ? 1 : 0);
         return result;
     }
+
 }

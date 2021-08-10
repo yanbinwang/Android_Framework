@@ -11,7 +11,6 @@ public class ItemDataBox extends AbstractBox {
     ByteBuffer data = ByteBuffer.allocate(0);
     public static final String TYPE = "idat";
 
-
     public ItemDataBox() {
         super(TYPE);
     }
@@ -40,4 +39,5 @@ public class ItemDataBox extends AbstractBox {
     protected void getContent(ByteBuffer byteBuffer) {
         byteBuffer.put(data);
     }
+
 }

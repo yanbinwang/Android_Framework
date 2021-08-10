@@ -46,7 +46,6 @@ public class TrackFragmentBaseMediaDecodeTimeBox extends AbstractFullBox {
         }
     }
 
-
     @Override
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
@@ -55,9 +54,7 @@ public class TrackFragmentBaseMediaDecodeTimeBox extends AbstractFullBox {
         } else {
             baseMediaDecodeTime = IsoTypeReader.readUInt32(content);
         }
-
     }
-
 
     public long getBaseMediaDecodeTime() {
         return baseMediaDecodeTime;
@@ -73,4 +70,5 @@ public class TrackFragmentBaseMediaDecodeTimeBox extends AbstractFullBox {
                 "baseMediaDecodeTime=" + baseMediaDecodeTime +
                 '}';
     }
+
 }

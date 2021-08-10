@@ -15,21 +15,23 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
-import com.coremedia.iso.boxes.sampleentry.TextSampleEntry;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
 import com.googlecode.mp4parser.boxes.apple.BaseMediaInfoAtom;
 import com.googlecode.mp4parser.boxes.apple.GenericMediaHeaderAtom;
 import com.googlecode.mp4parser.boxes.apple.GenericMediaHeaderTextAtom;
 import com.googlecode.mp4parser.boxes.apple.QuicktimeTextSampleEntry;
-import com.googlecode.mp4parser.boxes.threegpp26245.FontTableBox;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
-import java.util.Collections;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,9 +40,9 @@ import java.util.List;
  * A Text track as Quicktime Pro would create.
  */
 public class QuicktimeTextTrackImpl extends AbstractTrack {
+    List<Line> subs = new LinkedList<>();
     TrackMetaData trackMetaData = new TrackMetaData();
     SampleDescriptionBox sampleDescriptionBox;
-    List<Line> subs = new LinkedList<Line>();
 
     public List<Line> getSubs() {
         return subs;
@@ -51,18 +53,13 @@ public class QuicktimeTextTrackImpl extends AbstractTrack {
         QuicktimeTextSampleEntry textTrack = new QuicktimeTextSampleEntry();
         textTrack.setDataReferenceIndex(1);
         sampleDescriptionBox.addBox(textTrack);
-
-
         trackMetaData.setCreationTime(new Date());
         trackMetaData.setModificationTime(new Date());
         trackMetaData.setTimescale(1000);
-
-
     }
 
-
     public List<ByteBuffer> getSamples() {
-        List<ByteBuffer> samples = new LinkedList<ByteBuffer>();
+        List<ByteBuffer> samples = new LinkedList<>();
         long lastEnd = 0;
         for (Line sub : subs) {
             long silentTime = sub.from - lastEnd;
@@ -91,7 +88,7 @@ public class QuicktimeTextTrackImpl extends AbstractTrack {
     }
 
     public List<TimeToSampleBox.Entry> getDecodingTimeEntries() {
-        List<TimeToSampleBox.Entry> stts = new LinkedList<TimeToSampleBox.Entry>();
+        List<TimeToSampleBox.Entry> stts = new LinkedList<>();
         long lastEnd = 0;
         for (Line sub : subs) {
             long silentTime = sub.from - lastEnd;
@@ -126,12 +123,10 @@ public class QuicktimeTextTrackImpl extends AbstractTrack {
         return "text";
     }
 
-
     public static class Line {
         long from;
         long to;
         String text;
-
 
         public Line(long from, long to, String text) {
             this.from = from;
@@ -162,4 +157,5 @@ public class QuicktimeTextTrackImpl extends AbstractTrack {
     public SubSampleInformationBox getSubsampleInformationBox() {
         return null;
     }
+
 }

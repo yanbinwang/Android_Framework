@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2012 Sebastian Annies, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.googlecode.mp4parser;
@@ -46,16 +46,13 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * it is accessible by the <code>PropertyBoxParserImpl</code>
  */
 public abstract class AbstractBox implements Box {
-    public static int MEM_MAP_THRESHOLD = 100 * 1024;
-    private static Logger LOG = Logger.getLogger(AbstractBox.class.getName());
-
-    protected String type;
     private byte[] userType;
     private ContainerBox parent;
-
     private ByteBuffer content;
     private ByteBuffer deadBytes = null;
-
+    private static final Logger LOG = Logger.getLogger(AbstractBox.class.getName());
+    protected String type;
+    public static int MEM_MAP_THRESHOLD = 100 * 1024;
 
     protected AbstractBox(String type) {
         this.type = type;
@@ -115,7 +112,6 @@ public abstract class AbstractBox implements Box {
         if (isParsed() == false) {
             parseDetails();
         }
-
     }
 
     public void getBox(WritableByteChannel os) throws IOException {
@@ -136,7 +132,6 @@ public abstract class AbstractBox implements Box {
         bb.rewind();
         os.write(bb);
     }
-
 
     /**
      * Parses the raw content of the box. It surrounds the actual parsing
@@ -164,7 +159,6 @@ public abstract class AbstractBox implements Box {
     protected void setDeadBytes(ByteBuffer newDeadBytes) {
         deadBytes = newDeadBytes;
     }
-
 
     /**
      * Gets the full size of the box including header and content.
@@ -214,7 +208,6 @@ public abstract class AbstractBox implements Box {
         return content == null;
     }
 
-
     /**
      * Verifies that a box can be reconstructed byte-exact after parsing.
      *
@@ -232,7 +225,6 @@ public abstract class AbstractBox implements Box {
         }
         content.rewind();
         bb.rewind();
-
 
         if (content.remaining() != bb.remaining()) {
             LOG.severe(this.getType() + ": remaining differs " + content.remaining() + " vs. " + bb.remaining());
@@ -254,7 +246,6 @@ public abstract class AbstractBox implements Box {
             }
         }
         return true;
-
     }
 
     private boolean isSmallBox() {
@@ -273,7 +264,6 @@ public abstract class AbstractBox implements Box {
         if (UserBox.TYPE.equals(getType())) {
             byteBuffer.put(getUserType());
         }
-
-
     }
+
 }

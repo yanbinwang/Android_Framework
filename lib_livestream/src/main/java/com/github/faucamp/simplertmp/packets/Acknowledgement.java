@@ -1,11 +1,11 @@
 package com.github.faucamp.simplertmp.packets;
 
+import com.github.faucamp.simplertmp.Util;
+import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
-import com.github.faucamp.simplertmp.Util;
-import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
 
 /**
  * (Window) Acknowledgement
@@ -20,7 +20,6 @@ import com.github.faucamp.simplertmp.io.ChunkStreamInfo;
  * @author francois
  */
 public class Acknowledgement extends RtmpPacket {
-
     private int sequenceNumber;
 
     public Acknowledgement(RtmpHeader header) {
@@ -70,4 +69,5 @@ public class Acknowledgement extends RtmpPacket {
     public String toString() {
         return "RTMP Acknowledgment (sequence number: " + sequenceNumber + ")";
     }
+
 }

@@ -8,13 +8,12 @@ import java.io.OutputStream;
 
 /**
  * Content (audio/video) data packet base
- *  
+ *
  * @author francois
  */
 public abstract class ContentData extends RtmpPacket {
-
-    protected byte[] data;
     protected int size;
+    protected byte[] data;
 
     public ContentData(RtmpHeader header) {
         super(header);
@@ -53,4 +52,5 @@ public abstract class ContentData extends RtmpPacket {
     public int size() {
         return size;
     }
+
 }

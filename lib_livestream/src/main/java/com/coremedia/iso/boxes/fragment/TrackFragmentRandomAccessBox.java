@@ -51,19 +51,17 @@ import java.util.List;
  * }
  */
 public class TrackFragmentRandomAccessBox extends AbstractFullBox {
-    public static final String TYPE = "tfra";
-
-    private long trackId;
     private int reserved;
     private int lengthSizeOfTrafNum = 2;
     private int lengthSizeOfTrunNum = 2;
     private int lengthSizeOfSampleNum = 2;
+    private long trackId;
     private List<Entry> entries = Collections.emptyList();
+    public static final String TYPE = "tfra";
 
     public TrackFragmentRandomAccessBox() {
         super(TYPE);
     }
-
 
     protected long getContentSize() {
         long contentSize = 4;
@@ -79,7 +77,6 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
         return contentSize;
     }
 
-
     @Override
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
@@ -90,9 +87,7 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
         lengthSizeOfTrunNum = ((int) (temp & 0xC) >> 2) + 1;
         lengthSizeOfSampleNum = ((int) (temp & 0x3)) + 1;
         long numberOfEntries = IsoTypeReader.readUInt32(content);
-
-        entries = new ArrayList<Entry>();
-
+        entries = new ArrayList<>();
         for (int i = 0; i < numberOfEntries; i++) {
             Entry entry = new Entry();
             if (getVersion() == 1) {
@@ -105,12 +100,9 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
             entry.trafNumber = IsoTypeReaderVariable.read(content, lengthSizeOfTrafNum);
             entry.trunNumber = IsoTypeReaderVariable.read(content, lengthSizeOfTrunNum);
             entry.sampleNumber = IsoTypeReaderVariable.read(content, lengthSizeOfSampleNum);
-
             entries.add(entry);
         }
-
     }
-
 
     @Override
     protected void getContent(ByteBuffer byteBuffer) {
@@ -123,7 +115,6 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
         temp = temp | ((lengthSizeOfSampleNum - 1) & 0x3);
         IsoTypeWriter.writeUInt32(byteBuffer, temp);
         IsoTypeWriter.writeUInt32(byteBuffer, entries.size());
-
         for (Entry entry : entries) {
             if (getVersion() == 1) {
                 IsoTypeWriter.writeUInt64(byteBuffer, entry.time);
@@ -135,10 +126,8 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
             IsoTypeWriterVariable.write(entry.trafNumber, byteBuffer, lengthSizeOfTrafNum);
             IsoTypeWriterVariable.write(entry.trunNumber, byteBuffer, lengthSizeOfTrunNum);
             IsoTypeWriterVariable.write(entry.sampleNumber, byteBuffer, lengthSizeOfSampleNum);
-
         }
     }
-
 
     public void setTrackId(long trackId) {
         this.trackId = trackId;
@@ -261,15 +250,12 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
         public boolean equals(Object o) {
             if (this == o) return true;
             if (o == null || getClass() != o.getClass()) return false;
-
             Entry entry = (Entry) o;
-
             if (moofOffset != entry.moofOffset) return false;
             if (sampleNumber != entry.sampleNumber) return false;
             if (time != entry.time) return false;
             if (trafNumber != entry.trafNumber) return false;
             if (trunNumber != entry.trunNumber) return false;
-
             return true;
         }
 
@@ -291,4 +277,5 @@ public class TrackFragmentRandomAccessBox extends AbstractFullBox {
                 ", entries=" + entries +
                 '}';
     }
+
 }

@@ -44,7 +44,6 @@ public class Path {
             List<?> boxesOfBoxType = box.getParent().getBoxes(box.getClass());
             int index = boxesOfBoxType.indexOf(box);
             path = String.format("/%s[%d]", box.getType(), index) + path;
-
             return createPath(box.getParent(), path);
         }
     }
@@ -53,7 +52,6 @@ public class Path {
         List<Box> all = getPaths(box, path);
         return all.isEmpty() ? null : all.get(0);
     }
-
 
     public static List<Box> getPaths(Box box, String path) {
         if (path.startsWith("/")) {
@@ -75,7 +73,6 @@ public class Path {
                 now = path;
                 later = "";
             }
-
             Matcher m = component.matcher(now);
             if (m.matches()) {
                 String type = m.group(1);
@@ -104,12 +101,11 @@ public class Path {
                 throw new RuntimeException(now + " is invalid path.");
             }
         }
-
     }
-
 
     public static boolean isContained(Box box, String path) {
         assert path.startsWith("/") : "Absolute path required";
         return getPaths(box, path).contains(box);
     }
+
 }

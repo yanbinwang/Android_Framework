@@ -23,7 +23,6 @@ package com.googlecode.mp4parser.h264.model;
 import java.util.Arrays;
 
 public class ScalingMatrix {
-
     public ScalingList[] ScalingList4x4;
     public ScalingList[] ScalingList8x8;
 
@@ -34,4 +33,5 @@ public class ScalingMatrix {
                 ", ScalingList8x8=" + (ScalingList8x8 == null ? null : Arrays.asList(ScalingList8x8)) + "\n" +
                 '}';
     }
+
 }

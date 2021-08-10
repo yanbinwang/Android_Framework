@@ -22,9 +22,8 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * To change this template use File | Settings | File Templates.
  */
 public abstract class AbstractManifestWriter implements ManifestWriter {
+    private final FragmentIntersectionFinder intersectionFinder;
     private static final Logger LOG = Logger.getLogger(AbstractManifestWriter.class.getName());
-
-    private FragmentIntersectionFinder intersectionFinder;
     protected long[] audioFragmentsDurations;
     protected long[] videoFragmentsDurations;
 
@@ -44,7 +43,6 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
         long[] durations = new long[startSamples.length];
         int currentFragment = 0;
         int currentSample = 1; // sync samples start with 1 !
-
         for (TimeToSampleBox.Entry entry : track.getDecodingTimeEntries()) {
             for (int max = currentSample + l2i(entry.getCount()); currentSample < max; currentSample++) {
                 // in this loop we go through the entry.getCount() samples starting from current sample.
@@ -54,12 +52,9 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
                     currentFragment++;
                 }
                 durations[currentFragment] += entry.getDelta();
-
-
             }
         }
         return durations;
-
     }
 
     public long getBitrate(Track track) {
@@ -81,7 +76,6 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
     }
 
     protected long[] checkFragmentsAlign(long[] referenceTimes, long[] checkTimes) throws IOException {
-
         if (referenceTimes == null || referenceTimes.length == 0) {
             return checkTimes;
         }
@@ -89,7 +83,6 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
         System.arraycopy(referenceTimes, 0, referenceTimesMinusLast, 0, referenceTimes.length - 1);
         long[] checkTimesMinusLast = new long[checkTimes.length - 1];
         System.arraycopy(checkTimes, 0, checkTimesMinusLast, 0, checkTimes.length - 1);
-
         if (!Arrays.equals(checkTimesMinusLast, referenceTimesMinusLast)) {
             String log = "";
             log += (referenceTimes.length);
@@ -109,7 +102,6 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
             log += ("]");
             LOG.warning(log);
             throw new IOException("Track does not have the same fragment borders as its predecessor.");
-
         } else {
             return checkTimes;
         }
@@ -123,4 +115,5 @@ public abstract class AbstractManifestWriter implements ManifestWriter {
         }
         return type;
     }
+
 }

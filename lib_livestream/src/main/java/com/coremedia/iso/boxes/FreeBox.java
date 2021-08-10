@@ -1,26 +1,27 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
 
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.BoxParser;
 import com.coremedia.iso.ChannelHelper;
 import com.coremedia.iso.IsoTypeWriter;
-import com.googlecode.mp4parser.AbstractBox;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -30,16 +31,14 @@ import java.nio.channels.WritableByteChannel;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 /**
  * A free box. Just a placeholder to enable editing without rewriting the whole file.
  */
 public class FreeBox implements Box {
-    public static final String TYPE = "free";
     ByteBuffer data;
-    List<Box> replacers = new LinkedList<Box>();
+    List<Box> replacers = new LinkedList<>();
     private ContainerBox parent;
+    public static final String TYPE = "free";
 
     public FreeBox() {
     }
@@ -47,7 +46,6 @@ public class FreeBox implements Box {
     public FreeBox(int size) {
         this.data = ByteBuffer.allocate(size);
     }
-
 
     public ByteBuffer getData() {
         return data;
@@ -68,7 +66,6 @@ public class FreeBox implements Box {
         os.write(header);
         data.rewind();
         os.write(data);
-
     }
 
     public ContainerBox getParent() {
@@ -103,12 +100,10 @@ public class FreeBox implements Box {
         }
     }
 
-
     public void addAndReplace(Box box) {
         data.position(l2i(box.getSize()));
         data = data.slice();
         replacers.add(box);
     }
-
 
 }

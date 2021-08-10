@@ -15,8 +15,12 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
-import com.googlecode.mp4parser.authoring.Movie;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
 
@@ -25,17 +29,12 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-import static com.googlecode.mp4parser.util.Math.gcd;
-import static com.googlecode.mp4parser.util.Math.lcm;
-import static java.lang.Math.round;
-
 /**
  * Changes the timescale of a track by wrapping the track.
  */
 public class MultiplyTimeScaleTrack implements Track {
     Track source;
-    private int timeScaleFactor;
+    private final int timeScaleFactor;
 
     public MultiplyTimeScaleTrack(Track source, int timeScaleFactor) {
         this.source = source;
@@ -92,7 +91,6 @@ public class MultiplyTimeScaleTrack implements Track {
         return source.getSamples();
     }
 
-
     static List<CompositionTimeToSample.Entry> adjustCtts(List<CompositionTimeToSample.Entry> source, int timeScaleFactor) {
         if (source != null) {
             List<CompositionTimeToSample.Entry> entries2 = new ArrayList<CompositionTimeToSample.Entry>(source.size());
@@ -127,4 +125,5 @@ public class MultiplyTimeScaleTrack implements Track {
                 "source=" + source +
                 '}';
     }
+
 }

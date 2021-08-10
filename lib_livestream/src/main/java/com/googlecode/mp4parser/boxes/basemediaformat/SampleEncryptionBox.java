@@ -21,4 +21,5 @@ public class SampleEncryptionBox extends AbstractSampleEncryptionBox {
         super("senc");
 
     }
+
 }

@@ -10,8 +10,13 @@ import java.nio.ByteBuffer;
  *
  */
 public final class AppleLosslessSpecificBox extends AbstractFullBox {
-
-    public static final String TYPE = "alac";
+    private int unknown1; // 8bit
+    private int sampleSize; // 8bit
+    private int historyMult; // 8bit
+    private int initialHistory; // 8bit
+    private int kModifier; // 8bit
+    private int channels; // 8bit
+    private int unknown2; // 16bit
     /*
    Extradata: 32bit size 32bit tag (=alac) 32bit zero?
    32bit max sample per frame 8bit ?? (zero?) 8bit sample
@@ -20,16 +25,10 @@ public final class AppleLosslessSpecificBox extends AbstractFullBox {
    bitrate? 32bit samplerate
     */
     private long maxSamplePerFrame; // 32bi
-    private int unknown1; // 8bit
-    private int sampleSize; // 8bit
-    private int historyMult; // 8bit
-    private int initialHistory; // 8bit
-    private int kModifier; // 8bit
-    private int channels; // 8bit
-    private int unknown2; // 16bit
     private long maxCodedFrameSize; // 32bit
     private long bitRate; // 32bit
     private long sampleRate; // 32bit
+    public static final String TYPE = "alac";
 
     public long getMaxSamplePerFrame() {
         return maxSamplePerFrame;
@@ -118,7 +117,6 @@ public final class AppleLosslessSpecificBox extends AbstractFullBox {
     public void setSampleRate(int sampleRate) {
         this.sampleRate = sampleRate;
     }
-
 
     @Override
     public void _parseDetails(ByteBuffer content) {

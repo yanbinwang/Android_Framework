@@ -23,5 +23,7 @@ import java.io.IOException;
  * Writes the whole package.
  */
 public interface PackageWriter {
-    public void write(Movie qualities) throws IOException;
+
+    void write(Movie qualities) throws IOException;
+
 }

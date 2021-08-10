@@ -15,7 +15,6 @@
  */
 package com.coremedia.iso;
 
-import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public final class IsoTypeWriterVariable {
@@ -40,6 +39,6 @@ public final class IsoTypeWriterVariable {
             default:
                 throw new RuntimeException("I don't know how to read " + bytes + " bytes");
         }
-
     }
+
 }

@@ -8,7 +8,6 @@ import com.coremedia.iso.Utf8;
 public final class AppleCustomGenreBox extends AbstractAppleMetaDataBox {
     public static final String TYPE = "\u00a9gen";
 
-
     public AppleCustomGenreBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getStringAppleDataBox();
@@ -25,4 +24,5 @@ public final class AppleCustomGenreBox extends AbstractAppleMetaDataBox {
     public String getGenre() {
         return Utf8.convert(appleDataBox.getData());
     }
+
 }

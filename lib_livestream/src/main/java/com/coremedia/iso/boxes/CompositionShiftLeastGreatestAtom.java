@@ -19,19 +19,14 @@ public class CompositionShiftLeastGreatestAtom extends AbstractFullBox {
 
     // A 32-bit unsigned integer that specifies the calculated value.
     int compositionOffsetToDisplayOffsetShift;
-
     // A 32-bit signed integer that specifies the calculated value.
     int leastDisplayOffset;
-
     // A 32-bit signed integer that specifies the calculated value.
     int greatestDisplayOffset;
-
     //A 32-bit signed integer that specifies the calculated value.
     int displayStartTime;
-
     //A 32-bit signed integer that specifies the calculated value.
     int displayEndTime;
-
 
     @Override
     protected long getContentSize() {
@@ -57,7 +52,6 @@ public class CompositionShiftLeastGreatestAtom extends AbstractFullBox {
         byteBuffer.putInt(displayStartTime);
         byteBuffer.putInt(displayEndTime);
     }
-
 
     public int getCompositionOffsetToDisplayOffsetShift() {
         return compositionOffsetToDisplayOffsetShift;
@@ -98,4 +92,5 @@ public class CompositionShiftLeastGreatestAtom extends AbstractFullBox {
     public void setDisplayEndTime(int displayEndTime) {
         this.displayEndTime = displayEndTime;
     }
+
 }

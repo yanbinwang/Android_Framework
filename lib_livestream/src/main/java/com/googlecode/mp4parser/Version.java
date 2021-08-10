@@ -22,6 +22,6 @@ public class Version {
             version = "unknown";
         }
         VERSION = version;
-
     }
+
 }

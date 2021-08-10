@@ -16,6 +16,8 @@
 
 package com.googlecode.mp4parser.boxes.mp4.samplegrouping;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.AbstractFullBox;
@@ -23,8 +25,6 @@ import com.googlecode.mp4parser.AbstractFullBox;
 import java.nio.ByteBuffer;
 import java.util.LinkedList;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * This table can be used to find the group that a sample belongs to and the associated description of that
@@ -40,17 +40,13 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * Version 1 of this box should only be used if a grouping type parameter is needed.
  */
 public class SampleToGroupBox extends AbstractFullBox {
-    public static final String TYPE = "sbgp";
-
-
+    List<Entry> entries = new LinkedList<Entry>();
     private String groupingType;
     private String groupingTypeParameter;
-
-    List<Entry> entries = new LinkedList<Entry>();
+    public static final String TYPE = "sbgp";
 
     public SampleToGroupBox() {
         super(TYPE);
-
     }
 
     @Override
@@ -70,7 +66,6 @@ public class SampleToGroupBox extends AbstractFullBox {
             IsoTypeWriter.writeUInt32(byteBuffer, entry.getSampleCount());
             IsoTypeWriter.writeUInt32(byteBuffer, entry.getGroupDescriptionIndex());
         }
-
     }
 
     @Override
@@ -127,16 +122,13 @@ public class SampleToGroupBox extends AbstractFullBox {
             if (o == null || getClass() != o.getClass()) {
                 return false;
             }
-
             Entry entry = (Entry) o;
-
             if (groupDescriptionIndex != entry.groupDescriptionIndex) {
                 return false;
             }
             if (sampleCount != entry.sampleCount) {
                 return false;
             }
-
             return true;
         }
 
@@ -171,4 +163,5 @@ public class SampleToGroupBox extends AbstractFullBox {
     public void setEntries(List<Entry> entries) {
         this.entries = entries;
     }
+
 }

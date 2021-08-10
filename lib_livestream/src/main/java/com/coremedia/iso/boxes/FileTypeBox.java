@@ -1,17 +1,17 @@
-/*  
+/*
  * Copyright 2008 CoreMedia AG, Hamburg
  *
- * Licensed under the Apache License, Version 2.0 (the License); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an AS IS BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+ * Licensed under the Apache License, Version 2.0 (the License);
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an AS IS BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package com.coremedia.iso.boxes;
@@ -23,7 +23,6 @@ import com.googlecode.mp4parser.AbstractBox;
 import com.googlecode.mp4parser.annotations.DoNotParseDetail;
 
 import java.nio.ByteBuffer;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,11 +33,10 @@ import java.util.List;
  * identifies a precise specification.
  */
 public class FileTypeBox extends AbstractBox {
-    public static final String TYPE = "ftyp";
-
-    private String majorBrand;
     private long minorVersion;
+    private String majorBrand;
     private List<String> compatibleBrands = Collections.emptyList();
+    public static final String TYPE = "ftyp";
 
     public FileTypeBox() {
         super(TYPE);
@@ -53,7 +51,6 @@ public class FileTypeBox extends AbstractBox {
 
     protected long getContentSize() {
         return 8 + compatibleBrands.size() * 4;
-
     }
 
     @Override
@@ -61,7 +58,7 @@ public class FileTypeBox extends AbstractBox {
         majorBrand = IsoTypeReader.read4cc(content);
         minorVersion = IsoTypeReader.readUInt32(content);
         int compatibleBrandsCount = content.remaining() / 4;
-        compatibleBrands = new LinkedList<String>();
+        compatibleBrands = new LinkedList<>();
         for (int i = 0; i < compatibleBrandsCount; i++) {
             compatibleBrands.add(IsoTypeReader.read4cc(content));
         }
@@ -74,7 +71,6 @@ public class FileTypeBox extends AbstractBox {
         for (String compatibleBrand : compatibleBrands) {
             byteBuffer.put(IsoFile.fourCCtoBytes(compatibleBrand));
         }
-
     }
 
     /**
@@ -141,4 +137,5 @@ public class FileTypeBox extends AbstractBox {
         result.append("]");
         return result.toString();
     }
+
 }

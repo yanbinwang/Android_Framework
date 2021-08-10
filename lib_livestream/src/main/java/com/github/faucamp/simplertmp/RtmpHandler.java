@@ -12,7 +12,6 @@ import java.net.SocketException;
  */
 
 public class RtmpHandler extends Handler {
-
     private static final int MSG_RTMP_CONNECTING = 0;
     private static final int MSG_RTMP_CONNECTED = 1;
     private static final int MSG_RTMP_VIDEO_STREAMING = 2;
@@ -22,13 +21,11 @@ public class RtmpHandler extends Handler {
     private static final int MSG_RTMP_VIDEO_FPS_CHANGED = 6;
     private static final int MSG_RTMP_VIDEO_BITRATE_CHANGED = 7;
     private static final int MSG_RTMP_AUDIO_BITRATE_CHANGED = 8;
-
     private static final int MSG_RTMP_SOCKET_EXCEPTION = 9;
     private static final int MSG_RTMP_IO_EXCEPTION = 10;
     private static final int MSG_RTMP_ILLEGAL_ARGUMENT_EXCEPTION = 11;
     private static final int MSG_RTMP_ILLEGAL_STATE_EXCEPTION = 12;
-
-    private WeakReference<RtmpListener> mWeakListener;
+    private final WeakReference<RtmpListener> mWeakListener;
 
     public RtmpHandler(RtmpListener listener) {
         mWeakListener = new WeakReference<>(listener);
@@ -92,7 +89,6 @@ public class RtmpHandler extends Handler {
         if (listener == null) {
             return;
         }
-
         switch (msg.what) {
             case MSG_RTMP_CONNECTING:
                 listener.onRtmpConnecting((String) msg.obj);
@@ -139,7 +135,7 @@ public class RtmpHandler extends Handler {
     }
 
     public interface RtmpListener {
-        
+
         void onRtmpConnecting(String msg);
 
         void onRtmpConnected(String msg);
@@ -165,5 +161,7 @@ public class RtmpHandler extends Handler {
         void onRtmpIllegalArgumentException(IllegalArgumentException e);
 
         void onRtmpIllegalStateException(IllegalStateException e);
+
     }
+
 }

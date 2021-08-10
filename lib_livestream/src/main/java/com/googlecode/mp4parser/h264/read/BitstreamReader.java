@@ -31,12 +31,11 @@ import java.io.InputStream;
  * @author Stanislav Vitvitskiy
  */
 public class BitstreamReader {
-    private InputStream is;
+    int nBit;
     private int curByte;
     private int nextByte;
-    int nBit;
+    private final InputStream is;
     protected static int bitsRead;
-
     protected CharCache debugBits = new CharCache(50);
 
     public BitstreamReader(InputStream is) throws IOException {
@@ -46,10 +45,10 @@ public class BitstreamReader {
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#read1Bit()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#read1Bit()
+     */
     public int read1Bit() throws IOException {
         if (nBit == 8) {
             advance();
@@ -59,29 +58,23 @@ public class BitstreamReader {
         }
         int res = (curByte >> (7 - nBit)) & 1;
         nBit++;
-
         debugBits.append(res == 0 ? '0' : '1');
         ++bitsRead;
-
         return res;
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readNBit(int)
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readNBit(int)
+     */
     public long readNBit(int n) throws IOException {
-        if (n > 64)
-            throw new IllegalArgumentException("Can not readByte more then 64 bit");
-
+        if (n > 64) throw new IllegalArgumentException("Can not readByte more then 64 bit");
         long val = 0;
-
         for (int i = 0; i < n; i++) {
             val <<= 1;
             val |= read1Bit();
         }
-
         return val;
     }
 
@@ -92,27 +85,24 @@ public class BitstreamReader {
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readByte()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readByte()
+     */
     public int readByte() throws IOException {
         if (nBit > 0) {
             advance();
         }
-
         int res = curByte;
-
         advance();
-
         return res;
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#moreRBSPData()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#moreRBSPData()
+     */
     public boolean moreRBSPData() throws IOException {
         if (nBit == 8) {
             advance();
@@ -120,7 +110,6 @@ public class BitstreamReader {
         int tail = 1 << (8 - nBit - 1);
         int mask = ((tail << 1) - 1);
         boolean hasTail = (curByte & mask) == tail;
-
         return !(curByte == -1 || (nextByte == -1 && hasTail));
     }
 
@@ -129,22 +118,21 @@ public class BitstreamReader {
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readRemainingByte()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#readRemainingByte()
+     */
     public long readRemainingByte() throws IOException {
         return readNBit(8 - nBit);
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#next_bits(int)
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#next_bits(int)
+     */
     public int peakNextBits(int n) throws IOException {
-        if (n > 8)
-            throw new IllegalArgumentException("N should be less then 8");
+        if (n > 8) throw new IllegalArgumentException("N should be less then 8");
         if (nBit == 8) {
             advance();
             if (curByte == -1) {
@@ -152,43 +140,40 @@ public class BitstreamReader {
             }
         }
         int[] bits = new int[16 - nBit];
-
         int cnt = 0;
         for (int i = nBit; i < 8; i++) {
             bits[cnt++] = (curByte >> (7 - i)) & 0x1;
         }
-
         for (int i = 0; i < 8; i++) {
             bits[cnt++] = (nextByte >> (7 - i)) & 0x1;
         }
-
         int result = 0;
         for (int i = 0; i < n; i++) {
             result <<= 1;
             result |= bits[i];
         }
-
         return result;
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#byte_aligned()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#byte_aligned()
+     */
     public boolean isByteAligned() {
         return (nBit % 8) == 0;
     }
 
     /*
-      * (non-Javadoc)
-      *
-      * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#close()
-      */
+     * (non-Javadoc)
+     *
+     * @see ua.org.jplayer.javcodec.h264.RBSPInputStream#close()
+     */
     public void close() throws IOException {
     }
 
     public int getCurBit() {
         return nBit;
     }
+
 }

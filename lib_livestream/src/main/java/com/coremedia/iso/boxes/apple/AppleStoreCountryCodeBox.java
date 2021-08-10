@@ -7,7 +7,7 @@ import java.util.Map;
  * itunes MetaData comment box.
  */
 public class AppleStoreCountryCodeBox extends AbstractAppleMetaDataBox {
-    private static Map<String, String> countryCodes = new HashMap<String, String>();
+    private static final Map<String, String> countryCodes = new HashMap<>();
 
     static {
         countryCodes.put("143460", "Australia");
@@ -33,15 +33,12 @@ public class AppleStoreCountryCodeBox extends AbstractAppleMetaDataBox {
         countryCodes.put("143444", "United Kingdom");
         countryCodes.put("143441", "United States");
     }
-
     public static final String TYPE = "sfID";
-
 
     public AppleStoreCountryCodeBox() {
         super(TYPE);
         appleDataBox = AppleDataBox.getUint32AppleDataBox();
     }
-
 
     public String getReadableValue() {
         if (countryCodes.containsKey(getValue())) {
@@ -51,4 +48,5 @@ public class AppleStoreCountryCodeBox extends AbstractAppleMetaDataBox {
         }
 
     }
+
 }

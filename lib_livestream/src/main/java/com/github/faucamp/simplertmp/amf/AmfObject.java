@@ -9,14 +9,15 @@ import java.util.Map;
 
 /**
  * AMF object
- * 
+ *
  * @author francois
  */
 public class AmfObject implements AmfData {
-
-    protected Map<String, AmfData> properties = new LinkedHashMap<String, AmfData>();
     protected int size = -1;
-    /** Byte sequence that marks the end of an AMF object */
+    protected Map<String, AmfData> properties = new LinkedHashMap<>();
+    /**
+     * Byte sequence that marks the end of an AMF object
+     */
     protected static final byte[] OBJECT_END_MARKER = new byte[]{0x00, 0x00, 0x09};
 
     public AmfObject() {
@@ -50,17 +51,14 @@ public class AmfObject implements AmfData {
     public void writeTo(OutputStream out) throws IOException {
         // Begin the object
         out.write(AmfType.OBJECT.getValue());
-
-        // Write key/value pairs in this object        
+        // Write key/value pairs in this object
         for (Map.Entry<String, AmfData> entry : properties.entrySet()) {
             // The key must be a STRING type, and thus the "type-definition" byte is implied (not included in message)
             AmfString.writeStringTo(out, entry.getKey(), true);
             entry.getValue().writeTo(out);
         }
-
-        // End the object        
+        // End the object
         out.write(OBJECT_END_MARKER);
-
     }
 
     @Override
@@ -68,13 +66,11 @@ public class AmfObject implements AmfData {
         // Skip data type byte (we assume it's already read)       
         size = 1;
         InputStream markInputStream = in.markSupported() ? in : new BufferedInputStream(in);
-
         while (true) {
             // Look for the 3-byte object end marker [0x00 0x00 0x09]
             markInputStream.mark(3);
             byte[] endMarker = new byte[3];
             markInputStream.read(endMarker);
-
             if (endMarker[0] == OBJECT_END_MARKER[0] && endMarker[1] == OBJECT_END_MARKER[1] && endMarker[2] == OBJECT_END_MARKER[2]) {
                 // End marker found
                 size += 3;
@@ -102,8 +98,8 @@ public class AmfObject implements AmfData {
                 size += entry.getValue().getSize();
             }
             size += 3; // end of object marker
-
         }
         return size;
     }
+
 }

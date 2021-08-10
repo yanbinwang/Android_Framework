@@ -3,17 +3,17 @@ package com.seu.magicfilter.advanced;
 import android.opengl.GLES20;
 
 import com.seu.magicfilter.utils.MagicFilterType;
+
 import net.ossrs.yasea.R;
 
 import com.seu.magicfilter.base.gpuimage.GPUImageFilter;
 
-public class MagicSketchFilter extends GPUImageFilter{
-    
+public class MagicSketchFilter extends GPUImageFilter {
     private int mSingleStepOffsetLocation;
     //0.0 - 1.0
     private int mStrengthLocation;
-    
-    public MagicSketchFilter(){
+
+    public MagicSketchFilter() {
         super(MagicFilterType.SKETCH, R.raw.sketch);
     }
 
@@ -30,7 +30,7 @@ public class MagicSketchFilter extends GPUImageFilter{
     }
 
     @Override
-    protected void onInitialized(){
+    protected void onInitialized() {
         super.onInitialized();
         setFloat(mStrengthLocation, 0.5f);
     }
@@ -38,6 +38,7 @@ public class MagicSketchFilter extends GPUImageFilter{
     @Override
     public void onInputSizeChanged(final int width, final int height) {
         super.onInputSizeChanged(width, height);
-        setFloatVec2(mSingleStepOffsetLocation, new float[] {1.0f / width, 1.0f / height});
+        setFloatVec2(mSingleStepOffsetLocation, new float[]{1.0f / width, 1.0f / height});
     }
+
 }

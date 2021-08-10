@@ -15,7 +15,6 @@
  */
 package com.googlecode.mp4parser.util;
 
-
 public class CastUtils {
     /**
      * Casts a long to an int. In many cases I use a long for a UInt32 but this cannot be used to allocate
@@ -31,4 +30,5 @@ public class CastUtils {
         }
         return (int) l;
     }
+
 }

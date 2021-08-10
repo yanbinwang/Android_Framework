@@ -1,5 +1,7 @@
 package com.coremedia.iso.boxes;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
 import com.googlecode.mp4parser.AbstractFullBox;
@@ -8,8 +10,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
 
 /**
  * <pre>
@@ -43,9 +43,8 @@ import static com.googlecode.mp4parser.util.CastUtils.l2i;
  * exactly one with the value 0 (zero).
  */
 public class CompositionTimeToSample extends AbstractFullBox {
-    public static final String TYPE = "ctts";
-
     List<Entry> entries = Collections.emptyList();
+    public static final String TYPE = "ctts";
 
     public CompositionTimeToSample() {
         super(TYPE);
@@ -67,7 +66,7 @@ public class CompositionTimeToSample extends AbstractFullBox {
     public void _parseDetails(ByteBuffer content) {
         parseVersionAndFlags(content);
         int numberOfEntries = l2i(IsoTypeReader.readUInt32(content));
-        entries = new ArrayList<Entry>(numberOfEntries);
+        entries = new ArrayList<>(numberOfEntries);
         for (int i = 0; i < numberOfEntries; i++) {
             Entry e = new Entry(l2i(IsoTypeReader.readUInt32(content)), content.getInt());
             entries.add(e);
@@ -78,14 +77,11 @@ public class CompositionTimeToSample extends AbstractFullBox {
     protected void getContent(ByteBuffer byteBuffer) {
         writeVersionAndFlags(byteBuffer);
         IsoTypeWriter.writeUInt32(byteBuffer, entries.size());
-
         for (Entry entry : entries) {
             IsoTypeWriter.writeUInt32(byteBuffer, entry.getCount());
             byteBuffer.putInt(entry.getOffset());
         }
-
     }
-
 
     public static class Entry {
         int count;
@@ -121,7 +117,6 @@ public class CompositionTimeToSample extends AbstractFullBox {
         }
     }
 
-
     /**
      * Decompresses the list of entries and returns the list of composition times.
      *
@@ -134,16 +129,12 @@ public class CompositionTimeToSample extends AbstractFullBox {
         }
         assert numOfSamples <= Integer.MAX_VALUE;
         int[] decodingTime = new int[(int) numOfSamples];
-
         int current = 0;
-
-
         for (CompositionTimeToSample.Entry entry : entries) {
             for (int i = 0; i < entry.getCount(); i++) {
                 decodingTime[current++] = entry.getOffset();
             }
         }
-
         return decodingTime;
     }
 

@@ -23,7 +23,6 @@ import java.nio.ByteBuffer;
 public class TimeCodeBox extends SampleEntry {
     byte[] data;
 
-
     public TimeCodeBox() {
         super("tmcd");
     }
@@ -51,4 +50,5 @@ public class TimeCodeBox extends SampleEntry {
         byteBuffer.put(data);
         _writeChildBoxes(byteBuffer);
     }
+
 }

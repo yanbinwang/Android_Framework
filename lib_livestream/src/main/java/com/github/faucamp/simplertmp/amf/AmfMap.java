@@ -1,16 +1,16 @@
 package com.github.faucamp.simplertmp.amf;
 
+import com.github.faucamp.simplertmp.Util;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-import com.github.faucamp.simplertmp.Util;
-
 /**
- * AMF map; that is, an "object"-like structure of key/value pairs, but with 
+ * AMF map; that is, an "object"-like structure of key/value pairs, but with
  * an array-like size indicator at the start (which is seemingly always 0)
- * 
+ *
  * @author francois
  */
 public class AmfMap extends AmfObject {
@@ -19,18 +19,15 @@ public class AmfMap extends AmfObject {
     public void writeTo(OutputStream out) throws IOException {
         // Begin the map/object/array/whatever exactly this is
         out.write(AmfType.MAP.getValue());
-
         // Write the "array size"
         Util.writeUnsignedInt32(out, properties.size());
-
-        // Write key/value pairs in this object        
+        // Write key/value pairs in this object
         for (Map.Entry<String, AmfData> entry : properties.entrySet()) {
             // The key must be a STRING type, and thus the "type-definition" byte is implied (not included in message)
             AmfString.writeStringTo(out, entry.getKey(), true);
             entry.getValue().writeTo(out);
         }
-
-        // End the object        
+        // End the object
         out.write(OBJECT_END_MARKER);
     }
 
@@ -50,4 +47,5 @@ public class AmfMap extends AmfObject {
         }
         return size;
     }
+
 }

@@ -15,7 +15,12 @@
  */
 package com.googlecode.mp4parser.authoring;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 
 import java.nio.ByteBuffer;
 import java.util.List;
@@ -53,8 +58,8 @@ public interface Track {
 
     List<ByteBuffer> getSamples();
 
-    public Box getMediaHeaderBox();
+    Box getMediaHeaderBox();
 
-    public SubSampleInformationBox getSubsampleInformationBox();
+    SubSampleInformationBox getSubsampleInformationBox();
 
 }

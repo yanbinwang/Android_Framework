@@ -15,14 +15,18 @@
  */
 package com.googlecode.mp4parser.authoring.tracks;
 
-import com.coremedia.iso.boxes.*;
+import com.coremedia.iso.boxes.Box;
+import com.coremedia.iso.boxes.CompositionTimeToSample;
+import com.coremedia.iso.boxes.SampleDependencyTypeBox;
+import com.coremedia.iso.boxes.SampleDescriptionBox;
+import com.coremedia.iso.boxes.SubSampleInformationBox;
+import com.coremedia.iso.boxes.TimeToSampleBox;
 import com.googlecode.mp4parser.authoring.AbstractTrack;
 import com.googlecode.mp4parser.authoring.Track;
 import com.googlecode.mp4parser.authoring.TrackMetaData;
 
 import java.nio.ByteBuffer;
 import java.util.AbstractList;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -31,16 +35,15 @@ import java.util.List;
 
 public class ReplaceSampleTrack extends AbstractTrack {
     Track origTrack;
-    private long sampleNumber;
-    private ByteBuffer sampleContent;
-    private List<ByteBuffer>  samples;
+    private final long sampleNumber;
+    private final ByteBuffer sampleContent;
+    private final List<ByteBuffer> samples;
 
     public ReplaceSampleTrack(Track origTrack, long sampleNumber, ByteBuffer content) {
         this.origTrack = origTrack;
         this.sampleNumber = sampleNumber;
         this.sampleContent = content;
         this.samples = new ReplaceASingleEntryList();
-
     }
 
     public List<ByteBuffer> getSamples() {
@@ -53,12 +56,10 @@ public class ReplaceSampleTrack extends AbstractTrack {
 
     public List<TimeToSampleBox.Entry> getDecodingTimeEntries() {
         return origTrack.getDecodingTimeEntries();
-
     }
 
     public List<CompositionTimeToSample.Entry> getCompositionTimeEntries() {
         return origTrack.getCompositionTimeEntries();
-
     }
 
     synchronized public long[] getSyncSamples() {

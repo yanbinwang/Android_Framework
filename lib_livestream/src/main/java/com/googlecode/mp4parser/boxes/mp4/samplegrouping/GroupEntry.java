@@ -20,9 +20,11 @@ import java.nio.ByteBuffer;
 
 public abstract class GroupEntry {
     public abstract void parse(ByteBuffer byteBuffer);
+
     public abstract ByteBuffer get();
 
     public int size() {
         return get().limit();
     }
+
 }

@@ -16,6 +16,8 @@
 
 package com.coremedia.iso.boxes.apple;
 
+import static com.googlecode.mp4parser.util.CastUtils.l2i;
+
 import com.coremedia.iso.IsoFile;
 import com.coremedia.iso.IsoTypeReader;
 import com.coremedia.iso.IsoTypeWriter;
@@ -24,18 +26,15 @@ import com.googlecode.mp4parser.AbstractFullBox;
 
 import java.nio.ByteBuffer;
 
-import static com.googlecode.mp4parser.util.CastUtils.l2i;
-
 public class AppleDataReferenceBox extends AbstractFullBox {
-    public static final String TYPE = "rdrf";
     private int dataReferenceSize;
     private String dataReferenceType;
     private String dataReference;
+    public static final String TYPE = "rdrf";
 
     public AppleDataReferenceBox() {
         super(TYPE);
     }
-
 
     protected long getContentSize() {
         return 12 + dataReferenceSize;
@@ -68,4 +67,5 @@ public class AppleDataReferenceBox extends AbstractFullBox {
     public String getDataReference() {
         return dataReference;
     }
+
 }
