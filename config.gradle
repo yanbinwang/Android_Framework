@@ -103,7 +103,7 @@ def addRepos(repositories) {
     repositories.flatDir { dirs 'libs' }
     repositories.maven { url 'https://jitpack.io' }
     repositories.maven { url 'https://mvn.mob.com/android' }
-    repositories.maven { url 'https://mvn.gt.getui.com/nexus/content/repositories/releases/' }
+    repositories.maven { url 'https://mvn.getui.com/nexus/content/repositories/releases/' }
 }
 
 ext.addRepos = this.&addRepos

@@ -137,7 +137,9 @@ object WXShareHelper {
         if (platform.isAuthValid) platform.removeAccount(true) //执行此操作就可以移除掉本地授权状态和授权信息
     }
 
-    //获取分享方式
+    /**
+     * 获取分享方式
+     */
     private fun getPlatformType(type: Int) = if (type == SendMessageToWX.Req.WXSceneTimeline) WechatMoments.NAME else Wechat.NAME
 
 }

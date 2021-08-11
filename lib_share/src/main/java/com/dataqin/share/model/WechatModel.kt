@@ -19,7 +19,9 @@ class WechatModel {
 
     constructor()
 
-    //分享链接
+    /**
+     * 分享链接
+     */
     constructor(title: String, content: String, imgUrl: String, url: String, type: Int = SendMessageToWX.Req.WXSceneSession) {
         this.title = title
         this.content = content
@@ -28,7 +30,9 @@ class WechatModel {
         this.type = type
     }
 
-    //分享微信小程序
+    /**
+     * 分享微信小程序
+     */
     constructor(title: String, content: String, imgUrl: String, url: String, id: String, type: Int = SendMessageToWX.Req.WXSceneSession) {
         this.title = title
         this.content = content
@@ -38,7 +42,9 @@ class WechatModel {
         this.type = type
     }
 
-    //分享图片
+    /**
+     * 分享图片
+     */
     constructor(type: Int, bmp: Bitmap) {
         this.type = type
         this.bmp = SoftReference(bmp)
