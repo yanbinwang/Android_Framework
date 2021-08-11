@@ -13,7 +13,7 @@ import java.util.*
 object TimerHelper {
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
-    private var downTimer: CountDownTimer? = null
+    private var countDownTimer: CountDownTimer? = null
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
 
     /**
@@ -29,7 +29,7 @@ object TimerHelper {
     }
 
     /**
-     * 计时-开始
+     * 计时(累加)-开始
      */
     @JvmStatic
     fun startTask(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
@@ -45,7 +45,7 @@ object TimerHelper {
     }
 
     /**
-     * 计时-结束
+     * 计时（累加）-结束
      */
     @JvmStatic
     fun stopTask() {
@@ -60,20 +60,20 @@ object TimerHelper {
      * second-秒
      */
     @JvmStatic
-    fun startDownTask(onCountDownListener: OnCountDownListener? = null, second: Long = 1) {
-        if (null == downTimer) {
-            downTimer = object : CountDownTimer(second * 1000, 1000) {
+    fun startDownTask(onDownTaskListener: OnDownTaskListener? = null, second: Long = 1) {
+        if (null == countDownTimer) {
+            countDownTimer = object : CountDownTimer(second * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
-                    onCountDownListener?.onTick((millisUntilFinished / 1000))
+                    onDownTaskListener?.onTick((millisUntilFinished / 1000))
                 }
 
                 override fun onFinish() {
-                    onCountDownListener?.onFinish()
+                    onDownTaskListener?.onFinish()
                     stopDownTask()
                 }
             }
         }
-        downTimer?.start()
+        countDownTimer?.start()
     }
 
     /**
@@ -81,12 +81,12 @@ object TimerHelper {
      */
     @JvmStatic
     fun stopDownTask() {
-        downTimer?.cancel()
-        downTimer = null
+        countDownTimer?.cancel()
+        countDownTimer = null
     }
 
     /**
-     * 页面销毁时调取
+     * 页面销毁时调取-如同时使用了俩种计时方法
      */
     @JvmStatic
     fun destroy() {
@@ -100,7 +100,7 @@ object TimerHelper {
 
     }
 
-    interface OnCountDownListener {
+    interface OnDownTaskListener {
 
         fun onTick(second: Long)//返回秒
 
