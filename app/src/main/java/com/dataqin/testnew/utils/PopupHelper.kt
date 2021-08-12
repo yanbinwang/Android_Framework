@@ -42,7 +42,7 @@ object PopupHelper {
      * any-通知对象
      */
     @JvmStatic
-    fun addPopup(index: Int, any: Any) {
+    fun addPopup(index: Int, any: Any?) {
         popupMap[labelList[index]] = any
         showPopup()
     }
