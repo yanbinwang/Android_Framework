@@ -93,7 +93,7 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
                                     MotionEvent.ACTION_MOVE->{
                                         val dx = event.rawX.toInt() - lastX
                                         val dy = event.rawY.toInt() - lastY
-                                        params.x = paramX + dx
+                                        params.x = paramX - dx
                                         params.y = paramY + dy
                                         // update float window
                                         window?.attributes = params
