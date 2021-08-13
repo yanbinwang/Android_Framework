@@ -116,10 +116,7 @@ class CameraFactory {
     }
 
     private fun log(title: String, content: String) {
-        LogUtil.e(
-            TAG,
-            " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————"
-        )
+        LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
     }
 
     private fun instanceCamera(): Camera? {
@@ -172,13 +169,7 @@ class CameraFactory {
     /**
      * 对焦
      */
-    fun focusing() = run {
-        if (null != viewGroup) focusOnTouch(
-            Constants.SCREEN_WIDTH / 2,
-            Constants.SCREEN_HEIGHT,
-            viewGroup as FrameLayout
-        )
-    }
+    fun focusing() = run { if (null != viewGroup) focusOnTouch(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT, viewGroup as FrameLayout) }
 
     /**
      * 复位
@@ -259,12 +250,7 @@ class CameraFactory {
         }
     }
 
-    private fun calculateTapArea(
-        x: Float,
-        y: Float,
-        coefficient: Float,
-        previewSize: Camera.Size?
-    ): Rect {
+    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size?): Rect {
         val focusAreaSize = 300
         val areaSize = focusAreaSize * coefficient
         val centerX = (x / previewSize!!.width - 1000)
@@ -272,12 +258,7 @@ class CameraFactory {
         val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
         val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
         val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
-        return Rect(
-            rectF.left.roundToInt(),
-            rectF.top.roundToInt(),
-            rectF.right.roundToInt(),
-            rectF.bottom.roundToInt()
-        )
+        return Rect(rectF.left.roundToInt(), rectF.top.roundToInt(), rectF.right.roundToInt(), rectF.bottom.roundToInt())
     }
 
     private fun clamp(x: Int, min: Int, max: Int): Int {
@@ -454,10 +435,11 @@ class CameraFactory {
      */
     fun onDestroy() {
         releaseMediaRecorder()
+        orientationListener?.disable()
+        cameraId = CameraInfo.CAMERA_FACING_BACK
         camera = null
         cameraPreview = null
         viewGroup = null
-        cameraId = CameraInfo.CAMERA_FACING_BACK
     }
 
 }
