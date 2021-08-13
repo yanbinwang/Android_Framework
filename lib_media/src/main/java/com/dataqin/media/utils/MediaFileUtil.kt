@@ -81,7 +81,8 @@ object MediaFileUtil {
     @JvmStatic
     fun setHandleVideo(videoPath: String, secondList: MutableList<Int>, zipFilePath: String, onThreadListener: FileUtil.OnThreadListener?) {
         onThreadListener?.onStart()
-        val savePath = Constants.APPLICATION_FILE_PATH + "/证据文件/视频抽帧"
+        //在‘视频抽帧’文件夹下建立一个以抽帧文件名命名的文件夹，方便后续对当前文件夹打压缩包
+        val savePath = Constants.APPLICATION_FILE_PATH + "/文件/视频抽帧/${File(videoPath).name}"
         val thumbPaths = ArrayList<String>()
         for (i in secondList) {
             val thumbPath = VideoHelper.getFrames(videoPath, savePath, i)
@@ -92,9 +93,8 @@ object MediaFileUtil {
                 FileUtil.zipFolder(savePath, zipFilePath)
             } catch (ignored: Exception) {
             } finally {
-                for (thumbPath in thumbPaths) {
-                    FileUtil.deleteFile(thumbPath)
-                }
+                //清空当前文件夹和其下的所有图片
+                FileUtil.deleteDir(savePath)
                 WeakHandler(Looper.getMainLooper()).post{ onThreadListener?.onStop() }
             }
         }.start()

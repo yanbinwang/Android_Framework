@@ -68,7 +68,8 @@ object VideoHelper {
         if (!File(savePath).exists()) File(savePath).mkdirs()
         //获取的是微秒
         val bitmap = retriever.getFrameAtTime((second * 1000 * 1000).toLong(), MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
-        val path = savePath + File.separator + "${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}_${File(videoPath).name}_${second}s.jpg"
+//        val path = savePath + File.separator + "${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}_${File(videoPath).name}_${second}s.jpg"
+        val path = savePath + File.separator + "${File(videoPath).name}_${second}s.jpg"
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(path)
