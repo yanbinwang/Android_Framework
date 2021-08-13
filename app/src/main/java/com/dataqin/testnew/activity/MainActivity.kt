@@ -1,11 +1,8 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Build
-import android.os.Environment
 import android.os.Looper
-import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
@@ -19,8 +16,6 @@ import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.utils.file.FileUtil
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
@@ -30,10 +25,8 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
-import com.dataqin.testnew.service.TimeTickService
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
-import com.yanzhenjie.permission.runtime.Permission
 import java.io.File
 
 
@@ -219,10 +212,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                val intent =  Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 //                intent.setData(Uri.parse("package:" + getPackageName()));
 //                startActivityForResult(intent, 10086);
-                val mIntent = Intent()
-                mIntent.setClass(this, TimeTickService::class.java)
-                startService(mIntent)
-//                editPopup.showPopup(v)
+                editPopup.showPopup(v)
 //                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 //                    if (Environment.isExternalStorageManager()) {
 //                        startZip()
