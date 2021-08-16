@@ -250,10 +250,9 @@ class CameraFactory {
         }
     }
 
-    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size?): Rect {
-        val focusAreaSize = 300
-        val areaSize = focusAreaSize * coefficient
-        val centerX = (x / previewSize!!.width - 1000)
+    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size): Rect {
+        val areaSize = 300 * coefficient
+        val centerX = (x / previewSize.width - 1000)
         val centerY = (y / previewSize.height - 1000)
         val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
         val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
