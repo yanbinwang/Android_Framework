@@ -78,7 +78,7 @@ object GSYVideoHelper {
         GSYVideoType.disableMediaCodecTexture()
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
-        imgCover?.scaleType = ImageView.ScaleType.FIT_CENTER
+        imgCover?.scaleType = if (videoType == VideoType.MOBILE && !fullScreen) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.CENTER_CROP
         player?.titleTextView?.visibility = View.GONE
         player?.backButton?.visibility = View.GONE
         player?.thumbImageView = imgCover
@@ -104,7 +104,7 @@ object GSYVideoHelper {
      * 设置播放路径
      */
     @JvmStatic
-    fun setUrl(url: String) {
+    fun setUrl(url: String, autoPlay: Boolean = false) {
         retryTimes = 0
         //加载图片
         if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
@@ -131,6 +131,7 @@ object GSYVideoHelper {
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
             }
         }
+        if(autoPlay) player?.startPlayLogic()
     }
 
     /**
@@ -146,17 +147,13 @@ object GSYVideoHelper {
      * 写在系统的onPause之前
      */
     @JvmStatic
-    fun onPause() {
-        player?.currentPlayer?.onVideoPause()
-    }
+    fun onPause() = player?.currentPlayer?.onVideoPause()
 
     /**
      * 写在系统的onResume之前
      */
     @JvmStatic
-    fun onResume() {
-        player?.currentPlayer?.onVideoResume(false)
-    }
+    fun onResume() = player?.currentPlayer?.onVideoResume(false)
 
     /**
      * 写在系统的onDestroy之后
