@@ -1,9 +1,12 @@
 package com.dataqin.media.utils.helper
 
+import android.media.MediaPlayer
+import android.net.Uri
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
 import com.dataqin.base.utils.ToastUtil
+import com.dataqin.common.BaseApplication
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
@@ -20,6 +23,7 @@ import com.otaliastudios.cameraview.controls.*
  */
 object CameraHelper {
     private var cvFinder: CameraView? = null
+    private val shootMP by lazy { MediaPlayer.create(BaseApplication.instance?.applicationContext, Uri.parse("file:///system/media/audio/ui/camera_click.ogg")) }
     var onTakePictureListener: OnTakePictureListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
 
@@ -33,14 +37,24 @@ object CameraHelper {
     @JvmStatic
     fun initialize(owner: LifecycleOwner, cvFinder: CameraView) {
         this.cvFinder = cvFinder
+//        cvFinder.apply {
+//            setLifecycleOwner(owner)
+//            setExperimental(true)//拍照快门声
+//            keepScreenOn = true//是否保持屏幕高亮
+//            playSounds = true//录像是否录制声音
+//            audio = Audio.ON//录制开启声音
+////            engine = Engine.CAMERA2//相机底层类型
+//            engine = Engine.CAMERA1//相机底层类型
+//            preview = Preview.GL_SURFACE//绘制相机的装载控件
+//            facing = Facing.BACK//打开时镜头默认后置
+//            flash = Flash.AUTO//闪光灯自动
+//        }
         cvFinder.apply {
             setLifecycleOwner(owner)
-            setExperimental(true)//拍照快门声
             keepScreenOn = true//是否保持屏幕高亮
             playSounds = true//录像是否录制声音
             audio = Audio.ON//录制开启声音
-//            engine = Engine.CAMERA2//相机底层类型
-            engine = Engine.CAMERA1//相机底层类型
+            engine = Engine.CAMERA2//相机底层类型
             preview = Preview.GL_SURFACE//绘制相机的装载控件
             facing = Facing.BACK//打开时镜头默认后置
             flash = Flash.AUTO//闪光灯自动
@@ -67,13 +81,15 @@ object CameraHelper {
      * 拍照/抓拍
      */
     @JvmStatic
-    fun takePicture(snapshot: Boolean = false) {
+    fun takePicture(snapshot: Boolean = true) {
         if (cvFinder?.isTakingPicture == true) {
             ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
             return
         }
         onTakePictureListener?.onStart()
         if (snapshot) {
+            //缩略相片可以很快生成，但是没有拍照声响，调取系统音轨播放一次
+            shootMP.start()
             cvFinder?.takePictureSnapshot()
         } else {
             cvFinder?.takePicture()
