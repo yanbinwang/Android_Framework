@@ -1,12 +1,10 @@
 package com.dataqin.media.utils.helper
 
-import android.media.MediaPlayer
-import android.net.Uri
+import android.media.MediaActionSound
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
 import androidx.lifecycle.LifecycleOwner
 import com.dataqin.base.utils.ToastUtil
-import com.dataqin.common.BaseApplication
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
@@ -23,7 +21,7 @@ import com.otaliastudios.cameraview.controls.*
  */
 object CameraHelper {
     private var cvFinder: CameraView? = null
-    private val shootMP by lazy { MediaPlayer.create(BaseApplication.instance?.applicationContext, Uri.parse("file:///system/media/audio/ui/camera_click.ogg")) }
+    private val sound by lazy { MediaActionSound() }
     var onTakePictureListener: OnTakePictureListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
 
@@ -86,10 +84,9 @@ object CameraHelper {
             ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
             return
         }
+        sound.play(MediaActionSound.SHUTTER_CLICK)
         onTakePictureListener?.onStart()
         if (snapshot) {
-            //缩略相片可以很快生成，但是没有拍照声响，调取系统音轨播放一次
-            shootMP.start()
             cvFinder?.takePictureSnapshot()
         } else {
             cvFinder?.takePicture()
