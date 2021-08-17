@@ -30,24 +30,19 @@ import java.lang.ref.WeakReference
  *  具体规则如下：
  *  scheme://host:port/path or pathPrefix or pathPattern
  */
-class RecognitionFactory {
-
-    companion object {
-        @JvmStatic
-        val instance: RecognitionFactory by lazy {
-            RecognitionFactory()
-        }
-    }
+object RecognitionHelper {
 
     /**
      * 先调取本地服务器接口取号需要用到bizCode
      */
+    @JvmStatic
     fun getBizCode(context: Context) = ServiceFactory.build().getBizCode(context)
 
     /**
      * 唤起支付宝人脸识别用到的bizCode则是服务器下发的
      * 监听必传
      */
+    @JvmStatic
     fun startService(activity: Activity, bizCode: String?, certifyId: String?, url: String?, onRecognitionListener: OnRecognitionListener) {
         val weakActivity = WeakReference(activity)
         if (!FileUtil.isAvailable(weakActivity.get()!!, "com.eg.android.AlipayGphone")) {
@@ -85,6 +80,16 @@ class RecognitionFactory {
                 else -> onRecognitionListener.onFailure(weakActivity.get()!!.getString(R.string.toast_certification_failure))
             }
         }
+    }
+
+    interface OnRecognitionListener {
+
+        fun onWaitFor()
+
+        fun onSuccess(certifyId: String, response: String)
+
+        fun onFailure(result: String)
+
     }
 
 }
