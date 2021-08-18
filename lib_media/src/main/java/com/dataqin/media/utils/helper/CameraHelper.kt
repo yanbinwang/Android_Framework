@@ -118,7 +118,7 @@ object CameraHelper {
      * 开始录像
      */
     @JvmStatic
-    fun startRecorder() {
+    fun startRecorder(snapshot: Boolean = false) {
         if (cvFinder?.isTakingVideo == true) {
             ToastUtil.mackToastSHORT("正在生成视频,请勿频繁操作...", cvFinder?.context!!)
             return
@@ -126,7 +126,11 @@ object CameraHelper {
         val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
         if (null != videoFile) {
             onVideoRecordListener?.onStartRecorder()
-            cvFinder?.takeVideo(videoFile)
+            if (snapshot) {
+                cvFinder?.takeVideoSnapshot(videoFile)
+            } else {
+                cvFinder?.takeVideo(videoFile)
+            }
             cvFinder?.addCameraListener(object : CameraListener() {
                 //正式完成录制的回调，获取路径
                 override fun onVideoTaken(result: VideoResult) {
