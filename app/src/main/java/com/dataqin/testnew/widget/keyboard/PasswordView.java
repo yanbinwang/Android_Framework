@@ -138,7 +138,7 @@ public class PasswordView extends SimpleViewGroup {
                     for (int i = 0; i < 6; i++) {
                         strPassword.append(tvList[i].getText().toString().trim());
                     }
-                    LogUtil.e("strPassword :" + strPassword);
+                    LogUtil.e("Password :" + strPassword);
                     //接口中要实现的方法，完成密码输入完成后的响应逻辑
                     listener.inputFinish(strPassword.toString());
                 }
