@@ -55,7 +55,6 @@ public class PasswordView extends SimpleViewGroup {
         ivCancel = contextView.findViewById(R.id.iv_cancel);
 
         //赋值，基础变量
-        RecyclerView recyclerView = vkvPassword.getRecyclerView();
         tvList = new TextView[6];
         imgList = new ImageView[6];
         tvList[0] = contextView.findViewById(R.id.tv_password_1);
@@ -107,6 +106,7 @@ public class PasswordView extends SimpleViewGroup {
                 }
             }
         });
+        RecyclerView recyclerView = vkvPassword.getRecyclerView();
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recyclerView.setAdapter(adapter);
         SparseArray<SCommonItemDecoration.ItemDecorationProps> propMap = new SparseArray<>();
