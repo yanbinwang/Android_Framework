@@ -4,16 +4,15 @@ import android.content.Intent
 import android.os.Build
 import android.os.Looper
 import android.text.TextUtils
+import android.view.Gravity
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
-import com.dataqin.common.base.page.PageParams
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
-import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
@@ -29,6 +28,7 @@ import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
+import com.dataqin.testnew.widget.popup.EnterPasswordPopup
 import java.io.File
 
 
@@ -45,6 +45,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
     private val editPopup by lazy { EditPopup(this) }
+    private val enterPasswordPopup by lazy { EnterPasswordPopup(this) }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -211,6 +212,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
+                enterPasswordPopup.showPopup(v)
 //                val intent =  Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 //                intent.setData(Uri.parse("package:" + getPackageName()));
 //                startActivityForResult(intent, 10086);
@@ -245,17 +247,17 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                    }).getPermissions()
 //                addressPopup.showPopup(v)
 //                navigation(ARouterPath.TransActivity)
-                navigation(
-                    ARouterPath.ScaleActivity,
-                    PageParams().append(
-                        Extras.FILE_PATH,
-                        listOf(
-                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4",
-                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa1%2F144%2Fd%2F83.jpg&refer=http%3A%2F%2Fimg1.3lian.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619341141&t=a25aa81f9e0e7cbf611281bfc7f7a486",
-                            "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/ca1349540923dd54ea2076a4d309b3de9d8248af.jpg"
-                        )
-                    )
-                )
+//                navigation(
+//                    ARouterPath.ScaleActivity,
+//                    PageParams().append(
+//                        Extras.FILE_PATH,
+//                        listOf(
+//                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4",
+//                            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa1%2F144%2Fd%2F83.jpg&refer=http%3A%2F%2Fimg1.3lian.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619341141&t=a25aa81f9e0e7cbf611281bfc7f7a486",
+//                            "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/ca1349540923dd54ea2076a4d309b3de9d8248af.jpg"
+//                        )
+//                    )
+//                )
             }
         }
     }

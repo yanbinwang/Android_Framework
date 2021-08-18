@@ -13,10 +13,12 @@
     <color name="grey_666666">#666666</color>
     <color name="grey_888888">#888888</color>
     <color name="grey_999999">#999999</color>
+    <color name="gray_b3b3b3">#b3b3b3</color>
     <color name="gray_f6f8ff">#f6f8ff</color>
     <color name="gray_f7f7f7">#f7f7f7</color>
 
     <color name="blue_0d86ff">#0d86ff</color>
     <color name="blue_2e60df">#2e60df</color>
+    <color name="blue_36a1ff">#36a1ff</color>
 
 </resources>
