@@ -39,5 +39,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
     //框架库
     api project(':lib_common')
-    api files('libs/AMap3DMap_7.9.1_AMapSearch_7.9.0_AMapLocation_5.3.1_20210414.jar')
+    api files('libs/AMap3DMap_8.0.0_AMapSearch_7.9.0_AMapLocation_5.4.0_20210723.jar')
 }
