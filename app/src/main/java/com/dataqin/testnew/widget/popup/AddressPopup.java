@@ -232,8 +232,8 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
 
     @Override
     public void onClick(View v) {
+        //获取省市区字段做返回显示
         if (v.getId() == R.id.tv_sure) {
-            //获取省市区字段做返回显示
             //省份编码，市编码，区编码
             String fullCode = addressList.get(binding.wpCity.getCurrentItemPosition()).getCode() + "," + provinceList.get(binding.wpProvince.getCurrentItemPosition()).getCode() + "," + properList.get(binding.wpProper.getCurrentItemPosition()).getCode();
             //310003
