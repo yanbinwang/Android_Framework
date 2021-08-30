@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.view.View
 import android.widget.ImageView
+import com.dataqin.base.utils.TimerHelper
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.utils.file.FileUtil
@@ -30,7 +31,7 @@ import java.lang.ref.WeakReference
 @SuppressLint("StaticFieldLeak")
 object GSYVideoHelper {
     private var cacheWithPlay = false
-    private var retryTimes = 0
+    private var retryWithPlay = false
     private var videoType: VideoType = VideoType.MOBILE
     private var weakActivity: WeakReference<Activity>? = null
     private var imgCover: ImageView? = null
@@ -44,17 +45,23 @@ object GSYVideoHelper {
 
         override fun onPlayError(url: String?, vararg objects: Any?) {
             super.onPlayError(url, *objects)
-            //播放失败切换内核，3次重试
-            if (retryTimes != 3) {
-                retryTimes++
+            if (!retryWithPlay) {
+                retryWithPlay = true
+                player?.isEnabled = false
+                //允许硬件解码，装载IJK播放器内核
+                GSYVideoType.enableMediaCodec()
                 GSYVideoType.enableMediaCodecTexture()
                 PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
                 CacheFactory.setCacheManager(ProxyCacheManager::class.java)
-                player?.startPlayLogic()
+                TimerHelper.schedule(object : TimerHelper.OnTaskListener {
+                    override fun run() {
+                        player?.isEnabled = true
+                        player?.startPlayLogic()
+                    }
+                })
             }
         }
-    }
-    }
+    }}
 
     enum class VideoType {
         MOBILE, PC
@@ -77,10 +84,11 @@ object GSYVideoHelper {
         this.imgCover = ImageView(weakActivity?.get())
         //屏幕展示效果
         GSYVideoType.setShowType(if (videoType == VideoType.MOBILE && !fullScreen) GSYVideoType.SCREEN_MATCH_FULL else GSYVideoType.SCREEN_TYPE_DEFAULT)
-        //底层渲染
+        //设置底层渲染,关闭硬件解码
         GSYVideoType.setRenderType(GSYVideoType.GLSURFACE)
-        //默认采用exo内核，播放报错则切内核
+        GSYVideoType.disableMediaCodec()
         GSYVideoType.disableMediaCodecTexture()
+        //默认采用exo内核，播放报错则切ijk内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
         imgCover?.scaleType = if (videoType == VideoType.MOBILE && !fullScreen) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.CENTER_CROP
@@ -113,7 +121,7 @@ object GSYVideoHelper {
         val root = "${Constants.APPLICATION_FILE_PATH}/视频缓存"
         FileUtil.deleteDir(root)
         val storeDir = File(root)
-        retryTimes = 0
+        retryWithPlay = false
         //加载图片
         if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
         if (null != player) {
@@ -141,7 +149,7 @@ object GSYVideoHelper {
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
             }
         }
-        if(autoPlay) player?.startPlayLogic()
+        if (autoPlay) player?.startPlayLogic()
     }
 
     /**

@@ -24,6 +24,7 @@ import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.media.service.ScreenShotObserver
+import com.dataqin.media.utils.helper.GSYVideoHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
@@ -38,6 +39,7 @@ import java.io.File
  * 如果进应用就是地图，则在进首页前先给个软提示页面，列出所有权限问用户索要，如果还不接受，则直接进应用，在地图onload生命周期结束后，先移动到给定的默认位置，
  * 再进首页前弹出拦截的权限按钮进行权限的索要
  * cameraview_tts
+ * http://zcpt-test.obs.cn-east-3.myhuaweicloud.com/uploads/2021/08/26/3AEF64F8FD3D4F109C4C24F2C6FCC3CF.mp4
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
@@ -74,6 +76,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
+
+        GSYVideoHelper.initialize(this, binding.pvVideo, true)
 //        presenter.setEmptyView(baseBinding.flBaseContainer)
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
@@ -107,16 +111,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("当前选中了${index}")
             }
         })
-    }
 
-    override fun onResume() {
-        super.onResume()
-        binding.adGallery.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.adGallery.onPause()
+        GSYVideoHelper.setUrl("http://zcpt-test.obs.cn-east-3.myhuaweicloud.com/uploads/2021/08/26/3AEF64F8FD3D4F109C4C24F2C6FCC3CF.mp4")
     }
 
     override fun initEvent() {
@@ -158,6 +154,9 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //            }
 //        }
 //        LocationFactory.instance.start(this)
+    }
+
+    override fun getOperation() {
     }
 
 //    //获取本地省市区文件
@@ -271,11 +270,21 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         }
     }
 
-    override fun getOperation() {
+    override fun onResume() {
+        GSYVideoHelper.onResume()
+        super.onResume()
+        binding.adGallery.onResume()
+    }
+
+    override fun onPause() {
+        GSYVideoHelper.onPause()
+        super.onPause()
+        binding.adGallery.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
+        GSYVideoHelper.onDestroy()
         ScreenShotObserver.instance.unregister()
 //        LocationFactory.instance.stop()
     }
