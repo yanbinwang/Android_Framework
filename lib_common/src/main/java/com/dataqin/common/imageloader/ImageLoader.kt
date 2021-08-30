@@ -45,7 +45,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
 
     override fun displayCoverImage(view: ImageView, string: String?) {
         manager
-            .setDefaultRequestOptions(RequestOptions().frame(1000000))
+            .setDefaultRequestOptions(RequestOptions().frame(1000000).centerCrop())
             .load(string)
             .dontAnimate()
             .into(view)
