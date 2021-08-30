@@ -256,7 +256,7 @@ object FileUtil {
         /**
          * 线程停止执行
          */
-        fun onStop()
+        fun onStop(path: String? = null)
     }
 
     /**

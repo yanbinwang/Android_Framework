@@ -3,6 +3,7 @@ package com.dataqin.media.utils
 import android.content.Context
 import android.os.Looper
 import android.provider.MediaStore
+import android.util.Base64
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.SdcardUtil
@@ -11,6 +12,7 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.media.utils.helper.VideoHelper
 import java.io.File
+import java.io.FileOutputStream
 import java.util.*
 
 /**
@@ -61,7 +63,12 @@ object MediaFileUtil {
                 return null
             }
         } else LogUtil.i(TAG, "mkdirs,文件夹已存在： ${mediaStorageDir.path}")
-        return File(mediaStorageDir.path + File.separator + DateUtil.getDateTime("yyyyMMdd_HHmmss", Date()) + suffix)
+        return File(
+            mediaStorageDir.path + File.separator + DateUtil.getDateTime(
+                "yyyyMMdd_HHmmss",
+                Date()
+            ) + suffix
+        )
     }
 
     /**
@@ -97,6 +104,31 @@ object MediaFileUtil {
                 //清空当前文件夹和其下的所有图片
                 FileUtil.deleteDir(savePath)
                 weakHandler.post { onThreadListener?.onStop() }
+            }
+        }.start()
+    }
+
+    /**
+     * base64文件流的形式加载文件，需要先下载，之后在放置
+     */
+    @JvmStatic
+    fun getBase64File(base64: String, suffix: String, root: String = Constants.APPLICATION_FILE_PATH + "/缓存", clear: Boolean = true, onThreadListener: FileUtil.OnThreadListener?) {
+        Thread {
+            weakHandler.post { onThreadListener?.onStart() }
+            if (clear) FileUtil.deleteDir(root)
+            val storeDir = File(root)
+            if (!storeDir.mkdirs()) storeDir.createNewFile()
+            val file = File(storeDir, "${System.currentTimeMillis()}_cache${suffix}")
+            val pdfAsBytes = Base64.decode(base64, 0)
+            val fileOutputStream: FileOutputStream?
+            try {
+                fileOutputStream = FileOutputStream(file, false)
+                fileOutputStream.write(pdfAsBytes)
+                fileOutputStream.flush()
+                fileOutputStream.close()
+            } catch (e: Exception) {
+            } finally {
+                weakHandler.post { onThreadListener?.onStop(file.absolutePath) }
             }
         }.start()
     }
