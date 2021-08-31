@@ -5,11 +5,13 @@ import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
+import com.dataqin.base.utils.TimerHelper
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.media.service.ScreenService
 import java.lang.ref.WeakReference
+import java.util.*
 
 /**
  *  Created by wangyanbin
@@ -17,6 +19,9 @@ import java.lang.ref.WeakReference
  */
 object ScreenHelper {
     private var weakActivity: WeakReference<Activity>? = null
+    private var timer: Timer? = null
+    private var timerTask: TimerTask? = null
+    var waitingTime = 0
     var previewWidth = 0
     var previewHeight = 0
 
@@ -45,6 +50,16 @@ object ScreenHelper {
      */
     @JvmStatic
     fun startScreen() {
+        waitingTime = 0
+        if (timer == null) {
+            timer = Timer()
+            timerTask = object : TimerTask() {
+                override fun run() {
+                    waitingTime++
+                }
+            }
+            timer?.schedule(timerTask, 0, 1000)
+        }
         val mediaProjectionManager = weakActivity?.get()?.getSystemService(AppCompatActivity.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
         val permissionIntent = mediaProjectionManager.createScreenCaptureIntent()
         weakActivity?.get()?.startActivityForResult(permissionIntent, RequestCode.SERVICE_REQUEST)

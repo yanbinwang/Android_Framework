@@ -5,9 +5,7 @@ import android.app.Activity
 import android.view.View
 import android.widget.ImageView
 import com.dataqin.base.utils.TimerHelper
-import com.dataqin.common.constant.Constants
 import com.dataqin.common.imageloader.ImageLoader
-import com.dataqin.common.utils.file.FileUtil
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.cache.CacheFactory
@@ -20,7 +18,6 @@ import com.shuyu.gsyvideoplayer.utils.OrientationUtils
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
 import tv.danmaku.ijk.media.exo2.Exo2PlayerManager
 import tv.danmaku.ijk.media.exo2.ExoPlayerCacheManager
-import java.io.File
 import java.lang.ref.WeakReference
 
 /**
@@ -30,7 +27,6 @@ import java.lang.ref.WeakReference
  */
 @SuppressLint("StaticFieldLeak")
 object GSYVideoHelper {
-    private var cacheWithPlay = false
     private var retryWithPlay = false
     private var videoType: VideoType = VideoType.MOBILE
     private var weakActivity: WeakReference<Activity>? = null
@@ -49,7 +45,7 @@ object GSYVideoHelper {
                 retryWithPlay = true
                 player?.isEnabled = false
                 //允许硬件解码，装载IJK播放器内核
-                GSYVideoType.enableMediaCodec()
+//                GSYVideoType.enableMediaCodec()
                 GSYVideoType.enableMediaCodecTexture()
                 PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
                 CacheFactory.setCacheManager(ProxyCacheManager::class.java)
@@ -73,20 +69,17 @@ object GSYVideoHelper {
      * fullScreen-是否全屏（默认不全屏）
      */
     @JvmStatic
-    fun initialize(activity: Activity, standardGSYVideoPlayer: StandardGSYVideoPlayer, fullScreen: Boolean = false, cacheWithPlay: Boolean = false, videoType: VideoType = VideoType.MOBILE) {
-//        GSYVideoType.setShowType(GSYVideoType.SCREEN_MATCH_FULL)//是否平铺屏幕
-//        GSYVideoType.enableMediaCodecTexture()
-        //赋值
+    fun initialize(activity: Activity, standardGSYVideoPlayer: StandardGSYVideoPlayer, fullScreen: Boolean = false, videoType: VideoType = VideoType.MOBILE) {
+        //基础属性赋值
         this.weakActivity = WeakReference(activity)
         this.player = standardGSYVideoPlayer
-        this.cacheWithPlay = cacheWithPlay
         this.videoType = videoType
         this.imgCover = ImageView(weakActivity?.get())
         //屏幕展示效果
         GSYVideoType.setShowType(if (videoType == VideoType.MOBILE && !fullScreen) GSYVideoType.SCREEN_MATCH_FULL else GSYVideoType.SCREEN_TYPE_DEFAULT)
         //设置底层渲染,关闭硬件解码
         GSYVideoType.setRenderType(GSYVideoType.GLSURFACE)
-        GSYVideoType.disableMediaCodec()
+//        GSYVideoType.disableMediaCodec()
         GSYVideoType.disableMediaCodecTexture()
         //默认采用exo内核，播放报错则切ijk内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
@@ -118,9 +111,6 @@ object GSYVideoHelper {
      */
     @JvmStatic
     fun setUrl(url: String, autoPlay: Boolean = false) {
-        val root = "${Constants.APPLICATION_FILE_PATH}/视频缓存"
-        FileUtil.deleteDir(root)
-        val storeDir = File(root)
         retryWithPlay = false
         //加载图片
         if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
@@ -133,8 +123,7 @@ object GSYVideoHelper {
                     .setShowFullAnimation(false)
                     .setNeedLockFull(false)
                     .setUrl(url)
-                    .setCacheWithPlay(cacheWithPlay)
-                    .setCachePath(storeDir)
+                    .setCacheWithPlay(false)//禁用缓存，vivo手机出错
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
             } else {
                 GSYVideoOptionBuilder()
@@ -144,8 +133,7 @@ object GSYVideoHelper {
                     .setShowFullAnimation(false)
                     .setNeedLockFull(false)
                     .setUrl(url)
-                    .setCacheWithPlay(cacheWithPlay)
-                    .setCachePath(storeDir)
+                    .setCacheWithPlay(false)
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
             }
         }
