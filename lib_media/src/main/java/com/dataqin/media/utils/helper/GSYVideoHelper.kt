@@ -68,6 +68,7 @@ object GSYVideoHelper {
      * player-视频对应播放器
      * fullScreen-是否全屏（默认不全屏）
      */
+    @JvmOverloads
     @JvmStatic
     fun initialize(activity: Activity, standardGSYVideoPlayer: StandardGSYVideoPlayer, fullScreen: Boolean = false, videoType: VideoType = VideoType.MOBILE) {
         //基础属性赋值
@@ -109,6 +110,7 @@ object GSYVideoHelper {
     /**
      * 设置播放路径
      */
+    @JvmOverloads
     @JvmStatic
     fun setUrl(url: String, autoPlay: Boolean = false) {
         retryWithPlay = false

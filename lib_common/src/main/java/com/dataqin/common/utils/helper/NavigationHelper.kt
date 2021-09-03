@@ -20,6 +20,7 @@ object NavigationHelper {
     /**
      * 初始化
      */
+    @JvmOverloads
     @JvmStatic
     fun initialize(navigationView: BottomNavigationView, ids: ArrayList<Int>, anim: Boolean = true) {
         this.navigationView = navigationView
