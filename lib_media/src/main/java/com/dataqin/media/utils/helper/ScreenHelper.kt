@@ -70,7 +70,6 @@ object ScreenHelper {
      */
     @JvmStatic
     fun startScreenResult(resultCode: Int, data: Intent?) {
-//        stopScreen()
         val service = Intent(weakActivity?.get()!!, ScreenService::class.java)
         service.putExtra(Extras.RESULT_CODE, resultCode)
         service.putExtra(Extras.BUNDLE_BEAN, data)
@@ -82,8 +81,6 @@ object ScreenHelper {
      * 结束录屏
      */
     @JvmStatic
-    fun stopScreen() {
-        weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ScreenService::class.java))
-    }
+    fun stopScreen() = weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ScreenService::class.java))
 
 }

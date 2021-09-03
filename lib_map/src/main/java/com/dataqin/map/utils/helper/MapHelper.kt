@@ -35,6 +35,7 @@ object MapHelper {
      * 初始化
      * 如需要广播监听，需书写对应的rxjava
      */
+    @JvmOverloads
     @JvmStatic
     fun initialize(savedInstanceState: Bundle?, mapView: MapView, initialize: Boolean = true) {
         this.mapView = mapView
@@ -111,6 +112,7 @@ object MapHelper {
     /**
      * 地图移动
      */
+    @JvmOverloads
     @JvmStatic
     fun moveCamera(latLng: LatLng? = mapLatLng, zoom: Float = 18f, anim: Boolean = false) {
         if (anim) {
@@ -123,6 +125,7 @@ object MapHelper {
     /**
      * 移动到中心点
      */
+    @JvmOverloads
     @JvmStatic
     fun moveCamera(latLngList: MutableList<LatLng>, zoom: Float = 18f, anim: Boolean = false) {
         moveCamera(CoordinateTransUtil.getCenterPoint(latLngList), zoom, anim)
@@ -150,6 +153,7 @@ object MapHelper {
     /**
      * 添加覆盖物
      */
+    @JvmOverloads
     @JvmStatic
     fun addMarker(latLng: LatLng, view: View, json: String = "") {
         //将标识绘制在地图上

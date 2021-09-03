@@ -35,18 +35,6 @@ object CameraHelper {
     @JvmStatic
     fun initialize(owner: LifecycleOwner, cvFinder: CameraView) {
         this.cvFinder = cvFinder
-//        cvFinder.apply {
-//            setLifecycleOwner(owner)
-//            setExperimental(true)//拍照快门声
-//            keepScreenOn = true//是否保持屏幕高亮
-//            playSounds = true//录像是否录制声音
-//            audio = Audio.ON//录制开启声音
-////            engine = Engine.CAMERA2//相机底层类型
-//            engine = Engine.CAMERA1//相机底层类型
-//            preview = Preview.GL_SURFACE//绘制相机的装载控件
-//            facing = Facing.BACK//打开时镜头默认后置
-//            flash = Flash.AUTO//闪光灯自动
-//        }
         cvFinder.apply {
             setLifecycleOwner(owner)
             keepScreenOn = true//是否保持屏幕高亮
@@ -71,13 +59,12 @@ object CameraHelper {
      * 镜头翻转
      */
     @JvmStatic
-    fun toggleCamera() {
-        cvFinder?.toggleFacing()
-    }
+    fun toggleCamera() = cvFinder?.toggleFacing()
 
     /**
      * 拍照/抓拍
      */
+    @JvmOverloads
     @JvmStatic
     fun takePicture(snapshot: Boolean = true) {
         if (cvFinder?.isTakingPicture == true) {
@@ -117,6 +104,7 @@ object CameraHelper {
     /**
      * 开始录像
      */
+    @JvmOverloads
     @JvmStatic
     fun startRecorder(snapshot: Boolean = false) {
         if (cvFinder?.isTakingVideo == true) {

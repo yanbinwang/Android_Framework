@@ -206,13 +206,9 @@ object FileUtil {
      * 将bitmap存成文件至指定目录下-读写权限
      * BitmapFactory.decodeResource(resources, R.mipmap.img_qr_code)
      */
+    @JvmOverloads
     @JvmStatic
-    fun saveBitmap(context: Context, bitmap: Bitmap, quality: Int = 100): Boolean {
-        return saveBitmap(context, bitmap, Constants.APPLICATION_FILE_PATH + "/图片", true, quality)
-    }
-
-    @JvmStatic
-    fun saveBitmap(context: Context, bitmap: Bitmap, root: String = Constants.APPLICATION_FILE_PATH + "/图片", formatJpg: Boolean = false, quality: Int = 100): Boolean {
+    fun saveBitmap(context: Context, bitmap: Bitmap, root: String =  "${Constants.APPLICATION_FILE_PATH}/图片", formatJpg: Boolean = true, quality: Int = 100): Boolean {
         try {
             val storeDir = File(root)
             if (!storeDir.mkdirs()) storeDir.createNewFile()//需要权限
@@ -224,7 +220,7 @@ object FileUtil {
             fileOutputStream.close()
             //保存图片后发送广播通知更新数据库
             MediaStore.Images.Media.insertImage(context.contentResolver, file.absolutePath, file.name, null)
-            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file.path)))
+            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://${file.path}")))
 //            MediaScannerConnection.scanFile(context, arrayOf(file.toString()), arrayOf(file.name), null)
 //            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
             return result

@@ -70,6 +70,7 @@ object MediaFileUtil {
      * 传入指定大小的文件长度，扫描sd卡空间是否足够
      * 需有1G的默认大小的空间
      */
+    @JvmOverloads
     @JvmStatic
     fun setScanDisk(context: Context, space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测

@@ -17,7 +17,9 @@ object GenerateHelper {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private val executors by lazy { Executors.newSingleThreadExecutor() }
 
-    //构建图片
+    /**
+     * 构件图片
+     */
     fun create(view: View, onGenerateListener: OnGenerateListener?) {
         onGenerateListener?.onStart()
         loadLayout(view)

@@ -19,6 +19,7 @@ object TimerHelper {
     /**
      * 延时任务-容易造成内存泄漏
      */
+    @JvmOverloads
     @JvmStatic
     fun schedule(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
         Timer().schedule(object : TimerTask() {
@@ -31,6 +32,7 @@ object TimerHelper {
     /**
      * 计时(累加)-开始
      */
+    @JvmOverloads
     @JvmStatic
     fun startTask(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
         if (timer == null) {
@@ -59,6 +61,7 @@ object TimerHelper {
      * 倒计时-开始
      * second-秒
      */
+    @JvmOverloads
     @JvmStatic
     fun startDownTask(onDownTaskListener: OnDownTaskListener? = null, second: Long = 1) {
         if (null == countDownTimer) {
