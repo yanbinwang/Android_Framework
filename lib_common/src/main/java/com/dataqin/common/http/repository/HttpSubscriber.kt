@@ -24,11 +24,9 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
                 //                if (100002 == e) {
                 //                    ARouter.getInstance().build(ARouterPath.UnlockIPActivity).navigation()
                 //                }
-                onFailed(throwable, msg)
+                onFailed(throwable, msg, code)
             }
-        } else {
-            onFailed(throwable, "")
-        }
+        } else onFailed(throwable, "", -1)
     }
     // </editor-fold>
 
@@ -40,6 +38,10 @@ abstract class HttpSubscriber<T> : ResourceSubscriber<ApiResponse<T>>() {
     /**
      * 请求失败，获取失败原因
      */
+    open fun onFailed(e: Throwable?, msg: String?, code: Int?) {
+        onFailed(e, msg)
+    }
+
     open fun onFailed(e: Throwable?, msg: String?) {}
 
 }
