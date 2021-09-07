@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import com.dataqin.common.base.page.PageHandler
+import com.dataqin.common.base.page.getEmptyView
 import com.dataqin.common.bus.RxManager
 import com.dataqin.common.widget.empty.EmptyLayout
 import com.dataqin.common.widget.xrecyclerview.XRecyclerView
@@ -34,11 +34,11 @@ abstract class BasePresenter<T : BaseView> {
     }
 
     fun setEmptyView(container: ViewGroup) {
-        this.softEmpty = SoftReference(PageHandler.getEmptyView(container))
+        this.softEmpty = SoftReference(container.getEmptyView())
     }
 
     fun setEmptyView(xRecyclerView: XRecyclerView) {
-        this.softEmpty = SoftReference(PageHandler.getEmptyView(xRecyclerView))
+        this.softEmpty = SoftReference(xRecyclerView.emptyView)
         this.softRecycler = SoftReference(xRecyclerView)
     }
 
