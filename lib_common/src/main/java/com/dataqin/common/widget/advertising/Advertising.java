@@ -9,6 +9,10 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -35,7 +39,7 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
  * 广告控件
  */
 @SuppressLint("ClickableViewAccessibility")
-public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
+public class Advertising extends SimpleViewGroup implements AdvertisingImpl, LifecycleObserver {
     private boolean allow = true, scroll = true;//是否允许滑动，是否自动滚动
     private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private Timer timer;//自动滚动的定时器
@@ -178,7 +182,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
                         weakHandler.post(() -> {
                             int current = banner.getCurrentItem();
                             int position = current + 1;
-                            if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
+                            if (current == 0 || current == Integer.MAX_VALUE)
+                                position = halfPosition - (halfPosition % list.size());
                             banner.setCurrentItem(position);
                         });
                     }
@@ -195,11 +200,18 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl {
         }
     }
 
+    //绑定对应页面的生命周期
+    public void addLifecycleObserver(LifecycleOwner lifecycleOwner) {
+        lifecycleOwner.getLifecycle().addObserver(this);
+    }
+
+    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
     @Override
     public void onResume() {
         if (scroll) startTimer();
     }
 
+    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
     @Override
     public void onPause() {
         if (scroll) stopTimer();
