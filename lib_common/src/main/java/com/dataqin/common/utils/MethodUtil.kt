@@ -38,7 +38,7 @@ fun LinearLayout.topStatusMargin() {
     layoutParams = params
 }
 
-fun View.topStatusPadding() = run { if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
+fun View.topStatusPadding() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
 
 /**
  * 震动
@@ -98,11 +98,7 @@ fun TextView.setUnderline() {
  */
 fun EditText.inputTransformation(): Boolean {
     try {
-        transformationMethod = if(transformationMethod == HideReturnsTransformationMethod.getInstance()) {
-            PasswordTransformationMethod.getInstance()
-        } else {
-            HideReturnsTransformationMethod.getInstance()
-        }
+        transformationMethod = if (transformationMethod == HideReturnsTransformationMethod.getInstance()) { PasswordTransformationMethod.getInstance() } else { HideReturnsTransformationMethod.getInstance() }
         setSelection(text.length)
         postInvalidate()
     } catch (ignored: Exception) {
@@ -118,4 +114,21 @@ fun EditText.decimalFilter(decimalPoint: Int = 2) {
     val decimalInputFilter = DecimalInputFilter()
     decimalInputFilter.decimalPoint = decimalPoint
     filters = arrayOf<InputFilter>(decimalInputFilter)
+}
+
+/**
+ * EditText不允许输入空格
+ */
+fun EditText.inhibitInputSpace() {
+    filters = arrayOf(object : InputFilter {
+        override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence? {
+            val result = source ?: ""
+            return if (result == " ") {
+                ""
+            } else {
+                null
+            }
+        }
+    })
+
 }
