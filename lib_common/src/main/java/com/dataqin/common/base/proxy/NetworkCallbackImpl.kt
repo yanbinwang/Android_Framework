@@ -64,15 +64,15 @@ class NetworkCallbackImpl : ConnectivityManager.NetworkCallback() {
      */
     override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
         super.onCapabilitiesChanged(network, networkCapabilities)
-        if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
+        netState = if (networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED) &&
             networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)) {
-            netState = when {
+            when {
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> 0
                 networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> 1
                 else -> -1
             }
-            if (-1 != netState) if (PermissionHelper.with(BaseApplication.instance?.applicationContext).checkSelfLocation()) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
-        } else netState = -1
+        } else -1
+        if (-1 != netState) if (PermissionHelper.with(BaseApplication.instance?.applicationContext).checkSelfLocation()) RxBus.instance.post(RxEvent(Constants.APP_MAP_CONNECTIVITY))
     }
 
 }
