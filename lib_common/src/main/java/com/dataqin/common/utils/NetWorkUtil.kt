@@ -122,5 +122,4 @@ object NetWorkUtil {
         return result
     }
 
-
 }
