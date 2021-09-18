@@ -77,16 +77,12 @@ object ConfigHelper {
     /**
      * 获取当前标签的行为-是否第一次启动，是否进入引导页等，针对用户的行为在用户类中单独管理
      */
-    fun obtainBehavior(label: String): Boolean {
-        return mmkv.decodeBool(label, false)
-    }
+    fun obtainBehavior(label: String) = mmkv.decodeBool(label, false)
 
     /**
      * 存储当前标签行为
      */
-    fun storageBehavior(label: String, value: Boolean): Boolean {
-        return mmkv.encode(label, value)
-    }
+    fun storageBehavior(label: String, value: Boolean) = mmkv.encode(label, value)
 
     /**
      * 模拟触屏点击屏幕事件
@@ -109,7 +105,7 @@ object ConfigHelper {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val network = manager.activeNetwork ?: return ""
             val capabilities = manager.getNetworkCapabilities(network) ?: return ""
-            if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
+            if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)) {
                 if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     return getMobileIp()
                 } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
