@@ -3,32 +3,29 @@ package com.dataqin.common.utils
 import android.annotation.SuppressLint
 import android.util.Base64
 import com.dataqin.base.utils.LogUtil
-import java.nio.charset.StandardCharsets
 import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 @SuppressLint("GetInstance")
 object AESUtil {
-    private val CHARSET_UTF8 by lazy { StandardCharsets.UTF_8 }//字符编码(默认使用UTF-8编码 getBytes()默认使用ISO8859-1编码
-    private const val CIPHER_ALGORITHM = "AES/ECB/PKCS5Padding"//加解密算法/工作模式/填充方式
+    private val cipher by lazy { Cipher.getInstance("AES/ECB/PKCS5Padding") }//创建密码器
 
     /**
      * 加密
-     * @param secretKey 加密密码，长度：16 或 32 个字符
      * @param data      待加密内容
+     * @param secretKey 加密密码，长度：16 或 32 个字符
      * @return 返回Base64转码后的加密数据
      */
+    @JvmOverloads
     @JvmStatic
-    fun encrypt(secretKey: String, data: String): String {
+    fun encrypt(data: String, secretKey: String = ""): String {
         try {
             //创建AES秘钥
-            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(CHARSET_UTF8), "AES")
-            //创建密码器
-            val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
+            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
             //初始化加密器
             cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec)
             //将加密以后的数据进行 Base64 编码
-            return base64Encode(cipher.doFinal(data.toByteArray(CHARSET_UTF8)))
+            return base64Encode(cipher.doFinal(data.toByteArray()))
         } catch (e: Exception) {
             handleException("encrypt", e)
         }
@@ -37,22 +34,21 @@ object AESUtil {
 
     /**
      * 解密
-     * @param secretKey  解密的密钥，长度：16 或 32 个字符
      * @param base64Data 加密的密文 Base64 字符串
+     * @param secretKey  解密的密钥，长度：16 或 32 个字符
      * @return 返回Base64转码后的加密数据
      */
+    @JvmOverloads
     @JvmStatic
-    fun decrypt(secretKey: String, base64Data: String): String {
+    fun decrypt(base64Data: String, secretKey: String = ""): String {
         try {
             val data = base64Decode(base64Data)
             //创建AES秘钥
-            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(CHARSET_UTF8), "AES")
-            //创建密码器
-            val cipher = Cipher.getInstance(CIPHER_ALGORITHM)
+            val secretKeySpec = SecretKeySpec(secretKey.toByteArray(), "AES")
             //初始化解密器
             cipher.init(Cipher.DECRYPT_MODE, secretKeySpec)
             //执行解密操作
-            return String(cipher.doFinal(data), CHARSET_UTF8)
+            return String(cipher.doFinal(data), Charsets.UTF_8)
         } catch (e: Exception) {
             handleException("decrypt", e)
         }
