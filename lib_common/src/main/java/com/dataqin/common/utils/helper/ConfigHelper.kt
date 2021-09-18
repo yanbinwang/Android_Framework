@@ -105,18 +105,19 @@ object ConfigHelper {
      * 获取当前设备ip地址
      */
     private fun getIp(): String {
-        val connectivityManager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
+        val manager = (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val networkCapabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (networkCapabilities != null) {
-                if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+            val network = manager.activeNetwork ?: return ""
+            val capabilities = manager.getNetworkCapabilities(network) ?: return ""
+            if (capabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)){
+                if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
                     return getMobileIp()
-                } else if (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                } else if (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
                     return getWifiIp()
                 }
             }
         } else {
-            val networkInfo = connectivityManager.activeNetworkInfo
+            val networkInfo = manager.activeNetworkInfo
             if (networkInfo != null && networkInfo.isConnected) {
                 if (networkInfo.type == ConnectivityManager.TYPE_MOBILE) {
                     return getMobileIp()
