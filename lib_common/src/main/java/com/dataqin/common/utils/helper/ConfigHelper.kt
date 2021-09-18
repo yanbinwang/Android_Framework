@@ -29,8 +29,8 @@ import java.util.*
  */
 @SuppressLint("MissingPermission", "HardwareIds", "StaticFieldLeak")
 object ConfigHelper {
-    private val mmkv by lazy { MMKV.defaultMMKV() }
     private lateinit var context: Context
+    private val mmkv by lazy { MMKV.defaultMMKV() }
 
     fun initialize(application: Application) {
         context = application
@@ -53,8 +53,8 @@ object ConfigHelper {
         //版本名，版本号
         Constants.VERSION_CODE = getAppVersionCode()
         Constants.VERSION_NAME = getAppVersionName()
-        //获取应用名。包名。默认保存文件路径
-        Constants.APPLICATION_FILE_PATH = Constants.SDCARD_PATH + "/" + Constants.APPLICATION_NAME
+        //获取应用名，包名，拼接生成默认保存文件路径
+        Constants.APPLICATION_FILE_PATH = "${Constants.SDCARD_PATH}/${Constants.APPLICATION_NAME}"
     }
 
     /**
@@ -65,7 +65,7 @@ object ConfigHelper {
             storageBehavior(label, true)
             val weakActivity = WeakReference(activity)
             val builder = NewbieGuide.with(weakActivity.get())//传入activity
-                .setLabel(label)//设置引导层标示，用于区分不同引导层，必传！否则报错
+                .setLabel(label)//设置引导层标示，用于区分不同引导层，必传,否则报错
                 .alwaysShow(true)
             for (page in pages) {
                 builder.addGuidePage(page)
@@ -193,7 +193,7 @@ object ConfigHelper {
     }
 
     /**
-     * 获取当前app version code
+     * 获取当前app version code 版本号
      */
     private fun getAppVersionCode(): Long {
         var appVersionCode: Long = 0
@@ -210,7 +210,7 @@ object ConfigHelper {
     }
 
     /**
-     * 获取当前app version name
+     * 获取当前app version name 版本名
      */
     private fun getAppVersionName(): String {
         var appVersionName = ""
