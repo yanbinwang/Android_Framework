@@ -53,9 +53,7 @@ class CameraFactory {
 
     companion object {
         @JvmStatic
-        val instance: CameraFactory by lazy {
-            CameraFactory()
-        }
+        val instance by lazy { CameraFactory() }
     }
 
     fun initialize(viewGroup: ViewGroup, cameraPreview: CameraPreview) {
@@ -115,9 +113,7 @@ class CameraFactory {
         }
     }
 
-    private fun log(title: String, content: String) {
-        LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
-    }
+    private fun log(title: String, content: String) = LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
 
     private fun instanceCamera(): Camera? {
         var camera: Camera? = null
@@ -169,7 +165,13 @@ class CameraFactory {
     /**
      * 对焦
      */
-    fun focusing() = run { if (null != viewGroup) focusOnTouch(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT, viewGroup as FrameLayout) }
+    fun focusing() = run {
+        if (null != viewGroup) focusOnTouch(
+            Constants.SCREEN_WIDTH / 2,
+            Constants.SCREEN_HEIGHT,
+            viewGroup as FrameLayout
+        )
+    }
 
     /**
      * 复位
@@ -257,7 +259,12 @@ class CameraFactory {
         val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
         val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
         val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
-        return Rect(rectF.left.roundToInt(), rectF.top.roundToInt(), rectF.right.roundToInt(), rectF.bottom.roundToInt())
+        return Rect(
+            rectF.left.roundToInt(),
+            rectF.top.roundToInt(),
+            rectF.right.roundToInt(),
+            rectF.bottom.roundToInt()
+        )
     }
 
     private fun clamp(x: Int, min: Int, max: Int): Int {
@@ -343,13 +350,7 @@ class CameraFactory {
     /**
      * 开启或停止录像
      */
-    fun startOrStopRecorder(surface: Surface?) {
-        if (recording) {
-            stopRecorder()
-        } else {
-            startRecorder(surface)
-        }
-    }
+    fun startOrStopRecorder(surface: Surface?) = if (recording) stopRecorder() else startRecorder(surface)
 
     private fun prepareVideoRecorder(surface: Surface?) {
         videFilePath = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()

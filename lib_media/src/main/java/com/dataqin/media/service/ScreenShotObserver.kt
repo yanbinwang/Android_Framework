@@ -25,9 +25,7 @@ class ScreenShotObserver : ContentObserver(null) {
 
     companion object {
         @JvmStatic
-        val instance: ScreenShotObserver by lazy {
-            ScreenShotObserver()
-        }
+        val instance by lazy { ScreenShotObserver() }
     }
 
     override fun onChange(selfChange: Boolean) {

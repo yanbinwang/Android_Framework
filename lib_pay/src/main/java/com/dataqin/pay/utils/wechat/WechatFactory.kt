@@ -18,9 +18,7 @@ class WechatFactory {
 
     companion object {
         @JvmStatic
-        val instance: WechatFactory by lazy {
-            WechatFactory()
-        }
+        val instance by lazy { WechatFactory() }
     }
 
     fun toPay(context: Context, req: PayReq) {
@@ -34,15 +32,15 @@ class WechatFactory {
             return
         }
         if (!wxApi.isWXAppSupportAPI) {
-            doResult(context,context.getString(R.string.toast_wechat_pay_error))
+            doResult(context, context.getString(R.string.toast_wechat_pay_error))
             return
         }
         val sendResult = wxApi.sendReq(req)
         LogUtil.e("支付状态:$sendResult")
-        if (!sendResult) doResult(context,context.getString(R.string.toast_pay_failure))
+        if (!sendResult) doResult(context, context.getString(R.string.toast_pay_failure))
     }
 
-    private fun doResult(context: Context, text: String){
+    private fun doResult(context: Context, text: String) {
         ToastUtil.mackToastSHORT(text, context)
         RxBus.instance.post(RxEvent(Constants.APP_PAY_FAILURE))
     }

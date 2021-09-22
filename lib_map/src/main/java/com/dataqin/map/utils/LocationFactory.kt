@@ -41,9 +41,7 @@ class LocationFactory : AMapLocationListener {
 
     companion object {
         @JvmStatic
-        val instance: LocationFactory by lazy {
-            LocationFactory()
-        }
+        val instance by lazy { LocationFactory() }
     }
 
     init {
@@ -81,7 +79,8 @@ class LocationFactory : AMapLocationListener {
         val builder: Notification.Builder?
         //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            val notificationManager =
+                context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
             notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
             notificationChannel.lightColor = Color.BLUE //小圆点颜色

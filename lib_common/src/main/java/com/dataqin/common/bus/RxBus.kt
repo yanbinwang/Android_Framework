@@ -20,9 +20,7 @@ class RxBus private constructor() {
 
     companion object {
         @JvmStatic
-        val instance: RxBus by lazy {
-            RxBus()
-        }
+        val instance by lazy { RxBus() }
     }
 
     fun post(vararg objs: Any) {
@@ -31,6 +29,7 @@ class RxBus private constructor() {
         }
     }
 
+    @JvmOverloads
     fun interval(act: Consumer<Long>, second: Long = 1) {
         disposable = Flowable.interval(0, second, TimeUnit.SECONDS).observeOn(AndroidSchedulers.mainThread()).subscribe(act)
     }

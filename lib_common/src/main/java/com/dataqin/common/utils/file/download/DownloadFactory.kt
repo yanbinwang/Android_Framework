@@ -29,9 +29,7 @@ class DownloadFactory private constructor() {
 
     companion object {
         @JvmStatic
-        val instance: DownloadFactory by lazy {
-            DownloadFactory()
-        }
+        val instance by lazy { DownloadFactory() }
     }
 
     fun download(downloadUrl: String, filePath: String, fileName: String, onDownloadListener: OnDownloadListener?) {

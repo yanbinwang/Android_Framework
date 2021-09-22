@@ -26,17 +26,14 @@ class NotificationFactory private constructor() {
 
     companion object {
         @JvmStatic
-        val instance: NotificationFactory by lazy {
-            NotificationFactory()
-        }
+        val instance by lazy { NotificationFactory() }
     }
 
     /**
      * 构建常规通知栏
      */
     @JvmOverloads
-    fun normal(title: String, text: String, smallIcon: Int, largeIcon: Int, intent: Intent? = null, id: String = "") {
-        builder.apply {
+    fun normal(title: String, text: String, smallIcon: Int, largeIcon: Int, intent: Intent? = null, id: String = "") { builder.apply {
             color = ContextCompat.getColor(context!!, R.color.black)//6.0提示框白色小球的颜色
             setTicker(title)//状态栏显示的提示
             setContentTitle(title)//通知栏标题

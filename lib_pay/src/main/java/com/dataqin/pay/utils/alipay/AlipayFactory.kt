@@ -25,9 +25,7 @@ class AlipayFactory {
 
     companion object {
         @JvmStatic
-        val instance: AlipayFactory by lazy {
-            AlipayFactory()
-        }
+        val instance by lazy { AlipayFactory() }
     }
 
     fun toPay(activity: Activity, payInfo: String) {
@@ -90,4 +88,5 @@ class AlipayFactory {
         }
         false
     }
+
 }

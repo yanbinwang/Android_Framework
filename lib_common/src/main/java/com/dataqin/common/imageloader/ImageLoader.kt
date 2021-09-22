@@ -29,9 +29,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
 
     companion object {
         @JvmStatic
-        val instance: ImageLoader by lazy {
-            ImageLoader()
-        }
+        val instance by lazy { ImageLoader() }
     }
 
     override fun displayZoomImage(view: ImageView, string: String?) {

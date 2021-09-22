@@ -19,7 +19,7 @@ import java.nio.charset.Charset
 internal class LoggingInterceptor : Interceptor {
 
     companion object {
-        private val UTF8 = Charset.forName("UTF-8")
+        private val UTF8 by lazy { Charset.forName("UTF-8") }
     }
 
     @Throws(IOException::class)

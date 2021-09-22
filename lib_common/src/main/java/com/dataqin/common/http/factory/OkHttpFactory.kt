@@ -35,9 +35,7 @@ class OkHttpFactory private constructor() {
 
     companion object {
         @JvmStatic
-        val instance: OkHttpFactory by lazy {
-            OkHttpFactory()
-        }
+        val instance by lazy { OkHttpFactory() }
     }
 
 }
