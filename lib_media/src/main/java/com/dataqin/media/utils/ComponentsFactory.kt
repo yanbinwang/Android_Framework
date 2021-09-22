@@ -133,14 +133,9 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
     }
 
     private fun isAppOnForeground(): Boolean {
-        val processes =
-            (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses
-                ?: return false
+        val processes = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
         for (process in processes) {
-            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(
-                    context.packageName
-                )
-            ) return true
+            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context.packageName)) return true
         }
         return false
     }
