@@ -71,8 +71,8 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
                     params?.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     params?.height = view.measuredHeight
                     window?.attributes = params
-//                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
-                    window?.setBackgroundDrawable(null)//透明
+                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
+//                    window?.setBackgroundDrawable(null)//透明
                     //配置移动，只支持上下
                     if (null != params && move) {
                         view.setOnTouchListener(object : View.OnTouchListener {
