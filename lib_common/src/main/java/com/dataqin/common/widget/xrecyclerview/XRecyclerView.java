@@ -60,7 +60,7 @@ public class XRecyclerView extends SimpleViewGroup {
 
     @Override
     public void draw() {
-        if (onDetectionInflate()) initView(refreshId);
+        if (onInflate()) initView(refreshId);
     }
 
     private void initView(int refreshId) {

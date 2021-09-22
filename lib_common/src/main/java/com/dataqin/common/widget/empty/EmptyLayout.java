@@ -76,7 +76,7 @@ public class EmptyLayout extends SimpleViewGroup {
 
     @Override
     public void draw() {
-        if (onDetectionInflate()) addView(contextView);
+        if (onInflate()) addView(contextView);
     }
 
     /**
