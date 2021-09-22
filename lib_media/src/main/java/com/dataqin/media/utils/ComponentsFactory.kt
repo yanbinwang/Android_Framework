@@ -7,10 +7,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Looper
-import android.view.Gravity
-import android.view.MotionEvent
-import android.view.View
-import android.view.WindowManager
+import android.view.*
 import android.widget.ImageView
 import android.widget.TextView
 import com.dataqin.base.utils.DateUtil
@@ -27,8 +24,8 @@ import java.util.*
 /**
  * 录屏小组件工具栏
  */
-class ComponentsFactory(var context: Context, var move:Boolean =false) {
-    private var tvTimer: TextView?=null
+class ComponentsFactory(var context: Context, var move: Boolean = false) {
+    private var tvTimer: TextView? = null
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
     private var tickDialog: AlertDialog? = null
@@ -41,7 +38,8 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
 
     init {
         if (null == tickDialog) {
-            val view = View.inflate(context, R.layout.view_time_tick, null)
+//            val view = View.inflate(context, R.layout.view_time_tick, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.view_time_tick, null)
             tvTimer = view.findViewById(R.id.tv_timer)
             //停止录屏
             view.findViewById<ImageView>(R.id.tv_stop).setOnClickListener {
@@ -53,7 +51,7 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
 
                     override fun onCancel() {
                     }
-                }).setParams("系统提示","是否结束录屏","确定","取消").setType().show()
+                }).setParams("系统提示", "是否结束录屏", "确定", "取消").setType().show()
             }
             //获取当前录屏时间戳
             view.findViewById<ImageView>(R.id.tv_shot).setOnClickListener { ToastUtil.mackToastSHORT("截取时间戳：${DateUtil.getSecondFormat(timerCount - 1)}", context) }
@@ -73,24 +71,25 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
                     params?.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
                     params?.height = view.measuredHeight
                     window?.attributes = params
-                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
+//                    window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
+                    window?.setBackgroundDrawable(null)//透明
                     //配置移动，只支持上下
-                    if(null != params && move){
-                        view.setOnTouchListener(object :View.OnTouchListener{
+                    if (null != params && move) {
+                        view.setOnTouchListener(object : View.OnTouchListener {
                             private var lastX = 0
                             private var lastY = 0
                             private var paramX = 0
                             private var paramY = 0
 
                             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
-                                when(event?.action){
-                                    MotionEvent.ACTION_DOWN->{
+                                when (event?.action) {
+                                    MotionEvent.ACTION_DOWN -> {
                                         lastX = event.rawX.toInt()
                                         lastY = event.rawY.toInt()
                                         paramX = params.x
                                         paramY = params.y
                                     }
-                                    MotionEvent.ACTION_MOVE->{
+                                    MotionEvent.ACTION_MOVE -> {
                                         val dx = event.rawX.toInt() - lastX
                                         val dy = event.rawY.toInt() - lastY
                                         params.x = paramX - dx
@@ -108,7 +107,7 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
         }
     }
 
-    fun onStart(){
+    fun onStart() {
         //开启录屏计时器
         timerCount = 0
         if (timer == null) {
@@ -134,14 +133,19 @@ class ComponentsFactory(var context: Context, var move:Boolean =false) {
     }
 
     private fun isAppOnForeground(): Boolean {
-        val processes = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
+        val processes =
+            (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses
+                ?: return false
         for (process in processes) {
-            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context.packageName)) return true
+            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(
+                    context.packageName
+                )
+            ) return true
         }
         return false
     }
 
-    fun onDestroy(){
+    fun onDestroy() {
         timerCount = 0
         timerTask?.cancel()
         timer?.cancel()
