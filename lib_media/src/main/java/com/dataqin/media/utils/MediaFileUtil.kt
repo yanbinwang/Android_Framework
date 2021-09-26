@@ -31,7 +31,7 @@ object MediaFileUtil {
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
-        var prefix = Constants.APPLICATION_FILE_PATH + "/文件/"
+        var prefix = "${Constants.APPLICATION_FILE_PATH}/文件/"
         var suffix = ""
         when (mimeType) {
             //拍照/抓拍
@@ -57,7 +57,7 @@ object MediaFileUtil {
         }
         val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
-            LogUtil.i(TAG, "mkdirs: " + mediaStorageDir.path)
+            LogUtil.i(TAG, "mkdirs: ${mediaStorageDir.path}")
             if (!mediaStorageDir.mkdirs()) {
                 LogUtil.e(TAG, "failed to create directory")
                 return null
@@ -75,7 +75,7 @@ object MediaFileUtil {
     fun setScanDisk(context: Context, space: Long = 1024): Boolean {
         //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSdcardAvailableCapacity(context)
-        LogUtil.e(TAG, "sd availableSize: " + availableSize + "M")
+        LogUtil.e(TAG, "sd availableSize: ${availableSize}M")
         return availableSize > space
     }
 
@@ -87,7 +87,7 @@ object MediaFileUtil {
         Thread {
             weakHandler.post { onThreadListener?.onStart() }
             //在‘视频抽帧’文件夹下建立一个以抽帧文件名命名的文件夹，方便后续对当前文件夹打压缩包
-            val savePath = Constants.APPLICATION_FILE_PATH + "/文件/视频抽帧/${File(videoPath).name}"
+            val savePath = "${Constants.APPLICATION_FILE_PATH}/文件/视频抽帧/${File(videoPath).name}"
             val thumbPaths = ArrayList<String>()
             for (i in secondList) {
                 val thumbPath = VideoHelper.getFrames(videoPath, savePath, i)
