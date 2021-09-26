@@ -275,13 +275,13 @@ object FileUtil {
      * 转换文件大小格式
      */
     @JvmStatic
-    fun formatFileSize(fileS: Long): String {
-        val df = DecimalFormat("#.00")
+    fun formatFileSize(fileSize: Long): String {
+        val format = DecimalFormat("#.00")
         return when {
-            fileS < 1024 -> df.format(fileS.toDouble()) + "B"
-            fileS < 1048576 -> df.format(fileS.toDouble() / 1024) + "K"
-            fileS < 1073741824 -> df.format(fileS.toDouble() / 1048576) + "M"
-            else -> df.format(fileS.toDouble() / 1073741824) + "G"
+            fileSize < 1024 -> format.format(fileSize.toDouble()) + "B"
+            fileSize < 1048576 -> format.format(fileSize.toDouble() / 1024) + "K"
+            fileSize < 1073741824 -> format.format(fileSize.toDouble() / 1048576) + "M"
+            else -> format.format(fileSize.toDouble() / 1073741824) + "G"
         }
     }
 
