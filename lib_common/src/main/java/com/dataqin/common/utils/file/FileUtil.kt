@@ -329,7 +329,7 @@ object FileUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             val file = File(apkFilePath)
-            val contentUri = FileProvider.getUriForFile(context, Constants.APPLICATION_ID + ".fileProvider", file)
+            val contentUri = FileProvider.getUriForFile(context,  "${Constants.APPLICATION_ID}.fileProvider", file)
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
         } else {
             intent.setDataAndType(Uri.parse("file://$apkFilePath"), "application/vnd.android.package-archive")
