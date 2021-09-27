@@ -32,7 +32,7 @@ import static com.dataqin.common.utils.NetWorkUtil.isNetworkAvailable;
  */
 @SuppressLint("InflateParams")
 public class EmptyLayout extends SimpleViewGroup {
-    private View contextView;
+    private View view;
     private ImageView ivEmpty;//图案
     private TextView tvEmpty;//文本
     private TextView tvRefresh;//刷新按钮
@@ -55,13 +55,13 @@ public class EmptyLayout extends SimpleViewGroup {
 
     private void initialize() {
         Context context = getContext();
-        contextView = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
-        ivEmpty = contextView.findViewById(R.id.iv_empty);
-        tvEmpty = contextView.findViewById(R.id.tv_empty);
-        tvRefresh = contextView.findViewById(R.id.tv_refresh);
+        view = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
+        ivEmpty = view.findViewById(R.id.iv_empty);
+        tvEmpty = view.findViewById(R.id.tv_empty);
+        tvRefresh = view.findViewById(R.id.tv_refresh);
         //设置样式
-        contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
-        contextView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
         //设置监听
         tvRefresh.setOnClickListener(v -> {
             //进入加载中，并停止刷新动画
@@ -70,22 +70,22 @@ public class EmptyLayout extends SimpleViewGroup {
                 onEmptyRefreshListener.onRefreshClick();
             }
         });
-        contextView.setOnClickListener(null);
+        view.setOnClickListener(null);
         showLoading();
     }
 
     @Override
-    public void draw() {
-        if (onInflate()) addView(contextView);
+    public void drawView() {
+        if (onFinish()) addView(view);
     }
 
     /**
      * 设置列表所需的emptyview
      */
     public View setListView(View listView) {
-        removeView(contextView);
-        ((ViewGroup) listView.getParent()).addView(contextView);//添加到当前的View hierarchy
-        return contextView;
+        removeView(view);
+        ((ViewGroup) listView.getParent()).addView(view);//添加到当前的View hierarchy
+        return view;
     }
 
     /**
@@ -136,7 +136,7 @@ public class EmptyLayout extends SimpleViewGroup {
      * 设置背景颜色
      */
     public void setBackgroundColor(int color) {
-        contextView.setBackgroundColor(color);
+        view.setBackgroundColor(color);
     }
 
     /**
