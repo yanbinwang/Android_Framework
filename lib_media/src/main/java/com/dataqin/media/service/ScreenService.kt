@@ -19,7 +19,7 @@ import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
-import com.dataqin.media.utils.ComponentsFactory
+import com.dataqin.media.utils.TimerFactory
 import com.dataqin.media.utils.MediaFileUtil
 import com.dataqin.media.utils.helper.ScreenHelper.previewHeight
 import com.dataqin.media.utils.helper.ScreenHelper.previewWidth
@@ -41,7 +41,7 @@ class ScreenService : Service() {
     private var mediaProjection: MediaProjection? = null
     private var mediaRecorder: MediaRecorder? = null
     private var virtualDisplay: VirtualDisplay? = null
-    private val componentsFactory by lazy { ComponentsFactory(this) }
+    private val timerFactory by lazy { TimerFactory(this) }
 
     override fun onCreate() {
         super.onCreate()
@@ -55,7 +55,7 @@ class ScreenService : Service() {
             startForeground(1, builder.build())
         }
 //        stopForeground(true)//关闭录屏的图标-可注释
-        componentsFactory.onStart()
+        timerFactory.onStart()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -108,7 +108,7 @@ class ScreenService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         try {
-            componentsFactory.onDestroy()
+            timerFactory.onDestroy()
             virtualDisplay?.release()
             virtualDisplay = null
             mediaRecorder?.stop()
@@ -126,7 +126,7 @@ class ScreenService : Service() {
     private fun postResult(create: Boolean) {
         val bundle = Bundle()
         bundle.putString(Extras.FILE_PATH, filePath)
-        bundle.putBoolean(Extras.FILE_CREATE, create)
+        bundle.putBoolean(Extras.IS_CREATE, create)
         RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE, bundle))
     }
 

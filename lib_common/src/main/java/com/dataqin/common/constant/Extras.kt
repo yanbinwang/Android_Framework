@@ -11,11 +11,11 @@ object Extras {
     const val RESULT_CODE = "resultCode" //页面跳转链接
     const val PAGE_FROM = "pageFrom" //来自何种页面
     const val PAGE_TYPE = "pageType" //页面类型
-    const val FILE_INDEX = "fileIndex" //文件下标
     const val FILE_PATH = "filePath" //文件路径
-    const val FILE_CREATE = "fileCreate" //是否创建文件
+    const val FILE_INDEX = "fileIndex" //文件下标
 
     const val PAYLOAD = "payLoad" //透传信息
+    const val IS_CREATE = "isCreate" //是否创建
     const val IS_RUNNING = "isRunning" //是否正在运行
 
     const val WEB_URL = "webUrl" //网页链接

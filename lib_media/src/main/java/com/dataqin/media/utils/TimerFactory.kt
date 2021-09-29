@@ -24,7 +24,7 @@ import java.util.*
 /**
  * 录屏小组件工具栏
  */
-class ComponentsFactory(var context: Context, var move: Boolean = false) {
+class TimerFactory(var context: Context, var move: Boolean = false) {
     private var tvTimer: TextView? = null
     private var timer: Timer? = null
     private var timerTask: TimerTask? = null
@@ -36,9 +36,11 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
         var timerCount: Long = 0//录制时的时间在应用回退到页面时赋值页面的时间
     }
 
+    /**
+     * 初始化时调用，点击事件，弹框的初始化
+     */
     init {
         if (null == tickDialog) {
-//            val view = View.inflate(context, R.layout.view_time_tick, null)
             val view = LayoutInflater.from(context).inflate(R.layout.view_time_tick, null)
             tvTimer = view.findViewById(R.id.tv_timer)
             //停止录屏
@@ -94,7 +96,6 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
                                         val dy = event.rawY.toInt() - lastY
                                         params.x = paramX - dx
                                         params.y = paramY + dy
-                                        // update float window
                                         window?.attributes = params
                                     }
                                 }
@@ -107,8 +108,10 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
         }
     }
 
+    /**
+     * 开启定时器计时按秒累加，毫秒级的操作不能被获取
+     */
     fun onStart() {
-        //开启录屏计时器
         timerCount = 0
         if (timer == null) {
             timer = Timer()
@@ -132,6 +135,9 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
         }
     }
 
+    /**
+     * 当前app进程是否在前台
+     */
     private fun isAppOnForeground(): Boolean {
         val processes = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
         for (process in processes) {
@@ -140,6 +146,9 @@ class ComponentsFactory(var context: Context, var move: Boolean = false) {
         return false
     }
 
+    /**
+     * 挂载的服务销毁同时调用，结束计时器,弹框等
+     */
     fun onDestroy() {
         timerCount = 0
         timerTask?.cancel()
