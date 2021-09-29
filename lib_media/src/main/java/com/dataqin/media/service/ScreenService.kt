@@ -76,8 +76,8 @@ class ScreenService : Service() {
     }
 
     private fun createMediaRecorder(): MediaRecorder {
-        val file = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
-        filePath = file.toString()
+        val screenFile = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
+        filePath = screenFile.toString()
         postResult(true)
         return MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
@@ -90,7 +90,7 @@ class ScreenService : Service() {
             setVideoFrameRate(60)
             try {
                 //若api低于O，调用setOutputFile(String path),高于使用setOutputFile(File path)
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) setOutputFile(filePath) else setOutputFile(file)
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) setOutputFile(filePath) else setOutputFile(screenFile)
                 prepare()
             } catch (ignored: Exception) {
             }
