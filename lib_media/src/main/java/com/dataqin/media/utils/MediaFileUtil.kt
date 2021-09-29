@@ -29,7 +29,7 @@ object MediaFileUtil {
     @JvmStatic
     fun getOutputFile(mimeType: Int): File? {
         if (!SdcardUtil.hasSdcard()) {
-            LogUtil.e(TAG, "未找到手机sd卡")
+            log("未找到手机sd卡", "暂无")
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
@@ -60,7 +60,7 @@ object MediaFileUtil {
         //先在包名目录下建立对应类型的文件夹，构建失败直接返回null
         val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
-            log("开始文件目录建立", mediaStorageDir.path)
+            log("开始创建文件目录", mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
                 log("创建文件目录失败", "暂无")
                 return null
