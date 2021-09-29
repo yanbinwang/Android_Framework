@@ -23,11 +23,13 @@ object MediaFileUtil {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private const val TAG = "MediaFileUtil"
 
-    //获取对应文件类型的存储地址
+    /**
+     * 获取对应文件类型的存储地址
+     */
     @JvmStatic
     fun getOutputFile(mimeType: Int): File? {
         if (!SdcardUtil.hasSdcard()) {
-            LogUtil.e(TAG, "can not get sdcard!")
+            LogUtil.e(TAG, "未找到手机sd卡")
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
@@ -58,14 +60,16 @@ object MediaFileUtil {
         //先在包名目录下建立对应类型的文件夹，构建失败直接返回null
         val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
-            LogUtil.i(TAG, "mkdirs: ${mediaStorageDir.path}")
+            log("开始文件目录建立", mediaStorageDir.path)
             if (!mediaStorageDir.mkdirs()) {
-                LogUtil.e(TAG, "failed to create directory")
+                log("创建文件目录失败", "暂无")
                 return null
             }
-        } else LogUtil.i(TAG, "mkdirs,文件夹已存在： ${mediaStorageDir.path}")
+        } else log("文件目录已创建", mediaStorageDir.path)
         return File("${mediaStorageDir.path}/${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}.${suffix}")
     }
+
+    private fun log(status: String, path: String) = LogUtil.i(TAG, " \n————————————————————————多媒体文件————————————————————————\n状态：${status}\n路径: ${path}\n————————————————————————多媒体文件————————————————————————")
 
     /**
      * 传入指定大小的文件长度，扫描sd卡空间是否足够
@@ -74,9 +78,7 @@ object MediaFileUtil {
     @JvmOverloads
     @JvmStatic
     fun setScanDisk(context: Context, space: Long = 1024): Boolean {
-        //对本地存储空间做一次扫描检测
         val availableSize = SdcardUtil.getSdcardAvailableCapacity(context)
-        LogUtil.e(TAG, "sd availableSize: ${availableSize}M")
         return availableSize > space
     }
 
