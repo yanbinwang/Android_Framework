@@ -37,24 +37,25 @@ object MediaFileUtil {
             //拍照/抓拍
             MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE -> {
                 prefix += "拍照"
-                suffix = ".jpg"
+                suffix = "jpg"
             }
             //录像
             MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO -> {
                 prefix += "录像"
-                suffix = ".mp4"
+                suffix = "mp4"
             }
             //录音
             MediaStore.Files.FileColumns.MEDIA_TYPE_AUDIO -> {
                 prefix += "录音"
-                suffix = ".wav"
+                suffix = "wav"
             }
             //录屏
             MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST -> {
                 prefix += "录屏"
-                suffix = ".mp4"
+                suffix = "mp4"
             }
         }
+        //先在包名目录下建立对应类型的文件夹，构建失败直接返回null
         val mediaStorageDir = File(prefix)
         if (!mediaStorageDir.exists()) {
             LogUtil.i(TAG, "mkdirs: ${mediaStorageDir.path}")
@@ -63,7 +64,7 @@ object MediaFileUtil {
                 return null
             }
         } else LogUtil.i(TAG, "mkdirs,文件夹已存在： ${mediaStorageDir.path}")
-        return File(mediaStorageDir.path + File.separator + DateUtil.getDateTime("yyyyMMdd_HHmmss", Date()) + suffix)
+        return File("${mediaStorageDir.path}/${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}.${suffix}")
     }
 
     /**
@@ -108,7 +109,7 @@ object MediaFileUtil {
      * base64文件流的形式加载文件，需要先下载，之后在放置
      */
     @JvmStatic
-    fun getBase64File(base64: String, suffix: String, root: String = Constants.APPLICATION_FILE_PATH + "/缓存", clear: Boolean = true, onThreadListener: FileUtil.OnThreadListener?) {
+    fun getBase64File(base64: String, suffix: String, root: String = "${Constants.APPLICATION_FILE_PATH}/缓存", clear: Boolean = true, onThreadListener: FileUtil.OnThreadListener?) {
         Thread {
             weakHandler.post { onThreadListener?.onStart() }
             if (clear) FileUtil.deleteDir(root)
