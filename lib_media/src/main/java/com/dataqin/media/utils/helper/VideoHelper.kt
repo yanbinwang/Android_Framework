@@ -2,13 +2,9 @@ package com.dataqin.media.utils.helper
 
 import android.graphics.Bitmap.CompressFormat
 import android.media.MediaMetadataRetriever
-import com.dataqin.base.utils.DateUtil
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.io.RandomAccessFile
-import java.util.*
-import kotlin.collections.ArrayList
 
 /**
  * 视频抽帧工具栏
@@ -36,7 +32,7 @@ object VideoHelper {
         for (i in 1..seconds) {
             //获取的是微秒
             val bitmap = retriever.getFrameAtTime((i * 1000 * 1000).toLong(), MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
-            val path = savePath + File.separator + i + ".jpg"
+            val path = "${savePath}/${i}.jpg"
             thumbPaths.add(path)
             var fos: FileOutputStream? = null
             try {
@@ -69,7 +65,7 @@ object VideoHelper {
         //获取的是微秒
         val bitmap = retriever.getFrameAtTime((second * 1000 * 1000).toLong(), MediaMetadataRetriever.OPTION_CLOSEST_SYNC)
 //        val path = savePath + File.separator + "${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}_${File(videoPath).name}_${second}s.jpg"
-        val path = savePath + File.separator + "${File(videoPath).name}_${second}s.jpg"
+        val path = "${savePath}/${File(videoPath).name}_${second}s.jpg"
         var fos: FileOutputStream? = null
         try {
             fos = FileOutputStream(path)
