@@ -134,7 +134,7 @@ object MediaFileUtil {
     }
 
     /**
-     * 返回视频时长
+     * 返回时长(音频，视频)
      */
     private fun getDuration(sourcePath: String): String {
         val file = File(sourcePath)
@@ -143,7 +143,7 @@ object MediaFileUtil {
         medialPlayer.prepare()
         val time = medialPlayer.duration//视频时长（毫秒）
         val duration = (time / 1000).toString()
-        LogUtil.e(TAG, "视频时长：${duration}")
+        LogUtil.e(TAG, "时长：${duration}")
         return duration
     }
 
