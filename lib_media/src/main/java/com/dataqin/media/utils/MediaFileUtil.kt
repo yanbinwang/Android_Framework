@@ -1,6 +1,7 @@
 package com.dataqin.media.utils
 
 import android.content.Context
+import android.media.MediaPlayer
 import android.os.Looper
 import android.provider.MediaStore
 import android.util.Base64
@@ -130,6 +131,20 @@ object MediaFileUtil {
                 weakHandler.post { onThreadListener?.onStop(file.absolutePath) }
             }
         }.start()
+    }
+
+    /**
+     * 返回视频时长
+     */
+    private fun getDuration(sourcePath: String): String {
+        val file = File(sourcePath)
+        val medialPlayer = MediaPlayer()
+        medialPlayer.setDataSource(file.path)
+        medialPlayer.prepare()
+        val time = medialPlayer.duration//视频时长（毫秒）
+        val duration = (time / 1000).toString()
+        LogUtil.e(TAG, "视频时长：${duration}")
+        return duration
     }
 
 }
