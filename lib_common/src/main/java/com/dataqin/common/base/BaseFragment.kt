@@ -73,12 +73,19 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         initEvent()
         initData()
     }
+
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        initView()
+//        initEvent()
+//        initData()
+//    }
 
     override fun initView() {
         ARouter.getInstance().inject(this)
