@@ -3,6 +3,6 @@
     <string name="toast_alipay_pay_loading">正在发起支付宝支付,请稍后…</string>
     <string name="toast_wechat_pay_error">当前微信版本不支持</string>
     <string name="toast_pay_success">支付成功</string>
-    <string name="toast_pay_failure">支付取消</string>
-    <string name="toast_pay_cancel">支付失败</string>
+    <string name="toast_pay_failure">支付失败</string>
+    <string name="toast_pay_cancel">支付取消</string>
 </resources>
