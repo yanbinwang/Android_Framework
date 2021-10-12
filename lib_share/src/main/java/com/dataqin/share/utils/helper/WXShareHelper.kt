@@ -65,8 +65,7 @@ object WXShareHelper {
      */
     @JvmStatic
     fun shareMiniProgram(model: WechatModel) {
-        val onekeyShare = OnekeyShare()
-        onekeyShare.apply {
+        OnekeyShare().apply {
             setPlatform(Wechat.NAME)
             disableSSOWhenAuthorize()
             setTitle(model.title)
@@ -74,12 +73,12 @@ object WXShareHelper {
             setImageUrl(model.imgUrl)
             setUrl(model.url)
             shareContentCustomizeCallback = ShareContentCustomizeCallback { _: Platform?, shareParams: ShareParams ->
-                    shareParams.apply {
-                        shareType = Platform.SHARE_WXMINIPROGRAM //分享小程序类型,修改为Platform.OPEN_WXMINIPROGRAM可直接打开微信小程序
-                        wxUserName = model.id //配置小程序原始ID，前面有截图说明
-                        wxPath = model.url //分享小程序页面的具体路径
-                    }
+                shareParams.apply {
+                    shareType = Platform.SHARE_WXMINIPROGRAM //分享小程序类型,修改为Platform.OPEN_WXMINIPROGRAM可直接打开微信小程序
+                    wxUserName = model.id //配置小程序原始ID，前面有截图说明
+                    wxPath = model.url //分享小程序页面的具体路径
                 }
+            }
             show(context)
         }
     }
@@ -89,8 +88,7 @@ object WXShareHelper {
      */
     @JvmStatic
     fun shareImage(model: WechatModel) {
-        val onekeyShare = OnekeyShare()
-        onekeyShare.apply {
+        OnekeyShare().apply {
             setPlatform(getPlatformType(model.type))
             //关闭sso授权
             disableSSOWhenAuthorize()
@@ -106,9 +104,8 @@ object WXShareHelper {
     @JvmStatic
     fun authorize(activity: Activity, onWXAuthorizeListener: OnWXAuthorizeListener?) {
         ShareSDK.setActivity(activity)
-        val platform = ShareSDK.getPlatform(Wechat.NAME)
         //回调信息，可以在这里获取基本的授权返回的信息，但是注意如果做提示和UI操作要传到主线程handler里去执行
-        platform.apply {
+        ShareSDK.getPlatform(Wechat.NAME).apply {
             platformActionListener = object : PlatformActionListener {
                 override fun onComplete(platform: Platform, i: Int, hashMap: HashMap<String, Any>) {
                     weakHandler.post { onWXAuthorizeListener?.onComplete(hashMap) }
