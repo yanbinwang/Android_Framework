@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import com.dataqin.base.utils.DisplayUtilKt;
 
-
 /**
  * author: wyb
  * date: 2017/11/24.
