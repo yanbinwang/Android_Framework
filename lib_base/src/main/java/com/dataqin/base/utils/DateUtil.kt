@@ -67,8 +67,8 @@ object DateUtil {
     fun compareDate(fromSource: String, toSource: String): Int {
         val dateFormat = SimpleDateFormat(EN_YMD, Locale.getDefault())
         try {
-            val comparedDate = dateFormat.parse(fromSource)
-            val comparedDate2 = dateFormat.parse(toSource)
+            val comparedDate = dateFormat.parse(fromSource) ?: Date()
+            val comparedDate2 = dateFormat.parse(toSource) ?: Date()
             return when {
                 comparedDate.time > comparedDate2.time -> 1//日程时间大于系统时间
                 comparedDate.time < comparedDate2.time -> -1//日程时间小于系统时间
@@ -93,7 +93,7 @@ object DateUtil {
         var result = ""
         try {
             //传入格式转换成日期
-            val date = SimpleDateFormat(fromFormat, Locale.getDefault()).parse(source)
+            val date = SimpleDateFormat(fromFormat, Locale.getDefault()).parse(source) ?: ""
             //日期转换成想要的格式
             result = SimpleDateFormat(toFormat, Locale.getDefault()).format(date)
         } catch (ignored: ParseException) {
@@ -121,7 +121,7 @@ object DateUtil {
      */
     @Synchronized
     @JvmStatic
-    fun getDateTime(format: String, timestamp: Long) = SimpleDateFormat(format, Locale.getDefault()).format(Date(timestamp))
+    fun getDateTime(format: String, timestamp: Long) = SimpleDateFormat(format, Locale.getDefault()).format(Date(timestamp)) ?: ""
 
     /**
      * 传入指定日期格式和日期類转换成字符串
@@ -132,7 +132,7 @@ object DateUtil {
      */
     @Synchronized
     @JvmStatic
-    fun getDateTime(format: String, date: Date) = SimpleDateFormat(format, Locale.getDefault()).format(date)
+    fun getDateTime(format: String, date: Date) = SimpleDateFormat(format, Locale.getDefault()).format(date) ?: ""
 
     /**
      * 传入毫秒转换成00:00的格式
@@ -146,9 +146,7 @@ object DateUtil {
         if (timestamp <= 0) return "00:00"
         val second = (timestamp / 1000 / 60).toInt()
         val million = (timestamp / 1000 % 60).toInt()
-        val f = if (second >= 10) second.toString() else "0$second"
-        val m = if (million >= 10) million.toString() else "0$million"
-        return "$f:$m"
+        return "${if (second >= 10) second.toString() else "0$second"}:${if (million >= 10) million.toString() else "0$million"}"
     }
 
     /**
@@ -162,7 +160,7 @@ object DateUtil {
     fun getWeekOfMonth(source: String): Int {
         try {
             val calendar = Calendar.getInstance()
-            calendar.time = SimpleDateFormat(EN_YMD, Locale.getDefault()).parse(source)
+            calendar.time = SimpleDateFormat(EN_YMD, Locale.getDefault()).parse(source) ?: Date()
             return calendar.get(Calendar.WEEK_OF_MONTH)
         } catch (ignored: ParseException) {
         }
@@ -180,7 +178,7 @@ object DateUtil {
     fun getWeekOfDate(source: String): Int {
         try {
             val calendar = Calendar.getInstance()
-            calendar.time = SimpleDateFormat(EN_YMD, Locale.getDefault()).parse(source)
+            calendar.time = SimpleDateFormat(EN_YMD, Locale.getDefault()).parse(source) ?: Date()
             var weekIndex = calendar.get(Calendar.DAY_OF_WEEK) - 1
             if (weekIndex < 0) weekIndex = 0
             return weekIndex
@@ -238,8 +236,6 @@ object DateUtil {
         return result
     }
 
-    private fun unitFormat(time: Long): String {
-        return if (time in 0..9) "0$time" else "" + time
-    }
+    private fun unitFormat(time: Long) = if (time in 0..9) "0$time" else "" + time
 
 }
