@@ -220,6 +220,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     @Override
     public void setAutoScroll(boolean scroll) {
         this.scroll = scroll;
+        if(!scroll) stopTimer();
     }
 
     @Override
