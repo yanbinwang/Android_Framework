@@ -34,9 +34,11 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
             ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_image_loading, null)
             list.add(img)
         }
-        binding.svpContainer.adapter = ScaleAdapter(list)
-        binding.svpContainer.currentItem = index
-        binding.svpContainer.startAnimation(getInAnimation())
+        binding.svpContainer.apply {
+            adapter = ScaleAdapter(list)
+            currentItem = index
+            startAnimation(getInAnimation())
+        }
     }
 
     override fun finish() {

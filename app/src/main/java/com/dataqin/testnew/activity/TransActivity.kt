@@ -11,7 +11,7 @@ import com.dataqin.testnew.databinding.ActivityTransBinding
  *  透明页-底部直接显示activity
  */
 @Route(path = ARouterPath.TransActivity)
-class TransActivity :BaseActivity<ActivityTransBinding>(){
+class TransActivity : BaseActivity<ActivityTransBinding>() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
