@@ -53,6 +53,11 @@ abstract class BasePresenter<T : BaseView> {
         softEmpty?.get()?.visibility = View.GONE
     }
 
+    fun showEmpty(imgInt: Int = -1, text: String = "") {
+        softEmpty?.get()?.visibility = View.VISIBLE
+        softEmpty?.get()?.showEmpty(imgInt, text)
+    }
+
     fun detachView() {
         weakActivity?.clear()
         weakContext?.clear()
