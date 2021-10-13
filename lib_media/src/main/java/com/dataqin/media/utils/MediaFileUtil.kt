@@ -78,10 +78,7 @@ object MediaFileUtil {
      */
     @JvmOverloads
     @JvmStatic
-    fun setScanDisk(context: Context, space: Long = 1024): Boolean {
-        val availableSize = SdcardUtil.getSdcardAvailableCapacity(context)
-        return availableSize > space
-    }
+    fun setScanDisk(context: Context, space: Long = 1024) = SdcardUtil.getSdcardAvailableCapacity(context) > space
 
     /**
      * 传入视频原路径，并通过秒数集合，批量生成图片，并打包成压缩包保存到指定路径下
