@@ -28,4 +28,5 @@ public class ScaleViewPager extends ViewPager {
             return super.canScroll(v, checkV, dx, x, y);
         }
     }
+
 }

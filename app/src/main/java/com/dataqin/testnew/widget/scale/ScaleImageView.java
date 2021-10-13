@@ -54,24 +54,20 @@ public class ScaleImageView extends ImageView {
     private float superMaxScale;
     private float matchViewWidth, matchViewHeight, prevMatchViewWidth, prevMatchViewHeight;
     private float[] m;
-
     private Context context;
     private State state;
     private Fling fling;
     private ScaleType mScaleType;
     private Matrix matrix, prevMatrix;
     private ZoomVariables delayedZoomVariables;
-
     private GestureDetector mGestureDetector;
     private ScaleGestureDetector mScaleDetector;
     private OnTouchListener userTouchListener = null;
     private OnTouchImageViewListener touchImageViewListener = null;
     private GestureDetector.OnDoubleTapListener doubleTapListener = null;
-
     private static final float SUPER_MIN_MULTIPLIER = .75f;
     private static final float SUPER_MAX_MULTIPLIER = 1.25f;
     private static final String TAG = "DEBUG";
-
     private enum State {NONE, DRAG, ZOOM, FLING, ANIMATE_ZOOM}
 
     public ScaleImageView(Context context) {
@@ -357,10 +353,8 @@ public class ScaleImageView extends ImageView {
             minTrans = viewSize - contentSize;
             maxTrans = 0;
         }
-        if (trans < minTrans)
-            return -trans + minTrans;
-        if (trans > maxTrans)
-            return -trans + maxTrans;
+        if (trans < minTrans) return -trans + minTrans;
+        if (trans > maxTrans) return -trans + maxTrans;
         return 0;
     }
 
@@ -406,7 +400,6 @@ public class ScaleImageView extends ImageView {
         if (matrix == null || prevMatrix == null) {
             return;
         }
-
         int drawableWidth = drawable.getIntrinsicWidth();
         int drawableHeight = drawable.getIntrinsicHeight();
         float scaleX = (float) viewWidth / drawableWidth;
@@ -428,7 +421,6 @@ public class ScaleImageView extends ImageView {
             default:
                 throw new UnsupportedOperationException("TouchImageView does not support FIT_START or FIT_END");
         }
-
         float redundantXSpace = viewWidth - (scaleX * drawableWidth);
         float redundantYSpace = viewHeight - (scaleY * drawableHeight);
         matchViewWidth = viewWidth - redundantXSpace;
@@ -508,7 +500,6 @@ public class ScaleImageView extends ImageView {
     }
 
     private class GestureListener extends GestureDetector.SimpleOnGestureListener {
-
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             if (doubleTapListener != null) {
@@ -568,16 +559,13 @@ public class ScaleImageView extends ImageView {
             mScaleDetector.onTouchEvent(event);
             mGestureDetector.onTouchEvent(event);
             PointF curr = new PointF(event.getX(), event.getY());
-
             if (state == State.NONE || state == State.DRAG || state == State.FLING) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         last.set(curr);
-                        if (fling != null)
-                            fling.cancelFling();
+                        if (fling != null) fling.cancelFling();
                         setState(State.DRAG);
                         break;
-
                     case MotionEvent.ACTION_MOVE:
                         if (state == State.DRAG) {
                             float deltaX = curr.x - last.x;
@@ -589,7 +577,6 @@ public class ScaleImageView extends ImageView {
                             last.set(curr.x, curr.y);
                         }
                         break;
-
                     case MotionEvent.ACTION_UP:
                     case MotionEvent.ACTION_POINTER_UP:
                         setState(State.NONE);
@@ -632,7 +619,6 @@ public class ScaleImageView extends ImageView {
             if (normalizedScale > maxScale) {
                 targetZoom = maxScale;
                 animateToZoomBoundary = true;
-
             } else if (normalizedScale < minScale) {
                 targetZoom = minScale;
                 animateToZoomBoundary = true;
@@ -667,12 +653,12 @@ public class ScaleImageView extends ImageView {
     }
 
     private class DoubleTapZoom implements Runnable {
-        private final boolean stretchImageToSuper;
         private final float startZoom;
         private final float targetZoom;
         private final float bitmapX;
         private final float bitmapY;
         private final long startTime;
+        private final boolean stretchImageToSuper;
         private final PointF startTouch;
         private final PointF endTouch;
         private final AccelerateDecelerateInterpolator interpolator = new AccelerateDecelerateInterpolator();
@@ -756,8 +742,8 @@ public class ScaleImageView extends ImageView {
     }
 
     private class Fling implements Runnable {
-        CompatScroller scroller;
-        int currX, currY;
+        private CompatScroller scroller;
+        private int currX, currY;
 
         private Fling(int velocityX, int velocityY) {
             setState(State.FLING);
@@ -775,11 +761,9 @@ public class ScaleImageView extends ImageView {
             if (getImageHeight() > viewHeight) {
                 minY = viewHeight - (int) getImageHeight();
                 maxY = 0;
-
             } else {
                 minY = maxY = startY;
             }
-
             scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
             currX = startX;
             currY = startY;
@@ -816,77 +800,46 @@ public class ScaleImageView extends ImageView {
         }
     }
 
+    private void compatPostOnAnimation(Runnable runnable) {
+        postOnAnimation(runnable);
+    }
+
+    private void printMatrixInfo() {
+        float[] n = new float[9];
+        matrix.getValues(n);
+        LogUtil.d(TAG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
+    }
+
     private static class CompatScroller {
-        private Scroller scroller;
-        private OverScroller overScroller;
-        private final boolean isPreGingerbread;
+        private final OverScroller overScroller;
 
         public CompatScroller(Context context) {
-            if (VERSION.SDK_INT < VERSION_CODES.GINGERBREAD) {
-                isPreGingerbread = true;
-                scroller = new Scroller(context);
-
-            } else {
-                isPreGingerbread = false;
-                overScroller = new OverScroller(context);
-            }
+            overScroller = new OverScroller(context);
         }
 
         public void fling(int startX, int startY, int velocityX, int velocityY, int minX, int maxX, int minY, int maxY) {
-            if (isPreGingerbread) {
-                scroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            } else {
-                overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
-            }
+            overScroller.fling(startX, startY, velocityX, velocityY, minX, maxX, minY, maxY);
         }
 
         public void forceFinished(boolean finished) {
-            if (isPreGingerbread) {
-                scroller.forceFinished(finished);
-            } else {
-                overScroller.forceFinished(finished);
-            }
+            overScroller.forceFinished(finished);
         }
 
         public boolean isFinished() {
-            if (isPreGingerbread) {
-                return scroller.isFinished();
-            } else {
-                return overScroller.isFinished();
-            }
+            return overScroller.isFinished();
         }
 
         public boolean computeScrollOffset() {
-            if (isPreGingerbread) {
-                return scroller.computeScrollOffset();
-            } else {
-                overScroller.computeScrollOffset();
-                return overScroller.computeScrollOffset();
-            }
+            overScroller.computeScrollOffset();
+            return overScroller.computeScrollOffset();
         }
 
         public int getCurrX() {
-            if (isPreGingerbread) {
-                return scroller.getCurrX();
-            } else {
-                return overScroller.getCurrX();
-            }
+            return overScroller.getCurrX();
         }
 
         public int getCurrY() {
-            if (isPreGingerbread) {
-                return scroller.getCurrY();
-            } else {
-                return overScroller.getCurrY();
-            }
-        }
-    }
-
-    private void compatPostOnAnimation(Runnable runnable) {
-        if (VERSION.SDK_INT >= VERSION_CODES.JELLY_BEAN) {
-            postOnAnimation(runnable);
-        } else {
-            postDelayed(runnable, 1000 / 60);
+            return overScroller.getCurrY();
         }
     }
 
@@ -902,12 +855,6 @@ public class ScaleImageView extends ImageView {
             this.focusY = focusY;
             this.scaleType = scaleType;
         }
-    }
-
-    private void printMatrixInfo() {
-        float[] n = new float[9];
-        matrix.getValues(n);
-        LogUtil.d(TAG, "Scale: " + n[Matrix.MSCALE_X] + " TransX: " + n[Matrix.MTRANS_X] + " TransY: " + n[Matrix.MTRANS_Y]);
     }
 
 }
