@@ -86,32 +86,27 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //        PopupHelper.addPopup(2,Any())
 //        PopupHelper.addPopup(3,Any())
 
-        ImageLoader.instance.displayProgressImage(
-            binding.ivLoading,
-            "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F03%2F165526ophx4l6c6ll3cnpl.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626503458&t=0e2ad4aa991a1788dd91eed69ecf40b7",
-            object : OnLoaderListener {
-                override fun onStart() {
-                }
+        ImageLoader.instance.displayProgressImage(binding.ivLoading, "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fattach.bbs.miui.com%2Fforum%2F201312%2F03%2F165526ophx4l6c6ll3cnpl.jpg&refer=http%3A%2F%2Fattach.bbs.miui.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1626503458&t=0e2ad4aa991a1788dd91eed69ecf40b7", object : OnLoaderListener {
+            override fun onStart() {
+            }
 
-                override fun onProgress(progress: Int) {
-                }
+            override fun onProgress(progress: Int) {
+            }
 
-                override fun onComplete() {
-                }
-            })
+            override fun onComplete() {
+            }
+        })
 
         val list = listOf(
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F04%2F20170804135156_metTN.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=d90a27b306f2d7ce4c0d18a6744bca86",
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F1336313%2Ff%2F977802912.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=82da0c88197102345a628bc2239bcf50",
-            "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30"
-        )
+            "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30")
         binding.adGallery.onStart(list, binding.llPoint)
-        binding.adGallery.setOnAdvertisingClickListener(object :OnAdvertisingClickListener{
+        binding.adGallery.setOnAdvertisingClickListener(object : OnAdvertisingClickListener {
             override fun onItemClick(index: Int) {
                 showToast("当前选中了${index}")
             }
         })
-
         GSYVideoHelper.setUrl("http://zcpt-test.obs.cn-east-3.myhuaweicloud.com/uploads/2021/08/26/3AEF64F8FD3D4F109C4C24F2C6FCC3CF.mp4")
     }
 
@@ -119,7 +114,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initEvent()
         onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
         ScreenShotObserver.instance.register()
-
         addDisposable(RxBus.instance.toFlowable {
             when (it.getAction()) {
 //                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
@@ -188,10 +182,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 val fileDir = File(srcPath)
                 val zipFile = File("${Constants.SDCARD_PATH}/10086.zip")
                 try {
-                    if (fileDir.exists()) FileUtil.zipFolder(
-                        fileDir.absolutePath,
-                        zipFile.absolutePath
-                    )
+                    if (fileDir.exists()) FileUtil.zipFolder(fileDir.absolutePath, zipFile.absolutePath)
                 } catch (e: Exception) {
                     log("打包图片生成压缩文件异常: $e")
                 } finally {
@@ -244,17 +235,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                    }).getPermissions()
 //                addressPopup.showPopup(v)
 //                navigation(ARouterPath.TransActivity)
-                navigation(
-                    ARouterPath.ScaleActivity,
-                    PageParams().append(
-                        Extras.FILE_PATH,
+                navigation(ARouterPath.ScaleActivity,
+                    PageParams().append(Extras.FILE_PATH,
                         listOf(
                             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic1.win4000.com%2Fwallpaper%2F2017-12-06%2F5a2795b48ab8c.jpg%3Fdown&refer=http%3A%2F%2Fpic1.win4000.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619340383&t=d6165e069cd6c28c2296496b074784d4",
                             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg1.3lian.com%2F2015%2Fa1%2F144%2Fd%2F83.jpg&refer=http%3A%2F%2Fimg1.3lian.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1619341141&t=a25aa81f9e0e7cbf611281bfc7f7a486",
-                            "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/ca1349540923dd54ea2076a4d309b3de9d8248af.jpg"
-                        )
-                    )
-                )
+                            "https://ss1.baidu.com/-4o3dSag_xI4khGko9WTAnF6hhy/zhidao/pic/item/ca1349540923dd54ea2076a4d309b3de9d8248af.jpg")))
             }
         }
     }
