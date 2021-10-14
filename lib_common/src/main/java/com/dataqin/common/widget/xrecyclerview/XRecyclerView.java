@@ -151,6 +151,10 @@ public class XRecyclerView extends SimpleViewGroup {
         addItemDecoration(horizontalSpace, verticalSpace, hasHorizontalEdge, hasVerticalEdge);
     }
 
+    public <T extends BaseAdapter> T getAdapter(){
+        return (T) recycler.getAdapter();
+    }
+
     /**
      * 设置横向左右滑动的adapter
      */
