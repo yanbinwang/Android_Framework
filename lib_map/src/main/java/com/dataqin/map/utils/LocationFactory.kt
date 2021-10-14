@@ -79,12 +79,13 @@ class LocationFactory : AMapLocationListener {
         val builder: Notification.Builder?
         //Android O上对Notification进行了修改，如果设置的targetSDKVersion>=26建议使用此种方式创建通知栏
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val notificationManager =
-                context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
+            val notificationManager = context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager?
             val notificationChannel = NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT)
-            notificationChannel.enableLights(true) //是否在桌面icon右上角展示小圆点
-            notificationChannel.lightColor = Color.BLUE //小圆点颜色
-            notificationChannel.setShowBadge(true) //是否在久按桌面图标时显示此渠道的通知
+            notificationChannel.apply {
+                enableLights(true) //是否在桌面icon右上角展示小圆点
+                lightColor = Color.BLUE //小圆点颜色
+                setShowBadge(true) //是否在久按桌面图标时显示此渠道的通知
+            }
             notificationManager?.createNotificationChannel(notificationChannel)
             builder = Notification.Builder(context, Constants.PUSH_CHANNEL_ID)
         } else {
