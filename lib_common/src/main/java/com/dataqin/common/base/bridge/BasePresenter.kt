@@ -53,6 +53,7 @@ abstract class BasePresenter<T : BaseView> {
         softEmpty?.get()?.visibility = View.GONE
     }
 
+    @JvmOverloads
     fun showEmpty(imgInt: Int = -1, text: String = "") {
         softEmpty?.get()?.visibility = View.VISIBLE
         softEmpty?.get()?.showEmpty(imgInt, text)
