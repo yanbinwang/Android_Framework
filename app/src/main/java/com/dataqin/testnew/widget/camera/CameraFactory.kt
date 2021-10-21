@@ -85,37 +85,35 @@ class CameraFactory {
             //设置拍照后存储的图片格式
             parameters?.pictureFormat = PixelFormat.JPEG
             val focusModes = parameters?.supportedFocusModes
-            if (!focusModes.isNullOrEmpty()) {
-                parameters.focusMode = when {
-                    focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE) -> Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
-                    focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO) -> Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
-                    else -> null
-                }
-                //设置PreviewSize和PictureSize
-                var previewWidth = 0
-                var previewHeight = 0
-                try {
-                    //选择合适的预览尺寸
-                    val previewSizeList = parameters.supportedPreviewSizes
-                    if (previewSizeList.size > 1) {
-                        for (cur in previewSizeList) {
-                            if (cur.width >= previewWidth && cur.height >= previewHeight) {
-                                previewWidth = cur.width
-                                previewHeight = cur.height
-                                break
-                            }
+            if (focusModes!!.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+            } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
+                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
+            }
+            //设置PreviewSize和PictureSize
+            var previewWidth = 0
+            var previewHeight = 0
+            try {
+                //选择合适的预览尺寸
+                val previewSizeList = parameters.supportedPreviewSizes
+                if (previewSizeList.size > 1) {
+                    for (cur in previewSizeList) {
+                        if (cur.width >= previewWidth && cur.height >= previewHeight) {
+                            previewWidth = cur.width
+                            previewHeight = cur.height
+                            break
                         }
                     }
-                    //获得摄像区域的大小
-                    parameters.setPreviewSize(previewWidth, previewHeight)
-                    //获得保存图片的大小
-                    parameters.setPictureSize(previewWidth, previewHeight)
-                    camera?.parameters = parameters
-                } catch (ignored: Exception) {
-                } finally {
-                    //预览旋转90度
-                    camera?.setDisplayOrientation(90)
                 }
+                //获得摄像区域的大小
+                parameters.setPreviewSize(previewWidth, previewHeight)
+                //获得保存图片的大小
+                parameters.setPictureSize(previewWidth, previewHeight)
+                camera?.parameters = parameters
+            } catch (ignored: Exception) {
+            } finally {
+                //预览旋转90度
+                camera?.setDisplayOrientation(90)
             }
         }
     }
@@ -241,7 +239,6 @@ class CameraFactory {
             }
             val currentFocusMode = params.focusMode
             params.focusMode = Camera.Parameters.FOCUS_MODE_MACRO
-            camera?.parameters = params
             camera?.autoFocus { _, camera ->
                 val parameters = camera.parameters
                 parameters.focusMode = currentFocusMode
@@ -352,7 +349,7 @@ class CameraFactory {
                 setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
                 setOutputFile(videFilePath)
                 setPreviewDisplay(cameraPreview?.holder?.surface)
-                setOrientationHint(90)
+                setOrientationHint(if (cameraId == CameraInfo.CAMERA_FACING_BACK) 90 else 270)
                 prepare()
             }
         } catch (e: Exception) {
