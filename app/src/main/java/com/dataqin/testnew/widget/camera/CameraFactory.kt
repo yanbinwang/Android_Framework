@@ -11,7 +11,10 @@ import android.media.MediaRecorder
 import android.provider.MediaStore.Files.FileColumns
 import android.text.TextUtils
 import android.util.Log
-import android.view.*
+import android.view.MotionEvent
+import android.view.OrientationEventListener
+import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.dataqin.base.utils.CompressUtil
 import com.dataqin.base.utils.LogUtil
@@ -56,8 +59,27 @@ class CameraFactory {
         val instance by lazy { CameraFactory() }
     }
 
+    // <editor-fold defaultstate="collapsed" desc="基类方法">
+    private fun openCamera(): Camera? {
+        var camera: Camera? = null
+        try {
+            camera = Camera.open(cameraId)
+        } catch (e: Exception) {
+            log("相机类初始化", "状态：失败\n原因：$e")
+        }
+        log("相机类初始化", "状态：成功")
+        return camera
+    }
+
+    private fun log(title: String, content: String) = LogUtil.e(TAG, " \n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
+    // </editor-fold>
+
+    // <editor-fold defaultstate="collapsed" desc="操作方法">
+    /**
+     * 相机类参数初始化操作
+     */
     fun init() {
-        camera = instanceCamera()
+        camera = openCamera()
         if (null != camera) {
             val parameters = camera?.parameters
             //设置拍照后存储的图片格式
@@ -98,13 +120,14 @@ class CameraFactory {
         }
     }
 
+    /**
+     * 页面初始化操作
+     */
     fun initialize(viewGroup: ViewGroup, cameraPreview: CameraPreview) {
         this.viewGroup = viewGroup
         this.cameraPreview = cameraPreview
         this.orientationListener = object : OrientationEventListener(viewGroup.context) {
-            override fun onOrientationChanged(orientation: Int) {
-                cameraOrientation = orientation
-            }
+            override fun onOrientationChanged(orientation: Int) { cameraOrientation = orientation }
         }
         viewGroup.addView(cameraPreview)
         cameraPreview.setOnTouchListener { _, event ->
@@ -113,15 +136,42 @@ class CameraFactory {
         }
     }
 
-    private fun instanceCamera(): Camera? {
-        var camera: Camera? = null
-        try {
-            camera = Camera.open(cameraId)
-        } catch (e: Exception) {
-            log("相机类初始化", "状态：失败\n原因：$e")
+    /**
+     * 触碰相机镜头调整
+     */
+    private fun focusOnTouch(x: Int, y: Int, preview: FrameLayout) {
+        val rect = Rect(x - 100, y - 100, x + 100, y + 100)
+        var left = rect.left * 2000 / preview.width - 1000
+        var top = rect.top * 2000 / preview.height - 1000
+        var right = rect.right * 2000 / preview.width - 1000
+        var bottom = rect.bottom * 2000 / preview.height - 1000
+        //如果超出了(-1000,1000)到(1000, 1000)的范围，则会导致相机崩溃
+        left = if (left < -1000) -1000 else left
+        top = if (top < -1000) -1000 else top
+        right = if (right > 1000) 1000 else right
+        bottom = if (bottom > 1000) 1000 else bottom
+        //相机对焦
+        val camera = getCamera()
+        if (camera != null) {
+            //先获取当前相机的参数配置对象
+            val mobileParameters = camera.parameters
+            //设置聚焦模式
+            mobileParameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
+            log("相机类焦点", "状态:${mobileParameters.maxNumFocusAreas}")
+            if (mobileParameters.maxNumFocusAreas > 0) {
+                val focusAreas = ArrayList<Camera.Area>()
+                focusAreas.add(Camera.Area(Rect(left, top, right, bottom), 1000))
+                mobileParameters.focusAreas = focusAreas
+            }
+            try {
+                camera.apply {
+                    cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
+                    parameters = mobileParameters
+                    autoFocus { success: Boolean, _: Camera? -> log("相机类焦点", "状态:$success") }
+                }
+            } catch (ignored: Exception) {
+            }
         }
-        log("相机类初始化", "状态：成功")
-        return camera
     }
 
     /**
@@ -133,7 +183,7 @@ class CameraFactory {
      * 获取相机类
      */
     fun getCamera(): Camera? {
-        if (camera == null) camera = instanceCamera()
+        if (camera == null) camera = openCamera()
         return camera
     }
 
@@ -150,11 +200,7 @@ class CameraFactory {
         if (getCamera() != null) {
             val cameraInfo = CameraInfo()
             Camera.getCameraInfo(cameraId, cameraInfo)
-            cameraId = if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) {
-                CameraInfo.CAMERA_FACING_FRONT
-            } else {
-                CameraInfo.CAMERA_FACING_BACK
-            }
+            cameraId = if (cameraInfo.facing == CameraInfo.CAMERA_FACING_BACK) CameraInfo.CAMERA_FACING_FRONT else CameraInfo.CAMERA_FACING_BACK
             releaseCamera()
         }
         reset()
@@ -178,7 +224,29 @@ class CameraFactory {
      */
     fun onTouchEvent(event: MotionEvent?) {
         if (event?.pointerCount == 1) {
-            handleFocusMetering(event)
+            val params = camera?.parameters!!
+            val previewSize = params.previewSize
+            val focusRect = calculateTapArea(event.x, event.y, 1f, previewSize)
+            val meteringRect = calculateTapArea(event.x, event.y, 1.5f, previewSize)
+            camera?.cancelAutoFocus()
+            if (params.maxNumFocusAreas > 0) {
+                val focusAreas = ArrayList<Camera.Area>()
+                focusAreas.add(Camera.Area(focusRect, 800))
+                params.focusAreas = focusAreas
+            }
+            if (params.maxNumMeteringAreas > 0) {
+                val meteringAreas = ArrayList<Camera.Area>()
+                meteringAreas.add(Camera.Area(meteringRect, 800))
+                params.meteringAreas = meteringAreas
+            }
+            val currentFocusMode = params.focusMode
+            params.focusMode = Camera.Parameters.FOCUS_MODE_MACRO
+            camera?.parameters = params
+            camera?.autoFocus { _, camera ->
+                val parameters = camera.parameters
+                parameters.focusMode = currentFocusMode
+                camera.parameters = parameters
+            }
         } else {
             when (event?.action) {
                 MotionEvent.ACTION_POINTER_DOWN -> oldDist = getFingerSpacing(event).toInt()
@@ -195,6 +263,22 @@ class CameraFactory {
                 }
             }
         }
+    }
+
+    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size): Rect {
+        val areaSize = 300 * coefficient
+        val centerX = (x / previewSize.width - 1000)
+        val centerY = (y / previewSize.height - 1000)
+        val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
+        val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
+        val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
+        return Rect(rectF.left.roundToInt(), rectF.top.roundToInt(), rectF.right.roundToInt(), rectF.bottom.roundToInt())
+    }
+
+    private fun clamp(x: Int, min: Int, max: Int): Int {
+        if (x > max) return max
+        if (x < min) return min
+        return x
     }
 
     private fun getFingerSpacing(event: MotionEvent): Float {
@@ -215,94 +299,6 @@ class CameraFactory {
             }
             params.zoom = zoom
             camera?.parameters = params
-        }
-    }
-
-    private fun handleFocusMetering(event: MotionEvent) {
-        val params = camera?.parameters!!
-        val previewSize = params.previewSize
-        val focusRect = calculateTapArea(event.x, event.y, 1f, previewSize)
-        val meteringRect = calculateTapArea(event.x, event.y, 1.5f, previewSize)
-        camera?.cancelAutoFocus()
-        if (params.maxNumFocusAreas > 0) {
-            val focusAreas = ArrayList<Camera.Area>()
-            focusAreas.add(Camera.Area(focusRect, 800))
-            params.focusAreas = focusAreas
-        }
-        if (params.maxNumMeteringAreas > 0) {
-            val meteringAreas = ArrayList<Camera.Area>()
-            meteringAreas.add(Camera.Area(meteringRect, 800))
-            params.meteringAreas = meteringAreas
-        }
-        val currentFocusMode = params.focusMode
-        params.focusMode = Camera.Parameters.FOCUS_MODE_MACRO
-        camera?.parameters = params
-        camera?.autoFocus { _, camera ->
-            val parameters = camera.parameters
-            parameters.focusMode = currentFocusMode
-            camera.parameters = parameters
-        }
-    }
-
-    private fun calculateTapArea(x: Float, y: Float, coefficient: Float, previewSize: Camera.Size): Rect {
-        val areaSize = 300 * coefficient
-        val centerX = (x / previewSize.width - 1000)
-        val centerY = (y / previewSize.height - 1000)
-        val left = clamp((centerX - areaSize / 2).toInt(), -1000, 1000)
-        val top = clamp((centerY - areaSize / 2).toInt(), -1000, 1000)
-        val rectF = RectF(left.toFloat(), top.toFloat(), left + areaSize, top + areaSize)
-        return Rect(
-            rectF.left.roundToInt(),
-            rectF.top.roundToInt(),
-            rectF.right.roundToInt(),
-            rectF.bottom.roundToInt()
-        )
-    }
-
-    private fun clamp(x: Int, min: Int, max: Int): Int {
-        if (x > max) return max
-        if (x < min) return min
-        return x
-    }
-
-    /**
-     * 触碰相机镜头调整
-     */
-    fun focusOnTouch(x: Int, y: Int, preview: FrameLayout) {
-        val rect = Rect(x - 100, y - 100, x + 100, y + 100)
-        var left = rect.left * 2000 / preview.width - 1000
-        var top = rect.top * 2000 / preview.height - 1000
-        var right = rect.right * 2000 / preview.width - 1000
-        var bottom = rect.bottom * 2000 / preview.height - 1000
-        //如果超出了(-1000,1000)到(1000, 1000)的范围，则会导致相机崩溃
-        left = if (left < -1000) -1000 else left
-        top = if (top < -1000) -1000 else top
-        right = if (right > 1000) 1000 else right
-        bottom = if (bottom > 1000) 1000 else bottom
-        focusOnRect(Rect(left, top, right, bottom))
-    }
-
-    private fun focusOnRect(rect: Rect) {
-        val camera = getCamera()
-        if (camera != null) {
-            //先获取当前相机的参数配置对象
-            val parameters = camera.parameters
-            //设置聚焦模式
-            parameters.focusMode = Camera.Parameters.FOCUS_MODE_AUTO
-            log("相机类焦点", "状态:${parameters.maxNumFocusAreas}")
-            if (parameters.maxNumFocusAreas > 0) {
-                val focusAreas = ArrayList<Camera.Area>()
-                focusAreas.add(Camera.Area(rect, 1000))
-                parameters.focusAreas = focusAreas
-            }
-            try {
-                camera.cancelAutoFocus() //先要取消掉进程中所有的聚焦功能
-                camera.parameters = parameters
-                camera.autoFocus { success: Boolean, _: Camera? ->
-                    log("相机类焦点", "状态:$success")
-                }
-            } catch (ignored: Exception) {
-            }
         }
     }
 
@@ -340,11 +336,11 @@ class CameraFactory {
     }
 
     /**
-     * 开启或停止录像
+     * 开始录像
      */
-    fun startOrStopRecorder(surface: Surface?) = if (recording) stopRecorder() else startRecorder(surface)
-
-    private fun prepareVideoRecorder(surface: Surface?) {
+    fun startRecorder() {
+        if (recording) return
+        onVideoRecordListener?.onStartRecorder()
         videFilePath = MediaFileUtil.getOutputFile(FileColumns.MEDIA_TYPE_VIDEO).toString()
         try {
             camera?.unlock()
@@ -355,7 +351,7 @@ class CameraFactory {
                 setVideoSource(MediaRecorder.VideoSource.CAMERA)
                 setProfile(CamcorderProfile.get(CamcorderProfile.QUALITY_720P))
                 setOutputFile(videFilePath)
-                setPreviewDisplay(surface)
+                setPreviewDisplay(cameraPreview?.holder?.surface)
                 setOrientationHint(90)
                 prepare()
             }
@@ -364,27 +360,6 @@ class CameraFactory {
             videFilePath = ""
             releaseMediaRecorder()
         }
-    }
-
-    private fun releaseMediaRecorder() {
-        try {
-            mediaRecorder?.reset()
-            mediaRecorder?.release()
-            mediaRecorder = null
-            camera?.lock()
-        } catch (ignored: Exception) {
-        } finally {
-            onVideoRecordListener?.onStopRecorder(videFilePath)
-        }
-    }
-
-    /**
-     * 开始录像
-     */
-    fun startRecorder(surface: Surface?) {
-        if (recording) return
-        onVideoRecordListener?.onStartRecorder()
-        prepareVideoRecorder(surface)
         if (!TextUtils.isEmpty(videFilePath)) {
             recording = true
             mediaRecorder?.start()
@@ -413,6 +388,18 @@ class CameraFactory {
         }
     }
 
+    private fun releaseMediaRecorder() {
+        try {
+            mediaRecorder?.reset()
+            mediaRecorder?.release()
+            mediaRecorder = null
+            camera?.lock()
+        } catch (ignored: Exception) {
+        } finally {
+            onVideoRecordListener?.onStopRecorder(videFilePath)
+        }
+    }
+
     /**
      * 销毁相机
      */
@@ -433,7 +420,6 @@ class CameraFactory {
         cameraPreview = null
         viewGroup = null
     }
-
-    private fun log(title: String, content: String) = LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
+    // </editor-fold>
 
 }
