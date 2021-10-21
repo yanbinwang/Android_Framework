@@ -25,7 +25,7 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         LogUtil.i(TAG, "surfaceCreated");
-        CameraFactory.getInstance().initCamera();
+        CameraFactory.getInstance().init();
         startPreview(holder);
     }
 

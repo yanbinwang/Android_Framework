@@ -56,22 +56,7 @@ class CameraFactory {
         val instance by lazy { CameraFactory() }
     }
 
-    fun initialize(viewGroup: ViewGroup, cameraPreview: CameraPreview) {
-        this.viewGroup = viewGroup
-        this.cameraPreview = cameraPreview
-        this.orientationListener = object : OrientationEventListener(viewGroup.context) {
-            override fun onOrientationChanged(orientation: Int) {
-                cameraOrientation = orientation
-            }
-        }
-        viewGroup.addView(cameraPreview)
-        cameraPreview.setOnTouchListener { _, event ->
-            focusOnTouch(event.x.toInt(), event.y.toInt(), viewGroup as FrameLayout)
-            false
-        }
-    }
-
-    fun initCamera() {
+    fun init() {
         camera = instanceCamera()
         if (null != camera) {
             val parameters = camera?.parameters
@@ -113,7 +98,20 @@ class CameraFactory {
         }
     }
 
-    private fun log(title: String, content: String) = LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
+    fun initialize(viewGroup: ViewGroup, cameraPreview: CameraPreview) {
+        this.viewGroup = viewGroup
+        this.cameraPreview = cameraPreview
+        this.orientationListener = object : OrientationEventListener(viewGroup.context) {
+            override fun onOrientationChanged(orientation: Int) {
+                cameraOrientation = orientation
+            }
+        }
+        viewGroup.addView(cameraPreview)
+        cameraPreview.setOnTouchListener { _, event ->
+            focusOnTouch(event.x.toInt(), event.y.toInt(), viewGroup as FrameLayout)
+            false
+        }
+    }
 
     private fun instanceCamera(): Camera? {
         var camera: Camera? = null
@@ -165,13 +163,7 @@ class CameraFactory {
     /**
      * 对焦
      */
-    fun focusing() = run {
-        if (null != viewGroup) focusOnTouch(
-            Constants.SCREEN_WIDTH / 2,
-            Constants.SCREEN_HEIGHT,
-            viewGroup as FrameLayout
-        )
-    }
+    fun focusing() = run { if (null != viewGroup) focusOnTouch(Constants.SCREEN_WIDTH / 2, Constants.SCREEN_HEIGHT, viewGroup as FrameLayout) }
 
     /**
      * 复位
@@ -441,5 +433,7 @@ class CameraFactory {
         cameraPreview = null
         viewGroup = null
     }
+
+    private fun log(title: String, content: String) = LogUtil.e(TAG, " " + "\n————————————————————————${title}————————————————————————\n${content}\n————————————————————————${title}————————————————————————")
 
 }
