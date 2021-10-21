@@ -358,13 +358,13 @@ class CameraFactory {
         } catch (e: Exception) {
             log("相机类录像", "状态：失败\n原因：${e.message}")
             videFilePath = ""
-            releaseMediaRecorder()
+            releaseRecorder()
         }
         if (!TextUtils.isEmpty(videFilePath)) {
             recording = true
             mediaRecorder?.start()
             onVideoRecordListener?.onRecording()
-        } else releaseMediaRecorder()
+        } else releaseRecorder()
     }
 
     /**
@@ -384,11 +384,11 @@ class CameraFactory {
         } catch (e: Exception) {
             log("相机类录像", "状态：失败\n原因：${Log.getStackTraceString(e)}")
         } finally {
-            releaseMediaRecorder()
+            releaseRecorder()
         }
     }
 
-    private fun releaseMediaRecorder() {
+    private fun releaseRecorder() {
         try {
             mediaRecorder?.reset()
             mediaRecorder?.release()
@@ -413,7 +413,7 @@ class CameraFactory {
      * 销毁稍镜头调整
      */
     fun onDestroy() {
-        releaseMediaRecorder()
+        releaseRecorder()
         orientationListener?.disable()
         cameraId = CameraInfo.CAMERA_FACING_BACK
         camera = null
