@@ -86,9 +86,9 @@ class CameraFactory {
             parameters?.pictureFormat = PixelFormat.JPEG
             val focusModes = parameters?.supportedFocusModes
             if (focusModes!!.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)
+                parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE
             } else if (focusModes.contains(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)) {
-                parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO)
+                parameters.focusMode = Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
             }
             //设置PreviewSize和PictureSize
             var previewWidth = 0

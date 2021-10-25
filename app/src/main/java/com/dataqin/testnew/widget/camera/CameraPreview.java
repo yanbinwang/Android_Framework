@@ -2,6 +2,7 @@ package com.dataqin.testnew.widget.camera;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
+import android.hardware.Camera;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -34,7 +35,8 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
         LogUtil.i(TAG, "surfaceChanged");
         if (surfaceHolder.getSurface() == null) return;
         try {
-            if (CameraFactory.getInstance().getCamera() != null) CameraFactory.getInstance().getCamera().stopPreview();
+            Camera camera = CameraFactory.getInstance().getCamera();
+            if (camera != null) camera.stopPreview();
         } catch (Exception ignored) {
         } finally {
             startPreview(holder);
@@ -50,10 +52,11 @@ public class CameraPreview extends SurfaceView implements SurfaceHolder.Callback
     private void startPreview(SurfaceHolder holder) {
         LogUtil.i(TAG, "startPreview");
         try {
-            if (CameraFactory.getInstance().getCamera() != null) {
-                CameraFactory.getInstance().getCamera().setPreviewDisplay(holder);
-                CameraFactory.getInstance().getCamera().startPreview();
-                CameraFactory.getInstance().getCamera().cancelAutoFocus();
+            Camera camera = CameraFactory.getInstance().getCamera();
+            if (camera != null) {
+                camera.setPreviewDisplay(holder);
+                camera.startPreview();
+                camera.cancelAutoFocus();
             }
         } catch (Exception e) {
             LogUtil.i(TAG, "Error starting camera preview: " + e.getMessage());
