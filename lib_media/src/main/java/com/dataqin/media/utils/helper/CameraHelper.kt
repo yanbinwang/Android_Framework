@@ -51,15 +51,13 @@ object CameraHelper {
      * 复位
      */
     @JvmStatic
-    fun reset() {
-        cvFinder?.zoom = 0f
-    }
+    fun reset() = run { cvFinder?.zoom = 0f }
 
     /**
      * 镜头翻转
      */
     @JvmStatic
-    fun toggleCamera() = cvFinder?.toggleFacing()
+    fun toggleFacing() = cvFinder?.toggleFacing()
 
     /**
      * 拍照/抓拍
@@ -106,7 +104,7 @@ object CameraHelper {
      */
     @JvmOverloads
     @JvmStatic
-    fun startRecorder(snapshot: Boolean = false) {
+    fun takeVideo(snapshot: Boolean = false) {
         if (cvFinder?.isTakingVideo == true) {
             ToastUtil.mackToastSHORT("正在生成视频,请勿频繁操作...", cvFinder?.context!!)
             return
@@ -144,7 +142,7 @@ object CameraHelper {
      * 停止录像
      */
     @JvmStatic
-    fun stopRecorder() {
+    fun stopVideo() {
         onVideoRecordListener?.onTakenRecorder()
         cvFinder?.stopVideo()
     }
