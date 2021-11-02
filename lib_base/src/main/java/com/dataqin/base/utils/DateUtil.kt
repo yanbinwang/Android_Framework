@@ -171,8 +171,7 @@ object DateUtil {
     fun getWeekOfMonth(source: String): Int {
         try {
             Calendar.getInstance().apply {
-                val dateFormat = getDateFormat(EN_YMD)
-                time = dateFormat.parse(source) ?: Date()
+                time = getDateFormat(EN_YMD).parse(source) ?: Date()
                 return get(Calendar.WEEK_OF_MONTH)
             }
         } catch (ignored: ParseException) {
@@ -191,8 +190,7 @@ object DateUtil {
     fun getWeekOfDate(source: String): Int {
         try {
             Calendar.getInstance().apply {
-                val dateFormat = getDateFormat(EN_YMD)
-                time = dateFormat.parse(source) ?: Date()
+                time = getDateFormat(EN_YMD).parse(source) ?: Date()
                 var weekIndex = get(Calendar.DAY_OF_WEEK) - 1
                 if (weekIndex < 0) weekIndex = 0
                 return weekIndex
