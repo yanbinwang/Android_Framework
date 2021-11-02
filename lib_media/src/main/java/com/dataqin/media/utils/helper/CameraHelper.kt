@@ -65,38 +65,30 @@ object CameraHelper {
     @JvmOverloads
     @JvmStatic
     fun takePicture(snapshot: Boolean = true) {
-        if (cvFinder?.isTakingPicture == true) {
-            ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", cvFinder?.context!!)
-            return
-        }
-        sound.play(MediaActionSound.SHUTTER_CLICK)
-        onTakePictureListener?.onStart()
-        if (snapshot) {
-            cvFinder?.takePictureSnapshot()
-        } else {
-            cvFinder?.takePicture()
-        }
-        cvFinder?.addCameraListener(object : CameraListener() {
-            override fun onPictureShutter() {
-                super.onPictureShutter()
-                onTakePictureListener?.onShutter()
+        cvFinder?.apply {
+            if (isTakingPicture) {
+                ToastUtil.mackToastSHORT("正在生成图片,请勿频繁操作...", context)
+                return
             }
+            sound.play(MediaActionSound.SHUTTER_CLICK)
+            onTakePictureListener?.onStart()
+            if (snapshot) takePictureSnapshot() else takePicture()
+            addCameraListener(object : CameraListener() {
+                override fun onPictureShutter() {
+                    super.onPictureShutter()
+                    onTakePictureListener?.onShutter()
+                }
 
-            override fun onPictureTaken(result: PictureResult) {
-                super.onPictureTaken(result)
-                //在sd卡的Picture文件夹下创建对应的文件
-                val pictureFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_IMAGE)
-                if (null != pictureFile) {
-                    result.toFile(pictureFile) {
-                        if (null != it) {
-                            onTakePictureListener?.onSuccess(it)
-                        } else {
-                            onTakePictureListener?.onFailed()
-                        }
-                    }
-                } else onTakePictureListener?.onFailed()
-            }
-        })
+                override fun onPictureTaken(result: PictureResult) {
+                    super.onPictureTaken(result)
+                    //在sd卡的Picture文件夹下创建对应的文件
+                    val pictureFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_IMAGE)
+                    if (null != pictureFile) {
+                        result.toFile(pictureFile) { if (null != it) onTakePictureListener?.onSuccess(it) else onTakePictureListener?.onFailed() }
+                    } else onTakePictureListener?.onFailed()
+                }
+            })
+        }
     }
 
     /**
@@ -104,38 +96,40 @@ object CameraHelper {
      */
     @JvmOverloads
     @JvmStatic
-    fun takeVideo(snapshot: Boolean = false) {
-        if (cvFinder?.isTakingVideo == true) {
-            ToastUtil.mackToastSHORT("正在生成视频,请勿频繁操作...", cvFinder?.context!!)
-            return
-        }
-        val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
-        if (null != videoFile) {
-            onVideoRecordListener?.onStartRecorder()
-            if (snapshot) {
-                cvFinder?.takeVideoSnapshot(videoFile)
-            } else {
-                cvFinder?.takeVideo(videoFile)
+    fun takeVideo(snapshot: Boolean = true) {
+        cvFinder?.apply {
+            if (isTakingVideo) {
+                ToastUtil.mackToastSHORT("正在生成视频,请勿频繁操作...", context)
+                return
             }
-            cvFinder?.addCameraListener(object : CameraListener() {
-                //正式完成录制的回调，获取路径
-                override fun onVideoTaken(result: VideoResult) {
-                    super.onVideoTaken(result)
-                    onVideoRecordListener?.onStopRecorder(result.file.path)
+            val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
+            if (null != videoFile) {
+                onVideoRecordListener?.onStartRecorder()
+                if (snapshot) {
+                    takeVideoSnapshot(videoFile)
+                } else {
+                    takeVideo(videoFile)
                 }
+                addCameraListener(object : CameraListener() {
+                    //正式完成录制的回调，获取路径
+                    override fun onVideoTaken(result: VideoResult) {
+                        super.onVideoTaken(result)
+                        onVideoRecordListener?.onStopRecorder(result.file.path)
+                    }
 
-                override fun onVideoRecordingStart() {
-                    super.onVideoRecordingStart()
-                    onVideoRecordListener?.onRecording()
-                }
+                    override fun onVideoRecordingStart() {
+                        super.onVideoRecordingStart()
+                        onVideoRecordListener?.onRecording()
+                    }
 
 //                //onVideoRecordingEnd比onVideoTaken先调取,文件此时可能还在存储
 //                override fun onVideoRecordingEnd() {
 //                    super.onVideoRecordingEnd()
 //                    onVideoRecordListener?.onStopRecorder()
 //                }
-            })
-        } else onVideoRecordListener?.onStopRecorder(null)
+                })
+            } else onVideoRecordListener?.onStopRecorder(null)
+        }
     }
 
     /**
