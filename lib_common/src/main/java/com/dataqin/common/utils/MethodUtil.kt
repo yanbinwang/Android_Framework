@@ -1,6 +1,7 @@
 package com.dataqin.common.utils
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.VIBRATOR_SERVICE
 import android.content.Intent
 import android.graphics.Paint
@@ -11,6 +12,7 @@ import android.os.Vibrator
 import android.text.InputFilter
 import android.text.SpannableString
 import android.text.Spanned
+import android.text.TextUtils
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
 import android.text.style.ForegroundColorSpan
@@ -98,7 +100,7 @@ fun TextView.setUnderline() {
  */
 fun EditText.inputTransformation(): Boolean {
     try {
-        transformationMethod = if (transformationMethod == HideReturnsTransformationMethod.getInstance()) { PasswordTransformationMethod.getInstance() } else { HideReturnsTransformationMethod.getInstance() }
+        transformationMethod = if (transformationMethod == HideReturnsTransformationMethod.getInstance()) PasswordTransformationMethod.getInstance() else HideReturnsTransformationMethod.getInstance()
         setSelection(text.length)
         postInvalidate()
     } catch (ignored: Exception) {
@@ -123,12 +125,19 @@ fun EditText.inhibitInputSpace() {
     filters = arrayOf(object : InputFilter {
         override fun filter(source: CharSequence?, start: Int, end: Int, dest: Spanned?, dstart: Int, dend: Int): CharSequence? {
             val result = source ?: ""
-            return if (result == " ") {
-                ""
-            } else {
-                null
-            }
+            return if (result == " ") "" else null
         }
     })
+}
 
+/**
+ * 检测
+ */
+fun Context.testingContent(vararg views: EditText?): Boolean {
+    for (view in views) {
+        if (view != null) {
+            if (TextUtils.isEmpty(view.text.toString().trim { it <= ' ' })) return false
+        }
+    }
+    return true
 }
