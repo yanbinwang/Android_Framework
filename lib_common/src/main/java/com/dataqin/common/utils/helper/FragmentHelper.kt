@@ -14,7 +14,7 @@ object FragmentHelper {
     private var containerViewId = 0
     private var fragmentList = ArrayList<Fragment>()
     private var weakActivity: WeakReference<AppCompatActivity>? = null
-    var onTabClickListener: OnTabClickListener? = null
+    var onTabCommitListener: OnTabCommitListener? = null
 
     @JvmOverloads
     @JvmStatic
@@ -45,13 +45,13 @@ object FragmentHelper {
             }
             fragmentTransaction.show(fragmentList[tabNum])
             fragmentTransaction.commitAllowingStateLoss()
-            onTabClickListener?.onTabClickListener(tabNum)
+            onTabCommitListener?.onTabShow(tabNum)
         }
     }
 
-    interface OnTabClickListener {
+    interface OnTabCommitListener {
 
-        fun onTabClickListener(tabNum: Int)
+        fun onTabShow(tabNum: Int)
 
     }
 
