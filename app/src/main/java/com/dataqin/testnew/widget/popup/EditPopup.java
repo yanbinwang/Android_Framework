@@ -71,4 +71,5 @@ public class EditPopup extends BasePopupWindow<ViewPopupEditBinding> implements 
             dismiss();
         }
     }
+
 }
