@@ -7,7 +7,6 @@ import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import java.lang.ref.WeakReference
 import java.util.concurrent.ConcurrentHashMap
 
-
 /**
  *  Created by wangyanbin
  *  针对首页弹框的帮助类，如果后台不能给弹框优先级顺序的记录
