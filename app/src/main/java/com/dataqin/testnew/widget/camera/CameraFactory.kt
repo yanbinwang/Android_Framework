@@ -95,12 +95,12 @@ class CameraFactory {
             var previewHeight = 0
             try {
                 //选择合适的预览尺寸
-                val previewSizeList = parameters.supportedPreviewSizes
-                if (previewSizeList.size > 1) {
-                    for (cur in previewSizeList) {
-                        if (cur.width >= previewWidth && cur.height >= previewHeight) {
-                            previewWidth = cur.width
-                            previewHeight = cur.height
+                val previewSizes = parameters.supportedPreviewSizes
+                if (previewSizes.size > 1) {
+                    for (size in previewSizes) {
+                        if (size.width >= previewWidth && size.height >= previewHeight) {
+                            previewWidth = size.width
+                            previewHeight = size.height
                             break
                         }
                     }
