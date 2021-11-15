@@ -8,7 +8,7 @@ import android.os.StatFs
 /**
  *  Created by wangyanbin
  *  sd卡工具类
- *  只能拿到外置存储器的大致容量，并不准确
+ *  Q版本开始只能拿到外置存储器的大致容量，并不准确
  */
 object SdcardUtil {
 
