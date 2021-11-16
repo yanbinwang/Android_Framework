@@ -46,43 +46,27 @@ class PdfActivity : BaseTitleActivity<ActivityPdfBinding>() {
             override fun onSuccess(path: String?) {
                 super.onSuccess(path)
                 try {
-                    val file = File(path)
-                    binding.pdfContainer.fromFile(file)
-                        .defaultPage(1)//默认显示第1页
-                        .showMinimap(false) //pdf放大的时候，是否在屏幕的右上角生成小地图
-                        .swipeVertical(true) //pdf文档翻页是否是垂直翻页，默认是左右滑动翻页
-                        .enableSwipe(true) //是否允许翻页，默认是允许翻页
-                        .onLoad {
-                            try {
-                                val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
-                                val page = renderer.openPage(0)//选择渲染哪一页的渲染数据
-                                val width = resources.displayMetrics.densityDpi / 72 * page.width
-                                val height = resources.displayMetrics.densityDpi / 72 * page.height
-                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
-                                val canvas = Canvas(bitmap)
-                                canvas.drawColor(Color.WHITE)
-                                canvas.drawBitmap(bitmap, 0f, 0f, null)
-                                val r =  Rect(0, 0, width, height);
-                                page.render(bitmap, r, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
-                                page.close()
-                                renderer.close()
-                                //放置本地，观测
-                                FileUtil.saveBitmapThread(baseContext, bitmap, object : FileUtil.OnThreadListener {
-                                    override fun onStart() {
-                                    }
-
-                                    override fun onStop(path: String?) {
-                                    }
-                                })
-                            }catch (e:Exception){}
-
-
-//                                //下载生成的bitmap
-//                                val pdfFile = ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY) //以只读的方式打开文件
-//                                val renderer = PdfRenderer(pdfFile)
-//                                val mCurrentPage = renderer.openPage(0)//选择渲染哪一页的渲染数据
-//                                val bitmap = Bitmap.createBitmap(mCurrentPage.width, mCurrentPage.height, Bitmap.Config.ARGB_8888)
-//                                mCurrentPage.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_PRINT)//render支持裁切和旋转参数
+                    FileUtil.sendFile(activity.get()!!,path!!)
+//                    val file = File(path)
+//                    binding.pdfContainer.fromFile(file)
+//                        .defaultPage(1)//默认显示第1页
+//                        .showMinimap(false) //pdf放大的时候，是否在屏幕的右上角生成小地图
+//                        .swipeVertical(true) //pdf文档翻页是否是垂直翻页，默认是左右滑动翻页
+//                        .enableSwipe(true) //是否允许翻页，默认是允许翻页
+//                        .onLoad {
+//                            try {
+//                                val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
+//                                val page = renderer.openPage(0)//选择渲染哪一页的渲染数据
+//                                val width = resources.displayMetrics.densityDpi / 72 * page.width
+//                                val height = resources.displayMetrics.densityDpi / 72 * page.height
+//                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+//                                val canvas = Canvas(bitmap)
+//                                canvas.drawColor(Color.WHITE)
+//                                canvas.drawBitmap(bitmap, 0f, 0f, null)
+//                                val r =  Rect(0, 0, width, height);
+//                                page.render(bitmap, r, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+//                                page.close()
+//                                renderer.close()
 //                                //放置本地，观测
 //                                FileUtil.saveBitmapThread(baseContext, bitmap, object : FileUtil.OnThreadListener {
 //                                    override fun onStart() {
@@ -91,8 +75,8 @@ class PdfActivity : BaseTitleActivity<ActivityPdfBinding>() {
 //                                    override fun onStop(path: String?) {
 //                                    }
 //                                })
-                                //                    mCurrentPage?.close()
-                        }.load()
+//                            }catch (e:Exception){}
+//                        }.load()
                 } catch (e: Exception) {
                 }
             }

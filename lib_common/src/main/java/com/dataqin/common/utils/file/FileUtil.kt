@@ -1,7 +1,6 @@
 package com.dataqin.common.utils.file
 
 import android.annotation.SuppressLint
-import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -287,31 +286,25 @@ object FileUtil {
     }
 
     /**
-     * 打开文件
+     * 发送文件
      */
     @JvmStatic
-    fun openFile(context: Context, filePath: String) {
+    fun sendFile(context: Context, filePath: String) {
         val file = File(filePath)
         if (!file.exists()) {
-            ToastUtil.mackToastSHORT("附件不能打开，文件路径错误！", context)
+            ToastUtil.mackToastSHORT("文件路径错误", context)
             return
         }
-        try {
-            val intent = Intent(Intent.ACTION_VIEW)
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            val uri: Uri
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-                uri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
-                intent.setDataAndType(uri, "application/vnd.android.package-archive")
-            } else {
-                uri = Uri.parse("file://$file")
-            }
-            intent.setDataAndType(uri, "*/*")
-            context.startActivity(intent)
-        } catch (e: ActivityNotFoundException) {
-            ToastUtil.mackToastSHORT("附件不能打开，请下载相关软件！", context)
+        val intent = Intent(Intent.ACTION_SEND)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            intent.putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file))
+        }else{
+            intent.putExtra(Intent.EXTRA_STREAM, file)
         }
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        intent.type = "*/*"//此处可发送多种文件
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        context.startActivity(Intent.createChooser(intent, "分享文件"))
     }
 
     /**
