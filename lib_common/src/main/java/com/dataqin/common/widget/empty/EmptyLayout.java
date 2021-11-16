@@ -35,7 +35,6 @@ public class EmptyLayout extends SimpleViewGroup {
     private View view;
     private ImageView ivEmpty;//图案
     private TextView tvEmpty;//文本
-    private TextView tvRefresh;//刷新按钮
     private OnEmptyRefreshListener onEmptyRefreshListener;
 
     public EmptyLayout(Context context) {
@@ -58,19 +57,17 @@ public class EmptyLayout extends SimpleViewGroup {
         view = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
         ivEmpty = view.findViewById(R.id.iv_empty);
         tvEmpty = view.findViewById(R.id.tv_empty);
-        tvRefresh = view.findViewById(R.id.tv_refresh);
         //设置样式
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
         view.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
         //设置监听
-        tvRefresh.setOnClickListener(v -> {
+        view.setOnClickListener(v -> {
             //进入加载中，并停止刷新动画
             showLoading();
             if (null != onEmptyRefreshListener) {
                 onEmptyRefreshListener.onRefreshClick();
             }
         });
-        view.setOnClickListener(null);
         showLoading();
     }
 
@@ -95,7 +92,6 @@ public class EmptyLayout extends SimpleViewGroup {
         setVisibility(View.VISIBLE);
         ivEmpty.setImageResource(R.mipmap.img_data_loading);
         tvEmpty.setText(getContext().getString(R.string.label_data_loading));
-        tvRefresh.setVisibility(View.GONE);
     }
 
     public void showEmpty() {
@@ -109,7 +105,6 @@ public class EmptyLayout extends SimpleViewGroup {
         setVisibility(View.VISIBLE);
         ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_empty : resId);
         tvEmpty.setText(TextUtils.isEmpty(text) ? getContext().getString(R.string.label_data_empty) : text);
-        tvRefresh.setVisibility(View.GONE);
     }
 
     public void showError() {
@@ -129,7 +124,6 @@ public class EmptyLayout extends SimpleViewGroup {
             ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_error : resId);
             tvEmpty.setText(TextUtils.isEmpty(text) ? getContext().getString(R.string.label_data_error) : text);
         }
-        tvRefresh.setVisibility(View.VISIBLE);
     }
 
     /**
