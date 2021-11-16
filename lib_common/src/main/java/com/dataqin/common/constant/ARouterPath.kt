@@ -13,7 +13,7 @@ object ARouterPath {
     const val VideoTapActivity = "/app/VideoTapActivity"
     const val RecordActivity = "/app/RecordActivity"
     const val TransActivity = "/app/TransActivity"
-    const val CameraActivity = "/app/CameraActivity"
+    const val PdfActivity = "/app/PdfActivity"
 
     //homepage模块
 //    const val ShotActivity = "/app/ShotActivity" //锁定ip页

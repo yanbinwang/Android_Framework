@@ -111,7 +111,7 @@
             android:theme="@style/fullScreenTransTheme" />
 
         <activity
-            android:name=".activity.CameraActivity"
+            android:name=".activity.PdfActivity"
             android:screenOrientation="portrait" />
 
         <!-- ******************************************************服务****************************************************** -->
