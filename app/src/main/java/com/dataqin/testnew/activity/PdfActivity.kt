@@ -46,7 +46,7 @@ class PdfActivity : BaseTitleActivity<ActivityPdfBinding>() {
             override fun onSuccess(path: String?) {
                 super.onSuccess(path)
                 try {
-                    FileUtil.sendFile(activity.get()!!,path!!)
+//                    FileUtil.sendFile(activity.get()!!,path!!)
 //                    val file = File(path)
 //                    binding.pdfContainer.fromFile(file)
 //                        .defaultPage(1)//默认显示第1页
@@ -57,8 +57,8 @@ class PdfActivity : BaseTitleActivity<ActivityPdfBinding>() {
 //                            try {
 //                                val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
 //                                val page = renderer.openPage(0)//选择渲染哪一页的渲染数据
-//                                val width = resources.displayMetrics.densityDpi / 72 * page.width
-//                                val height = resources.displayMetrics.densityDpi / 72 * page.height
+//                                val width = page.width
+//                                val height = page.height
 //                                val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
 //                                val canvas = Canvas(bitmap)
 //                                canvas.drawColor(Color.WHITE)
