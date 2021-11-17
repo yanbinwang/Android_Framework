@@ -85,7 +85,7 @@ class ScreenService : Service() {
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             setVideoEncodingBitRate(5 * previewWidth * previewHeight)
             setVideoEncoder(MediaRecorder.VideoEncoder.H264)
-            setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
+            setAudioEncoder(MediaRecorder.AudioEncoder.AAC)
             setVideoSize(previewWidth, previewHeight)
             setVideoFrameRate(60)
             try {
