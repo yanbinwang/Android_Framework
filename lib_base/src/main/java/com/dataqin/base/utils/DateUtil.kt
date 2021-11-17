@@ -65,8 +65,8 @@ object DateUtil {
      */
     @Synchronized
     @JvmStatic
-    fun compareDate(fromSource: String, toSource: String): Int {
-        val dateFormat = getDateFormat(EN_YMD)
+    fun compareDate(fromSource: String, toSource: String, format: String = EN_YMD): Int {
+        val dateFormat = getDateFormat(format)
         try {
             val comparedDate = dateFormat.parse(fromSource) ?: Date()
             val comparedDate2 = dateFormat.parse(toSource) ?: Date()
