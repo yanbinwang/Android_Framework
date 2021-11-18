@@ -53,7 +53,7 @@ object NavigationHelper {
      * 选中下标
      */
     @JvmStatic
-    fun selectedItem(index: Int) = navigationView?.menu?.getItem(index)?.itemId
+    fun selectedItem(index: Int) = navigationView?.selectedItemId = navigationView?.menu?.getItem(index)?.itemId ?: 0
 
     /**
      * 获取下标item
