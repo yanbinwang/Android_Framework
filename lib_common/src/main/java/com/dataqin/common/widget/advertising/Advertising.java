@@ -182,8 +182,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
                         weakHandler.post(() -> {
                             int current = banner.getCurrentItem();
                             int position = current + 1;
-                            if (current == 0 || current == Integer.MAX_VALUE)
-                                position = halfPosition - (halfPosition % list.size());
+                            if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
                             banner.setCurrentItem(position);
                         });
                     }
