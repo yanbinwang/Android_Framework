@@ -45,7 +45,7 @@ class AlbumHelper(activity: Activity) {
                             }.start()
                     }
                 }
-            }).getPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+            }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 
@@ -79,7 +79,7 @@ class AlbumHelper(activity: Activity) {
                             }.start()
                     }
                 }
-            }).getPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+            }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 

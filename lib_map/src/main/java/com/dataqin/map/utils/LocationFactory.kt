@@ -134,7 +134,7 @@ class LocationFactory : AMapLocationListener {
                     locationSubscriber?.onFailed()
                 }
             }
-        }).getPermissions(Permission.Group.LOCATION)
+        }).requestPermissions(Permission.Group.LOCATION)
     }
 
     /**
