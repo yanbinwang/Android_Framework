@@ -252,7 +252,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
                     cls == Double::class.javaPrimitiveType -> postcard.withDouble(key, value as Double)
                     cls == CharArray::class.java -> postcard.withCharArray(key, value as CharArray?)
                     cls == Bundle::class.java -> postcard.withBundle(key, value as Bundle?)
-                    else -> throw RuntimeException("不支持参数类型" + ": " + cls.simpleName)
+                    else -> throw RuntimeException("不支持参数类型: ${cls.simpleName}")
                 }
             }
         }
