@@ -1,11 +1,14 @@
 package com.dataqin.media.utils.helper
 
+import android.annotation.SuppressLint
 import android.media.MediaActionSound
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE
 import android.provider.MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO
+import android.view.MotionEvent
 import androidx.lifecycle.LifecycleOwner
 import com.dataqin.base.utils.ToastUtil
 import com.dataqin.media.utils.MediaFileUtil
+import com.dataqin.media.utils.helper.callback.OnCameraTouchListener
 import com.dataqin.media.utils.helper.callback.OnTakePictureListener
 import com.dataqin.media.utils.helper.callback.OnVideoRecordListener
 import com.otaliastudios.cameraview.CameraListener
@@ -19,11 +22,13 @@ import com.otaliastudios.cameraview.controls.*
  *  相机帮助类
  *  https://github.com/natario1/CameraView
  */
+@SuppressLint("ClickableViewAccessibility")
 object CameraHelper {
     private var cvFinder: CameraView? = null
     private val sound by lazy { MediaActionSound() }
     var onTakePictureListener: OnTakePictureListener? = null
     var onVideoRecordListener: OnVideoRecordListener? = null
+    var onCameraTouchListener: OnCameraTouchListener? = null
 
     /**
      *  相机初始化
@@ -44,6 +49,13 @@ object CameraHelper {
             preview = Preview.GL_SURFACE//绘制相机的装载控件
             facing = Facing.BACK//打开时镜头默认后置
             flash = Flash.AUTO//闪光灯自动
+            setOnTouchListener { _, event ->
+                when (event?.action) {
+                    MotionEvent.ACTION_UP -> onCameraTouchListener?.onUp()
+                    else -> onCameraTouchListener?.onDown(cvFinder.zoom)
+                }
+                false
+            }
         }
     }
 
