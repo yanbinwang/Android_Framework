@@ -83,9 +83,7 @@ object CameraHelper {
                     super.onPictureTaken(result)
                     //在sd卡的Picture文件夹下创建对应的文件
                     val pictureFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_IMAGE)
-                    if (null != pictureFile) {
-                        result.toFile(pictureFile) { if (null != it) onTakePictureListener?.onSuccess(it) else onTakePictureListener?.onFailed() }
-                    } else onTakePictureListener?.onFailed()
+                    if (null != pictureFile) result.toFile(pictureFile) { if (null != it) onTakePictureListener?.onSuccess(it) else onTakePictureListener?.onFailed() } else onTakePictureListener?.onFailed()
                 }
             })
         }
@@ -105,11 +103,7 @@ object CameraHelper {
             val videoFile = MediaFileUtil.getOutputFile(MEDIA_TYPE_VIDEO)
             if (null != videoFile) {
                 onVideoRecordListener?.onStartRecorder()
-                if (snapshot) {
-                    takeVideoSnapshot(videoFile)
-                } else {
-                    takeVideo(videoFile)
-                }
+                if (snapshot) takeVideoSnapshot(videoFile) else takeVideo(videoFile)
                 addCameraListener(object : CameraListener() {
                     //正式完成录制的回调，获取路径
                     override fun onVideoTaken(result: VideoResult) {
