@@ -23,40 +23,51 @@ import java.lang.ref.WeakReference
  */
 class AlbumHelper(activity: Activity) {
     private val weakActivity = WeakReference(activity)
-    private val outputPatch = Constants.APPLICATION_FILE_PATH + "/图片"//裁剪后图片保存位置
     private var onAlbumListener: OnAlbumListener? = null //单选回调监听
 
-    //跳转至相机
-    fun toCamera(isTailor: Boolean = false): AlbumHelper {
+    /**
+     * 跳转至相机-拍照
+     */
+    fun takePicture(filePath: String, hasTailor: Boolean = false): AlbumHelper {
         PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
             override fun onPermission(isGranted: Boolean) {
                 if (isGranted) {
-                    //相机功能
                     Album.camera(weakActivity.get())
-                        //拍照
                         .image()
-                        .onResult { if (isTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }.start()
+                        .filePath(filePath)
+                        .onResult { if (hasTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }
+                        .start()
                 }
             }
         }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 
-//    fun toCamera(): AlbumHelper {
-//        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
-//            override fun onPermission(isGranted: Boolean) {
-//                if (isGranted) {
-//                    //相机功能
-////                    Album.video(weakActivity.get())
-////                        .onResult { if (isTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }.start()
-//                }
-//            }
-//        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
-//        return this
-//    }
+    /**
+     * 跳转至相机-录像
+     */
+    fun recordVideo(filePath: String, duration: Long = 1000 * 60 * 60): AlbumHelper {
+        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
+            override fun onPermission(isGranted: Boolean) {
+                if (isGranted) {
+                    Album.camera(weakActivity.get())
+                        .video()
+                        .filePath(filePath)
+                        .quality(1)//视频质量, [0, 1].
+                        .limitDuration(duration)//视频的最长持续时间以毫秒为单位
+//                           .limitBytes(Long.MAX_VALUE)//视频的最大大小，以字节为单位
+                        .onResult { onAlbumListener?.onAlbum(it) }
+                        .start()
+                }
+            }
+        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+        return this
+    }
 
-    //跳转至相册
-    fun toAlbum(isCamera: Boolean = true, isTailor: Boolean = false): AlbumHelper {
+    /**
+     * 跳转至相册
+     */
+    fun imageSelection(hasCamera: Boolean = true, hasTailor: Boolean = false): AlbumHelper {
         PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
             override fun onPermission(isGranted: Boolean) {
                 if (isGranted) {
@@ -73,22 +84,24 @@ class AlbumHelper(activity: Activity) {
                             //Toolbar颜色
                             .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)).build())
                             //页面列表的列数
-                            .camera(isCamera).columnCount(3)
+                            .camera(hasCamera).columnCount(3)
                             .onResult {
                                 val resultSize = it[0].size
                                 if (resultSize > 10 * 1024 * 1024) {
                                     ToastUtil.mackToastSHORT(weakActivity.get()!!.getString(R.string.toast_album_choice), weakActivity.get()!!.applicationContext)
                                     return@onResult
                                 }
-                                if (isTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
+                                if (hasTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
                             }.start()
-                    }
+                }
             }
         }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 
-    //开始裁剪
+    /**
+     * 开始裁剪
+     */
     private fun toTailor(vararg imagePathArray: String) {
         Durban.with(weakActivity.get())
             //裁剪界面的标题
@@ -100,7 +113,7 @@ class AlbumHelper(activity: Activity) {
             //图片路径list或者数组
             .inputImagePaths(*imagePathArray)
             //图片输出文件夹路径
-            .outputDirectory(outputPatch)
+            .outputDirectory("${Constants.APPLICATION_FILE_PATH}/裁剪图片")
             //裁剪图片输出的最大宽高
             .maxWidthHeight(500, 500)
             //裁剪时的宽高比
@@ -110,7 +123,8 @@ class AlbumHelper(activity: Activity) {
             //图片压缩质量，请参考：Bitmap#compress(Bitmap.CompressFormat, int, OutputStream)
             .compressQuality(90)
             //裁剪时的手势支持：ROTATE, SCALE, ALL, NONE.
-            .gesture(Durban.GESTURE_SCALE).controller(Controller.newBuilder()
+            .gesture(Durban.GESTURE_SCALE).controller(
+                Controller.newBuilder()
                     //是否开启控制面板
                     .enable(false)
                     //是否有旋转按钮
@@ -126,7 +140,7 @@ class AlbumHelper(activity: Activity) {
             .requestCode(RequestCode.PHOTO_REQUEST).start()
     }
 
-    fun setAlbumCallBack(onAlbumListener: OnAlbumListener): AlbumHelper {
+    fun setAlbumListener(onAlbumListener: OnAlbumListener): AlbumHelper {
         this.onAlbumListener = onAlbumListener
         return this
     }
