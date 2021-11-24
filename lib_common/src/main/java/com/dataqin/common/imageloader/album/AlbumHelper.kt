@@ -28,45 +28,50 @@ class AlbumHelper(activity: Activity) {
 
     //跳转至相机
     fun toCamera(isTailor: Boolean = false): AlbumHelper {
-        PermissionHelper.with(weakActivity.get())
-            .setPermissionCallBack(object : OnPermissionCallBack {
-                override fun onPermission(isGranted: Boolean) {
-                    if (isGranted) {
-                        //相机功能
-                        Album.camera(weakActivity.get())
-                            //拍照
-                            .image()
-                            .onResult {
-                                if (isTailor) {
-                                    toTailor(it)
-                                } else {
-                                    onAlbumListener?.onAlbum(it)
-                                }
-                            }.start()
-                    }
+        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
+            override fun onPermission(isGranted: Boolean) {
+                if (isGranted) {
+                    //相机功能
+                    Album.camera(weakActivity.get())
+                        //拍照
+                        .image()
+                        .onResult { if (isTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }.start()
                 }
-            }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+            }
+        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 
+//    fun toCamera(): AlbumHelper {
+//        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
+//            override fun onPermission(isGranted: Boolean) {
+//                if (isGranted) {
+//                    //相机功能
+////                    Album.video(weakActivity.get())
+////                        .onResult { if (isTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }.start()
+//                }
+//            }
+//        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+//        return this
+//    }
+
     //跳转至相册
     fun toAlbum(isCamera: Boolean = true, isTailor: Boolean = false): AlbumHelper {
-        PermissionHelper.with(weakActivity.get())
-            .setPermissionCallBack(object : OnPermissionCallBack {
-                override fun onPermission(isGranted: Boolean) {
-                    if (isGranted) {
-                        //选择图片
-                        Album.image(weakActivity.get())
-                            //多选模式为：multipleChoice,单选模式为：singleChoice()
-                            .singleChoice()
-                            //状态栏是深色背景时的构建newDarkBuilder ，状态栏是白色背景时的构建newLightBuilder
-                            .widget(Widget.newDarkBuilder(weakActivity.get())
-                                    //标题 ---标题颜色只有黑色白色
-                                    .title(" ")
-                                    //状态栏颜色
-                                    .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
-                                    //Toolbar颜色
-                                    .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)).build())
+        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
+            override fun onPermission(isGranted: Boolean) {
+                if (isGranted) {
+                    //选择图片
+                    Album.image(weakActivity.get())
+                        //多选模式为：multipleChoice,单选模式为：singleChoice()
+                        .singleChoice()
+                        //状态栏是深色背景时的构建newDarkBuilder ，状态栏是白色背景时的构建newLightBuilder
+                        .widget(Widget.newDarkBuilder(weakActivity.get())
+                            //标题 ---标题颜色只有黑色白色
+                            .title(" ")
+                            //状态栏颜色
+                            .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+                            //Toolbar颜色
+                            .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)).build())
                             //页面列表的列数
                             .camera(isCamera).columnCount(3)
                             .onResult {
@@ -78,8 +83,8 @@ class AlbumHelper(activity: Activity) {
                                 if (isTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
                             }.start()
                     }
-                }
-            }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+            }
+        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
         return this
     }
 
@@ -105,8 +110,7 @@ class AlbumHelper(activity: Activity) {
             //图片压缩质量，请参考：Bitmap#compress(Bitmap.CompressFormat, int, OutputStream)
             .compressQuality(90)
             //裁剪时的手势支持：ROTATE, SCALE, ALL, NONE.
-            .gesture(Durban.GESTURE_SCALE).controller(
-                Controller.newBuilder()
+            .gesture(Durban.GESTURE_SCALE).controller(Controller.newBuilder()
                     //是否开启控制面板
                     .enable(false)
                     //是否有旋转按钮
