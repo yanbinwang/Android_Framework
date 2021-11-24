@@ -44,7 +44,7 @@ class AlbumHelper(activity: Activity) {
     }
 
     /**
-     * 跳转至相机-录像
+     * 跳转至相机-录像(时间不一定能指定，大多数手机不兼容)
      */
     fun recordVideo(filePath: String, duration: Long = 1000 * 60 * 60): AlbumHelper {
         PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
