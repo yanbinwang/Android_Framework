@@ -39,11 +39,9 @@ object FileUtil {
      */
     @JvmStatic
     fun isAvailable(context: Context, packageName: String): Boolean {
-        val packageManager = context.packageManager
-        val packageInfos = packageManager.getInstalledPackages(0)
-        for (i in packageInfos.indices) {
-            val pn = packageInfos[i].packageName
-            if (pn == packageName) return true
+        val packages = context.packageManager.getInstalledPackages(0)
+        for (i in packages.indices) {
+            if (packages[i].packageName == packageName) return true
         }
         return false
     }
@@ -385,9 +383,9 @@ object FileUtil {
     @JvmStatic
     fun getCpuInfo(): String {
         try {
-            val fr = FileReader("/proc/cpuinfo")
-            val br = BufferedReader(fr)
-            val text = br.readLine()
+            val fileReader = FileReader("/proc/cpuinfo")
+            val bufferedReader = BufferedReader(fileReader)
+            val text = bufferedReader.readLine()
             val array = text.split(":\\s+".toRegex(), 2).toTypedArray()
             return array[1]
         } catch (ignored: Exception) {
