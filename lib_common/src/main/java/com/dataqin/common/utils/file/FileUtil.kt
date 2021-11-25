@@ -361,6 +361,25 @@ object FileUtil {
     }
 
     /**
+     * 打开压缩包
+     */
+    @JvmStatic
+    fun getZip(context: Context, filePath: String): Intent {
+        val intent = Intent(Intent.ACTION_VIEW)
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            val file = File(filePath)
+            val contentUri = FileProvider.getUriForFile(context,  "${Constants.APPLICATION_ID}.fileProvider", file)
+            intent.setDataAndType(contentUri, "application/x-zip-compressed")
+        } else {
+            intent.setDataAndType(Uri.parse("file://$filePath"), "application/x-zip-compressed")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        return intent
+    }
+
+    /**
      * 获取手机cpu信息-报错或获取失败显示暂无
      */
     @JvmStatic
