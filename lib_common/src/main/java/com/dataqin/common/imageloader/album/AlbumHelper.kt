@@ -66,8 +66,10 @@ class AlbumHelper(activity: Activity) {
                     //Toolbar颜色
                     .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
                     .build())
+            //是否具备相机
+            .camera(hasCamera)
             //页面列表的列数
-            .camera(hasCamera).columnCount(3)
+            .columnCount(3)
             .onResult {
                 val resultSize = it[0].size
                 if (resultSize > 10 * 1024 * 1024) {
