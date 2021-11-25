@@ -270,20 +270,6 @@ object FileUtil {
     }
 
     /**
-     * 转换文件大小格式
-     */
-    @JvmStatic
-    fun formatFileSize(fileSize: Long): String {
-        val format = DecimalFormat("#.00")
-        return when {
-            fileSize < 1024 -> format.format(fileSize.toDouble()) + "B"
-            fileSize < 1048576 -> format.format(fileSize.toDouble() / 1024) + "K"
-            fileSize < 1073741824 -> format.format(fileSize.toDouble() / 1048576) + "M"
-            else -> format.format(fileSize.toDouble() / 1073741824) + "G"
-        }
-    }
-
-    /**
      * 发送文件
      */
     @JvmStatic
@@ -303,6 +289,20 @@ object FileUtil {
         intent.type = "*/*"//此处可发送多种文件
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(Intent.createChooser(intent, "分享文件"))
+    }
+
+    /**
+     * 转换文件大小格式
+     */
+    @JvmStatic
+    fun formatFileSize(fileSize: Long): String {
+        val format = DecimalFormat("#.00")
+        return when {
+            fileSize < 1024 -> format.format(fileSize.toDouble()) + "B"
+            fileSize < 1048576 -> format.format(fileSize.toDouble() / 1024) + "K"
+            fileSize < 1073741824 -> format.format(fileSize.toDouble() / 1048576) + "M"
+            else -> format.format(fileSize.toDouble() / 1073741824) + "G"
+        }
     }
 
     /**
