@@ -27,8 +27,7 @@ object NavigationHelper {
         this.ids = ids
         //去除长按的toast提示
         for (position in ids.indices) {
-            (navigationView.getChildAt(0) as ViewGroup).getChildAt(position)
-                .findViewById<View>(ids[position]).setOnLongClickListener { true }
+            (navigationView.getChildAt(0) as ViewGroup).getChildAt(position).findViewById<View>(ids[position]).setOnLongClickListener { true }
         }
         //最多配置5个
         navigationView.setOnNavigationItemSelectedListener {
@@ -40,8 +39,8 @@ object NavigationHelper {
                 ids[4] -> 4
                 else -> -1
             }
-            onNavigationItemSelectedListener?.onNavigationItemSelected(index)
-            if(anim) getItemView(index).getChildAt(0).apply {
+            onNavigationItemSelectedListener?.onItemSelected(index)
+            if (anim) getItemView(index).getChildAt(0).apply {
                 startAnimation(context.getInAnimation())
                 vibrate(50)
             }
@@ -53,7 +52,7 @@ object NavigationHelper {
      * 选中下标
      */
     @JvmStatic
-    fun selectedItem(index: Int) = navigationView?.selectedItemId = navigationView?.menu?.getItem(index)?.itemId ?: 0
+    fun selectedItem(index: Int) = run { navigationView?.setSelectedItemId(navigationView?.menu?.getItem(index)?.itemId ?: 0) }
 
     /**
      * 获取下标item
@@ -98,7 +97,7 @@ object NavigationHelper {
 
     interface OnNavigationItemSelectedListener {
 
-        fun onNavigationItemSelected(index: Int = 0)
+        fun onItemSelected(index: Int = 0)
 
     }
 
