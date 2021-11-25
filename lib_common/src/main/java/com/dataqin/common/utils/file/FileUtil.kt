@@ -378,6 +378,23 @@ object FileUtil {
     }
 
     /**
+     * 打开world
+     */
+    fun openWorld(context: Context, filePath: String) {
+        val file = File(filePath)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val uri: Uri
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            uri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
+            intent.setDataAndType(uri, "application/vnd.android.package-archive")
+        } else uri = Uri.parse("file://$file")
+        intent.setDataAndType(uri, "application/msword")
+        context.startActivity(intent)
+    }
+
+    /**
      * 获取手机cpu信息-报错或获取失败显示暂无
      */
     @JvmStatic
