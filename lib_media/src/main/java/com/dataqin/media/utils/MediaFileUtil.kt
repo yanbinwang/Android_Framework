@@ -34,7 +34,7 @@ object MediaFileUtil {
             return null
         }
         //根据类型在sd卡picture目录下建立对应app名称的对应类型文件
-        var prefix = "${Constants.APPLICATION_FILE_PATH}/文件/"
+        var prefix = "${Constants.APPLICATION_FILE_PATH}/证据文件/"
         var suffix = ""
         when (mimeType) {
             //拍照/抓拍
@@ -59,15 +59,15 @@ object MediaFileUtil {
             }
         }
         //先在包名目录下建立对应类型的文件夹，构建失败直接返回null
-        val mediaStorageDir = File(prefix)
-        if (!mediaStorageDir.exists()) {
-            log("开始创建文件目录", mediaStorageDir.path)
-            if (!mediaStorageDir.mkdirs()) {
+        val storageDir = File(prefix)
+        if (!storageDir.exists()) {
+            log("开始创建文件目录", storageDir.path)
+            if (!storageDir.mkdirs()) {
                 log("创建文件目录失败", "暂无")
                 return null
             }
-        } else log("文件目录已创建", mediaStorageDir.path)
-        return File("${mediaStorageDir.path}/${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}.${suffix}")
+        } else log("文件目录已创建", storageDir.path)
+        return File("${storageDir.path}/${DateUtil.getDateTime("yyyyMMdd_HHmmss", Date())}.${suffix}")
     }
 
     private fun log(status: String, path: String) = LogUtil.i(TAG, " \n————————————————————————多媒体文件————————————————————————\n状态：${status}\n路径: ${path}\n————————————————————————多媒体文件————————————————————————")

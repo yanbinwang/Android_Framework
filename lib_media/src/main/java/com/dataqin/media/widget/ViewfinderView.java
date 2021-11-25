@@ -11,7 +11,7 @@ import android.view.View;
 
 /**
  * Created by wangyanbin
- * 外层边框
+ * 相机外层边框，通过代码绘制
  */
 @SuppressLint("DrawAllocation")
 public class ViewfinderView extends View {
