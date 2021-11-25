@@ -11,6 +11,7 @@ MobSDK {
     appSecret "d1f10f3d8a8291d94a400acdfcf2a07b"
 
     ShareSDK {
+        loopShare true
         //平台配置信息
         devInfo {
             Wechat {
