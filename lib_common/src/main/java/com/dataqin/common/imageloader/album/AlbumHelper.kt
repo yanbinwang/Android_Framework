@@ -6,13 +6,10 @@ import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.R
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.RequestCode
-import com.dataqin.common.utils.helper.permission.OnPermissionCallBack
-import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.api.widget.Widget
 import com.yanzhenjie.durban.Controller
 import com.yanzhenjie.durban.Durban
-import com.yanzhenjie.permission.runtime.Permission
 import java.lang.ref.WeakReference
 
 /**
@@ -29,17 +26,11 @@ class AlbumHelper(activity: Activity) {
      * 跳转至相机-拍照
      */
     fun takePicture(filePath: String, hasTailor: Boolean = false): AlbumHelper {
-        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
-            override fun onPermission(isGranted: Boolean) {
-                if (isGranted) {
-                    Album.camera(weakActivity.get())
-                        .image()
-                        .filePath(filePath)
-                        .onResult { if (hasTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }
-                        .start()
-                }
-            }
-        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+        Album.camera(weakActivity.get())
+            .image()
+            .filePath(filePath)
+            .onResult { if (hasTailor) toTailor(it) else onAlbumListener?.onAlbum(it) }
+            .start()
         return this
     }
 
@@ -47,20 +38,14 @@ class AlbumHelper(activity: Activity) {
      * 跳转至相机-录像(时间不一定能指定，大多数手机不兼容)
      */
     fun recordVideo(filePath: String, duration: Long = 1000 * 60 * 60): AlbumHelper {
-        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
-            override fun onPermission(isGranted: Boolean) {
-                if (isGranted) {
-                    Album.camera(weakActivity.get())
-                        .video()
-                        .filePath(filePath)
-                        .quality(1)//视频质量, [0, 1].
-                        .limitDuration(duration)//视频的最长持续时间以毫秒为单位
+        Album.camera(weakActivity.get())
+            .video()
+            .filePath(filePath)
+            .quality(1)//视频质量, [0, 1].
+            .limitDuration(duration)//视频的最长持续时间以毫秒为单位
 //                           .limitBytes(Long.MAX_VALUE)//视频的最大大小，以字节为单位
-                        .onResult { onAlbumListener?.onAlbum(it) }
-                        .start()
-                }
-            }
-        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+            .onResult { onAlbumListener?.onAlbum(it) }
+            .start()
         return this
     }
 
@@ -68,34 +53,29 @@ class AlbumHelper(activity: Activity) {
      * 跳转至相册
      */
     fun imageSelection(hasCamera: Boolean = true, hasTailor: Boolean = false): AlbumHelper {
-        PermissionHelper.with(weakActivity.get()).setPermissionCallBack(object : OnPermissionCallBack {
-            override fun onPermission(isGranted: Boolean) {
-                if (isGranted) {
-                    //选择图片
-                    Album.image(weakActivity.get())
-                        //多选模式为：multipleChoice,单选模式为：singleChoice()
-                        .singleChoice()
-                        //状态栏是深色背景时的构建newDarkBuilder ，状态栏是白色背景时的构建newLightBuilder
-                        .widget(Widget.newDarkBuilder(weakActivity.get())
-                            //标题 ---标题颜色只有黑色白色
-                            .title(" ")
-                            //状态栏颜色
-                            .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
-                            //Toolbar颜色
-                            .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)).build())
-                            //页面列表的列数
-                            .camera(hasCamera).columnCount(3)
-                            .onResult {
-                                val resultSize = it[0].size
-                                if (resultSize > 10 * 1024 * 1024) {
-                                    ToastUtil.mackToastSHORT(weakActivity.get()!!.getString(R.string.toast_album_choice), weakActivity.get()!!.applicationContext)
-                                    return@onResult
-                                }
-                                if (hasTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
-                            }.start()
+        //选择图片
+        Album.image(weakActivity.get())
+            //多选模式为：multipleChoice,单选模式为：singleChoice()
+            .singleChoice()
+            //状态栏是深色背景时的构建newDarkBuilder ，状态栏是白色背景时的构建newLightBuilder
+            .widget(Widget.newDarkBuilder(weakActivity.get())
+                    //标题 ---标题颜色只有黑色白色
+                    .title(" ")
+                    //状态栏颜色
+                    .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+                    //Toolbar颜色
+                    .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+                    .build())
+            //页面列表的列数
+            .camera(hasCamera).columnCount(3)
+            .onResult {
+                val resultSize = it[0].size
+                if (resultSize > 10 * 1024 * 1024) {
+                    ToastUtil.mackToastSHORT(weakActivity.get()!!.getString(R.string.toast_album_choice), weakActivity.get()!!.applicationContext)
+                    return@onResult
                 }
-            }
-        }).requestPermissions(Permission.Group.CAMERA, Permission.Group.STORAGE)
+                if (hasTailor) toTailor(it[0].path) else onAlbumListener?.onAlbum(it[0].path)
+            }.start()
         return this
     }
 
