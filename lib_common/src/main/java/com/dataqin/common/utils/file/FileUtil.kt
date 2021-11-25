@@ -364,7 +364,7 @@ object FileUtil {
      * 打开压缩包
      */
     @JvmStatic
-    fun getZip(context: Context, filePath: String): Intent {
+    fun openZip(context: Context, filePath: String) {
         val intent = Intent(Intent.ACTION_VIEW)
         //判断是否是AndroidN以及更高的版本
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -376,7 +376,7 @@ object FileUtil {
             intent.setDataAndType(Uri.parse("file://$filePath"), "application/x-zip-compressed")
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        return intent
+        context.startActivity(intent)
     }
 
     /**
