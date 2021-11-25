@@ -20,6 +20,7 @@ import java.lang.ref.WeakReference
  */
 class AlbumHelper(activity: Activity) {
     private val weakActivity = WeakReference(activity)
+    private val color = ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333)
     private var onAlbumListener: OnAlbumListener? = null //单选回调监听
 
     /**
@@ -62,9 +63,9 @@ class AlbumHelper(activity: Activity) {
                     //标题 ---标题颜色只有黑色白色
                     .title(" ")
                     //状态栏颜色
-                    .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+                    .statusBarColor(color)
                     //Toolbar颜色
-                    .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+                    .toolBarColor(color)
                     .build())
             //是否具备相机
             .camera(hasCamera)
@@ -89,9 +90,9 @@ class AlbumHelper(activity: Activity) {
             //裁剪界面的标题
             .title(" ")
             //状态栏颜色
-            .statusBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+            .statusBarColor(color)
             //Toolbar颜色
-            .toolBarColor(ContextCompat.getColor(weakActivity.get()!!, R.color.grey_333333))
+            .toolBarColor(color)
             //图片路径list或者数组
             .inputImagePaths(*imagePathArray)
             //图片输出文件夹路径
