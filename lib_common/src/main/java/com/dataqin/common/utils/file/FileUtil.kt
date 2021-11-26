@@ -3,12 +3,12 @@ package com.dataqin.common.utils.file
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.Canvas
-import android.graphics.PixelFormat
+import android.graphics.*
+import android.graphics.pdf.PdfRenderer
 import android.net.Uri
 import android.os.Build
 import android.os.Looper
+import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.TextUtils
@@ -236,6 +236,22 @@ object FileUtil {
                 onThreadListener?.onStop()
             }
         }.start()
+    }
+
+    @JvmStatic
+    fun savePDFBitmap(file: File,index:Int = 0) {
+        val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
+        val page = renderer.openPage(index)//选择渲染哪一页的渲染数据
+        val width = page.width
+        val height = page.height
+        val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+        val canvas = Canvas(bitmap)
+        canvas.drawColor(Color.WHITE)
+        canvas.drawBitmap(bitmap, 0f, 0f, null)
+        val rent =  Rect(0, 0, width, height)
+        page.render(bitmap, rent, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
+        page.close()
+        renderer.close()
     }
 
     interface OnThreadListener {
