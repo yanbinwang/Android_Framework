@@ -19,6 +19,7 @@ import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
+import com.dataqin.common.widget.empty.OnEmptyRefreshListener
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
@@ -27,6 +28,7 @@ import com.dataqin.media.service.ScreenShotObserver
 import com.dataqin.media.utils.helper.GSYVideoHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
+import com.dataqin.testnew.presenter.MainPresenter
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
@@ -44,7 +46,7 @@ import java.io.File
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
     private var srcPath = ""
-    //    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+        private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
     private val editPopup by lazy { EditPopup(this) }
 
@@ -77,8 +79,10 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 
+
+
         GSYVideoHelper.initialize(this, binding.pvVideo, true)
-//        presenter.setEmptyView(baseBinding.flBaseContainer)
+        presenter.setEmptyView(binding.xrvOrder)
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
 //        PopupHelper.addPopup(0,Any())
@@ -121,11 +125,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             }
         })
 
-//        presenter.getEmptyView()?.setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
-//            override fun onRefreshListener() {
-//                presenter.getOperation()
-//            }
-//        })
+        presenter.getEmptyView().showError()
+        presenter.getEmptyView().setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
+            override fun onRefreshClick() {
+                showToast("~~~~")
+            }
+        })
 //
 //        LocationFactory.instance.start(this)
 //        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
