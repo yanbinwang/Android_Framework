@@ -22,6 +22,7 @@ import androidx.core.content.ContextCompat
 import com.dataqin.base.utils.DecimalInputFilter
 import com.dataqin.common.R
 import com.dataqin.common.constant.Constants
+import java.lang.StringBuilder
 
 //------------------------------------按钮，控件行为工具类------------------------------------
 
@@ -93,6 +94,45 @@ fun TextView.setState(textStr: String, colorRes: Int = R.color.blue_0d86ff) {
 fun TextView.setUnderline() {
     paint.flags = Paint.UNDERLINE_TEXT_FLAG
     paint.isAntiAlias = true
+}
+
+/**
+ * 设置撑满的文本内容
+ */
+fun TextView.setMatchText() {
+    post {
+        val rawText = text.toString()//原始文本
+        val tvPaint = paint//paint包含字体等信息
+        val tvWidth = width - paddingLeft - paddingRight//控件可用宽度
+        val rawTextLines = rawText.replace("\r".toRegex(), "").split("\n").toTypedArray()//将原始文本按行拆分
+        val sbNewText = StringBuilder()
+        for (rawTextLine in rawTextLines) {
+            if (tvPaint.measureText(rawTextLine) <= tvWidth) {
+                //如果整行宽度在控件可用宽度之内，就不处理了
+                sbNewText.append(rawTextLine)
+            } else {
+                //如果整行宽度超过控件可用宽度，则按字符测量，在超过可用宽度的前一个字符处手动换行
+                var lineWidth = 0f
+                var cnt = 0
+                while (cnt != rawTextLine.length) {
+                    val ch = rawTextLine[cnt]
+                    lineWidth += tvPaint.measureText(ch.toString())
+                    if (lineWidth <= tvWidth) {
+                        sbNewText.append(ch)
+                    } else {
+                        sbNewText.append("\n")
+                        lineWidth = 0f
+                        --cnt
+                    }
+                    ++cnt
+                }
+            }
+            sbNewText.append("\n")
+        }
+        //把结尾多余的\n去掉
+        if (!rawText.endsWith("\n")) sbNewText.deleteCharAt(sbNewText.length - 1)
+        text = sbNewText.toString()
+    }
 }
 
 /**
