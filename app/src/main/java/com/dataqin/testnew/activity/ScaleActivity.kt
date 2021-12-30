@@ -5,8 +5,6 @@ import com.dataqin.base.utils.getInAnimation
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
-import com.dataqin.common.imageloader.ImageLoader
-import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityScaleBinding
 import com.dataqin.testnew.widget.scale.ScaleAdapter
 import com.dataqin.testnew.widget.scale.ScaleImageView
@@ -30,12 +28,12 @@ class ScaleActivity : BaseActivity<ActivityScaleBinding>() {
         val list = ArrayList<ScaleImageView>()
         for (url in fileList) {
             val img = ScaleImageView(this)
+            img.adjustViewBounds = true
             img.setOnClickListener { finish() }
-            ImageLoader.instance.displayImage(img, url as String, R.drawable.shape_scale_loading, R.drawable.shape_image_loading, null)
             list.add(img)
         }
         binding.svpContainer.apply {
-            adapter = ScaleAdapter(list)
+            adapter = ScaleAdapter(list, fileList)
             currentItem = index
             startAnimation(getInAnimation())
         }
