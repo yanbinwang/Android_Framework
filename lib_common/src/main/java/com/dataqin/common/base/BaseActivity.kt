@@ -2,7 +2,6 @@ package com.dataqin.common.base
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -26,7 +25,6 @@ import com.dataqin.common.constant.Extras
 import com.dataqin.common.utils.builder.StatusBarBuilder
 import com.dataqin.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
-import me.jessyan.autosize.AutoSizeCompat
 import java.io.Serializable
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -108,15 +106,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         return false
     }
 
+    /**
+     *  android:configChanges="orientation|keyboardHidden|locale"
+     *  android:windowSoftInputMode="stateVisible|adjustPan"
+     */
     override fun openDecor(view: View?) {
-        closeDecor(view)
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
-            }
-        }, 200)
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(view, 2)
+        getFocus(view)
+        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     override fun closeDecor(view: View?) {
@@ -200,12 +196,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
             presenter?.detachView()
         }
         log("onDestroy...")
-    }
-
-    override fun getResources(): Resources {
-        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
-        AutoSizeCompat.autoConvertDensity(super.getResources(), 750f, true)
-        return super.getResources()
     }
     // </editor-fold>
 
