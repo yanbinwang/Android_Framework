@@ -72,6 +72,24 @@ object CameraHelper {
     fun toggleFacing() = cvFinder?.toggleFacing()
 
     /**
+     * 开关闪光灯
+     */
+    @JvmStatic
+    fun flash(): Boolean {
+        if(cvFinder?.facing == Facing.FRONT) {
+            ToastUtil.mackToastSHORT("闪光灯仅支持后置摄像头", cvFinder?.context!!)
+            return false
+        }
+        return if(cvFinder?.flash == Flash.TORCH) {
+            cvFinder?.flash = Flash.OFF
+            false
+        } else {
+            cvFinder?.flash = Flash.TORCH
+            true
+        }
+    }
+
+    /**
      * 拍照/抓拍
      */
     @JvmOverloads
