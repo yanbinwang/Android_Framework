@@ -72,7 +72,6 @@ object TimerHelper {
 
                 override fun onFinish() {
                     onDownTaskListener?.onFinish()
-                    stopDownTask()
                 }
             }
         }
