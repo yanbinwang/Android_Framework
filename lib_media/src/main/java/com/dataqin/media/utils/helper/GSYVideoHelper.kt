@@ -170,6 +170,7 @@ object GSYVideoHelper {
     fun onDestroy() {
         onPause()
         player?.currentPlayer?.release()
+        player?.release()
         orientationUtils?.releaseListener()
     }
 
