@@ -46,7 +46,7 @@ interface GlideImpl {
     //---------------------------------------------圆形图片加载开始---------------------------------------------
 
     //---------------------------------------------图片库方法开始---------------------------------------------
-    fun downloadImage(context: Context, string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?)
+    fun downloadImage(context: Context, string: String?, listener: GlideRequestListener<File?>?)
 
     fun clearMemoryCache(context: Context)
 

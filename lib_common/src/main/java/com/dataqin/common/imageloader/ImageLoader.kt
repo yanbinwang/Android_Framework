@@ -139,11 +139,12 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .into(view)
     }
 
-    override fun downloadImage(context: Context, string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?) {
+    override fun downloadImage(context: Context, string: String?, listener: GlideRequestListener<File?>?) {
+//    override fun downloadImage(context: Context, string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?) {
 //        //创建保存的文件目录
 //        val destFile = File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"))
 //        //下载对应的图片文件
-//        val srcFile: FutureTarget<File> = manager!!
+//        val srcFile = Glide.with(context)
 //            .asFile()
 //            .load(string)
 //            .listener(requestListener)
@@ -152,10 +153,10 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
 //        FileUtil.copyFile(srcFile.get(), destFile)
         //下载对应的图片文件
         Glide.with(context)
-            .asFile()
+            .downloadOnly()
             .load(string)
             .listener(listener)
-            .submit(width, height)
+            .preload()
     }
 
     //清除内存缓存是在主线程中
