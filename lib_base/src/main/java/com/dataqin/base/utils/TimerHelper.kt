@@ -74,8 +74,8 @@ object TimerHelper {
                     onDownTaskListener?.onFinish()
                 }
             }
+            countDownTimer?.start()
         }
-        countDownTimer?.start()
     }
 
     /**

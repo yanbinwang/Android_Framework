@@ -1,5 +1,7 @@
 package com.dataqin.common.imageloader
 
+import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import com.bumptech.glide.Glide
@@ -24,25 +26,24 @@ import java.io.File
  * 图片加载库使用Application上下文，Glide请求将不受Activity/Fragment生命周期控制。
  */
 class ImageLoader private constructor() : GlideModule(), GlideImpl {
-    private val context by lazy { BaseApplication.instance?.applicationContext!! }
-    private val manager by lazy { Glide.with(context) }
 
     companion object {
         @JvmStatic
         val instance by lazy { ImageLoader() }
     }
 
-    override fun displayZoomImage(view: ImageView, string: String?) {
-        manager
+    override fun displayZoomImage(view: ImageView, string: String?, listener: GlideRequestListener<Bitmap?>?) {
+        Glide.with(view.context)
             .asBitmap()
             .load(string)
             .placeholder(R.drawable.shape_image_loading)
             .dontAnimate()
+            .listener(listener)
             .into(ZoomTransform(view))
     }
 
     override fun displayCoverImage(view: ImageView, string: String?) {
-        manager
+        Glide.with(view.context)
             .setDefaultRequestOptions(RequestOptions().frame(1000000).centerCrop())
             .load(string)
             .dontAnimate()
@@ -55,7 +56,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
                 listener?.onProgress(progress)
             }
         })
-        manager
+        Glide.with(view.context)
             .load(string)
             .apply(RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
             .addListener(object : GlideRequestListener<Drawable?>() {
@@ -84,7 +85,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     }
 
     override fun displayImage(view: ImageView, string: String?, placeholderId: Int, errorId: Int, listener: GlideRequestListener<Drawable?>?) {
-        manager
+        Glide.with(view.context)
             .load(string)
             .placeholder(placeholderId)
             .error(errorId)
@@ -98,7 +99,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     }
 
     override fun displayRoundImage(view: ImageView, string: String?, errorId: Int, roundingRadius: Int) {
-        manager
+        Glide.with(view.context)
             .load(string)
             .apply(RequestOptions.bitmapTransform(RoundedCorners(roundingRadius)))
             .placeholder(R.drawable.shape_image_loading)
@@ -113,9 +114,9 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
 
     //leftTop, rightTop, leftBottom, rightBottom
     override fun displayRoundImage(view: ImageView, string: String?, errorId: Int, roundingRadius: Int, overRide: BooleanArray) {
-        val transformation = CornerTransform(context, roundingRadius.toFloat())
+        val transformation = CornerTransform(view.context, roundingRadius.toFloat())
         transformation.setExceptCorner(overRide[0], overRide[1], overRide[2], overRide[3])
-        manager
+        Glide.with(view.context)
             .load(string)
             .transform(transformation)
             .placeholder(R.drawable.shape_image_loading)
@@ -129,7 +130,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     }
 
     override fun displayCircleImage(view: ImageView, string: String?, errorId: Int) {
-        manager
+        Glide.with(view.context)
             .load(string)
             .apply(RequestOptions.circleCropTransform())
             .placeholder(R.drawable.shape_image_loading_round)
@@ -138,7 +139,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
             .into(view)
     }
 
-    override fun downloadImage(string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?) {
+    override fun downloadImage(context: Context, string: String?, width: Int, height: Int, listener: GlideRequestListener<File?>?) {
 //        //创建保存的文件目录
 //        val destFile = File(FileUtil.isExistDir(Constants.APPLICATION_FILE_PATH + "/图片"))
 //        //下载对应的图片文件
@@ -150,7 +151,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
 //        //下载的文件从缓存目录拷贝到指定目录
 //        FileUtil.copyFile(srcFile.get(), destFile)
         //下载对应的图片文件
-        manager
+        Glide.with(context)
             .asFile()
             .load(string)
             .listener(listener)
@@ -158,16 +159,16 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
     }
 
     //清除内存缓存是在主线程中
-    override fun clearMemoryCache() {
+    override fun clearMemoryCache(context: Context) {
         Glide.get(context).clearMemory()
     }
 
     //清除磁盘缓存是在子线程中进行
-    override fun clearDiskCache() {
+    override fun clearDiskCache(context: Context) {
         Thread { Glide.get(context).clearDiskCache() }.start()
     }
 
     override val cacheDir: File?
-        get() = Glide.getPhotoCacheDir(context)
+        get() = Glide.getPhotoCacheDir(BaseApplication.instance?.applicationContext!!)
 
 }
