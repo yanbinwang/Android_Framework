@@ -29,19 +29,25 @@ import java.lang.StringBuilder
 /**
  * 空出状态栏高度
  */
-fun RelativeLayout.topStatusMargin() {
-    val params = layoutParams as RelativeLayout.LayoutParams
-    params.topMargin = Constants.STATUS_BAR_HEIGHT
-    layoutParams = params
+fun RelativeLayout.topStatusMargin(arrow: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
+        val params = layoutParams as RelativeLayout.LayoutParams
+        params.topMargin = Constants.STATUS_BAR_HEIGHT
+        layoutParams = params
+    }
 }
 
-fun LinearLayout.topStatusMargin() {
-    val params = layoutParams as LinearLayout.LayoutParams
-    params.topMargin = Constants.STATUS_BAR_HEIGHT
-    layoutParams = params
+fun LinearLayout.topStatusMargin(arrow: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
+        val params = layoutParams as LinearLayout.LayoutParams
+        params.topMargin = Constants.STATUS_BAR_HEIGHT
+        layoutParams = params
+    }
 }
 
 fun View.topStatusPadding() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
+
+fun View.topStatus() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Constants.STATUS_BAR_HEIGHT) }
 
 /**
  * 震动
@@ -65,6 +71,24 @@ fun View.openWebsite(url: String) = context.startActivity(Intent(Intent.ACTION_V
  * 设置按钮显影图片
  */
 fun ImageView.setDisplayResource(display: Boolean, showId: Int, hideId: Int) = setBackgroundResource(if (!display) showId else hideId)
+
+/**
+ * 图片宽屏
+ */
+fun ImageView.setRelativeScreenWidth() {
+    val rLayoutParams = layoutParams as RelativeLayout.LayoutParams
+    rLayoutParams.width = Constants.SCREEN_WIDTH
+    layoutParams = rLayoutParams
+}
+
+/**
+ * 图片宽屏
+ */
+fun ImageView.setLinearScreenWidth() {
+    val lLayoutParams = layoutParams as LinearLayout.LayoutParams
+    lLayoutParams.width = Constants.SCREEN_WIDTH
+    layoutParams = lLayoutParams
+}
 
 /**
  * 设置textview内容当中某一段的颜色
@@ -94,6 +118,14 @@ fun TextView.setState(textStr: String, colorRes: Int = R.color.blue_0d86ff) {
 fun TextView.setUnderline() {
     paint.flags = Paint.UNDERLINE_TEXT_FLAG
     paint.isAntiAlias = true
+}
+
+/**
+ * 设置中等加粗
+ */
+fun TextView.setMediumBold() {
+    paint.strokeWidth = 1.0f
+    paint.style = Paint.Style.FILL_AND_STROKE
 }
 
 /**
