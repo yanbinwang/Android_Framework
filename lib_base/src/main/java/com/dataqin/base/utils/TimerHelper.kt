@@ -35,7 +35,6 @@ object TimerHelper {
     @JvmOverloads
     @JvmStatic
     fun startTask(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
-        stopTask()
         if (timer == null) {
             timer = Timer()
             timerTask = object : TimerTask() {
@@ -65,7 +64,6 @@ object TimerHelper {
     @JvmOverloads
     @JvmStatic
     fun startDownTask(onDownTaskListener: OnDownTaskListener? = null, second: Long = 1) {
-        stopDownTask()
         if (null == countDownTimer) {
             countDownTimer = object : CountDownTimer(second * 1000, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -74,9 +72,9 @@ object TimerHelper {
 
                 override fun onFinish() {
                     onDownTaskListener?.onFinish()
+                    stopDownTask()
                 }
-            }
-            countDownTimer?.start()
+            }.start()
         }
     }
 
