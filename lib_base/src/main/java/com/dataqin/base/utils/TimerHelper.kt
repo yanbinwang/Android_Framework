@@ -35,15 +35,13 @@ object TimerHelper {
     @JvmStatic
     fun startTask(onTaskListener: OnTaskListener? = null, millisecond: Long = 1000) {
         stopTask()
-        if (timer == null) {
-            timer = Timer()
-            timerTask = object : TimerTask() {
-                override fun run() {
-                    WeakHandler(Looper.getMainLooper()).post { onTaskListener?.run() }
-                }
+        timer = Timer()
+        timerTask = object : TimerTask() {
+            override fun run() {
+                WeakHandler(Looper.getMainLooper()).post { onTaskListener?.run() }
             }
-            timer?.schedule(timerTask, 0, millisecond)
         }
+        timer?.schedule(timerTask, 0, millisecond)
     }
 
     /**
@@ -65,18 +63,16 @@ object TimerHelper {
     @JvmStatic
     fun startDownTask(onDownTaskListener: OnDownTaskListener? = null, second: Long = 1) {
         stopDownTask()
-        if (null == countDownTimer) {
-            countDownTimer = object : CountDownTimer(second * 1000, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    onDownTaskListener?.onTick((millisUntilFinished / 1000))
-                }
+        countDownTimer = object : CountDownTimer(second * 1000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                onDownTaskListener?.onTick((millisUntilFinished / 1000))
+            }
 
-                override fun onFinish() {
-                    onDownTaskListener?.onFinish()
-                    stopDownTask()
-                }
-            }.start()
-        }
+            override fun onFinish() {
+                onDownTaskListener?.onFinish()
+                stopDownTask()
+            }
+        }.start()
     }
 
     /**
