@@ -57,6 +57,12 @@ class PermissionHelper(context: Context) {
                                 return@onDenied
                             }
                         }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (checkSelfStorage() && it.size == 1 && listOf(*Permission.Group.STORAGE).contains(it[0])) {
+                                onPermissionCallBack?.onPermission(true)
+                                return@onDenied
+                            }
+                        }
                         onPermissionCallBack?.onPermission(false)
                         if (denied) {
                             var permissionIndex = 0
@@ -76,16 +82,13 @@ class PermissionHelper(context: Context) {
                             }
                             //如果用户拒绝了开启权限
                             if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), it)) {
-                                AndDialog.with(weakContext.get())
-                                    .setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()
-                                                ?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel))
-                                    .setOnDialogListener(object : OnDialogListener {
-                                        override fun onConfirm() {
-                                            weakContext.get()?.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + weakContext.get()?.packageName)))
-                                        }
+                                AndDialog.with(weakContext.get()).setOnDialogListener(object : OnDialogListener {
+                                    override fun onConfirm() {
+                                        weakContext.get()?.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + weakContext.get()?.packageName)))
+                                    }
 
-                                        override fun onCancel() {}
-                                    }).show()
+                                    override fun onCancel() {}
+                                }).setParams(weakContext.get()?.getString(R.string.label_window_title), MessageFormat.format(weakContext.get()?.getString(R.string.label_window_permission), result), weakContext.get()?.getString(R.string.label_window_sure), weakContext.get()?.getString(R.string.label_window_cancel)).show()
                             }
                         }
                     }.start()
@@ -122,14 +125,15 @@ class PermissionHelper(context: Context) {
      */
     fun checkSelfLocation(): Boolean {
         var granted = true
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
-            if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
-//        } else {
-//            for (index in Permission.Group.LOCATION.indices) {
-//                if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.Group.LOCATION[index])) granted = false
-//            }
-//        }
+        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_FINE_LOCATION)) granted = false
+        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.ACCESS_COARSE_LOCATION)) granted = false
+        return granted
+    }
+
+    fun checkSelfStorage(): Boolean {
+        var granted = true
+        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.READ_EXTERNAL_STORAGE)) granted = false
+        if (PackageManager.PERMISSION_GRANTED != ActivityCompat.checkSelfPermission(weakContext.get()!!, Permission.WRITE_EXTERNAL_STORAGE)) granted = false
         return granted
     }
 

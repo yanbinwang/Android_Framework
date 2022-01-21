@@ -115,7 +115,10 @@ object GSYVideoHelper {
     fun setUrl(url: String, autoPlay: Boolean = false) {
         retryWithPlay = false
         //加载图片
-        if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
+        try {
+            if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
+        } catch (e: Exception) {
+        }
         if (null != player) {
             if (videoType == VideoType.MOBILE) {
                 GSYVideoOptionBuilder()
