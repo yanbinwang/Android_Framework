@@ -5,7 +5,6 @@ import android.graphics.*
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.Transformation
 import com.bumptech.glide.load.engine.Resource
-import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool
 import com.bumptech.glide.load.resource.bitmap.BitmapResource
 import java.security.MessageDigest
 
@@ -18,7 +17,7 @@ class CornerTransform(context: Context, private var radius: Float) : Transformat
     private var exceptRightTop: Boolean = false
     private var exceptLeftBottom: Boolean = false
     private var exceptRightBottom: Boolean = false
-    private val mBitmapPool: BitmapPool = Glide.get(context).bitmapPool
+    private val mBitmapPool = Glide.get(context).bitmapPool
 
     fun setExceptCorner(leftTop: Boolean, rightTop: Boolean, leftBottom: Boolean, rightBottom: Boolean) {
         this.exceptLeftTop = leftTop
@@ -54,7 +53,6 @@ class CornerTransform(context: Context, private var radius: Float) : Transformat
             finalHeight = source.height
             finalWidth = finalHeight
         }
-
         //修正圆角
         this.radius *= finalHeight.toFloat() / outHeight.toFloat()
         var outBitmap: Bitmap? = this.mBitmapPool.get(finalWidth, finalHeight, Bitmap.Config.ARGB_8888)
@@ -79,7 +77,6 @@ class CornerTransform(context: Context, private var radius: Float) : Transformat
         if (exceptRightTop) canvas.drawRect(canvas.width - radius, 0f, radius, radius, paint)//右上角不为圆角
         if (exceptLeftBottom) canvas.drawRect(0f, canvas.height - radius, radius, canvas.height.toFloat(), paint)//左下角不为圆角
         if (exceptRightBottom) canvas.drawRect(canvas.width - radius, canvas.height - radius, canvas.width.toFloat(), canvas.height.toFloat(), paint)//右下角不为圆角
-
         return BitmapResource.obtain(outBitmap, this.mBitmapPool)!!
     }
 
