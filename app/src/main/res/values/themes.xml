@@ -5,6 +5,9 @@
         <item name="android:windowBackground">@mipmap/img_start</item>
         <item name="android:windowAnimationStyle">@null</item>
         <item name="android:windowTranslucentStatus">true</item>
+
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
     </style>
 
 </resources>

@@ -5,6 +5,7 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseActivity
 import com.dataqin.common.constant.ARouterPath
+import com.dataqin.testnew.databinding.ActivityStartBinding
 
 /**
  *  Created by wangyanbin
@@ -13,7 +14,7 @@ import com.dataqin.common.constant.ARouterPath
  *  3.免登陆，进首页
  */
 @Route(path = ARouterPath.StartActivity)
-class StartActivity : BaseActivity<ViewBinding>() {
+class StartActivity : BaseActivity<ActivityStartBinding>() {
     private val weakHandler by lazy {
         WeakHandler {
             navigation(ARouterPath.MainActivity).finish()
@@ -23,7 +24,7 @@ class StartActivity : BaseActivity<ViewBinding>() {
 
     override fun initView() {
         super.initView()
-        statusBarBuilder.setTransparentStatus()//30api使用全屏刘海部分会黑色，改为透明白电池
+//        statusBarBuilder.setTransparentStatus()//30api使用全屏刘海部分会黑色，改为透明白电池
 //        //先判断是否是初始化过app
 //        //如果是，验证权限是否具有，没有直接跳到权限申请页，权限申请页的下一页是引导页，具有直接跳转到引导页
 //        //如果不是，验证是否需要免登陆，随后跳转到首页
