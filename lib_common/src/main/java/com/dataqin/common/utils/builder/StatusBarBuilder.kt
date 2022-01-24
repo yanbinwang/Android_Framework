@@ -27,7 +27,6 @@ class StatusBarBuilder(var window: Window) {
      * 透明状态栏(白电池)
      */
     fun setTransparentStatus() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         window.apply {
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
             decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -36,14 +35,12 @@ class StatusBarBuilder(var window: Window) {
         }
         setMiuiStatusBarLightMode(false)
         setFlymeStatusBarLightMode(false)
-//        }
     }
 
     /**
      * 透明状态栏(黑电池)
      */
     fun setTransparentDarkStatus() {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         window.apply {
             addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
             clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS or WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
@@ -52,7 +49,6 @@ class StatusBarBuilder(var window: Window) {
         }
         setMiuiStatusBarLightMode(true)
         setFlymeStatusBarLightMode(true)
-//        }
     }
 
     /**

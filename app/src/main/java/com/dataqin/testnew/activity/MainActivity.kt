@@ -9,23 +9,19 @@ import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
-import com.dataqin.common.base.page.PageParams
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Constants
-import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
-import com.dataqin.common.widget.empty.OnEmptyRefreshListener
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.media.service.ScreenShotObserver
-import com.dataqin.media.utils.helper.GSYVideoHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -33,7 +29,6 @@ import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import java.io.File
-
 
 /**
  * Created by WangYanBin
@@ -46,7 +41,7 @@ import java.io.File
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
     private var srcPath = ""
-        private val presenter by lazy { createPresenter(MainPresenter::class.java) }
+    private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
     private val editPopup by lazy { EditPopup(this) }
 
@@ -78,11 +73,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
-
-
-
-        GSYVideoHelper.initialize(this, binding.pvVideo, true)
-        presenter.setEmptyView(binding.xrvOrder)
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
 //        PopupHelper.addPopup(0,Any())
@@ -111,7 +101,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("当前选中了${index}")
             }
         })
-        GSYVideoHelper.setUrl("http://zcpt-test.obs.cn-east-3.myhuaweicloud.com/uploads/2021/08/26/3AEF64F8FD3D4F109C4C24F2C6FCC3CF.mp4")
     }
 
     override fun initEvent() {
@@ -124,14 +113,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 Constants.APP_SHOT_PATH -> srcPath = it.getStringExtra()
             }
         })
-
-        presenter.getEmptyView().showError()
-        presenter.getEmptyView().setOnEmptyRefreshListener(object : OnEmptyRefreshListener {
-            override fun onRefreshClick() {
-                showToast("~~~~")
-            }
-        })
-//
 //        LocationFactory.instance.start(this)
 //        LocationFactory.instance.locationSubscriber = object : LocationSubscriber() {
 //            override fun onSuccess(model: AMapLocation) {
@@ -262,20 +243,17 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     }
 
     override fun onResume() {
-        GSYVideoHelper.onResume()
         super.onResume()
         binding.adGallery.onResume()
     }
 
     override fun onPause() {
-        GSYVideoHelper.onPause()
         super.onPause()
         binding.adGallery.onPause()
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        GSYVideoHelper.onDestroy()
         ScreenShotObserver.instance.unregister()
 //        LocationFactory.instance.stop()
     }
