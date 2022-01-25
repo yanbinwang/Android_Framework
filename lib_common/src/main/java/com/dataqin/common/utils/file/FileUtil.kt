@@ -287,9 +287,10 @@ object FileUtil {
 
     /**
      * 发送文件
+     * image -> 图片
      */
     @JvmStatic
-    fun sendFile(context: Context, filePath: String) {
+    fun sendFile(context: Context, filePath: String, type: String ?= "*/*") {
         val file = File(filePath)
         if (!file.exists()) {
             ToastUtil.mackToastSHORT("文件路径错误", context)
@@ -302,7 +303,7 @@ object FileUtil {
             intent.putExtra(Intent.EXTRA_STREAM, file)
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-        intent.type = "*/*"//此处可发送多种文件
+        intent.type = type//此处可发送多种文件
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(Intent.createChooser(intent, "分享文件"))
     }
