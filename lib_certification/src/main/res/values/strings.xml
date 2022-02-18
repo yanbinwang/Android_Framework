@@ -1,5 +1,0 @@
-<resources>
-    <!-- app内的view显示字段 -->
-    <string name="toast_certification_error">初始化失败</string>
-    <string name="toast_certification_failure">认证失败,请重试</string>
-</resources>
