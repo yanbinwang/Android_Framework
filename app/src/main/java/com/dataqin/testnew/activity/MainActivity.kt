@@ -7,6 +7,7 @@ import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
+import com.amap.api.services.core.ServiceSettings
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.bus.RxBus
@@ -101,6 +102,9 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("当前选中了${index}")
             }
         })
+        //高德地图隐私政策合规
+        ServiceSettings.updatePrivacyShow(this, true, true)
+        ServiceSettings.updatePrivacyAgree(this, true)
     }
 
     override fun initEvent() {

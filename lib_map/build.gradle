@@ -11,8 +11,6 @@ android {
     defaultConfig {
         minSdk build_versions.minSdkVersion
         targetSdk build_versions.targetSdkVersion
-        versionCode build_versions.versionCode
-        versionName build_versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -35,9 +33,9 @@ android {
 dependencies {
     api fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.2'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     //框架库
     api project(':lib_common')
-    api files('libs/AMap3DMap_8.0.0_AMapSearch_7.9.0_AMapLocation_5.4.0_20210723.jar')
+    api files('libs/AMap3DMap_8.1.0_AMapSearch_8.1.0_AMapLocation_5.6.2_20211230.jar')
 }

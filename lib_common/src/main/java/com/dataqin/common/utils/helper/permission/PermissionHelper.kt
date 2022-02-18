@@ -11,7 +11,7 @@ import com.dataqin.common.R
 import com.dataqin.common.widget.dialog.AndDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.yanzhenjie.permission.AndPermission
-import com.yanzhenjie.permission.runtime.Permission
+import com.yanzhenjie.permission.Permission
 import java.lang.ref.WeakReference
 import java.text.MessageFormat
 
@@ -42,8 +42,7 @@ class PermissionHelper(context: Context) {
             if (checkSelfPermission()) {
                 onPermissionCallBack?.onPermission(true)
             } else {
-                AndPermission.with(weakContext.get())
-                    .runtime()
+                AndPermission.with(weakContext.get()!!)
                     .permission(*groups)
                     .onGranted {
                         //权限申请成功回调
@@ -81,7 +80,7 @@ class PermissionHelper(context: Context) {
                                 else -> null
                             }
                             //如果用户拒绝了开启权限
-                            if (AndPermission.hasAlwaysDeniedPermission(weakContext.get(), it)) {
+                            if (AndPermission.hasAlwaysDeniedPermission(weakContext.get()!!, it)) {
                                 AndDialog.with(weakContext.get()).setOnDialogListener(object : OnDialogListener {
                                     override fun onConfirm() {
                                         weakContext.get()?.startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + weakContext.get()?.packageName)))

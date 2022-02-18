@@ -24,7 +24,7 @@ import com.dataqin.common.utils.helper.permission.PermissionHelper
 import com.dataqin.common.widget.dialog.AppDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.dataqin.map.R
-import com.yanzhenjie.permission.runtime.Permission
+import com.yanzhenjie.permission.Permission
 import java.lang.ref.WeakReference
 
 /**
