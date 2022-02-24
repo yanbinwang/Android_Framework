@@ -25,7 +25,7 @@ object SSLSocketClient {
                     return arrayOf()
                 }
             }), SecureRandom())
-            sslContext.socketFactory
+            return sslContext.socketFactory
         } catch (ignored: Exception) {
         }
         return null
