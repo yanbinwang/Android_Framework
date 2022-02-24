@@ -1,6 +1,5 @@
 package com.dataqin.testnew.activity
 
-import androidx.viewbinding.ViewBinding
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseActivity

@@ -1,6 +1,7 @@
 package com.dataqin.common.http.factory
 
 import com.dataqin.common.http.interceptor.LoggingInterceptor
+import com.dataqin.common.http.interceptor.SSLSocketClient
 import com.dataqin.common.http.interceptor.UserAgentInterceptor
 import okhttp3.OkHttpClient
 import java.util.concurrent.TimeUnit
@@ -21,6 +22,8 @@ class OkHttpFactory private constructor() {
         .addInterceptor(UserAgentInterceptor())//请求加头
         .addInterceptor(LoggingInterceptor())//日志监听
 //            .addInterceptor(RetryServerInterceptor())//重新构建请求
+//        .sslSocketFactory(SSLSocketClient.getSSLSocketFactory()!!, SSLSocketClient.getX509TrustManager()!!)
+//        .hostnameVerifier(SSLSocketClient.getHostnameVerifier())
         .build()
 
     companion object {
