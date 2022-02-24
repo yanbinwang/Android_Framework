@@ -1,21 +1,19 @@
 <resources>
 
     <!-- 启动页，直接背景是一张启动页图，点开app就是引导页的展示 -->
-<!--    <style name="splashTheme" parent="AppTheme">-->
-<!--        <item name="android:windowBackground">@mipmap/img_start</item>-->
-<!--        <item name="android:windowAnimationStyle">@null</item>-->
-<!--        <item name="android:windowTranslucentStatus">true</item>-->
-<!--        -->
-<!--        <item name="android:windowFullscreen">true</item>-->
-<!--        <item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
-<!--    </style>-->
-
-        <style name="splashTheme" parent="AppTheme">
-            <item name="android:windowBackground">@mipmap/img_start</item>
-            <item name="android:windowAnimationStyle">@null</item>
-            <item name="android:windowTranslucentStatus">true</item>
-            <item name="android:windowFullscreen">true</item>
-            <item name="android:windowDrawsSystemBarBackgrounds">false</item>
-        </style>
+    <!--    <style name="splashTheme" parent="AppTheme">-->
+    <!--        <item name="android:windowBackground">@mipmap/img_start</item>-->
+    <!--        <item name="android:windowAnimationStyle">@null</item>-->
+    <!--        <item name="android:windowTranslucentStatus">true</item>-->
+    <!--        -->
+    <!--        <item name="android:windowFullscreen">true</item>-->
+    <!--        <item name="android:windowDrawsSystemBarBackgrounds">false</item>-->
+    <!--    </style>-->
+    <style name="splashTheme" parent="AppTheme">
+        <item name="colorPrimaryDark">@color/blue_3d81f2</item>
+        <item name="android:navigationBarColor">@color/blue_3d81f2</item>
+        <item name="android:windowBackground">@drawable/layout_list_splash</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
 
 </resources>
