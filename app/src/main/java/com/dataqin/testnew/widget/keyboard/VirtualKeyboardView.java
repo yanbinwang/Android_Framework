@@ -62,13 +62,7 @@ public class VirtualKeyboardView extends SimpleViewGroup {
             }
             valueList.add(map);
         }
-        VirtualKeyboardAdapter adapter = new VirtualKeyboardAdapter(valueList);
-        recKeyboard.setLayoutManager(new GridLayoutManager(getContext(), 3));
-        recKeyboard.setAdapter(adapter);
-        SparseArray<SCommonItemDecoration.ItemDecorationProps> propMap = new SparseArray<>();
-        SCommonItemDecoration.ItemDecorationProps prop1 = new SCommonItemDecoration.ItemDecorationProps(DisplayUtilKt.dip2px(getContext(), 1), DisplayUtilKt.dip2px(getContext(), 1), true, true);
-        propMap.put(0, prop1);
-        recKeyboard.addItemDecoration(new SCommonItemDecoration(propMap));
+        setAdapter(new VirtualKeyboardAdapter(valueList));
     }
 
     @Override
@@ -86,6 +80,15 @@ public class VirtualKeyboardView extends SimpleViewGroup {
 
     public ArrayList<Map<String, String>> getValueList() {
         return valueList;
+    }
+
+    public void setAdapter(VirtualKeyboardAdapter adapter) {
+        recKeyboard.setLayoutManager(new GridLayoutManager(getContext(), 3));
+        recKeyboard.setAdapter(adapter);
+        SparseArray<SCommonItemDecoration.ItemDecorationProps> propMap = new SparseArray<>();
+        SCommonItemDecoration.ItemDecorationProps prop1 = new SCommonItemDecoration.ItemDecorationProps(DisplayUtilKt.dip2px(getContext(), 1), DisplayUtilKt.dip2px(getContext(), 1), true, true);
+        propMap.put(0, prop1);
+        recKeyboard.addItemDecoration(new SCommonItemDecoration(propMap));
     }
 
 }

@@ -1,5 +1,6 @@
 package com.dataqin.testnew.activity
 
+import android.view.KeyEvent
 import android.view.View
 import android.view.WindowManager
 import android.view.animation.AnimationUtils
@@ -34,18 +35,9 @@ class PasswordInputActivity : BaseTitleActivity<ActivityPasswordInputBinding>() 
 
     override fun initEvent() {
         super.initEvent()
-        binding.etAmount.setOnClickListener {
-            binding.vkKeyboard.apply {
-                isFocusable = true
-                isFocusableInTouchMode = true
-                startAnimation(enterAnim)
-                visibility = View.VISIBLE
-            }
-        }
-        binding.vkKeyboard.back.setOnClickListener {
-            binding.vkKeyboard.startAnimation(exitAnim)
-            GONE(binding.vkKeyboard)
-        }
+        binding.etAmount.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) shown() else hidden() }
+        binding.etAmount.setOnClickListener { shown() }
+        binding.vkKeyboard.back.setOnClickListener { hidden() }
         val valueList = binding.vkKeyboard.valueList
         (binding.vkKeyboard.recyclerView.adapter as VirtualKeyboardAdapter).onItemClickListener = object : OnItemClickListener {
             override fun onItemClick(position: Int) {
@@ -77,6 +69,28 @@ class PasswordInputActivity : BaseTitleActivity<ActivityPasswordInputBinding>() 
                 }
             }
         }
+    }
+
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (binding.vkKeyboard.visibility == View.VISIBLE) hidden() else finish()
+            return true
+        }
+        return false
+    }
+
+    private fun shown() {
+        if (binding.vkKeyboard.visibility != View.VISIBLE) {
+            binding.vkKeyboard.isFocusable = true
+            binding.vkKeyboard.isFocusableInTouchMode = true
+            binding.vkKeyboard.startAnimation(enterAnim)
+            VISIBLE(binding.vkKeyboard)
+        }
+    }
+
+    private fun hidden() {
+        binding.vkKeyboard.startAnimation(exitAnim)
+        GONE(binding.vkKeyboard)
     }
 
 }

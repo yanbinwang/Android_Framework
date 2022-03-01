@@ -4,18 +4,14 @@ import android.content.Context;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.AttributeSet;
-import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.dataqin.base.utils.DisplayUtilKt;
 import com.dataqin.base.widget.SimpleViewGroup;
-import com.dataqin.common.widget.xrecyclerview.manager.SCommonItemDecoration;
 import com.dataqin.testnew.R;
 import com.dataqin.testnew.widget.keyboard.callback.OnPasswordInputListener;
 
@@ -29,12 +25,11 @@ import java.util.Map;
 public class PasswordInputView extends SimpleViewGroup {
     private View view;
     private ImageView ivCancel;
-    private RecyclerView recKeyboard;
     private VirtualKeyboardView vkKeyboard;
     private TextView[] tvList;//用数组保存6个TextView
     private ImageView[] imgList;//用数组保存6个TextView
-    private ArrayList<Map<String, String>> valueList = new ArrayList<>();
     private int currentIndex = -1;//用于记录当前输入密码格位置
+    private final ArrayList<Map<String, String>> valueList = new ArrayList<>();
 
     public PasswordInputView(Context context) {
         super(context);
@@ -56,7 +51,7 @@ public class PasswordInputView extends SimpleViewGroup {
         view = LayoutInflater.from(context).inflate(R.layout.view_password_input, null);
         ivCancel = view.findViewById(R.id.iv_cancel);
         vkKeyboard = view.findViewById(R.id.vk_keyboard);
-        recKeyboard = vkKeyboard.getRecyclerView();
+        RecyclerView recKeyboard = vkKeyboard.getRecyclerView();
         //初始化按钮上应该显示的数字
         for (int i = 1; i < 13; i++) {
             Map<String, String> map = new HashMap<>();
@@ -111,12 +106,7 @@ public class PasswordInputView extends SimpleViewGroup {
                 }
             }
         });
-        recKeyboard.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recKeyboard.setAdapter(adapter);
-        SparseArray<SCommonItemDecoration.ItemDecorationProps> propMap = new SparseArray<>();
-        SCommonItemDecoration.ItemDecorationProps prop1 = new SCommonItemDecoration.ItemDecorationProps(DisplayUtilKt.dip2px(getContext(), 1), DisplayUtilKt.dip2px(getContext(), 1), true, true);
-        propMap.put(0, prop1);
-        recKeyboard.addItemDecoration(new SCommonItemDecoration(propMap));
     }
 
     @Override
@@ -146,7 +136,6 @@ public class PasswordInputView extends SimpleViewGroup {
                     for (int i = 0; i < 6; i++) {
                         strPassword.append(tvList[i].getText().toString().trim());
                     }
-                    System.out.println("strPassword :" + strPassword);
                     listener.onFinish(strPassword.toString());//接口中要实现的方法，完成密码输入完成后的响应逻辑
                 }
             }
