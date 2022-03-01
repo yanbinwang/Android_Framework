@@ -17,9 +17,10 @@
 
     <RelativeLayout
         android:id="@+id/rel_keyboard_delete"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="120mm"
-        android:layout_centerInParent="true">
+        android:layout_centerInParent="true"
+        android:background="@drawable/selector_keyboard">
 
         <ImageView
             android:layout_width="140mm"
