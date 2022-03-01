@@ -14,6 +14,8 @@ object ARouterPath {
     const val RecordActivity = "/app/RecordActivity"
     const val TransActivity = "/app/TransActivity"
     const val PdfActivity = "/app/PdfActivity"
+    const val PasswordInputActivity = "/app/PasswordInputActivity"
+    const val PayInputActivity = "/app/PayInputActivity"
 
     //homepage模块
 //    const val ShotActivity = "/app/ShotActivity" //锁定ip页

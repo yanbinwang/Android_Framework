@@ -61,7 +61,7 @@ public class EmptyLayout extends SimpleViewGroup {
         tvRefresh = view.findViewById(R.id.tv_refresh);
         //设置样式
         view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
-        view.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f6f8ff));
         //设置监听
         tvRefresh.setOnClickListener(v -> {
             //进入加载中，并停止刷新动画

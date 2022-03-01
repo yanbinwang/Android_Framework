@@ -191,6 +191,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
+                navigation(ARouterPath.PayInputActivity)
+//                navigation(ARouterPath.PasswordInputActivity)
 //                val intent =  Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 //                intent.setData(Uri.parse("package:" + getPackageName()));
 //                startActivityForResult(intent, 10086);
@@ -212,7 +214,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 //                    }).getPermissions(Permission.Group.STORAGE)
 //                }
 //                log(NetWorkUtil.getWifiSecurity())
-                navigation(ARouterPath.PdfActivity)
+//                navigation(ARouterPath.PdfActivity)
 //                PermissionHelper.with(this)
 //                    .setPermissionCallBack(object :OnPermissionCallBack{
 //                        override fun onPermission(isGranted: Boolean) {

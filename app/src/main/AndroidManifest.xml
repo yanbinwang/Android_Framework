@@ -114,6 +114,14 @@
             android:name=".activity.PdfActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.PasswordInputActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".activity.PayInputActivity"
+            android:screenOrientation="portrait" />
+
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
