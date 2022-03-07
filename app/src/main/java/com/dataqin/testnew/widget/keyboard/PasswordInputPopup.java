@@ -2,10 +2,10 @@ package com.dataqin.testnew.widget.keyboard;
 
 import android.app.Activity;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 
+import com.dataqin.base.utils.ToastUtil;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.databinding.ViewPopupPasswordInputBinding;
 import com.dataqin.testnew.widget.keyboard.callback.OnPasswordListener;
@@ -25,7 +25,7 @@ public class PasswordInputPopup extends BasePopupWindow<ViewPopupPasswordInputBi
         super.initialize();
         binding.pivPassword.setOnPasswordInputListener(password -> {
             if (null != onPasswordListener) onPasswordListener.onFinish(password);
-            Toast.makeText(getActivity(), "支付成功，密码为：" + password, Toast.LENGTH_SHORT).show();
+            ToastUtil.mackToastSHORT("支付成功，密码为：" + password, getActivity());
             dismiss();
         });
         binding.pivPassword.getCancel().setOnClickListener(view -> dismiss());
