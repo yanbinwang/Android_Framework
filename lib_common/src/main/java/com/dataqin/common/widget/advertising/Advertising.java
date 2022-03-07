@@ -40,10 +40,11 @@ import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
  */
 @SuppressLint("ClickableViewAccessibility")
 public class Advertising extends SimpleViewGroup implements AdvertisingImpl, LifecycleObserver {
-    private boolean allow = true, scroll = true;//是否允许滑动，是否自动滚动
+    private boolean allow = true, scroll = true, local;//是否允许滑动，是否自动滚动，是否是本地
     private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private Timer timer;//自动滚动的定时器
     private List<String> list;//图片网络路径数组
+    private ArrayList<Integer> localList;//图片本地路径数组
     private ViewPager2 banner;//广告容器
     private LinearLayout ovalLayout;//圆点容器
     private OnAdvertisingClickListener onAdvertisingClickListener;//监听
@@ -109,6 +110,16 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="实现方法">
+    public void onStartLocal(@NotNull ArrayList<Integer> uriList, @Nullable LinearLayout ovalLayout) {
+        this.local = true;
+        this.localList = uriList;
+        this.list = new ArrayList<>();
+        for (Integer integer : uriList) {
+            list.add(integer.toString());
+        }
+        onStart(list, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10);
+    }
+
     public void onStart(@NotNull List<String> uriList) {
         onStart(uriList, null);
     }
@@ -160,6 +171,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
             ovalLayout.getChildAt(0).setBackgroundResource(focusedId);
         }
         //设置图片数据
+        adapter.setLocalList(localList);
+        adapter.setLocal(local);
         adapter.setData(list);
         adapter.setOnItemClickListener(position -> {
             if (null != onAdvertisingClickListener) {

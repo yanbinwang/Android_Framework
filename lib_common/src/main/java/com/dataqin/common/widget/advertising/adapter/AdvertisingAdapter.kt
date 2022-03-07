@@ -3,6 +3,7 @@ package com.dataqin.common.widget.advertising.adapter
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.ImageLoader.Companion.instance
 
 /**
@@ -11,6 +12,8 @@ import com.dataqin.common.imageloader.ImageLoader.Companion.instance
  */
 class AdvertisingAdapter(var list: MutableList<String>) : RecyclerView.Adapter<AdvertisingAdapter.ViewHolder>() {
     var onItemClickListener: OnItemClickListener? = null
+    var local: Boolean = false
+    var localList = ArrayList<Int>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ImageView(parent.context))
@@ -18,7 +21,12 @@ class AdvertisingAdapter(var list: MutableList<String>) : RecyclerView.Adapter<A
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(position % list.size) }
-        instance.displayImage((holder.itemView as ImageView), list[position % list.size])
+//        instance.displayImage((holder.itemView as ImageView), list[position % list.size])
+        if(local) {
+            (holder.itemView as ImageView).setBackgroundResource(localList[position % localList.size])
+        } else {
+            ImageLoader.instance.displayImage((holder.itemView as ImageView), list[position % list.size])
+        }
     }
 
     override fun getItemCount(): Int {
