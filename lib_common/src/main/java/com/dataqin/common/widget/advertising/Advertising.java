@@ -137,8 +137,6 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
         this.margin = margin;
         //设置数据
         initData();
-//        //自动滚动
-//        startTimer();
     }
 
     /**
