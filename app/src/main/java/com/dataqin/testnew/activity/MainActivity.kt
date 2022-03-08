@@ -92,6 +92,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             }
         })
 
+        binding.adGallery.addLifecycleObserver(this)
         val list = listOf(
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F04%2F20170804135156_metTN.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=d90a27b306f2d7ce4c0d18a6744bca86",
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F1336313%2Ff%2F977802912.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=82da0c88197102345a628bc2239bcf50",
@@ -246,16 +247,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("没开")
             }
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        binding.adGallery.onResume()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        binding.adGallery.onPause()
     }
 
     override fun onDestroy() {

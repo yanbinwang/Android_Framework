@@ -169,9 +169,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
             ovalLayout.getChildAt(0).setBackgroundResource(focusedId);
         }
         //设置图片数据
-        adapter.setLocalList(localList);
         adapter.setLocal(local);
-        adapter.setData(list);
+        if(local) adapter.setLocalList(localList); else adapter.setData(list);
         adapter.setOnItemClickListener(position -> {
             if (null != onAdvertisingClickListener) {
                 onAdvertisingClickListener.onItemClick(position);
