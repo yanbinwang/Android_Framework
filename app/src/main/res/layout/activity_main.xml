@@ -107,8 +107,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="400mm"
-            android:visibility="gone">
+            android:layout_height="400mm">
 
             <com.dataqin.common.widget.advertising.Advertising
                 android:id="@+id/ad_gallery"

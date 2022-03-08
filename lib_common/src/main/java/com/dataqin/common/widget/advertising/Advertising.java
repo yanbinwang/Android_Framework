@@ -49,7 +49,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     private LinearLayout ovalLayout;//圆点容器
     private OnAdvertisingClickListener onAdvertisingClickListener;//监听
     private final int halfPosition = Integer.MAX_VALUE / 2;//计算中心值
-    private final AdvertisingAdapter adapter = new AdvertisingAdapter(new ArrayList<>());//图片适配器
+    private final AdvertisingAdapter adapter = new AdvertisingAdapter();//图片适配器
     private final WeakHandler weakHandler = new WeakHandler(Looper.getMainLooper());//切线程
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
@@ -110,14 +110,13 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="实现方法">
-    public void onStartLocal(@NotNull ArrayList<Integer> uriList, @Nullable LinearLayout ovalLayout) {
-        this.local = true;
-        this.localList = uriList;
+    public void onStart(@NotNull ArrayList<Integer> resList, @Nullable LinearLayout ovalLayout) {
+        this.localList = resList;
         this.list = new ArrayList<>();
-        for (Integer integer : uriList) {
-            list.add(integer.toString());
+        for (Integer ignored : resList) {
+            list.add("");
         }
-        onStart(list, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10);
+        onStart(list, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, true);
     }
 
     public void onStart(@NotNull List<String> uriList) {
@@ -125,11 +124,12 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     }
 
     public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
-        onStart(uriList, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10);
+        onStart(uriList, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, false);
     }
 
     @Override
-    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int focusedId, int normalId, int margin) {
+    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int focusedId, int normalId, int margin, boolean local) {
+        this.local = local;
         this.list = uriList;
         this.ovalLayout = ovalLayout;
         this.focusedId = focusedId;
@@ -169,8 +169,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
             ovalLayout.getChildAt(0).setBackgroundResource(focusedId);
         }
         //设置图片数据
-        adapter.setLocal(local);
-        if(local) adapter.setLocalList(localList); else adapter.setData(list);
+        if(local) adapter.setLocalList(localList); else adapter.setList(list);
         adapter.setOnItemClickListener(position -> {
             if (null != onAdvertisingClickListener) {
                 onAdvertisingClickListener.onItemClick(position);
