@@ -14,7 +14,9 @@ import android.text.SpannableString
 import android.text.Spanned
 import android.text.TextUtils
 import android.text.method.HideReturnsTransformationMethod
+import android.text.method.LinkMovementMethod
 import android.text.method.PasswordTransformationMethod
+import android.text.style.ClickableSpan
 import android.text.style.ForegroundColorSpan
 import android.view.View
 import android.widget.*
@@ -97,10 +99,24 @@ fun ImageView.setLinearScreenWidth() {
 fun TextView.setSpan(textStr: String, keyword: String, colorRes: Int = R.color.blue_0d86ff) {
     val spannable = SpannableString(textStr)
     val index = textStr.indexOf(keyword)
-    if (index != -1) {
+    text = if (index != -1) {
         spannable.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, colorRes)), index, index + keyword.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        text = spannable
-    }
+        spannable
+    } else textStr
+}
+
+/**
+ * 文案添加点击事件（单一）
+ */
+@JvmOverloads
+fun TextView.setClickableSpan(textStr: String, keyword: String, clickableSpan: ClickableSpan) {
+    val spannable = SpannableString(textStr)
+    val index = textStr.indexOf(keyword)
+    text = if (index != -1) {
+        spannable.setSpan(clickableSpan, index, index + keyword.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannable
+    } else textStr
+    movementMethod = LinkMovementMethod.getInstance()
 }
 
 /**
