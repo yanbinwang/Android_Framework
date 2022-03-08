@@ -13,6 +13,10 @@ class AdvertisingAdapter(var list: MutableList<String>) : RecyclerView.Adapter<A
     var onItemClickListener: OnItemClickListener? = null
     var local: Boolean = false
     var localList = ArrayList<Int>()
+        set(value) {
+            field = value
+            notifyDataSetChanged()
+        }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(ImageView(parent.context))
