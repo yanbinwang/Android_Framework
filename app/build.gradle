@@ -31,8 +31,8 @@ android {
         versionCode build_versions.versionCode
         versionName build_versions.versionName
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        //减少语言支持
         resConfigs 'zh'
-//减少语言支持
         //dex突破65535的限制
         multiDexEnabled true
         kapt {
