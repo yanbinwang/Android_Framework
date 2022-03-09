@@ -44,8 +44,7 @@ public class VirtualKeyboardView extends SimpleViewGroup {
     }
 
     private void initialize() {
-        Context context = getContext();
-        view = LayoutInflater.from(context).inflate(R.layout.view_virtual_keyboard, null);
+        view = LayoutInflater.from(getContext()).inflate(R.layout.view_virtual_keyboard, null);
         recKeyboard = view.findViewById(R.id.rec_keyboard);
         ivBack = view.findViewById(R.id.iv_back);
         //初始化按钮上应该显示的数字
@@ -70,18 +69,10 @@ public class VirtualKeyboardView extends SimpleViewGroup {
         if (onFinish()) addView(view);
     }
 
-    public ImageView getBack() {
-        return ivBack;
-    }
-
-    public RecyclerView getRecyclerView() {
-        return recKeyboard;
-    }
-
-    public ArrayList<Map<String, String>> getValueList() {
-        return valueList;
-    }
-
+    /**
+     * 设置键盘列表数据
+     * @param adapter
+     */
     public void setAdapter(VirtualKeyboardAdapter adapter) {
         recKeyboard.setLayoutManager(new GridLayoutManager(getContext(), 3));
         recKeyboard.setAdapter(adapter);
@@ -89,6 +80,30 @@ public class VirtualKeyboardView extends SimpleViewGroup {
         SCommonItemDecoration.ItemDecorationProps prop1 = new SCommonItemDecoration.ItemDecorationProps(DisplayUtilKt.dip2px(getContext(), 1), DisplayUtilKt.dip2px(getContext(), 1), true, true);
         propMap.put(0, prop1);
         recKeyboard.addItemDecoration(new SCommonItemDecoration(propMap));
+    }
+
+    /**
+     * 获取键盘整体列表
+     * @return
+     */
+    public RecyclerView getRecyclerView() {
+        return recKeyboard;
+    }
+
+    /**
+     * 获取关闭输入框按钮
+     * @return
+     */
+    public ImageView getBack() {
+        return ivBack;
+    }
+
+    /**
+     * 获取当前数据信息
+     * @return
+     */
+    public ArrayList<Map<String, String>> getValueList() {
+        return valueList;
     }
 
 }

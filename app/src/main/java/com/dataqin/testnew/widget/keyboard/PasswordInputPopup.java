@@ -34,10 +34,6 @@ public class PasswordInputPopup extends BasePopupWindow<ViewPopupPasswordInputBi
         binding.pivPassword.getVirtualKeyboardView().getBack().setOnClickListener(view -> dismiss());
     }
 
-    public void setOnPasswordListener(OnPasswordListener onPasswordListener) {
-        this.onPasswordListener = onPasswordListener;
-    }
-
     @Override
     public void dismiss() {
         super.dismiss();
@@ -52,6 +48,14 @@ public class PasswordInputPopup extends BasePopupWindow<ViewPopupPasswordInputBi
             binding.pivPassword.getPassword().setVisibility(View.VISIBLE);
             binding.pivPassword.getPassword().startAnimation(AnimationLoaderKt.getInAnimation(getActivity()));
         },500);
+    }
+
+    /**
+     * 设置回调监听
+     * @param onPasswordListener
+     */
+    public void setOnPasswordListener(OnPasswordListener onPasswordListener) {
+        this.onPasswordListener = onPasswordListener;
     }
 
 }

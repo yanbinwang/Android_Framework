@@ -70,6 +70,9 @@ object InputHelper {
         }
     }
 
+    /**
+     * 按下返回键时的处理
+     */
     @JvmStatic
     fun onKeyDown(): Boolean {
         var close = false
@@ -77,6 +80,9 @@ object InputHelper {
         return close
     }
 
+    /**
+     * 弹出时的处理
+     */
     @JvmStatic
     fun shown() {
         if (vkKeyboard?.visibility != View.VISIBLE) {
@@ -87,6 +93,9 @@ object InputHelper {
         }
     }
 
+    /**
+     * 关闭时的处理
+     */
     @JvmStatic
     fun hidden() {
         vkKeyboard?.startAnimation(exitAnim)
