@@ -28,9 +28,6 @@
             android:layout_margin="20mm"
             android:src="@mipmap/img_keyboard_close" />
 
-        <View style="@style/lineWidth" />
-
     </LinearLayout>
-
 
 </RelativeLayout>

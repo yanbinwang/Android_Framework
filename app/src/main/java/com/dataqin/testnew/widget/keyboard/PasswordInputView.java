@@ -7,6 +7,7 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import java.util.Map;
  */
 public class PasswordInputView extends SimpleViewGroup {
     private View view;
+    private LinearLayout llPassword;
     private ImageView ivCancel;
     private VirtualKeyboardView vkKeyboard;
     private TextView[] tvList;//用数组保存6个TextView
@@ -49,6 +51,7 @@ public class PasswordInputView extends SimpleViewGroup {
     private void initialize() {
         Context context = getContext();
         view = LayoutInflater.from(context).inflate(R.layout.view_password_input, null);
+        llPassword = view.findViewById(R.id.ll_password);
         ivCancel = view.findViewById(R.id.iv_cancel);
         vkKeyboard = view.findViewById(R.id.vk_keyboard);
         RecyclerView recKeyboard = vkKeyboard.getRecyclerView();
@@ -114,14 +117,38 @@ public class PasswordInputView extends SimpleViewGroup {
         if (onFinish()) addView(view);
     }
 
-    public VirtualKeyboardView getVirtualKeyboardView() {
-        return vkKeyboard;
+    /**
+     * 获取顶层支付整体
+     *
+     * @return
+     */
+    public LinearLayout getPassword() {
+        return llPassword;
     }
 
+    /**
+     * 获取关闭按钮
+     *
+     * @return
+     */
     public ImageView getCancel() {
         return ivCancel;
     }
 
+    /**
+     * 获取底部虚拟键盘
+     *
+     * @return
+     */
+    public VirtualKeyboardView getVirtualKeyboardView() {
+        return vkKeyboard;
+    }
+
+    /**
+     * 设置监听
+     *
+     * @param listener
+     */
     public void setOnPasswordInputListener(OnPasswordInputListener listener) {
         tvList[5].addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -142,6 +169,9 @@ public class PasswordInputView extends SimpleViewGroup {
         });
     }
 
+    /**
+     * 键盘复位
+     */
     public void restore() {
         while (currentIndex - 1 >= -1) {
             tvList[currentIndex].setText("");

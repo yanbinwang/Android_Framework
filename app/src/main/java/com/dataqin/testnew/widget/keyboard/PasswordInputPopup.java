@@ -5,6 +5,8 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.dataqin.base.utils.AnimationLoaderKt;
+import com.dataqin.base.utils.TimerHelper;
 import com.dataqin.base.utils.ToastUtil;
 import com.dataqin.common.base.BasePopupWindow;
 import com.dataqin.testnew.databinding.ViewPopupPasswordInputBinding;
@@ -37,9 +39,19 @@ public class PasswordInputPopup extends BasePopupWindow<ViewPopupPasswordInputBi
     }
 
     @Override
+    public void dismiss() {
+        super.dismiss();
+        binding.pivPassword.getPassword().setVisibility(View.GONE);
+    }
+
+    @Override
     public void showAtLocation(@Nullable View parent, int gravity, int x, int y) {
         super.showAtLocation(parent, gravity, x, y);
         binding.pivPassword.restore();
+        TimerHelper.schedule(() -> {
+            binding.pivPassword.getPassword().setVisibility(View.VISIBLE);
+            binding.pivPassword.getPassword().startAnimation(AnimationLoaderKt.getInAnimation(getActivity()));
+        },500);
     }
 
 }
