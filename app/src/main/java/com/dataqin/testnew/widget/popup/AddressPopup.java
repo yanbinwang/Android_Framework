@@ -102,7 +102,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         StringBuilder stringBuilder = new StringBuilder();
         try {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(getActivity().getAssets().open("pcas-code.json")));
-            String str = "";
+            String str;
             while (null != (str = bufferedReader.readLine())) {
                 stringBuilder.append(str);
             }
