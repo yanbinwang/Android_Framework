@@ -16,7 +16,7 @@ interface AdvertisingImpl {
      * @param normalId 圆点正常时的背景ID,圆点容器为空写0
      * @param margin 左右边距，可为空写0
      */
-    fun onStart(uriList: List<String>, ovalLayout: LinearLayout? = null, focusedId: Int, normalId: Int, margin: Int, local: Boolean)
+    fun start(uriList: List<String>, ovalLayout: LinearLayout? = null, focusedId: Int, normalId: Int, margin: Int, local: Boolean)
 
     /**
      * 设置自动滚动

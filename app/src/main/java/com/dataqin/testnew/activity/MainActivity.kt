@@ -97,13 +97,13 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201708%2F04%2F20170804135156_metTN.thumb.400_0.jpeg&refer=http%3A%2F%2Fc-ssl.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=d90a27b306f2d7ce4c0d18a6744bca86",
             "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fphoto.tuchong.com%2F1336313%2Ff%2F977802912.jpg&refer=http%3A%2F%2Fphoto.tuchong.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1628070617&t=82da0c88197102345a628bc2239bcf50",
             "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30")
-        binding.adGallery.onStart(list, binding.llPoint)
+        binding.adGallery.start(list, binding.llPoint)
 
 
 
 
 //        val adList = arrayListOf(R.mipmap.img_banner, R.mipmap.img_banner2)
-//        binding.adGallery.onStart(adList, binding.llPoint)
+//        binding.adGallery.start(adList, binding.llPoint)
 
 
 

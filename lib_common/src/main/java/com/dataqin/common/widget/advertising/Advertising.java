@@ -121,25 +121,25 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="实现方法">
-    public void onStart(@NotNull ArrayList<Integer> resList, @Nullable LinearLayout ovalLayout) {
+    public void start(@NotNull ArrayList<Integer> resList, @Nullable LinearLayout ovalLayout) {
         this.localList = resList;
         this.list = new ArrayList<>();
         for (Integer ignored : resList) {
             list.add("");
         }
-        onStart(list, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, true);
+        start(list, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, true);
     }
 
-    public void onStart(@NotNull List<String> uriList) {
-        onStart(uriList, null);
+    public void start(@NotNull List<String> uriList) {
+        start(uriList, null);
     }
 
-    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
-        onStart(uriList, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, false);
+    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout) {
+        start(uriList, ovalLayout, R.mipmap.ic_ad_select, R.mipmap.ic_ad_unselect, 10, false);
     }
 
     @Override
-    public void onStart(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int focusedId, int normalId, int margin, boolean local) {
+    public void start(@NotNull List<String> uriList, @Nullable LinearLayout ovalLayout, int focusedId, int normalId, int margin, boolean local) {
         this.local = local;
         this.list = uriList;
         this.ovalLayout = ovalLayout;
