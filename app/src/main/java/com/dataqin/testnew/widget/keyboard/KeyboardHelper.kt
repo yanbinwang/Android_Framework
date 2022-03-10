@@ -14,7 +14,7 @@ import com.dataqin.testnew.R
  * 输入帮助类
  */
 @SuppressLint("StaticFieldLeak")
-object InputHelper {
+object KeyboardHelper {
     private var etInput: EditText? = null
     private var vkKeyboard: VirtualKeyboardView? = null
     private var enterAnim: Animation? = null
