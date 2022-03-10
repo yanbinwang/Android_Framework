@@ -19,16 +19,6 @@ interface AdvertisingImpl {
     fun onStart(uriList: List<String>, ovalLayout: LinearLayout? = null, focusedId: Int, normalId: Int, margin: Int, local: Boolean)
 
     /**
-     * 开始滚动
-     */
-    fun onResume()
-
-    /**
-     * 停止滚动
-     */
-    fun onPause()
-
-    /**
      * 设置自动滚动
      */
     fun setAutoScroll(scroll: Boolean = true)

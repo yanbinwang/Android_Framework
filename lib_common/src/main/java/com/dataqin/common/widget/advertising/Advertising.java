@@ -1,5 +1,7 @@
 package com.dataqin.common.widget.advertising;
 
+import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
+
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Looper;
@@ -9,10 +11,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -32,14 +33,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
-
 /**
  * Created by wangyanbin
  * 广告控件
  */
 @SuppressLint("ClickableViewAccessibility")
-public class Advertising extends SimpleViewGroup implements AdvertisingImpl, LifecycleObserver {
+public class Advertising extends SimpleViewGroup implements AdvertisingImpl, DefaultLifecycleObserver {
     private boolean allow = true, scroll = true, local;//是否允许滑动，是否自动滚动，是否是本地
     private int curIndex, oldIndex, margin, focusedId, normalId;//当前选中的数组索引,上次选中的数组索引,左右边距,圆点选中时的背景ID,圆点正常时的背景ID
     private Timer timer;//自动滚动的定时器
@@ -100,6 +99,18 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     @Override
     public void drawView() {
         if (onFinish()) addView(banner);
+    }
+
+    @Override
+    public void onResume(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onResume(owner);
+        if (scroll) startTimer();
+    }
+
+    @Override
+    public void onPause(@NonNull LifecycleOwner owner) {
+        DefaultLifecycleObserver.super.onPause(owner);
+        if (scroll) stopTimer();
     }
 
     @Override
@@ -208,23 +219,6 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
         }
     }
 
-    //绑定对应页面的生命周期
-    public void addLifecycleObserver(LifecycleOwner lifecycleOwner) {
-        lifecycleOwner.getLifecycle().addObserver(this);
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
-    @Override
-    public void onResume() {
-        if (scroll) startTimer();
-    }
-
-    @OnLifecycleEvent(Lifecycle.Event.ON_PAUSE)
-    @Override
-    public void onPause() {
-        if (scroll) stopTimer();
-    }
-
     @Override
     public void setAutoScroll(boolean scroll) {
         this.scroll = scroll;
@@ -244,6 +238,11 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Lif
     @Override
     public void setOnAdvertisingClickListener(@NotNull OnAdvertisingClickListener onAdvertisingClickListener) {
         this.onAdvertisingClickListener = onAdvertisingClickListener;
+    }
+
+    //绑定对应页面的生命周期
+    public void addLifecycleObserver(LifecycleOwner lifecycleOwner) {
+        lifecycleOwner.getLifecycle().addObserver(this);
     }
     // </editor-fold>
 
