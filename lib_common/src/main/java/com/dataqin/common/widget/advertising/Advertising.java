@@ -180,7 +180,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
             ovalLayout.getChildAt(0).setBackgroundResource(focusedId);
         }
         //设置图片数据
-        if(local) adapter.setLocalList(localList); else adapter.setList(list);
+        if (local) adapter.setLocalList(localList); else adapter.setList(list);
         adapter.setOnItemClickListener(position -> {
             if (null != onAdvertisingClickListener) {
                 onAdvertisingClickListener.onItemClick(position);
@@ -234,7 +234,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
     @Override
     public void setAutoScroll(boolean scroll) {
         this.scroll = scroll;
-        if(!scroll) stopTimer();
+        if (!scroll) stopTimer();
     }
 
     @Override
