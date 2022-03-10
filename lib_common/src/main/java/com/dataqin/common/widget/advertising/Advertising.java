@@ -192,7 +192,9 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
         banner.setCurrentItem(position, false);
     }
 
-    //开始自动滚动任务 图片大于1张才滚动
+    /**
+     * 开始自动滚动任务 图片大于1张才滚动
+     */
     private void startTimer() {
         if (timer == null) {
             timer = new Timer();
@@ -211,12 +213,22 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
         }
     }
 
-    //停止自动滚动任务
+    /**
+     * 停止自动滚动任务
+     */
     private void stopTimer() {
         if (timer != null) {
             timer.cancel();
             timer = null;
         }
+    }
+
+    /**
+     * 绑定对应页面的生命周期-》对应回调重写对应方法
+     * @param lifecycleOwner
+     */
+    public void addLifecycleObserver(LifecycleOwner lifecycleOwner) {
+        lifecycleOwner.getLifecycle().addObserver(this);
     }
 
     @Override
@@ -238,11 +250,6 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
     @Override
     public void setOnAdvertisingClickListener(@NotNull OnAdvertisingClickListener onAdvertisingClickListener) {
         this.onAdvertisingClickListener = onAdvertisingClickListener;
-    }
-
-    //绑定对应页面的生命周期
-    public void addLifecycleObserver(LifecycleOwner lifecycleOwner) {
-        lifecycleOwner.getLifecycle().addObserver(this);
     }
     // </editor-fold>
 
