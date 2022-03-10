@@ -15,6 +15,7 @@ interface AdvertisingImpl {
      * @param focusedId 圆点选中时的背景ID,圆点容器可为空写0
      * @param normalId 圆点正常时的背景ID,圆点容器为空写0
      * @param margin 左右边距，可为空写0
+     * @param local 是否是本地图片资源。默认否
      */
     fun start(uriList: List<String>, ovalLayout: LinearLayout? = null, focusedId: Int, normalId: Int, margin: Int, local: Boolean)
 
