@@ -30,8 +30,8 @@ object KeyboardHelper {
             setShowSoftInputOnFocus.invoke(etInput, false)
         } catch (e: Exception) {
         }
-        enterAnim = AnimationUtils.loadAnimation(activity, R.anim.set_password_bottom_in)
-        exitAnim = AnimationUtils.loadAnimation(activity, R.anim.set_password_bottom_out)
+        this.enterAnim = AnimationUtils.loadAnimation(activity, R.anim.set_password_bottom_in)
+        this.exitAnim = AnimationUtils.loadAnimation(activity, R.anim.set_password_bottom_out)
         this.etInput = etInput
         this.vkKeyboard = vkKeyboard
         etInput.setOnFocusChangeListener { _, hasFocus -> if (hasFocus) shown() else hidden() }
