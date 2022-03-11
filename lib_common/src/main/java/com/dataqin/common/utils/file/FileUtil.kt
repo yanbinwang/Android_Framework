@@ -203,7 +203,7 @@ object FileUtil {
      */
     @JvmOverloads
     @JvmStatic
-    fun saveBitmap(context: Context, bitmap: Bitmap, root: String =  "${Constants.APPLICATION_FILE_PATH}/图片", formatJpg: Boolean = true, quality: Int = 100): Boolean {
+    fun saveBitmap(context: Context, bitmap: Bitmap, root: String = "${Constants.APPLICATION_FILE_PATH}/图片", formatJpg: Boolean = true, quality: Int = 100): Boolean {
         try {
             val storeDir = File(root)
             if (!storeDir.mkdirs()) storeDir.createNewFile()//需要权限
@@ -226,6 +226,9 @@ object FileUtil {
         return false
     }
 
+    /**
+     * 保存图片
+     */
     @JvmStatic
     fun saveBitmapThread(context: Context, bitmap: Bitmap, onThreadListener: OnThreadListener?) {
         weakHandler.post { onThreadListener?.onStart() }
@@ -238,8 +241,11 @@ object FileUtil {
         }.start()
     }
 
+    /**
+     * 保存pdf文件存成图片形式
+     */
     @JvmStatic
-    fun savePDFBitmap(file: File,index:Int = 0) {
+    fun savePDFBitmap(context: Context, file: File, index: Int = 0, onThreadListener: OnThreadListener?) {
         val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
         val page = renderer.openPage(index)//选择渲染哪一页的渲染数据
         val width = page.width
@@ -248,10 +254,11 @@ object FileUtil {
         val canvas = Canvas(bitmap)
         canvas.drawColor(Color.WHITE)
         canvas.drawBitmap(bitmap, 0f, 0f, null)
-        val rent =  Rect(0, 0, width, height)
+        val rent = Rect(0, 0, width, height)
         page.render(bitmap, rent, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
         page.close()
         renderer.close()
+        saveBitmapThread(context, bitmap, onThreadListener)
     }
 
     interface OnThreadListener {
@@ -290,7 +297,7 @@ object FileUtil {
      * image -> 图片
      */
     @JvmStatic
-    fun sendFile(context: Context, filePath: String, type: String ?= "*/*") {
+    fun sendFile(context: Context, filePath: String, type: String? = "*/*") {
         val file = File(filePath)
         if (!file.exists()) {
             ToastUtil.mackToastSHORT("文件路径错误", context)
@@ -298,8 +305,8 @@ object FileUtil {
         }
         val intent = Intent(Intent.ACTION_SEND)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            intent.putExtra(Intent.EXTRA_STREAM,FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file))
-        }else{
+            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file))
+        } else {
             intent.putExtra(Intent.EXTRA_STREAM, file)
         }
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
@@ -339,7 +346,7 @@ object FileUtil {
     }
 
     /**
-     * 获取app的图标
+     * 获取当前app的图标
      */
     @JvmStatic
     fun getApplicationIcon(context: Context): Bitmap? {
@@ -347,7 +354,7 @@ object FileUtil {
             val drawable = context.packageManager.getApplicationIcon(Constants.APPLICATION_ID)
             val bitmap = SoftReference(Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565))
             val canvas = Canvas(bitmap.get()!!)
-            //canvas.setBitmap(bitmap);
+            //canvas.setBitmap(bitmap)
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             drawable.draw(canvas)
             return bitmap.get()
@@ -366,7 +373,7 @@ object FileUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             val file = File(apkFilePath)
-            val contentUri = FileProvider.getUriForFile(context,  "${Constants.APPLICATION_ID}.fileProvider", file)
+            val contentUri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
             intent.setDataAndType(contentUri, "application/vnd.android.package-archive")
         } else {
             intent.setDataAndType(Uri.parse("file://$apkFilePath"), "application/vnd.android.package-archive")
@@ -385,7 +392,7 @@ object FileUtil {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
             val file = File(filePath)
-            val contentUri = FileProvider.getUriForFile(context,  "${Constants.APPLICATION_ID}.fileProvider", file)
+            val contentUri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
             intent.setDataAndType(contentUri, "application/x-zip-compressed")
         } else {
             intent.setDataAndType(Uri.parse("file://$filePath"), "application/x-zip-compressed")
