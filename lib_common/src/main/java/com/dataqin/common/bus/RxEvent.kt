@@ -1,6 +1,8 @@
 package com.dataqin.common.bus
 
 import android.os.Bundle
+import com.dataqin.common.constant.Extras
+import java.io.Serializable
 
 /**
  * author: wyb
@@ -23,6 +25,13 @@ class RxEvent {
         args?.putBoolean(action, value)
     }
 
+    //带int类型的广播
+    constructor(action: String, value: Int) {
+        this.action = action
+        if (args == null) args = Bundle()
+        args?.putInt(action, value)
+    }
+
     //带字符串类型的广播
     constructor(action: String, value: String) {
         this.action = action
@@ -36,20 +45,36 @@ class RxEvent {
         this.args = args
     }
 
+    //带对象的广播
+    constructor(action: String, any: Serializable) {
+        this.action = action
+        val bundle = Bundle()
+        bundle.putSerializable(Extras.BUNDLE_BEAN, any)
+        this.args = bundle
+    }
+
     //获取广播名
     fun getAction() = action
 
     //获取默认布尔值
-    fun getBooleanExtra(defaultValue: Boolean): Boolean {
+    fun getBoolean(defaultValue: Boolean): Boolean {
         return if (args == null) defaultValue else args?.getBoolean(action, defaultValue) ?: false
     }
 
+    //获取默认int值
+    fun getInt(defaultValue: Int): Int {
+        return if (args == null) defaultValue else args?.getInt(action, defaultValue) ?: 0
+    }
+
     //获取默认字符串值
-    fun getStringExtra(): String {
+    fun getString(): String {
         return if (args == null) "" else args?.getString(action) ?: ""
     }
 
     //获取默认类值
-    fun getBundleExtras() = args
+    fun getBundle() = args
+
+    //获取默认对象
+    fun getSerializable() = args?.getSerializable(Extras.BUNDLE_BEAN)
 
 }
