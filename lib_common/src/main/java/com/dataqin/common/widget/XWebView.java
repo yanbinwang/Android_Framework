@@ -48,6 +48,9 @@ public class XWebView extends WebView {
         //告诉webview不启用应用程序缓存api---退出activity时全部清空
         webSettings.setAppCacheEnabled(false);
         webSettings.setDefaultTextEncodingName("utf-8");
+        //兼容h5样式->亦可由前端实现
+        webSettings.setTextZoom(100);
+        webSettings.setDefaultFontSize(16);
     }
 
 }
