@@ -4,7 +4,6 @@ import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Flowable
 import io.reactivex.rxjava3.disposables.Disposable
 import io.reactivex.rxjava3.functions.Consumer
-import io.reactivex.rxjava3.processors.FlowableProcessor
 import io.reactivex.rxjava3.processors.PublishProcessor
 import io.reactivex.rxjava3.schedulers.Schedulers
 import java.util.concurrent.TimeUnit
@@ -16,7 +15,7 @@ import java.util.concurrent.TimeUnit
  */
 class RxBus private constructor() {
     private var disposable: Disposable? = null//轮询
-    private val processor: FlowableProcessor<Any> by lazy { PublishProcessor.create<Any>().toSerialized() }
+    private val processor by lazy { PublishProcessor.create<Any>().toSerialized() }
 
     companion object {
         @JvmStatic
