@@ -192,9 +192,8 @@ fun EditText.inputTransformation(): Boolean {
         setSelection(text.length)
         postInvalidate()
     } catch (ignored: Exception) {
-    } finally {
-        return transformationMethod == HideReturnsTransformationMethod.getInstance()
     }
+    return transformationMethod == HideReturnsTransformationMethod.getInstance()
 }
 
 /**

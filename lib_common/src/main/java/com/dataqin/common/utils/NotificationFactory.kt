@@ -1,5 +1,6 @@
 package com.dataqin.common.utils
 
+import android.annotation.SuppressLint
 import android.app.*
 import android.content.Context
 import android.content.Intent
@@ -19,6 +20,7 @@ import java.lang.ref.WeakReference
  * author:wyb
  * 通知工具类
  */
+@SuppressLint("UnspecifiedImmutableFlag")
 class NotificationFactory private constructor() {
     private val context by lazy { BaseApplication.instance?.applicationContext }
     private val notificationManager by lazy { context?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -33,7 +35,8 @@ class NotificationFactory private constructor() {
      * 构建常规通知栏
      */
     @JvmOverloads
-    fun normal(title: String, text: String, smallIcon: Int, largeIcon: Int, intent: Intent? = null, id: String = "") { builder.apply {
+    fun normal(title: String, text: String, smallIcon: Int, largeIcon: Int, intent: Intent? = null, id: String = "") {
+        builder.apply {
             color = ContextCompat.getColor(context!!, R.color.black)//6.0提示框白色小球的颜色
             setTicker(title)//状态栏显示的提示
             setContentTitle(title)//通知栏标题
@@ -67,7 +70,7 @@ class NotificationFactory private constructor() {
             setWhen(System.currentTimeMillis())
         }
         val notification = builder.build()
-        notification?.flags = Notification.FLAG_AUTO_CANCEL or Notification.FLAG_ONLY_ALERT_ONCE
+        notification.flags = Notification.FLAG_AUTO_CANCEL or Notification.FLAG_ONLY_ALERT_ONCE
         notificationManager.apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) createNotificationChannel(NotificationChannel(Constants.PUSH_CHANNEL_ID, Constants.PUSH_CHANNEL_NAME, NotificationManager.IMPORTANCE_HIGH))
             notify(id.toInt(), notification)
@@ -80,14 +83,15 @@ class NotificationFactory private constructor() {
     fun setting(activity: Activity) {
         val weakActivity = WeakReference(activity)
         val intent = Intent()
+        val sdkVersion = Build.VERSION.SDK_INT
         when {
             //8.0+
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.O -> {
+            sdkVersion >= Build.VERSION_CODES.O -> {
                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
                 intent.putExtra("android.provider.extra.APP_PACKAGE", Constants.APPLICATION_ID)
             }
             //5.0-7.0
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP -> {
+            sdkVersion >= Build.VERSION_CODES.LOLLIPOP && sdkVersion < Build.VERSION_CODES.O -> {
                 intent.action = "android.settings.APP_NOTIFICATION_SETTINGS"
                 intent.putExtra("app_package", Constants.APPLICATION_ID)
                 intent.putExtra("app_uid", weakActivity.get()?.applicationInfo?.uid)

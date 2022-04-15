@@ -70,7 +70,7 @@ object FileUtil {
     fun isAdbEnabled(context: Context) = (Settings.Secure.getInt(context.contentResolver, Settings.Global.ADB_ENABLED, 0) > 0)
 
     /**
-     * 判断下载目录是否存在
+     * 判断下载目录是否存在,不存在则创建，并返回路径
      */
     @JvmStatic
     @Throws(IOException::class)
@@ -81,7 +81,7 @@ object FileUtil {
     }
 
     /**
-     * 复制文件
+     * 复制文件到目标目录下
      */
     @JvmStatic
     @Throws(IOException::class)
@@ -104,12 +104,12 @@ object FileUtil {
     @JvmStatic
     fun deleteFile(filePath: String?) {
         if (TextUtils.isEmpty(filePath)) return
-        val file = File(filePath)
+        val file = File(filePath!!)
         if (file.isFile && file.exists()) file.delete()
     }
 
     /**
-     * 删除本地路径下的所有文件
+     * 删除路径下的所有文件
      */
     @JvmStatic
     fun deleteDir(filePath: String) = deleteDirWithFile(File(filePath))
@@ -117,7 +117,7 @@ object FileUtil {
     @JvmStatic
     fun deleteDirWithFile(dir: File?) {
         if (dir == null || !dir.exists() || !dir.isDirectory) return
-        for (file in dir.listFiles()) {
+        for (file in dir.listFiles()!!) {
             if (file.isFile) file.delete() //删除所有文件
             else if (file.isDirectory) deleteDirWithFile(file) //递规的方式删除文件夹
         }
@@ -125,7 +125,7 @@ object FileUtil {
     }
 
     /**
-     * 将指定路径下的所有文件打成压缩包,如果路径在sd卡下，安卓11需要获取外部操作
+     * 将指定路径下的所有文件打成压缩包,如果路径在sd卡中，安卓11需要获取外部操作
      * File fileDir = new File(rootDir + "/DCIM/Screenshots");
      * File zipFile = new File(rootDir + "/" + taskId + ".zip");
      *
@@ -354,7 +354,6 @@ object FileUtil {
             val drawable = context.packageManager.getApplicationIcon(Constants.APPLICATION_ID)
             val bitmap = SoftReference(Bitmap.createBitmap(drawable.intrinsicWidth, drawable.intrinsicHeight, if (drawable.opacity != PixelFormat.OPAQUE) Bitmap.Config.ARGB_8888 else Bitmap.Config.RGB_565))
             val canvas = Canvas(bitmap.get()!!)
-            //canvas.setBitmap(bitmap)
             drawable.setBounds(0, 0, drawable.intrinsicWidth, drawable.intrinsicHeight)
             drawable.draw(canvas)
             return bitmap.get()
@@ -380,6 +379,23 @@ object FileUtil {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         return intent
+    }
+
+    /**
+     * 获取手机cpu信息-报错或获取失败显示暂无
+     */
+    @JvmStatic
+    fun getCpuInfo(): String {
+        try {
+            val fileReader = FileReader("/proc/cpuinfo")
+            val bufferedReader = BufferedReader(fileReader)
+            val text = bufferedReader.readLine()
+            val array = text.split(":\\s+".toRegex(), 2).toTypedArray()
+            val result = array[1]
+            return if("0" == result) "暂无" else result
+        } catch (ignored: Exception) {
+        }
+        return "暂无"
     }
 
     /**
@@ -416,22 +432,6 @@ object FileUtil {
         } else uri = Uri.parse("file://$file")
         intent.setDataAndType(uri, "application/msword")
         context.startActivity(intent)
-    }
-
-    /**
-     * 获取手机cpu信息-报错或获取失败显示暂无
-     */
-    @JvmStatic
-    fun getCpuInfo(): String {
-        try {
-            val fileReader = FileReader("/proc/cpuinfo")
-            val bufferedReader = BufferedReader(fileReader)
-            val text = bufferedReader.readLine()
-            val array = text.split(":\\s+".toRegex(), 2).toTypedArray()
-            return array[1]
-        } catch (ignored: Exception) {
-        }
-        return "暂无"
     }
 
 }

@@ -7,7 +7,7 @@ import javax.crypto.Cipher
 import javax.crypto.spec.SecretKeySpec
 
 @SuppressLint("GetInstance")
-object AESCodeUtil {
+object AESCipherUtil {
     private val cipher by lazy { Cipher.getInstance("AES/ECB/PKCS5Padding") }//创建密码器
 
     /**
