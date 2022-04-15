@@ -187,13 +187,20 @@ fun TextView.setMatchText() {
  * EditText输入密码是否可见(显隐)
  */
 fun EditText.inputTransformation(): Boolean {
+    var display = false
     try {
-        transformationMethod = if (transformationMethod == HideReturnsTransformationMethod.getInstance()) PasswordTransformationMethod.getInstance() else HideReturnsTransformationMethod.getInstance()
+        if (transformationMethod == HideReturnsTransformationMethod.getInstance()) {
+            transformationMethod =  PasswordTransformationMethod.getInstance()
+            display = false
+        } else {
+            transformationMethod =  HideReturnsTransformationMethod.getInstance()
+            display = true
+        }
         setSelection(text.length)
         postInvalidate()
     } catch (ignored: Exception) {
     }
-    return transformationMethod == HideReturnsTransformationMethod.getInstance()
+    return display
 }
 
 /**
