@@ -29,7 +29,7 @@ import kotlin.math.roundToInt
 object MapHelper {
     private var mapView: MapView? = null
     private var mapLatLng: LatLng? = null//默认地图经纬度
-    var aMap: AMap? = null
+    private var aMap: AMap? = null
 
     /**
      * 初始化
