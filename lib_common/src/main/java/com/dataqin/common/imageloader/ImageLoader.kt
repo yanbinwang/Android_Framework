@@ -36,6 +36,7 @@ class ImageLoader private constructor() : GlideModule(), GlideImpl {
         Glide.with(view.context)
             .asBitmap()
             .load(string)
+            .apply(RequestOptions().skipMemoryCache(true).diskCacheStrategy(DiskCacheStrategy.NONE))
             .placeholder(R.drawable.shape_image_loading)
             .dontAnimate()
             .listener(listener)
