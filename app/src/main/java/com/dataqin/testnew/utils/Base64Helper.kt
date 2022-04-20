@@ -17,6 +17,7 @@ import java.util.concurrent.Executors
 class Base64Helper {
     private var executors = Executors.newSingleThreadExecutor()
 
+    @Synchronized
     private fun base64(base64: String, suffix: String, root: String = "${Constants.APPLICATION_FILE_PATH}/详情缓存") {
         executors.execute {
             try {
