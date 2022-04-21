@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.dataqin.base.utils.getInAnimation
 import com.dataqin.common.utils.vibrate
+import com.dataqin.common.widget.PagerFlipper
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationMenuView
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -13,6 +14,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
  *  导航栏帮助类
  */
 object NavigationHelper {
+    private var flipper: PagerFlipper? = null
     private var navigationView: BottomNavigationView? = null
     private var ids = ArrayList<Int>()
     var onNavigationItemSelectedListener: OnNavigationItemSelectedListener? = null
@@ -22,7 +24,8 @@ object NavigationHelper {
      */
     @JvmOverloads
     @JvmStatic
-    fun initialize(navigationView: BottomNavigationView, ids: ArrayList<Int>, anim: Boolean = true) {
+    fun initialize(flipper: PagerFlipper, navigationView: BottomNavigationView, ids: ArrayList<Int>, anim: Boolean = true) {
+        this.flipper = flipper
         this.navigationView = navigationView
         this.ids = ids
         //去除长按的toast提示
@@ -30,15 +33,10 @@ object NavigationHelper {
             (navigationView.getChildAt(0) as ViewGroup).getChildAt(position).findViewById<View>(ids[position]).setOnLongClickListener { true }
         }
         //最多配置5个
-        navigationView.setOnNavigationItemSelectedListener {
-            val index = when (it.itemId) {
-                ids[0] -> 0
-                ids[1] -> 1
-                ids[2] -> 2
-                ids[3] -> 3
-                ids[4] -> 4
-                else -> -1
-            }
+        navigationView.setOnItemSelectedListener { item ->
+            //返回第一个符合条件的元素的下标，没有就返回-1
+            val index = ids.indexOfFirst{ it == item.itemId }
+            flipper.setCurrentItem(index)
             onNavigationItemSelectedListener?.onItemSelected(index)
             if (anim) getItemView(index).getChildAt(0).apply {
                 startAnimation(context.getInAnimation())
