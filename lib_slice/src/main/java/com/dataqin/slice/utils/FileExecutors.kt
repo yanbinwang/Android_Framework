@@ -92,18 +92,24 @@ object FileExecutors {
                                 super.onSuccess(data)
                                 //成功删除这个切片
                                 FileUtil.deleteFile(model.tmpPath)
+                                RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                                 weakHandler.post { toPartUpload(SliceDBHelper.insertOrReplace(model), fileType, baoquan_no) }
                                 LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${model.sourcePath}\n分片路径：${model.tmpPath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                             }
 
                             override fun onFailed(e: Throwable?, msg: String?) {
                                 super.onFailed(e, msg)
+                                if(msg != "该保全号信息有误") {
+                                    weakHandler.post { toPartUpload(SliceDBHelper.insertOrReplace(model), fileType, baoquan_no) }
+                                } else {
+                                    var index = model.index -1
+                                    if(index < 0) index = 0
+                                    model.index = index
+                                    SliceDBHelper.update(model)
+                                    SliceDBHelper.uploadState(baoquan_no, false)
+                                    RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
+                                }
                                 LogUtil.e(TAG, " " + "\n————————————————————————文件上传-分片————————————————————————\n文件路径：${model.sourcePath}\n分片路径：${model.tmpPath}\n上传状态：失败\n失败原因：" + if (TextUtils.isEmpty(msg)) e.toString() else "$msg\n————————————————————————文件上传-分片————————————————————————")
-                            }
-
-                            override fun onComplete() {
-                                super.onComplete()
-                                RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             }
                         })
                 } else {

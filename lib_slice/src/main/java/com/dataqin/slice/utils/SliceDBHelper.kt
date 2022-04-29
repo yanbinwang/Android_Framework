@@ -70,6 +70,11 @@ object SliceDBHelper {
         return model
     }
 
+    @JvmStatic
+    fun update(model: SliceDB) {
+        dao.update(model)
+    }
+
     //删除对应id数据
     @JvmStatic
     fun delete(baoquan: String) {
