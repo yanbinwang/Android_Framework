@@ -99,6 +99,7 @@ object FileExecutors {
 
                             override fun onFailed(e: Throwable?, msg: String?) {
                                 super.onFailed(e, msg)
+                                FileUtil.deleteFile(model.tmpPath)
                                 if(msg != "该保全号信息有误") {
                                     weakHandler.post { toPartUpload(SliceDBHelper.insertOrReplace(model), fileType, baoquan_no) }
                                 } else {
