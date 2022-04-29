@@ -101,6 +101,7 @@ object FileExecutors {
                                 super.onFailed(e, msg)
                                 FileUtil.deleteFile(model.tmpPath)
                                 if(msg != "该保全号信息有误") {
+                                    RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                                     weakHandler.post { toPartUpload(SliceDBHelper.insertOrReplace(model), fileType, baoquan_no) }
                                 } else {
                                     var index = model.index -1
