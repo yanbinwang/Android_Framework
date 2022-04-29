@@ -107,6 +107,7 @@ object FileExecutors {
                             }
                         })
                 } else {
+                    FileUtil.deleteFile(model.sourcePath)
                     SliceDBHelper.delete(baoquan_no)
                     RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE), RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType))
                 }
