@@ -31,6 +31,7 @@ versions.recovery = "1.0.0"
 versions.guide = "v2.4.0"
 versions.wechat = "5.1.4"
 versions.wheelpicker = "1.1.2"
+versions.greendao = "3.3.0"
 
 //安卓x库
 def androidx = [:]
@@ -76,6 +77,7 @@ deps.recovery = "com.zxy.android:recovery:$versions.recovery"//闪退抓捕
 deps.guide = "com.github.huburt-Hu:NewbieGuide:$versions.guide"//遮罩引导
 deps.wechat = "com.tencent.mm.opensdk:wechat-sdk-android-without-mta:$versions.wechat"//微信
 deps.wheelpicker = "cn.aigestudio.wheelpicker:WheelPicker:$versions.wheelpicker"//滚筒控件
+deps.greendao = "org.greenrobot:greendao:$versions.greendao"//数据库
 ext.deps = deps
 //---------------------------------------------全局引用配置结束---------------------------------------------
 
@@ -94,6 +96,13 @@ build_config.applicationId = "com.dataqin.testnew"//主appId（包名）
 build_config.LOCALHOST_DEBUG = "\"https://netcar.dev.yoogate.cn/\""//测试环境
 build_config.LOCALHOST_RELEASE = "\"https://netcar.yoogate.cn/\""//生产环境
 ext.build_config = build_config
+
+//数据库参数配置
+def build_database = [:]
+build_database.schemaVersion = 1 // 数据库版本号（可同步app版本号）
+build_database.daoPackage = "com.dataqin.common.dao" //设置DaoMaster、DaoSession、Dao所在的包名
+build_database.targetGenDir = "src/main/java" //设置DaoMaster、DaoSession、Dao所在的目录
+ext.build_database = build_database
 
 //全局build配置
 def addRepos(repositories) {

@@ -57,6 +57,8 @@ object Constants {
     const val APP_SHOT_PATH = "$APPLICATION_ID.APP_SHOT_PATH"//系统截屏地址
     const val APP_SHOT_IMAGE_PATH = "$APPLICATION_ID.APP_SHOT_IMAGE_PATH"//系统截屏图片地址
 
+    const val APP_EVIDENCE_EXTRAS_UPDATE = "$APPLICATION_ID.APP_EVIDENCE_EXTRAS_UPDATE"//更新文件待上传数据
+    const val APP_EVIDENCE_UPDATE = "$APPLICATION_ID.APP_EVIDENCE_UPDATE"//更新数据,每一个证据文件上传成功后
 
     const val APP_BASE64_UPDATE = "$APPLICATION_ID.APP_BASE64_UPDATE"//base64加载完毕，返回路径
 

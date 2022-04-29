@@ -2,13 +2,11 @@ package com.dataqin.common
 
 import android.annotation.SuppressLint
 import android.app.Application
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkRequest
 import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
-import com.dataqin.common.base.proxy.NetworkCallbackImpl
+import com.dataqin.common.dao.DaoMaster
+import com.dataqin.common.dao.DaoSession
 import com.dataqin.common.imageloader.album.AlbumGlideLoader
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
@@ -24,6 +22,7 @@ import java.util.*
  */
 @SuppressLint("MissingPermission")
 open class BaseApplication : Application() {
+    var daoSession: DaoSession? = null
 
     companion object {
         @JvmField
@@ -65,6 +64,8 @@ open class BaseApplication : Application() {
         registerActivityLifecycleCallbacks(ApplicationActivityLifecycleCallbacks())
 //        //注册网络监听->接地图实时定位可以注册
 //        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).registerNetworkCallback(NetworkRequest.Builder().build(), NetworkCallbackImpl())
+        //数据库初始化
+        daoSession = DaoMaster(DaoMaster.DevOpenHelper(this, "evidence.db", null).readableDb).newSession()
     }
 
 }
