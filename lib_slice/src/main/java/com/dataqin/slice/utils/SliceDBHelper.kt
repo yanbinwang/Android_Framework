@@ -51,6 +51,7 @@ object SliceDBHelper {
         //分片文件->执行分片
         if (file.length() >= 100 * 1024 * 1024) {
             val targetInfo = SliceHelper.getTarget(file, model.index, model.endPointer)
+            model.sliceCount = targetInfo.sliceCount
             if (!targetInfo.over) {
                 model.tmpPath = targetInfo.tmpPath ?: ""
                 model.endPointer = targetInfo.endPointer ?: 0

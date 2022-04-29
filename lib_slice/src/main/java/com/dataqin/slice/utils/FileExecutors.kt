@@ -83,7 +83,7 @@ object FileExecutors {
                     val builder = MultipartBody.Builder()
                     builder.setType(MultipartBody.FORM)
                     builder.addFormDataPart("baoquan", baoquan_no)
-                    builder.addFormDataPart("totalNum", model.toString())
+                    builder.addFormDataPart("totalNum", model.sliceCount.toString())
                     builder.addFormDataPart("file", paramsFile.name, paramsFile.asRequestBody("video".toMediaTypeOrNull()))
                     SliceSubscribe.getPartUploadApi(builder.build().parts)
                         .compose(RxSchedulers.ioMain())
