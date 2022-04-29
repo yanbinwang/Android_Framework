@@ -27,6 +27,7 @@ import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
 import com.dataqin.testnew.presenter.contract.MainContract
+import com.dataqin.testnew.utils.MemoryHelper
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import java.io.File
@@ -74,6 +75,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
+
+
+
+        log(" \n总运行内存大小:${MemoryHelper.getTotalMemory(this)}\n当前可用运行内存大小${MemoryHelper.getAvailMemory(this)}\n当前应用使用的内存大小${MemoryHelper.sampleMemory(this)}MB")
+
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
 //        PopupHelper.addPopup(0,Any())
