@@ -56,12 +56,6 @@ object Constants {
     const val APP_SCREEN_STOP = "$APPLICATION_ID.APP_SCREEN_STOP"//停止录屏
     const val APP_SHOT_PATH = "$APPLICATION_ID.APP_SHOT_PATH"//系统截屏地址
     const val APP_SHOT_IMAGE_PATH = "$APPLICATION_ID.APP_SHOT_IMAGE_PATH"//系统截屏图片地址
-
-
-    const val APP_BASE64_UPDATE = "$APPLICATION_ID.APP_BASE64_UPDATE"//base64加载完毕，返回路径
-
-
-
     const val APP_PAY_SUCCESS = "$APPLICATION_ID.APP_PAY_SUCCESS" //支付成功广播字段
     const val APP_PAY_FAILURE = "$APPLICATION_ID.APP_PAY_FAILURE" //支付失败广播字段
 //    const val APP_PAY_CANCEL = "$APPLICATION_ID.APP_PAY_CANCEL" //支付取消广播字段
