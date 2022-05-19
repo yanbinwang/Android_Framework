@@ -15,24 +15,23 @@ import java.util.concurrent.ConcurrentHashMap
  *  如果不需要更新，调取
  */
 object PopupHelper {
-    private var show = false//是否已经弹过
+    private var end = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
-    private val popupMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
-
+    private val frameMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
-        "update_label",//更新
-        "push_label",//推送
-        "advertisement_label",//广告
-        "advertisement_label2"//广告2
+        "update",//更新
+        "push",//推送
+        "advertisement",//广告
+        "advertisement2"//广告2
     )
 
     @JvmStatic
     fun initialize(activity: Activity) {
-        this.show = false
+        this.end = false
         this.weakActivity = WeakReference(activity)
-        this.popupMap.clear()
-        this.popupMap[labelList[1]] = Any()//1留给推送
+        this.frameMap.clear()
+        this.frameMap[labelList[1]] = Any()//1留给推送
     }
 
     /**
@@ -41,20 +40,20 @@ object PopupHelper {
      * any-通知对象
      */
     @JvmStatic
-    fun addPopup(index: Int, any: Any?) {
-        popupMap[labelList[index]] = any
-        showPopup()
+    fun add(index: Int, any: Any?) {
+        frameMap[labelList[index]] = any
+        show()
     }
 
     /**
      * 逐步弹出窗口
      */
-    private fun showPopup() {
-        if (!show) {
+    private fun show() {
+        if (!end) {
             //检测当前的通知集合是否已经达到了配置的通知总数
-            if (popupMap.size >= labelList.size) {
-                show = true
-                showUpdate()
+            if (frameMap.size >= labelList.size) {
+                end = true
+                update()
             }
         }
     }
@@ -62,40 +61,36 @@ object PopupHelper {
     /**
      * 更新
      */
-    private fun showUpdate() {
-        val model = popupMap[labelList[0]]
+    private fun update() {
+        val model = frameMap[labelList[0]]
 //            var versionModel = model as VersionModel
 //        if(null != versionModel) {
 //
-//        } else {
-//            showNotification()
-//        }
+//        } else notification()
     }
 
     /**
      * 通知
      */
-    private fun showNotification() {
+    private fun notification() {
         if (!NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
             AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
                 override fun onConfirm() {
                     NotificationFactory.instance.setting(weakActivity?.get()!!)
-                    showAdvertisement()
+                    advertisement()
                 }
 
                 override fun onCancel() {
-                    showAdvertisement()
+                    advertisement()
                 }
             }).setParams("提示", "是否开启推送通知", "确定", "取消").show()
-        } else {
-            showAdvertisement()
-        }
+        } else advertisement()
     }
 
     /**
      * 广告
      */
-    private fun showAdvertisement() {
+    private fun advertisement() {
 
     }
 

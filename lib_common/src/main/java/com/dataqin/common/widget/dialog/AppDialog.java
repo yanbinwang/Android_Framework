@@ -23,7 +23,7 @@ public class AppDialog extends BaseDialog<ViewDialogBinding> {
 
     public AppDialog(@NonNull Context context) {
         super(context);
-        initialize(true, false);
+        initialize(true, true);
     }
 
     public AppDialog setParams(String title, String message, String positiveText) {
