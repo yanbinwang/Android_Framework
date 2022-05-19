@@ -18,6 +18,7 @@ object PopupHelper {
     private var end = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
     private val frameMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
+
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
         "update",//更新
@@ -63,7 +64,7 @@ object PopupHelper {
      */
     private fun update() {
         val model = frameMap[labelList[0]]
-//            var versionModel = model as VersionModel
+//        var versionModel = model as VersionModel
 //        if(null != versionModel) {
 //
 //        } else notification()
