@@ -23,6 +23,7 @@ object Base64Helper {
      * delete:是否清空目录-》默认每次都清空
      */
     @Synchronized
+    @JvmOverloads
     @JvmStatic
     fun base64(base64: String, suffix: String, listener: OnThreadListener? = null, root: String = "${Constants.APPLICATION_FILE_PATH}/文件缓存", delete: Boolean = true) {
         executors.execute {

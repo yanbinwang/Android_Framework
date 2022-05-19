@@ -244,6 +244,7 @@ object FileUtil {
     /**
      * 保存pdf文件存成图片形式
      */
+    @JvmOverloads
     @JvmStatic
     fun savePDFBitmap(context: Context, file: File, index: Int = 0, onThreadListener: OnThreadListener?) {
         val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
@@ -296,6 +297,7 @@ object FileUtil {
      * 发送文件
      * image -> 图片
      */
+    @JvmOverloads
     @JvmStatic
     fun sendFile(context: Context, filePath: String, type: String? = "*/*") {
         val file = File(filePath)
