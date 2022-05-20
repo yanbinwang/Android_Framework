@@ -17,7 +17,7 @@ import java.util.concurrent.ConcurrentHashMap
 object PopupHelper {
     private var end = false//是否已经弹过
     private var weakActivity: WeakReference<Activity>? = null
-    private val frameMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
+    private val popupMap by lazy { ConcurrentHashMap<String, Any?>() }//通知管理类，key-通知说明，value-通知对象
 
     //一些配置通知的label屬性集合
     private val labelList = arrayOf(
@@ -31,8 +31,8 @@ object PopupHelper {
     fun initialize(activity: Activity) {
         this.end = false
         this.weakActivity = WeakReference(activity)
-        this.frameMap.clear()
-        this.frameMap[labelList[1]] = Any()//1留给推送
+        this.popupMap.clear()
+        this.popupMap[labelList[1]] = Any()//1留给推送
     }
 
     /**
@@ -42,7 +42,7 @@ object PopupHelper {
      */
     @JvmStatic
     fun add(index: Int, any: Any?) {
-        frameMap[labelList[index]] = any
+        popupMap[labelList[index]] = any
         show()
     }
 
@@ -52,7 +52,7 @@ object PopupHelper {
     private fun show() {
         if (!end) {
             //检测当前的通知集合是否已经达到了配置的通知总数
-            if (frameMap.size >= labelList.size) {
+            if (popupMap.size >= labelList.size) {
                 end = true
                 update()
             }
@@ -63,7 +63,7 @@ object PopupHelper {
      * 更新
      */
     private fun update() {
-        val model = frameMap[labelList[0]]
+        val model = popupMap[labelList[0]]
 //        var versionModel = model as VersionModel
 //        if(null != versionModel) {
 //
