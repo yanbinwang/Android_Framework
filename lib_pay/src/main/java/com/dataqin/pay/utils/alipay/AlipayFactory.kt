@@ -32,7 +32,7 @@ class AlipayFactory {
         weakActivity = WeakReference(activity)
         //未安装给出提示并且取消订单
         if (!FileUtil.isAvailable(weakActivity?.get()!!, "com.eg.android.AlipayGphone")) {
-            doResult(weakActivity?.get()?.getString(R.string.toast_alipay_uninstall), Constants.APP_PAY_FAILURE)
+            doResult(weakActivity?.get()?.getString(com.dataqin.common.R.string.toast_alipay_uninstall), Constants.APP_PAY_FAILURE)
             return
         }
         showToast(weakActivity?.get()?.getString(R.string.toast_alipay_pay_loading))

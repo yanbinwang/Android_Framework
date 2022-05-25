@@ -1,3 +1,12 @@
+pluginManagement {
+    apply from: 'config.gradle'
+    addRepos(repositories)
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    addRepos(repositories)
+}
+rootProject.name = "Android_Framework"
 include ':app'
 include ':lib_common'
 include ':lib_base'
@@ -6,4 +15,3 @@ include ':lib_map'
 include ':lib_pay'
 include ':lib_push'
 include ':lib_media'
-rootProject.name = "Android_Framework"

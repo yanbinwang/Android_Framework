@@ -91,7 +91,7 @@ class LocationFactory : AMapLocationListener {
         } else {
             builder = Notification.Builder(context)
         }
-        builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setSmallIcon(com.dataqin.common.R.mipmap.ic_launcher)
             .setContentTitle(Constants.APPLICATION_NAME)
             .setContentText("正在定位...")
             .setWhen(System.currentTimeMillis())
@@ -173,7 +173,7 @@ class LocationFactory : AMapLocationListener {
 
                 override fun onCancel() {
                 }
-            }).setParams(weakActivity.get()?.getString(R.string.label_window_title), weakActivity.get()?.getString(R.string.label_window_gps), weakActivity.get()?.getString(R.string.label_window_sure), weakActivity.get()?.getString(R.string.label_window_cancel)).show()
+            }).setParams(weakActivity.get()?.getString(com.dataqin.common.R.string.label_window_title), weakActivity.get()?.getString(R.string.label_window_gps), weakActivity.get()?.getString(com.dataqin.common.R.string.label_window_sure), weakActivity.get()?.getString(com.dataqin.common.R.string.label_window_cancel)).show()
         }
     }
 

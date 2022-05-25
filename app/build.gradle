@@ -1,7 +1,6 @@
 plugins {
     id 'com.android.application'
-    id 'kotlin-android'
-    id 'kotlin-parcelize'
+    id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
 }
 
@@ -46,8 +45,8 @@ android {
 //        ]
     }
 
-    viewBinding {
-        enabled = true
+    buildFeatures {
+        viewBinding true
     }
 
     compileOptions {
@@ -91,9 +90,6 @@ android {
             }
         }
     }
-//    lint {
-//        disable 'GoogleAppIndexingWarning'
-//    }
 }
 
 dependencies {

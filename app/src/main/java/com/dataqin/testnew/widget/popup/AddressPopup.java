@@ -93,7 +93,7 @@ public class AddressPopup extends BasePopupWindow<ViewPopupAddressBinding> imple
         picker.setAtmospheric(true);//阴影效果
         picker.setCurved(true);//开启类似IOS的滚筒效果
         picker.setItemTextSize(DisplayUtilKt.dip2px(getActivity(), 15));//每个item的字体大小
-        picker.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
+        picker.setIndicatorColor(ContextCompat.getColor(getActivity(), com.dataqin.common.R.color.black));//年月日的颜色
         picker.setItemSpace(DisplayUtilKt.dip2px(getActivity(), 20));//每个item之间的间距
     }
 

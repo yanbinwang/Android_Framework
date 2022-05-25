@@ -43,7 +43,7 @@ public class DatePopup extends BasePopupWindow<ViewPopupDateBinding> implements 
         binding.wdpChannel.setAtmospheric(true);//阴影效果
         binding.wdpChannel.setCurved(true);//开启类似IOS的滚筒效果
         binding.wdpChannel.setItemTextSize(DisplayUtilKt.dip2px(getActivity(), 20));//每个item的字体大小
-        binding.wdpChannel.setIndicatorColor(ContextCompat.getColor(getActivity(), R.color.black));//年月日的颜色
+        binding.wdpChannel.setIndicatorColor(ContextCompat.getColor(getActivity(), com.dataqin.common.R.color.black));//年月日的颜色
 
         binding.tvSure.setOnClickListener(this);
         binding.tvCancel.setOnClickListener(this);
