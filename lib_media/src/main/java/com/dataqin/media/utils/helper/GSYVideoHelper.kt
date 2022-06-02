@@ -2,14 +2,10 @@ package com.dataqin.media.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
-import android.widget.LinearLayout
 import com.dataqin.base.utils.TimerHelper
-import com.dataqin.base.utils.dip2px
 import com.dataqin.common.imageloader.ImageLoader
-import com.dataqin.media.R
 import com.shuyu.gsyvideoplayer.GSYVideoManager
 import com.shuyu.gsyvideoplayer.builder.GSYVideoOptionBuilder
 import com.shuyu.gsyvideoplayer.cache.CacheFactory
@@ -49,6 +45,7 @@ object GSYVideoHelper {
                 retryWithPlay = true
                 player?.isEnabled = false
                 //允许硬件解码，装载IJK播放器内核
+//                GSYVideoType.enableMediaCodec()
                 GSYVideoType.enableMediaCodecTexture()
                 PlayerFactory.setPlayManager(IjkPlayerManager::class.java)
                 CacheFactory.setCacheManager(ProxyCacheManager::class.java)
@@ -78,28 +75,20 @@ object GSYVideoHelper {
         this.weakActivity = WeakReference(activity)
         this.player = standardGSYVideoPlayer
         this.videoType = videoType
+        this.imgCover = ImageView(weakActivity?.get())
         //屏幕展示效果
         GSYVideoType.setShowType(if (videoType == VideoType.MOBILE && !fullScreen) GSYVideoType.SCREEN_MATCH_FULL else GSYVideoType.SCREEN_TYPE_DEFAULT)
         //设置底层渲染,关闭硬件解码
         GSYVideoType.setRenderType(GSYVideoType.GLSURFACE)
+//        GSYVideoType.disableMediaCodec()
         GSYVideoType.disableMediaCodecTexture()
         //默认采用exo内核，播放报错则切ijk内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
+        imgCover?.scaleType = if (videoType == VideoType.MOBILE && !fullScreen) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.CENTER_CROP
         player?.titleTextView?.visibility = View.GONE
         player?.backButton?.visibility = View.GONE
-        //封面图片处理
-        val view = LayoutInflater.from(weakActivity?.get()).inflate(R.layout.view_video_cover, null)
-        this.imgCover = view.findViewById(R.id.iv_cover)
-        //如果是pc或手机不需要全屏的视频资源
-        if (videoType == VideoType.PC || (videoType == VideoType.MOBILE && !fullScreen)) {
-            imgCover?.scaleType = ImageView.ScaleType.CENTER_CROP
-            imgCover?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
-        } else {
-            imgCover?.scaleType = ImageView.ScaleType.FIT_XY
-            imgCover?.layoutParams = LinearLayout.LayoutParams(standardGSYVideoPlayer.context.dip2px(200f), LinearLayout.LayoutParams.MATCH_PARENT)
-        }
-        player?.thumbImageView = view
+        player?.thumbImageView = imgCover
         if (!fullScreen) {
             player?.fullscreenButton?.visibility = View.GONE
         } else {
