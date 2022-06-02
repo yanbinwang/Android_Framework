@@ -86,12 +86,19 @@ object GSYVideoHelper {
         //默认采用exo内核，播放报错则切ijk内核
         PlayerFactory.setPlayManager(Exo2PlayerManager::class.java)
         CacheFactory.setCacheManager(ExoPlayerCacheManager::class.java)
-        imgCover?.scaleType = if (videoType == VideoType.MOBILE && !fullScreen) ImageView.ScaleType.FIT_XY else ImageView.ScaleType.CENTER_CROP
         player?.titleTextView?.visibility = View.GONE
         player?.backButton?.visibility = View.GONE
+        //封面图片处理
         val view = LayoutInflater.from(weakActivity?.get()).inflate(R.layout.view_video_cover, null)
         this.imgCover = view.findViewById(R.id.iv_cover)
-        imgCover?.layoutParams = LinearLayout.LayoutParams(if (videoType == VideoType.MOBILE && fullScreen) standardGSYVideoPlayer.context.dip2px(200f) else LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        //如果是pc或手机不需要全屏的视频资源
+        if (videoType == VideoType.PC || (videoType == VideoType.MOBILE && !fullScreen)) {
+            imgCover?.scaleType = ImageView.ScaleType.CENTER_CROP
+            imgCover?.layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT)
+        } else {
+            imgCover?.scaleType = ImageView.ScaleType.FIT_XY
+            imgCover?.layoutParams = LinearLayout.LayoutParams(standardGSYVideoPlayer.context.dip2px(200f), LinearLayout.LayoutParams.MATCH_PARENT)
+        }
         player?.thumbImageView = view
         if (!fullScreen) {
             player?.fullscreenButton?.visibility = View.GONE
