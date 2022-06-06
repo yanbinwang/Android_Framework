@@ -98,9 +98,7 @@ object GSYVideoHelper {
         }
         player?.thumbImageView = thumbImageView
         //设置按钮的一些显影
-        if (!fullScreen) {
-            player?.fullscreenButton?.visibility = View.GONE
-        } else {
+        if (fullScreen) {
             if (videoType == VideoType.PC) {
                 //外部辅助的旋转，帮助全屏
                 orientationUtils = OrientationUtils(weakActivity?.get(), player)
@@ -113,7 +111,7 @@ object GSYVideoHelper {
                 //第一个true是否需要隐藏actionbar，第二个true是否需要隐藏statusbar
                 player?.startWindowFullscreen(weakActivity?.get(), true, true)
             }
-        }
+        } else player?.fullscreenButton?.visibility = View.GONE
     }
 
     /**
@@ -122,13 +120,9 @@ object GSYVideoHelper {
     @JvmOverloads
     @JvmStatic
     fun setUrl(url: String, autoPlay: Boolean = false) {
-        retryWithPlay = false
-        //加载图片
         try {
+            retryWithPlay = false
             if (null != imgCover) ImageLoader.instance.displayCoverImage(imgCover!!, url)
-        } catch (e: Exception) {
-        }
-        if (null != player) {
             if (videoType == VideoType.MOBILE) {
                 GSYVideoOptionBuilder()
                     .setIsTouchWiget(false)
@@ -150,8 +144,9 @@ object GSYVideoHelper {
                     .setCacheWithPlay(false)
                     .setVideoAllCallBack(gSYSampleCallBack).build(player)
             }
+            if (autoPlay) player?.startPlayLogic()
+        } catch (e: Exception) {
         }
-        if (autoPlay) player?.startPlayLogic()
     }
 
     /**
