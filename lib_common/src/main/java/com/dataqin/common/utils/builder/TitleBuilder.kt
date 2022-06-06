@@ -18,7 +18,7 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
     }
 
     @JvmOverloads
-    fun setTitle(titleStr: String, shade: Boolean = false, dark: Boolean = true): TitleBuilder {
+    fun setTitle(titleStr: String, dark: Boolean = true, shade: Boolean = false): TitleBuilder {
         statusBarBuilder.setStatusBarLightMode(dark)
         binding.tvMainTitle.apply {
             text = titleStr
@@ -123,6 +123,7 @@ class TitleBuilder(activity: Activity, private val binding: ViewTitleBarBinding)
         return this
     }
 
+    @JvmOverloads
     fun hideTitle(dark: Boolean = true): TitleBuilder {
         statusBarBuilder.setStatusBarLightMode(dark)
         binding.rlMain.visibility = View.GONE
