@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.recyclerview.widget.RecyclerView;
-
 import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.testnew.R;
-import com.dataqin.testnew.widget.keyboard.callback.OnPasswordInputListener;
+import com.dataqin.testnew.widget.keyboard.callback.OnInputListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -54,7 +52,6 @@ public class PasswordInputView extends SimpleViewGroup {
         llPassword = view.findViewById(R.id.ll_password);
         ivCancel = view.findViewById(R.id.iv_cancel);
         vkKeyboard = view.findViewById(R.id.vk_keyboard);
-        RecyclerView recKeyboard = vkKeyboard.getRecyclerView();
         //初始化按钮上应该显示的数字
         for (int i = 1; i < 13; i++) {
             Map<String, String> map = new HashMap<>();
@@ -109,7 +106,7 @@ public class PasswordInputView extends SimpleViewGroup {
                 }
             }
         });
-        recKeyboard.setAdapter(adapter);
+        vkKeyboard.getRecyclerView().setAdapter(adapter);
     }
 
     @Override
@@ -149,7 +146,7 @@ public class PasswordInputView extends SimpleViewGroup {
      *
      * @param listener
      */
-    public void setOnPasswordInputListener(OnPasswordInputListener listener) {
+    public void setOnPasswordInputListener(OnInputListener listener) {
         tvList[5].addTextChangedListener(new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }

@@ -9,15 +9,15 @@ import com.dataqin.base.utils.AnimationLoaderKt;
 import com.dataqin.base.utils.TimerHelper;
 import com.dataqin.base.utils.ToastUtil;
 import com.dataqin.common.base.BasePopupWindow;
-import com.dataqin.testnew.databinding.ViewPopupPasswordInputBinding;
+import com.dataqin.testnew.databinding.ViewPopupInputBinding;
 import com.dataqin.testnew.widget.keyboard.callback.OnPasswordListener;
 
 import org.jetbrains.annotations.NotNull;
 
-public class PasswordInputPopup extends BasePopupWindow<ViewPopupPasswordInputBinding> {
+public class InputPopup extends BasePopupWindow<ViewPopupInputBinding> {
     private OnPasswordListener onPasswordListener;
 
-    public PasswordInputPopup(@NotNull Activity activity) {
+    public InputPopup(@NotNull Activity activity) {
         super(activity, true);
         initialize();
     }

@@ -5,11 +5,15 @@ import com.alibaba.android.arouter.facade.annotation.Route
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.testnew.databinding.ActivityPayInputBinding
-import com.dataqin.testnew.widget.keyboard.PasswordInputPopup
+import com.dataqin.testnew.widget.keyboard.InputPopup
 
 @Route(path = ARouterPath.PayInputActivity)
 class PayInputActivity :BaseTitleActivity<ActivityPayInputBinding>(){
-    private val passwordInputPopup by lazy { PasswordInputPopup(this) }
+    private val inputPopup by lazy {
+        InputPopup(
+            this
+        )
+    }
 
     override fun initView() {
         super.initView()
@@ -18,7 +22,7 @@ class PayInputActivity :BaseTitleActivity<ActivityPayInputBinding>(){
 
     override fun initEvent() {
         super.initEvent()
-        binding.btnShow.setOnClickListener { passwordInputPopup.showAtLocation(it, Gravity.BOTTOM, 0, 0); }
+        binding.btnShow.setOnClickListener { inputPopup.showAtLocation(it, Gravity.BOTTOM, 0, 0); }
     }
 
 }
