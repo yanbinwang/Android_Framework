@@ -79,5 +79,5 @@ dependencies {
     api deps.wechat
     api deps.wheelpicker
 
-    api 'com.github.0xZhangKe:WebSocketDemo:3.1'
+//    api 'com.github.0xZhangKe:WebSocketDemo:3.1'
 }

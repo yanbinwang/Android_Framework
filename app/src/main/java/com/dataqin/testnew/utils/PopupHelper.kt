@@ -1,7 +1,6 @@
 package com.dataqin.testnew.utils
 
 import android.app.Activity
-import com.dataqin.push.utils.NotificationFactory
 import com.dataqin.common.widget.dialog.AppDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import java.lang.ref.WeakReference
@@ -74,18 +73,18 @@ object PopupHelper {
      * 通知
      */
     private fun notification() {
-        if (!com.dataqin.push.utils.NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
-            AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
-                override fun onConfirm() {
-                    com.dataqin.push.utils.NotificationFactory.instance.setting(weakActivity?.get()!!)
-                    advertisement()
-                }
-
-                override fun onCancel() {
-                    advertisement()
-                }
-            }).setParams("提示", "是否开启推送通知", "确定", "取消").show()
-        } else advertisement()
+//        if (!NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
+//            AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
+//                override fun onConfirm() {
+//                    NotificationFactory.instance.setting(weakActivity?.get()!!)
+//                    advertisement()
+//                }
+//
+//                override fun onCancel() {
+//                    advertisement()
+//                }
+//            }).setParams("提示", "是否开启推送通知", "确定", "取消").show()
+//        } else advertisement()
     }
 
     /**
