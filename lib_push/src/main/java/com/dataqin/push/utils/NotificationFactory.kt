@@ -1,4 +1,4 @@
-package com.dataqin.common.utils
+package com.dataqin.push.utils
 
 import android.annotation.SuppressLint
 import android.app.*

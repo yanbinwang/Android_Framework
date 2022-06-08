@@ -1,7 +1,7 @@
 package com.dataqin.testnew.utils
 
 import android.app.Activity
-import com.dataqin.common.utils.NotificationFactory
+import com.dataqin.push.utils.NotificationFactory
 import com.dataqin.common.widget.dialog.AppDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import java.lang.ref.WeakReference
@@ -74,10 +74,10 @@ object PopupHelper {
      * 通知
      */
     private fun notification() {
-        if (!NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
+        if (!com.dataqin.push.utils.NotificationFactory.instance.isEnabled(weakActivity?.get()!!)) {
             AppDialog.with(weakActivity?.get()).setOnDialogListener(object : OnDialogListener {
                 override fun onConfirm() {
-                    NotificationFactory.instance.setting(weakActivity?.get()!!)
+                    com.dataqin.push.utils.NotificationFactory.instance.setting(weakActivity?.get()!!)
                     advertisement()
                 }
 

@@ -7,7 +7,6 @@ import android.text.TextUtils
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
-import com.dataqin.common.utils.NotificationFactory
 import com.dataqin.push.R
 import com.dataqin.push.activity.PushActivity
 import com.dataqin.push.model.PushModel
