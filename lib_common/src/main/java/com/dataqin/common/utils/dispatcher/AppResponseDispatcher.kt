@@ -4,9 +4,9 @@ import android.os.Looper
 import android.text.TextUtils
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.WeakHandler
-import com.zhangke.websocket.dispatcher.IResponseDispatcher
-import com.zhangke.websocket.dispatcher.ResponseDelivery
-import com.zhangke.websocket.response.ErrorResponse
+import com.dataqin.websocket.dispatcher.IResponseDispatcher
+import com.dataqin.websocket.dispatcher.ResponseDelivery
+import com.dataqin.websocket.response.ErrorResponse
 import org.java_websocket.framing.Framedata
 import java.nio.ByteBuffer
 

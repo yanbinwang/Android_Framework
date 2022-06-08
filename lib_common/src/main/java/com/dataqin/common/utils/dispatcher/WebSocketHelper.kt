@@ -1,8 +1,8 @@
 package com.dataqin.common.utils.dispatcher
 
 import android.content.Context
-import com.zhangke.websocket.WebSocketHandler
-import com.zhangke.websocket.WebSocketSetting
+import com.dataqin.websocket.WebSocketHandler
+import com.dataqin.websocket.WebSocketSetting
 
 object WebSocketHelper {
 
