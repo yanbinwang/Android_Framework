@@ -1,6 +1,6 @@
 package com.dataqin.websocket;
 
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -54,11 +54,11 @@ public class DefaultReconnectManager implements ReconnectManager {
     @Override
     public void startReconnect() {
         if (reconnecting) {
-            LogUtil.i(TAG, "Reconnecting, do not call again.");
+            LogTable.i(TAG, "Reconnecting, do not call again.");
             return;
         }
         if (destroyed) {
-            LogUtil.e(TAG, "ReconnectManager is destroyed!!!");
+            LogTable.e(TAG, "ReconnectManager is destroyed!!!");
             return;
         }
         needStopReconnect = false;
@@ -66,7 +66,7 @@ public class DefaultReconnectManager implements ReconnectManager {
         try {
             singleThreadPool.execute(getReconnectRunnable());
         } catch (RejectedExecutionException e) {
-            LogUtil.e(TAG, "线程队列已满，无法执行此次任务。", e);
+            LogTable.e(TAG, "线程队列已满，无法执行此次任务。", e);
             reconnecting = false;
         }
     }
@@ -77,20 +77,20 @@ public class DefaultReconnectManager implements ReconnectManager {
                 reconnecting = false;
                 return;
             }
-            LogUtil.d(TAG, "开始重连:" + reconnectCount);
+            LogTable.d(TAG, "开始重连:" + reconnectCount);
             reconnectCount++;
             reconnecting = true;
             connected = false;
             try {
                 int count = mWebSocketManager.getSetting().getReconnectFrequency();
                 for (int i = 0; i < count; i++) {
-                    LogUtil.i(TAG, String.format("第%s次重连", i + 1));
+                    LogTable.i(TAG, String.format("第%s次重连", i + 1));
                     mWebSocketManager.reconnectOnce();
                     synchronized (BLOCK) {
                         try {
                             BLOCK.wait(mWebSocketManager.getSetting().getConnectTimeout());
                             if (connected) {
-                                LogUtil.i(TAG, "reconnectOnce success!");
+                                LogTable.i(TAG, "reconnectOnce success!");
                                 mOnDisconnectListener.onConnected();
                                 return;
                             }
@@ -103,13 +103,13 @@ public class DefaultReconnectManager implements ReconnectManager {
                     }
                 }
                 //重连失败
-                LogUtil.i(TAG, "reconnectOnce failed!");
+                LogTable.i(TAG, "reconnectOnce failed!");
                 mOnDisconnectListener.onDisconnect();
             } finally {
-                LogUtil.d(TAG, "重连结束:" + finishCount);
+                LogTable.d(TAG, "重连结束:" + finishCount);
                 finishCount++;
                 reconnecting = false;
-                LogUtil.i(TAG, "reconnecting = false");
+                LogTable.i(TAG, "reconnecting = false");
             }
         };
     }
@@ -126,7 +126,7 @@ public class DefaultReconnectManager implements ReconnectManager {
     public void onConnected() {
         connected = true;
         synchronized (BLOCK) {
-            LogUtil.i(TAG, "onConnected()->BLOCK.notifyAll()");
+            LogTable.i(TAG, "onConnected()->BLOCK.notifyAll()");
             BLOCK.notifyAll();
         }
     }
@@ -135,7 +135,7 @@ public class DefaultReconnectManager implements ReconnectManager {
     public void onConnectError(Throwable th) {
         connected = false;
         synchronized (BLOCK) {
-            LogUtil.i(TAG, "onConnectError(Throwable)->BLOCK.notifyAll()");
+            LogTable.i(TAG, "onConnectError(Throwable)->BLOCK.notifyAll()");
             BLOCK.notifyAll();
         }
     }

@@ -1,26 +1,44 @@
 package com.dataqin.websocket.utils;
 
+import com.dataqin.websocket.WebSocketHandler;
+
 /**
- * 打印日志接口
+ * 日志工具类
  * <p>
- * Created by ZhangKe on 2019/4/29.
+ * Created by ZhangKe on 2019/3/21.
  */
-public interface LogTable {
+public class LogTable {
 
-    void v(String tag, String msg);
+    public static void v(String tag, String msg) {
+        WebSocketHandler.getLogTable().v(tag, msg);
+    }
 
-    void v(String tag, String msg, Throwable tr);
+    public static void v(String tag, String msg, Throwable tr) {
+        WebSocketHandler.getLogTable().v(tag, msg, tr);
+    }
 
-    void d(String tag, String text);
+    public static void d(String tag, String text) {
+        WebSocketHandler.getLogTable().d(tag, text);
+    }
 
-    void d(String tag, String text, Throwable tr);
+    public static void d(String tag, String text, Throwable tr) {
+        WebSocketHandler.getLogTable().d(tag, text, tr);
+    }
 
-    void i(String tag, String text);
+    public static void i(String tag, String text) {
+        WebSocketHandler.getLogTable().i(tag, text);
+    }
 
-    void i(String tag, String text, Throwable tr);
+    public static void i(String tag, String text, Throwable tr) {
+        WebSocketHandler.getLogTable().i(tag, text, tr);
+    }
 
-    void e(String tag, String text);
+    public static void e(String tag, String text) {
+        WebSocketHandler.getLogTable().e(tag, text);
+    }
 
-    void e(String tag, String msg, Throwable tr);
+    public static void e(String tag, String msg, Throwable tr) {
+        WebSocketHandler.getLogTable().e(tag, msg, tr);
+    }
 
 }

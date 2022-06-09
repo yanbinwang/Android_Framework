@@ -6,7 +6,7 @@ import android.os.Message;
 
 import com.dataqin.websocket.request.Request;
 import com.dataqin.websocket.response.ErrorResponse;
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
@@ -55,7 +55,7 @@ public class WebSocketEngine {
             runnable.webSocketWrapper = webSocket;
             mOptionThread.mHandler.post(runnable);
         } else {
-            LogUtil.e(TAG, "WebSocketEngine not start!");
+            LogTable.e(TAG, "WebSocketEngine not start!");
         }
     }
 
@@ -66,7 +66,7 @@ public class WebSocketEngine {
             runnable.webSocketWrapper = webSocket;
             mOptionThread.mHandler.post(runnable);
         } else {
-            LogUtil.e(TAG, "WebSocketEngine not start!");
+            LogTable.e(TAG, "WebSocketEngine not start!");
         }
     }
 

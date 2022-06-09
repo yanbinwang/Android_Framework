@@ -10,7 +10,7 @@ import com.dataqin.websocket.request.RequestFactory;
 import com.dataqin.websocket.response.ErrorResponse;
 import com.dataqin.websocket.response.Response;
 import com.dataqin.websocket.response.ResponseFactory;
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.framing.PingFrame;
@@ -107,7 +107,7 @@ public class WebSocketManager {
     public WebSocketManager reconnect(WebSocketSetting setting) {
         disconnect = false;
         if (destroyed) {
-            LogUtil.e(TAG, "This WebSocketManager is destroyed!");
+            LogTable.e(TAG, "This WebSocketManager is destroyed!");
             return this;
         }
         this.mSetting = setting;
@@ -125,7 +125,7 @@ public class WebSocketManager {
     public WebSocketManager disConnect() {
         disconnect = true;
         if (destroyed) {
-            LogUtil.e(TAG, "This WebSocketManager is destroyed!");
+            LogTable.e(TAG, "This WebSocketManager is destroyed!");
             return this;
         }
         if (mWebSocket.getConnectState() != 0) {
@@ -276,7 +276,7 @@ public class WebSocketManager {
      */
     void reconnectOnce() {
         if (destroyed) {
-            LogUtil.e(TAG, "This WebSocketManager is destroyed!");
+            LogTable.e(TAG, "This WebSocketManager is destroyed!");
             return;
         }
         if (mWebSocket.getConnectState() == 0) {
@@ -285,7 +285,7 @@ public class WebSocketManager {
             if (mReconnectManager != null) {
                 mReconnectManager.onConnected();
             }
-            LogUtil.e(TAG, "WebSocket 已连接，请勿重试。");
+            LogTable.e(TAG, "WebSocket 已连接，请勿重试。");
         }
     }
 
@@ -294,7 +294,7 @@ public class WebSocketManager {
      */
     private void sendRequest(Request request) {
         if (destroyed) {
-            LogUtil.e(TAG, "This WebSocketManager is destroyed!");
+            LogTable.e(TAG, "This WebSocketManager is destroyed!");
             return;
         }
         mWebSocketEngine.sendRequest(mWebSocket, request, mSocketWrapperListener);
@@ -307,12 +307,12 @@ public class WebSocketManager {
         return new DefaultReconnectManager(this, new ReconnectManager.OnConnectListener() {
             @Override
             public void onConnected() {
-                LogUtil.i(TAG, "重连成功");
+                LogTable.i(TAG, "重连成功");
             }
 
             @Override
             public void onDisconnect() {
-                LogUtil.i(TAG, "重连失败");
+                LogTable.i(TAG, "重连失败");
                 mSetting.getResponseDispatcher().onDisconnect(mDelivery);
             }
         });
@@ -370,7 +370,7 @@ public class WebSocketManager {
                     mSetting.getResponseDispatcher().onSendDataError(errorResponse, mDelivery);
                 }
                 if (!disconnect && type == ErrorResponse.ERROR_NO_CONNECT) {
-                    LogUtil.e(TAG, "数据发送失败，网络未连接，开始重连。。。");
+                    LogTable.e(TAG, "数据发送失败，网络未连接，开始重连。。。");
                     reconnect();
                 }
                 //todo 使用完注意释放资源 request.release();

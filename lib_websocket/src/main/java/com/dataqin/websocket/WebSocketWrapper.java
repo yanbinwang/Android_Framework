@@ -6,7 +6,7 @@ import com.dataqin.websocket.request.Request;
 import com.dataqin.websocket.response.ErrorResponse;
 import com.dataqin.websocket.response.Response;
 import com.dataqin.websocket.response.ResponseFactory;
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 
 import org.java_websocket.WebSocket;
 import org.java_websocket.client.WebSocketClient;
@@ -71,7 +71,7 @@ public class WebSocketWrapper {
                         connectTimeOut = 0;
                     }
                     mWebSocket = new MyWebSocketClient(new URI(mSetting.getConnectUrl()), draft, mSetting.getHttpHeaders(), connectTimeOut);
-                    LogUtil.i(TAG, "WebSocket start connect...");
+                    LogTable.i(TAG, "WebSocket start connect...");
                     if (mSetting.getProxy() != null) {
                         mWebSocket.setProxy(mSetting.getProxy());
                     }
@@ -82,7 +82,7 @@ public class WebSocketWrapper {
                     }
                     checkDestroy();
                 } else {
-                    LogUtil.i(TAG, "WebSocket reconnecting...");
+                    LogTable.i(TAG, "WebSocket reconnecting...");
                     mWebSocket.reconnect();
                     if (needClose) {
                         disConnect();
@@ -91,7 +91,7 @@ public class WebSocketWrapper {
                 }
             } catch (Throwable e) {
                 connectStatus = 0;
-                LogUtil.e(TAG, "WebSocket connect failed:", e);
+                LogTable.e(TAG, "WebSocket connect failed:", e);
                 if (mSocketListener != null) {
                     mSocketListener.onConnectFailed(e);
                 }
@@ -115,11 +115,11 @@ public class WebSocketWrapper {
     void disConnect() {
         needClose = true;
         if (connectStatus == 2) {
-            LogUtil.i(TAG, "WebSocket disconnecting...");
+            LogTable.i(TAG, "WebSocket disconnecting...");
             if (mWebSocket != null) {
                 mWebSocket.close();
             }
-            LogUtil.i(TAG, "WebSocket disconnected");
+            LogTable.i(TAG, "WebSocket disconnected");
         }
     }
 
@@ -133,16 +133,16 @@ public class WebSocketWrapper {
             return;
         }
         if (request == null) {
-            LogUtil.e(TAG, "send data is null!");
+            LogTable.e(TAG, "send data is null!");
             return;
         }
         if (connectStatus == 2) {
             try {
                 request.send(mWebSocket);
-                LogUtil.i(TAG, "send success:" + request);
+                LogTable.i(TAG, "send success:" + request);
             } catch (WebsocketNotConnectedException e) {
                 connectStatus = 0;
-                LogUtil.e(TAG, "ws is disconnected, send failed:" + request, e);
+                LogTable.e(TAG, "ws is disconnected, send failed:" + request, e);
                 if (mSocketListener != null) {
                     //not connect
                     mSocketListener.onSendDataError(request, ErrorResponse.ERROR_NO_CONNECT, e);
@@ -150,7 +150,7 @@ public class WebSocketWrapper {
                 }
             } catch (Throwable e) {
                 connectStatus = 0;
-                LogUtil.e(TAG, "Exception,send failed:" + request, e);
+                LogTable.e(TAG, "Exception,send failed:" + request, e);
                 if (mSocketListener != null) {
                     //unknown error
                     mSocketListener.onSendDataError(request, ErrorResponse.ERROR_UNKNOWN, e);
@@ -159,7 +159,7 @@ public class WebSocketWrapper {
                 request.release();
             }
         } else {
-            LogUtil.e(TAG, "WebSocket not connect,send failed:" + request);
+            LogTable.e(TAG, "WebSocket not connect,send failed:" + request);
             if (mSocketListener != null) {
                 //not connect
                 mSocketListener.onSendDataError(request, ErrorResponse.ERROR_NO_CONNECT, null);
@@ -198,7 +198,7 @@ public class WebSocketWrapper {
                 releaseResource();
                 connectStatus = 0;
             } catch (Throwable e) {
-                LogUtil.e(TAG, "checkDestroy(WebSocketClient)", e);
+                LogTable.e(TAG, "checkDestroy(WebSocketClient)", e);
             }
         }
     }
@@ -215,7 +215,7 @@ public class WebSocketWrapper {
             return;
         }
         connectStatus = 2;
-        LogUtil.i(TAG, "WebSocket connect success");
+        LogTable.i(TAG, "WebSocket connect success");
         if (needClose) {
             disConnect();
         } else {
@@ -234,7 +234,7 @@ public class WebSocketWrapper {
         if (mSocketListener != null) {
             Response<String> response = ResponseFactory.createTextResponse();
             response.setResponseData(message);
-            LogUtil.i(TAG, "WebSocket received message:" + response);
+            LogTable.i(TAG, "WebSocket received message:" + response);
             mSocketListener.onMessage(response);
         }
     }
@@ -248,7 +248,7 @@ public class WebSocketWrapper {
         if (mSocketListener != null) {
             Response<ByteBuffer> response = ResponseFactory.createByteBufferResponse();
             response.setResponseData(bytes);
-            LogUtil.i(TAG, "WebSocket received message:" + response);
+            LogTable.i(TAG, "WebSocket received message:" + response);
             mSocketListener.onMessage(response);
         }
     }
@@ -262,7 +262,7 @@ public class WebSocketWrapper {
         if (mSocketListener != null) {
             Response<Framedata> response = ResponseFactory.createPingResponse();
             response.setResponseData(f);
-            LogUtil.i(TAG, "WebSocket received ping:" + response);
+            LogTable.i(TAG, "WebSocket received ping:" + response);
             mSocketListener.onMessage(response);
         }
     }
@@ -276,14 +276,14 @@ public class WebSocketWrapper {
         if (mSocketListener != null) {
             Response<Framedata> response = ResponseFactory.createPongResponse();
             response.setResponseData(f);
-            LogUtil.i(TAG, "WebSocket received pong:" + response);
+            LogTable.i(TAG, "WebSocket received pong:" + response);
             mSocketListener.onMessage(response);
         }
     }
 
     private void onWSCallbackClose(int code, String reason, boolean remote) {
         connectStatus = 0;
-        LogUtil.d(TAG, String.format("WebSocket closed!code=%s,reason:%s,remote:%s", code, reason, remote));
+        LogTable.d(TAG, String.format("WebSocket closed!code=%s,reason:%s,remote:%s", code, reason, remote));
         if (mSocketListener != null) {
             mSocketListener.onDisconnect();
         }
@@ -295,7 +295,7 @@ public class WebSocketWrapper {
             checkDestroy();
             return;
         }
-        LogUtil.e(TAG, "WebSocketClient#onError(Exception)", ex);
+        LogTable.e(TAG, "WebSocketClient#onError(Exception)", ex);
     }
 
     private class MyWebSocketClient extends WebSocketClient {

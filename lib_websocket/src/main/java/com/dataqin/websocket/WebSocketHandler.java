@@ -6,9 +6,9 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
 import com.dataqin.websocket.dispatcher.ResponseProcessEngine;
-import com.dataqin.websocket.utils.LogImpl;
+import com.dataqin.websocket.utils.LogTableUtil;
+import com.dataqin.websocket.utils.LogTableImpl;
 import com.dataqin.websocket.utils.LogTable;
-import com.dataqin.websocket.utils.LogUtil;
 import com.dataqin.websocket.utils.PermissionUtil;
 
 import java.util.HashMap;
@@ -40,7 +40,7 @@ public class WebSocketHandler {
      * 通过 Map 存储 WSM 对象，以此支持多个连接
      */
     private static Map<String, WebSocketManager> mWebSocketMap;
-    private static LogTable mLog;
+    private static LogTableImpl mLog;
     private final static String TAG = "WebSocketHandler";
 
     /**
@@ -62,7 +62,7 @@ public class WebSocketHandler {
                 }
             }
         } else {
-            LogUtil.e(TAG, "Default WebSocketManager exists!do not start again!");
+            LogTable.e(TAG, "Default WebSocketManager exists!do not start again!");
         }
         return defaultWebSocket;
     }
@@ -79,7 +79,7 @@ public class WebSocketHandler {
         checkWebSocketMapNullAndInit();
         synchronized (WS_MAP_BLOCK) {
             if (mWebSocketMap.containsKey(key)) {
-                LogUtil.e(TAG, "WebSocketManager exists!do not start again!");
+                LogTable.e(TAG, "WebSocketManager exists!do not start again!");
                 return mWebSocketMap.get(key);
             } else {
                 WebSocketManager wsm = new WebSocketManager(setting, webSocketEngine, responseProcessEngine);
@@ -153,10 +153,10 @@ public class WebSocketHandler {
                 filter.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
                 context.registerReceiver(new NetworkChangedReceiver(), filter);
             } catch (Exception e) {
-                LogUtil.e(TAG, "网络监听广播注册失败：", e);
+                LogTable.e(TAG, "网络监听广播注册失败：", e);
             }
         } else {
-            LogUtil.e(TAG, "未获取到网络状态权限，广播监听器无法注册");
+            LogTable.e(TAG, "未获取到网络状态权限，广播监听器无法注册");
         }
     }
 
@@ -191,15 +191,15 @@ public class WebSocketHandler {
 
     /**
      * 设置打印日志实现类，设置完成后内部运行日志会通过设置的实现类打印。
-     * 需实现 {@link LogTable} 接口
+     * 需实现 {@link LogTableImpl} 接口
      */
-    public static void setLogTable(LogTable logTable) {
-        mLog = logTable;
+    public static void setLogTable(LogTableImpl logTableImpl) {
+        mLog = logTableImpl;
     }
 
-    public static LogTable getLogTable() {
+    public static LogTableImpl getLogTable() {
         if (mLog == null) {
-            mLog = new LogImpl();
+            mLog = new LogTableUtil();
         }
         return mLog;
     }

@@ -7,7 +7,7 @@ import android.util.Log;
  * <p>
  * Created by ZhangKe on 2019/4/29.
  */
-public class LogImpl implements LogTable {
+public class LogTableUtil implements LogTableImpl {
 
     @Override
     public void v(String tag, String msg) {

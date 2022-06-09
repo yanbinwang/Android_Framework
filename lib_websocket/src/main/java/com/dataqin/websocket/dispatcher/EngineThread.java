@@ -2,7 +2,7 @@ package com.dataqin.websocket.dispatcher;
 
 import android.os.Process;
 
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;
@@ -43,14 +43,14 @@ public class EngineThread extends Thread {
                     return;
                 }
             } catch (Exception e) {
-                LogUtil.e(TAG, "run()->Exception", e);
+                LogTable.e(TAG, "run()->Exception", e);
             }
         }
     }
 
     void add(final ResponseProcessEngine.EngineEntity entity) {
         if (!jobQueue.offer(entity)) {
-            LogUtil.e(TAG, "Offer response to Engine failed!start an thread to put.");
+            LogTable.e(TAG, "Offer response to Engine failed!start an thread to put.");
             if (executorService == null) {
                 executorService = Executors.newCachedThreadPool();
             }
@@ -62,7 +62,7 @@ public class EngineThread extends Thread {
                     jobQueue.put(entity);
                 } catch (Exception e) {
                     if (stop) {
-                        LogUtil.e(TAG, "put response failed!", e);
+                        LogTable.e(TAG, "put response failed!", e);
                     } else {
                         interrupt();
                     }

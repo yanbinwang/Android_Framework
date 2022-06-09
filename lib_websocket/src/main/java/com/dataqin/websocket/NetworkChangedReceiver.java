@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.LogTable;
 import com.dataqin.websocket.utils.PermissionUtil;
 
 import java.util.Map;
@@ -35,9 +35,9 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                     if (activeNetwork != null) {
                         if (activeNetwork.isConnected()) {
                             if (activeNetwork.getType() == ConnectivityManager.TYPE_WIFI) {
-                                LogUtil.i(TAG, "网络连接发生变化，当前WiFi连接可用，正在尝试重连。");
+                                LogTable.i(TAG, "网络连接发生变化，当前WiFi连接可用，正在尝试重连。");
                             } else if (activeNetwork.getType() == ConnectivityManager.TYPE_MOBILE) {
-                                LogUtil.i(TAG, "网络连接发生变化，当前移动连接可用，正在尝试重连。");
+                                LogTable.i(TAG, "网络连接发生变化，当前移动连接可用，正在尝试重连。");
                             }
                             if (WebSocketHandler.getDefault() != null) {
                                 if (WebSocketHandler.getDefault().getSetting().reconnectWithNetworkChanged()) {
@@ -54,12 +54,12 @@ public class NetworkChangedReceiver extends BroadcastReceiver {
                                 }
                             }
                         } else {
-                            LogUtil.i(TAG, "当前没有可用网络");
+                            LogTable.i(TAG, "当前没有可用网络");
                         }
                     }
                 }
             } catch (Exception e) {
-                LogUtil.e(TAG, "网络状态获取错误", e);
+                LogTable.e(TAG, "网络状态获取错误", e);
             }
         }
     }
