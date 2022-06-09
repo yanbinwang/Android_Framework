@@ -1,6 +1,6 @@
 package com.dataqin.websocket;
 
-import com.dataqin.websocket.util.LogUtil;
+import com.dataqin.websocket.utils.LogUtil;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;

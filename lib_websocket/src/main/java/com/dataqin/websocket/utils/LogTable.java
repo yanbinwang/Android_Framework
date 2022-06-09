@@ -1,11 +1,11 @@
-package com.dataqin.websocket.util;
+package com.dataqin.websocket.utils;
 
 /**
  * 打印日志接口
  * <p>
  * Created by ZhangKe on 2019/4/29.
  */
-public interface Logable {
+public interface LogTable {
 
     void v(String tag, String msg);
 
@@ -22,13 +22,5 @@ public interface Logable {
     void e(String tag, String text);
 
     void e(String tag, String msg, Throwable tr);
-
-    void w(String tag, Throwable tr);
-
-    void wtf(String tag, String msg);
-
-    void wtf(String tag, Throwable tr);
-
-    void wtf(String tag, String msg, Throwable tr);
 
 }

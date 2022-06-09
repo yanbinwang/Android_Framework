@@ -10,7 +10,7 @@ import com.dataqin.websocket.request.RequestFactory;
 import com.dataqin.websocket.response.ErrorResponse;
 import com.dataqin.websocket.response.Response;
 import com.dataqin.websocket.response.ResponseFactory;
-import com.dataqin.websocket.util.LogUtil;
+import com.dataqin.websocket.utils.LogUtil;
 
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.framing.PingFrame;

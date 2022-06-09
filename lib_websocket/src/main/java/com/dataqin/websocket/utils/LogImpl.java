@@ -1,4 +1,4 @@
-package com.dataqin.websocket.util;
+package com.dataqin.websocket.utils;
 
 import android.util.Log;
 
@@ -7,7 +7,7 @@ import android.util.Log;
  * <p>
  * Created by ZhangKe on 2019/4/29.
  */
-public class LogImpl implements Logable {
+public class LogImpl implements LogTable {
 
     @Override
     public void v(String tag, String msg) {
@@ -47,26 +47,6 @@ public class LogImpl implements Logable {
     @Override
     public void e(String tag, String msg, Throwable tr) {
         Log.e(tag, msg, tr);
-    }
-
-    @Override
-    public void w(String tag, Throwable tr) {
-        Log.w(tag, tr);
-    }
-
-    @Override
-    public void wtf(String tag, String msg) {
-        Log.wtf(tag, msg);
-    }
-
-    @Override
-    public void wtf(String tag, Throwable tr) {
-        Log.wtf(tag, tr);
-    }
-
-    @Override
-    public void wtf(String tag, String msg, Throwable tr) {
-        Log.wtf(tag, msg, tr);
     }
 
 }

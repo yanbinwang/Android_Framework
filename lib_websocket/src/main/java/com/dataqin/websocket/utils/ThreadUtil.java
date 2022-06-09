@@ -1,4 +1,4 @@
-package com.dataqin.websocket.util;
+package com.dataqin.websocket.utils;
 
 import android.os.Handler;
 import android.os.Looper;

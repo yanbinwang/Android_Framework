@@ -9,8 +9,8 @@ import static com.dataqin.websocket.dispatcher.MainThreadResponseDelivery.RUNNAB
 import static com.dataqin.websocket.dispatcher.MainThreadResponseDelivery.RUNNABLE_TYPE.PONG;
 import static com.dataqin.websocket.dispatcher.MainThreadResponseDelivery.RUNNABLE_TYPE.SEND_ERROR;
 import static com.dataqin.websocket.dispatcher.MainThreadResponseDelivery.RUNNABLE_TYPE.STRING_MSG;
-import static com.dataqin.websocket.util.ThreadUtil.checkMainThread;
-import static com.dataqin.websocket.util.ThreadUtil.runOnMainThread;
+import static com.dataqin.websocket.utils.ThreadUtil.checkMainThread;
+import static com.dataqin.websocket.utils.ThreadUtil.runOnMainThread;
 
 import android.text.TextUtils;
 

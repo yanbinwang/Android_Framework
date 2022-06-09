@@ -2,7 +2,7 @@ package com.dataqin.websocket.dispatcher;
 
 import android.os.Process;
 
-import com.dataqin.websocket.util.LogUtil;
+import com.dataqin.websocket.utils.LogUtil;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ExecutorService;

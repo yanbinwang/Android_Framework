@@ -1,5 +1,6 @@
 package com.dataqin.websocket.dispatcher;
 
+import com.dataqin.websocket.WebSocketSetting;
 import com.dataqin.websocket.response.ErrorResponse;
 
 import org.java_websocket.framing.Framedata;

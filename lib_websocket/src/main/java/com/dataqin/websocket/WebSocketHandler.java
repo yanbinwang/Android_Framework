@@ -6,10 +6,10 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
 import com.dataqin.websocket.dispatcher.ResponseProcessEngine;
-import com.dataqin.websocket.util.LogImpl;
-import com.dataqin.websocket.util.LogUtil;
-import com.dataqin.websocket.util.Logable;
-import com.dataqin.websocket.util.PermissionUtil;
+import com.dataqin.websocket.utils.LogImpl;
+import com.dataqin.websocket.utils.LogTable;
+import com.dataqin.websocket.utils.LogUtil;
+import com.dataqin.websocket.utils.PermissionUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +40,7 @@ public class WebSocketHandler {
      * 通过 Map 存储 WSM 对象，以此支持多个连接
      */
     private static Map<String, WebSocketManager> mWebSocketMap;
-    private static Logable mLog;
+    private static LogTable mLog;
     private final static String TAG = "WebSocketHandler";
 
     /**
@@ -191,13 +191,13 @@ public class WebSocketHandler {
 
     /**
      * 设置打印日志实现类，设置完成后内部运行日志会通过设置的实现类打印。
-     * 需实现 {@link Logable} 接口
+     * 需实现 {@link LogTable} 接口
      */
-    public static void setLogable(Logable logable) {
-        mLog = logable;
+    public static void setLogTable(LogTable logTable) {
+        mLog = logTable;
     }
 
-    public static Logable getLogable() {
+    public static LogTable getLogTable() {
         if (mLog == null) {
             mLog = new LogImpl();
         }

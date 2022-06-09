@@ -6,7 +6,7 @@ import android.os.Message;
 
 import com.dataqin.websocket.request.Request;
 import com.dataqin.websocket.response.ErrorResponse;
-import com.dataqin.websocket.util.LogUtil;
+import com.dataqin.websocket.utils.LogUtil;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
