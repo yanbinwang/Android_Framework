@@ -20,6 +20,11 @@ public interface Response<T> {
      */
     void setResponseData(T responseData);
 
+    /**
+     * 接收到响应时的回调
+     * @param dispatcher
+     * @param delivery
+     */
     void onResponse(IResponseDispatcher dispatcher, ResponseDelivery delivery);
 
     /**

@@ -34,11 +34,11 @@ import java.util.Queue;
  * Created by ZhangKe on 2019/3/25.
  */
 public class MainThreadResponseDelivery implements ResponseDelivery {
+    private static Queue<CallbackRunnable> RUNNABLE_POOL;
     /**
      * Listener 操作锁
      */
     private static final Object LISTENER_BLOCK = new Object();
-    private static Queue<CallbackRunnable> RUNNABLE_POOL;
     private final List<SocketListener> mSocketListenerList = new ArrayList<>();
 
     public MainThreadResponseDelivery() {

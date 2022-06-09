@@ -34,13 +34,13 @@ public class TextResponse implements Response<String> {
     }
 
     @Override
-    public String toString() {
-        return String.format("[@TextResponse%s->responseText:%s]", hashCode(), TextUtils.isEmpty(responseText) ? "null" : responseText);
+    public void release() {
+        ResponseFactory.releaseTextResponse(this);
     }
 
     @Override
-    public void release() {
-        ResponseFactory.releaseTextResponse(this);
+    public String toString() {
+        return String.format("[@TextResponse%s->responseText:%s]", hashCode(), TextUtils.isEmpty(responseText) ? "null" : responseText);
     }
 
 }
