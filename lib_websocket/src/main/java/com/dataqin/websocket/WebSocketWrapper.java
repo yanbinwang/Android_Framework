@@ -77,18 +77,14 @@ public class WebSocketWrapper {
                     }
                     mWebSocket.connect();
                     mWebSocket.setConnectionLostTimeout(mSetting.getConnectionLostTimeout());
-                    if (needClose) {
-                        disConnect();
-                    }
-                    checkDestroy();
                 } else {
                     LogTable.i(TAG, "WebSocket reconnecting...");
                     mWebSocket.reconnect();
-                    if (needClose) {
-                        disConnect();
-                    }
-                    checkDestroy();
                 }
+                if (needClose) {
+                    disConnect();
+                }
+                checkDestroy();
             } catch (Throwable e) {
                 connectStatus = 0;
                 LogTable.e(TAG, "WebSocket connect failed:", e);
@@ -253,7 +249,7 @@ public class WebSocketWrapper {
         }
     }
 
-    private void onWSCallbackWebsocketPing(Framedata f) {
+    private void onWSCallbackWebSocketPing(Framedata f) {
         if (destroyed) {
             checkDestroy();
             return;
@@ -267,7 +263,7 @@ public class WebSocketWrapper {
         }
     }
 
-    private void onWSCallbackWebsocketPong(Framedata f) {
+    private void onWSCallbackWebSocketPong(Framedata f) {
         if (destroyed) {
             checkDestroy();
             return;
@@ -338,13 +334,13 @@ public class WebSocketWrapper {
         @Override
         public void onWebsocketPing(WebSocket conn, Framedata f) {
             super.onWebsocketPing(conn, f);
-            onWSCallbackWebsocketPing(f);
+            onWSCallbackWebSocketPing(f);
         }
 
         @Override
         public void onWebsocketPong(WebSocket conn, Framedata f) {
             super.onWebsocketPong(conn, f);
-            onWSCallbackWebsocketPong(f);
+            onWSCallbackWebSocketPong(f);
         }
 
         @Override

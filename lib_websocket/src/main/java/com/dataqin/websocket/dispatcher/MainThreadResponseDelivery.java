@@ -34,12 +34,12 @@ import java.util.Queue;
  * Created by ZhangKe on 2019/3/25.
  */
 public class MainThreadResponseDelivery implements ResponseDelivery {
+    private final List<SocketListener> mSocketListenerList = new ArrayList<>();
     private static Queue<CallbackRunnable> RUNNABLE_POOL;
     /**
      * Listener 操作锁
      */
     private static final Object LISTENER_BLOCK = new Object();
-    private final List<SocketListener> mSocketListenerList = new ArrayList<>();
 
     public MainThreadResponseDelivery() {
     }
@@ -202,7 +202,7 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
         } else {
             CallbackRunnable callbackRunnable = getRunnable();
             callbackRunnable.type = PING;
-            callbackRunnable.framedataResponse = framedata;
+            callbackRunnable.frameDataResponse = framedata;
             callbackRunnable.mSocketListenerList = mSocketListenerList;
             runOnMainThread(callbackRunnable);
         }
@@ -222,7 +222,7 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
         } else {
             CallbackRunnable callbackRunnable = getRunnable();
             callbackRunnable.type = PONG;
-            callbackRunnable.framedataResponse = framedata;
+            callbackRunnable.frameDataResponse = framedata;
             callbackRunnable.mSocketListenerList = mSocketListenerList;
             runOnMainThread(callbackRunnable);
         }
@@ -277,7 +277,7 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
         Throwable connectErrorCause;
         String textResponse;
         ByteBuffer byteResponse;
-        Framedata framedataResponse;
+        Framedata frameDataResponse;
 
         @Override
         public void run() {
@@ -290,8 +290,8 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
                 if (type == SEND_ERROR && errorResponse == null) return;
                 if (type == STRING_MSG && TextUtils.isEmpty(textResponse)) return;
                 if (type == BYTE_BUFFER_MSG && byteResponse == null) return;
-                if (type == PING && framedataResponse == null) return;
-                if (type == PONG && framedataResponse == null) return;
+                if (type == PING && frameDataResponse == null) return;
+                if (type == PONG && frameDataResponse == null) return;
                 synchronized (LISTENER_BLOCK) {
                     switch (type) {
                         case CONNECTED:
@@ -326,12 +326,12 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
                             break;
                         case PING:
                             for (SocketListener listener : mSocketListenerList) {
-                                listener.onPing(framedataResponse);
+                                listener.onPing(frameDataResponse);
                             }
                             break;
                         case PONG:
                             for (SocketListener listener : mSocketListenerList) {
-                                listener.onPong(framedataResponse);
+                                listener.onPong(frameDataResponse);
                             }
                             break;
                     }
@@ -340,7 +340,7 @@ public class MainThreadResponseDelivery implements ResponseDelivery {
                     connectErrorCause = null;
                     textResponse = null;
                     byteResponse = null;
-                    framedataResponse = null;
+                    frameDataResponse = null;
                     formattedData = null;
                 }
             } finally {

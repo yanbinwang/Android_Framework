@@ -5,6 +5,7 @@ import android.content.Context;
 
 import com.dataqin.websocket.dispatcher.DefaultResponseDispatcher;
 import com.dataqin.websocket.dispatcher.IResponseDispatcher;
+import com.dataqin.websocket.dispatcher.MainThreadResponseDelivery;
 import com.dataqin.websocket.dispatcher.ResponseDelivery;
 
 import org.java_websocket.drafts.Draft;
@@ -61,6 +62,7 @@ public class WebSocketSetting {
      * 消息发射器
      */
     private ResponseDelivery responseDelivery;
+
     /**
      * 获取 WebSocket 链接地址
      */
