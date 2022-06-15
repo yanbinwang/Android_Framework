@@ -27,7 +27,7 @@ import java.util.zip.ZipOutputStream
 
 /**
  * Created by WangYanBin on 2020/7/1.
- * 文件管理工具类
+ * 文件工具类
  */
 @SuppressLint("QueryPermissionsNeeded")
 object FileUtil {
@@ -85,7 +85,7 @@ object FileUtil {
      */
     @JvmStatic
     @Throws(IOException::class)
-    fun copyFile(srcFile: String, destFile: String) = copyFile(File(srcFile), File(destFile))
+    fun copyFile(srcPath: String, destPath: String) = copyFile(File(srcPath), File(destPath))
 
     @JvmStatic
     @Throws(IOException::class)
@@ -179,14 +179,14 @@ object FileUtil {
 
     /**
      * @param folderPath 要打成压缩包文件的路径
-     * @param zipFilePath 压缩完成的Zip路径（包含压缩文件名）-"${Constants.SDCARD_PATH}/10086.zip"
+     * @param zipPath 压缩完成的Zip路径（包含压缩文件名）-"${Constants.SDCARD_PATH}/10086.zip"
      */
     @JvmStatic
-    fun zipFolderThread(folderPath: String, zipFilePath: String, onThreadListener: OnThreadListener?) {
+    fun zipFolder(folderPath: String, zipPath: String, onThreadListener: OnThreadListener?) {
         weakHandler.post { onThreadListener?.onStart() }
         Thread {
             val fileDir = File(folderPath)
-            val zipFile = File(zipFilePath)
+            val zipFile = File(zipPath)
             try {
                 if (fileDir.exists()) zipFolder(fileDir.absolutePath, zipFile.absolutePath)
             } catch (e: Exception) {
@@ -216,8 +216,6 @@ object FileUtil {
             //保存图片后发送广播通知更新数据库
             MediaStore.Images.Media.insertImage(context.contentResolver, file.absolutePath, file.name, null)
             context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://${file.path}")))
-//            MediaScannerConnection.scanFile(context, arrayOf(file.toString()), arrayOf(file.name), null)
-//            context.sendBroadcast(Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)))
             return result
         } catch (ignored: Exception) {
         } finally {
@@ -230,7 +228,7 @@ object FileUtil {
      * 保存图片
      */
     @JvmStatic
-    fun saveBitmapThread(context: Context, bitmap: Bitmap, onThreadListener: OnThreadListener?) {
+    fun saveBitmap(context: Context, bitmap: Bitmap, onThreadListener: OnThreadListener?) {
         weakHandler.post { onThreadListener?.onStart() }
         Thread {
             val type = saveBitmap(context, bitmap)
@@ -259,10 +257,11 @@ object FileUtil {
         page.render(bitmap, rent, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
         page.close()
         renderer.close()
-        saveBitmapThread(context, bitmap, onThreadListener)
+        saveBitmap(context, bitmap, onThreadListener)
     }
 
     interface OnThreadListener {
+
         /**
          * 线程开始执行
          */
@@ -272,6 +271,7 @@ object FileUtil {
          * 线程停止执行
          */
         fun onStop(path: String? = null)
+
     }
 
     /**
@@ -315,6 +315,42 @@ object FileUtil {
         intent.type = type//此处可发送多种文件
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
         context.startActivity(Intent.createChooser(intent, "分享文件"))
+    }
+
+    /**
+     * 打开压缩包
+     */
+    @JvmStatic
+    fun openZip(context: Context, filePath: String) {
+        val intent = Intent(Intent.ACTION_VIEW)
+        //判断是否是AndroidN以及更高的版本
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            val file = File(filePath)
+            val contentUri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
+            intent.setDataAndType(contentUri, "application/x-zip-compressed")
+        } else {
+            intent.setDataAndType(Uri.parse("file://$filePath"), "application/x-zip-compressed")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+        context.startActivity(intent)
+    }
+
+    /**
+     * 打开world
+     */
+    fun openWorld(context: Context, filePath: String) {
+        val file = File(filePath)
+        val intent = Intent(Intent.ACTION_VIEW)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        val uri: Uri
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
+            uri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
+            intent.setDataAndType(uri, "application/vnd.android.package-archive")
+        } else uri = Uri.parse("file://$file")
+        intent.setDataAndType(uri, "application/msword")
+        context.startActivity(intent)
     }
 
     /**
@@ -389,51 +425,11 @@ object FileUtil {
     @JvmStatic
     fun getCpuInfo(): String {
         try {
-            val fileReader = FileReader("/proc/cpuinfo")
-            val bufferedReader = BufferedReader(fileReader)
-            val text = bufferedReader.readLine()
-            val array = text.split(":\\s+".toRegex(), 2).toTypedArray()
-            val result = array[1]
+            val result = BufferedReader(FileReader("/proc/cpuinfo")).readLine().split(":\\s+".toRegex(), 2).toTypedArray()[1]
             return if("0" == result) "暂无" else result
         } catch (ignored: Exception) {
         }
         return "暂无"
-    }
-
-    /**
-     * 打开压缩包
-     */
-    @JvmStatic
-    fun openZip(context: Context, filePath: String) {
-        val intent = Intent(Intent.ACTION_VIEW)
-        //判断是否是AndroidN以及更高的版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            val file = File(filePath)
-            val contentUri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
-            intent.setDataAndType(contentUri, "application/x-zip-compressed")
-        } else {
-            intent.setDataAndType(Uri.parse("file://$filePath"), "application/x-zip-compressed")
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        context.startActivity(intent)
-    }
-
-    /**
-     * 打开world
-     */
-    fun openWorld(context: Context, filePath: String) {
-        val file = File(filePath)
-        val intent = Intent(Intent.ACTION_VIEW)
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        val uri: Uri
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            intent.flags = Intent.FLAG_GRANT_READ_URI_PERMISSION
-            uri = FileProvider.getUriForFile(context, "${Constants.APPLICATION_ID}.fileProvider", file)
-            intent.setDataAndType(uri, "application/vnd.android.package-archive")
-        } else uri = Uri.parse("file://$file")
-        intent.setDataAndType(uri, "application/msword")
-        context.startActivity(intent)
     }
 
 }
