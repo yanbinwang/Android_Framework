@@ -1,4 +1,4 @@
-package com.dataqin.push
+package com.dataqin.websocket
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
