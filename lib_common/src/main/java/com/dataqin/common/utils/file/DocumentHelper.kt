@@ -10,7 +10,7 @@ import java.security.MessageDigest
 /**
  * 文件工具类
  */
-object FileHelper {
+object DocumentHelper {
 
     /**
      * 获取文件哈希值
