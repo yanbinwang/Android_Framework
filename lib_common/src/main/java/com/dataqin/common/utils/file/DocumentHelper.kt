@@ -13,32 +13,11 @@ import java.security.MessageDigest
 object DocumentHelper {
 
     /**
-     * 获取文件哈希值
-     * 满足64位哈希，不足则前位补0
+     * 开始创建并写入tmp文件
+     * @param filePath  分割文件地址
+     * @param fileSize 分割文件大小
      */
-    @JvmStatic
-    fun getSignature(file: File): String {
-        var hash = ""
-        try {
-            val inputStream = FileInputStream(file)
-            val digest = MessageDigest.getInstance("SHA-256")
-            val array = ByteArray(1024)
-            var len: Int
-            while (inputStream.read(array, 0, 1024).also { len = it } != -1) {
-                digest.update(array, 0, len)
-            }
-            inputStream.close()
-            val bigInt = BigInteger(1, digest.digest())
-            hash = bigInt.toString(16)
-            if (hash.length < 64) {
-                for (i in 0 until 64 - hash.length) {
-                    hash = "0$hash"
-                }
-            }
-        } catch (e: Exception) {
-        }
-        return hash
-    }
+    class TmpInfo(var filePath: String? = null, var fileSize: Long = 0)
 
     /**
      * 文件分割
@@ -69,14 +48,11 @@ object DocumentHelper {
                 offSet = tmpInfo.fileSize
                 splitList.add(tmpInfo.filePath ?: "")
             }
-            if (length - offSet > 0) {
-                val tmpInfo = getWrite(targetFile.absolutePath, count - 1, offSet, length)
-                splitList.add(tmpInfo.filePath ?: "")
-            }
+            if (length - offSet > 0) splitList.add(getWrite(targetFile.absolutePath, count - 1, offSet, length).filePath ?: "")
             accessFile.close()
         } catch (e: Exception) {
         } finally {
-            //确保返回的集合中不包含空集合
+            //确保返回的集合中不包含空路径
             for (i in splitList.indices.reversed()) {
                 if (TextUtils.isEmpty(splitList[i])) {
                     splitList.removeAt(i)
@@ -125,10 +101,31 @@ object DocumentHelper {
     }
 
     /**
-     * 开始创建并写入tmp文件
-     * @param filePath  分割文件地址
-     * @param fileSize 分割文件大小
+     * 获取文件哈希值
+     * 满足64位哈希，不足则前位补0
      */
-    class TmpInfo(var filePath: String? = null, var fileSize: Long = 0)
+    @JvmStatic
+    fun getSignature(file: File): String {
+        var hash = ""
+        try {
+            val inputStream = FileInputStream(file)
+            val digest = MessageDigest.getInstance("SHA-256")
+            val array = ByteArray(1024)
+            var len: Int
+            while (inputStream.read(array, 0, 1024).also { len = it } != -1) {
+                digest.update(array, 0, len)
+            }
+            inputStream.close()
+            val bigInt = BigInteger(1, digest.digest())
+            hash = bigInt.toString(16)
+            if (hash.length < 64) {
+                for (i in 0 until 64 - hash.length) {
+                    hash = "0$hash"
+                }
+            }
+        } catch (e: Exception) {
+        }
+        return hash
+    }
 
 }
