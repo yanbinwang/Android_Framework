@@ -86,11 +86,7 @@ object StringUtil {
         return if (source == null) {
             defaultStr
         } else {
-            if (source.trim { it <= ' ' }.isEmpty()) {
-                defaultStr
-            } else {
-                source
-            }
+            if (source.trim { it <= ' ' }.isEmpty()) defaultStr else source
         }
     }
 
