@@ -47,7 +47,7 @@ object DocumentHelper {
      * @param cutSize    分割文件的大小
      */
     @JvmStatic
-    fun split(targetFile: File, cutSize: Long): ArrayList<String> {
+    fun split(targetFile: File, cutSize: Long): MutableList<String> {
         val splitList = ArrayList<String>()
         try {
             //计算需要分割的文件总数
