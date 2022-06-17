@@ -78,7 +78,7 @@ object DocumentHelper {
             //申明文件切割后的文件磁盘
             val inAccessFile = RandomAccessFile(file, "r")
             //定义一个可读，可写的文件并且后缀名为.tmp的二进制文件
-            val tmpFile = File("${file.name.split(".")[0]}_${index}.tmp")
+            val tmpFile = File("${file.parent}/${file.name.split(".")[0]}_${index}.tmp")
             //如果不存在，则创建一个或继续写入
             val outAccessFile = RandomAccessFile(tmpFile, "rw")
             //申明具体每一文件的字节数组
