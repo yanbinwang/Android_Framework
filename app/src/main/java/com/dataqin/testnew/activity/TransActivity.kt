@@ -15,13 +15,7 @@ class TransActivity : BaseActivity<ActivityTransBinding>() {
 
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
-//        //即设定DecorView在PhoneWindow里的位置
-//        val layoutParams = window.decorView.layoutParams as WindowManager.LayoutParams
-////        layoutParams.gravity = Gravity.BOTTOM
-//        layoutParams.width = WindowManager.LayoutParams.MATCH_PARENT
-////        layoutParams.height = WindowManager.LayoutParams.WRAP_CONTENT
-//        layoutParams.height = WindowManager.LayoutParams.MATCH_PARENT
-//        windowManager.updateViewLayout(window.decorView, layoutParams)
+        //即设定DecorView在PhoneWindow里的位置
         (window.decorView.layoutParams as WindowManager.LayoutParams).apply {
             width = WindowManager.LayoutParams.MATCH_PARENT
             height = WindowManager.LayoutParams.MATCH_PARENT

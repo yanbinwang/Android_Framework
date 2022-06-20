@@ -74,6 +74,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
+
+        navigation(ARouterPath.TransActivity).finish()
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
 //        PopupHelper.addPopup(0,Any())
