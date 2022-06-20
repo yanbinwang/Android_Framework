@@ -4,7 +4,7 @@ import android.content.Context
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.BuildConfig
 import com.dataqin.common.utils.analysis.GsonUtil
-import com.dataqin.push.model.PushModel
+import com.dataqin.push.model.PayLoad
 import com.dataqin.push.utils.PushHelper
 import com.igexin.sdk.GTIntentService
 import com.igexin.sdk.PushManager
@@ -29,27 +29,27 @@ import com.igexin.sdk.message.GTTransmitMessage
  */
 class GetuiIntentService : GTIntentService() {
 
-    override fun onReceiveServicePid(p0: Context?, p1: Int) {
-    }
+    override fun onReceiveServicePid(context: Context?, pid: Int) {}
 
     /**
      * 接收 cid
      */
-    override fun onReceiveClientId(p0: Context?, p1: String?) {
+    override fun onReceiveClientId(context: Context?, clientid: String?) {
+        LogUtil.e(TAG, "onReceiveClientId -> clientid = $clientid")
     }
 
     /**
      * 处理透传消息
      */
-    override fun onReceiveMessageData(p0: Context?, p1: GTTransmitMessage?) {
-        val appid = p1?.appid
-        val taskid = p1?.taskId
-        val messageid = p1?.messageId
-        val payload = p1?.payload
-        val pkg = p1?.pkgName
-        val cid = p1?.clientId
+    override fun onReceiveMessageData(context: Context?, msg: GTTransmitMessage?) {
+        val appid = msg?.appid
+        val taskid = msg?.taskId
+        val messageid = msg?.messageId
+        val payload = msg?.payload
+        val pkg = msg?.pkgName
+        val cid = msg?.clientId
         //第三方回执调用接口，actionid范围为90000-90999，可根据业务场景执行
-        val result = PushManager.getInstance().sendFeedbackMessage(p0, taskid, messageid, 90001)
+        val result = PushManager.getInstance().sendFeedbackMessage(context, taskid, messageid, 90001)
         LogUtil.d(TAG, "call sendFeedbackMessage = " + if (result) "success" else "failed")
         LogUtil.d(TAG, "onReceiveMessageData -> appid = $appid\ntaskid = $taskid\nmessageid = $messageid\npkg = $pkg\ncid = $cid")
         if (null == payload) {
@@ -58,10 +58,10 @@ class GetuiIntentService : GTIntentService() {
             val data = String(payload)
             LogUtil.d(TAG, "receiver payload = $data")
             //将payload强转为对象，传到对应的工具类中
-            val pushModel = GsonUtil.jsonToObj(data, PushModel::class.java)
-            if (null != pushModel && !(BuildConfig.DEBUG && pushModel.env.equals("prod"))) {
+            val payLoad = GsonUtil.jsonToObj(data, PayLoad::class.java)
+            if (null != payLoad && !(BuildConfig.DEBUG && payLoad.env.equals("prod"))) {
                 LogUtil.d(TAG, "符合推送环境要求")
-                PushHelper.send(pushModel)
+                PushHelper.send(payLoad)
             }
         }
     }
@@ -69,25 +69,21 @@ class GetuiIntentService : GTIntentService() {
     /**
      * cid 离线上线通知
      */
-    override fun onReceiveOnlineState(p0: Context?, p1: Boolean) {
-    }
+    override fun onReceiveOnlineState(context: Context?, online: Boolean) {}
 
     /**
      * 各种事件处理回执
      */
-    override fun onReceiveCommandResult(p0: Context?, p1: GTCmdMessage?) {
-    }
+    override fun onReceiveCommandResult(context: Context?, cmdMessage: GTCmdMessage?) {}
 
     /**
      * 通知到达，只有个推通道下发的通知会回调此方法
      */
-    override fun onNotificationMessageArrived(p0: Context?, p1: GTNotificationMessage?) {
-    }
+    override fun onNotificationMessageArrived(context: Context?, gtNotificationMessage: GTNotificationMessage?) {}
 
     /**
      * 通知点击，只有个推通道下发的通知会回调此方法
      */
-    override fun onNotificationMessageClicked(p0: Context?, p1: GTNotificationMessage?) {
-    }
+    override fun onNotificationMessageClicked(context: Context?, gtNotificationMessage: GTNotificationMessage?) {}
 
 }

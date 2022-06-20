@@ -6,7 +6,7 @@ import java.io.Serializable
  *  Created by wangyanbin
  *  推送类
  */
-class PushModel :Serializable {
+class PayLoad :Serializable {
     var sendType: String? = null//消息发送类型
     var title: String? = null//通知栏显示标题
     var content: String? = null//通知栏显示内容

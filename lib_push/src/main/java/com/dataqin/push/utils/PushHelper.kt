@@ -9,7 +9,7 @@ import com.dataqin.common.constant.ARouterPath
 import com.dataqin.common.constant.Extras
 import com.dataqin.push.R
 import com.dataqin.push.activity.PushActivity
-import com.dataqin.push.model.PushModel
+import com.dataqin.push.model.PayLoad
 
 /**
  *  Created by wangyanbin
@@ -18,28 +18,28 @@ import com.dataqin.push.model.PushModel
 object PushHelper {
     private val context by lazy { BaseApplication.instance?.applicationContext }
 
-    fun send(model: PushModel) {
+    fun send(payload: PayLoad) {
         //找到合适条件的页面class后，创建推送
-        val clazz = getAppPage(model)
+        val clazz = getPage(payload)
+        //没拿到结果不做处理
         if (TextUtils.isEmpty(clazz)) return
-        //如果得到的json返回类是属于普通消息，且APP处于开启状态，则直接点击后不跳转不做操作
+        //如果得到的json返回类是属于普通消息，且APP处于开启状态，则点击通知后不跳转
         if (ARouterPath.StartActivity == clazz && isAppOnForeground()) {
-            NotificationFactory.instance.normal(model.title!!, model.content!!, R.mipmap.push_small, R.mipmap.push)
+            NotificationFactory.instance.normal(payload.title!!, payload.content!!, R.mipmap.push_small, R.mipmap.push)
         } else {
             val id = "xxxx"//服务器给的特定id
-            NotificationFactory.instance.normal(
-                model.title!!, model.content!!, R.mipmap.push_small, R.mipmap.push,
-                Intent(context, PushActivity::class.java)
-                    .putExtra(Extras.IS_RUNNING, isAppOnForeground())
-                    .putExtra(Extras.PAYLOAD, model), id)
+            NotificationFactory.instance.normal(payload.title!!, payload.content!!, R.mipmap.push_small, R.mipmap.push, Intent(context, PushActivity::class.java).putExtra(Extras.IS_RUNNING, isAppOnForeground()).putExtra(Extras.PAYLOAD, payload), id)
         }
     }
 
-    fun getAppPage(model: PushModel): String? {
-        return when (model.sendType) {
+    /**
+     * 获取要跳转页面的路由路径
+     */
+    fun getPage(payload: PayLoad): String {
+        return when (payload.sendType) {
             "SCORE_FINE_IN", "SCORE_FINE_OUT" -> ARouterPath.StartActivity
 //            "DISOBEY_FINE_IN", "DISOBEY_FINE_OUT" -> ARouterPath.CameraActivity
-            else -> null
+            else -> ""
         }
     }
 
@@ -48,14 +48,6 @@ object PushHelper {
      * 100表示取的最大的任务数，info.topActivity表示当前正在运行的Activity，info.baseActivity表系统后台有此进程在运行
      */
     private fun isAppOnForeground(): Boolean {
-//        val runningTasks = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).getRunningTasks(100)
-//        val packageName = context?.packageName
-//        for (tasks in runningTasks) {
-//            if (tasks.topActivity?.packageName == packageName || tasks.baseActivity?.packageName == packageName) {
-//                return true
-//            }
-//        }
-//        return false
         val processes = (context?.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
         for (process in processes) {
             if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context?.packageName)) return true
