@@ -28,6 +28,11 @@ import java.lang.StringBuilder
 
 //------------------------------------按钮，控件行为工具类------------------------------------
 /**
+ * 开启一个网页
+ */
+fun Context.openWebsite(url: String) = startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+
+/**
  * 震动
  */
 @SuppressLint("MissingPermission")
@@ -39,11 +44,6 @@ fun View.vibrate(milliseconds: Long) {
         vibrator.vibrate(VibrationEffect.createOneShot(milliseconds, VibrationEffect.DEFAULT_AMPLITUDE))
     }
 }
-
-/**
- * 开启一个网页
- */
-fun View.openWebsite(url: String) = context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
 /**
  * 空出状态栏高度
