@@ -107,7 +107,6 @@ fun TextView.setSpan(textStr: String, keyword: String, colorRes: Int = R.color.b
 /**
  * 文案添加点击事件（单一）
  */
-@JvmOverloads
 fun TextView.setClickableSpan(textStr: String, keyword: String, clickableSpan: ClickableSpan) {
     val spannable = SpannableString(textStr)
     val index = textStr.indexOf(keyword)
