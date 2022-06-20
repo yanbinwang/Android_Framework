@@ -27,30 +27,6 @@ import com.dataqin.common.constant.Constants
 import java.lang.StringBuilder
 
 //------------------------------------按钮，控件行为工具类------------------------------------
-
-/**
- * 空出状态栏高度
- */
-fun RelativeLayout.topStatusMargin(arrow: Boolean = true) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
-        val params = layoutParams as RelativeLayout.LayoutParams
-        params.topMargin = Constants.STATUS_BAR_HEIGHT
-        layoutParams = params
-    }
-}
-
-fun LinearLayout.topStatusMargin(arrow: Boolean = true) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
-        val params = layoutParams as LinearLayout.LayoutParams
-        params.topMargin = Constants.STATUS_BAR_HEIGHT
-        layoutParams = params
-    }
-}
-
-fun View.topStatusPadding() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
-
-fun View.topStatus() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Constants.STATUS_BAR_HEIGHT) }
-
 /**
  * 震动
  */
@@ -70,9 +46,32 @@ fun View.vibrate(milliseconds: Long) {
 fun View.openWebsite(url: String) = context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
 
 /**
+ * 空出状态栏高度
+ */
+fun View.topStatus() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) layoutParams = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, Constants.STATUS_BAR_HEIGHT) }
+
+fun View.topStatusPadding() = run { if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) setPadding(0, Constants.STATUS_BAR_HEIGHT, 0, 0) }
+
+fun RelativeLayout.topStatusMargin(arrow: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
+        val params = layoutParams as RelativeLayout.LayoutParams
+        params.topMargin = Constants.STATUS_BAR_HEIGHT
+        layoutParams = params
+    }
+}
+
+fun LinearLayout.topStatusMargin(arrow: Boolean = true) {
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M || arrow) {
+        val params = layoutParams as LinearLayout.LayoutParams
+        params.topMargin = Constants.STATUS_BAR_HEIGHT
+        layoutParams = params
+    }
+}
+
+/**
  * 设置按钮显影图片
  */
-fun ImageView.setDisplayResource(display: Boolean, showId: Int, hideId: Int) = setBackgroundResource(if (!display) showId else hideId)
+fun ImageView.setSwitchResource(display: Boolean, showId: Int, hideId: Int) = setImageResource(if (!display) showId else hideId)
 
 /**
  * 图片宽屏
@@ -222,16 +221,4 @@ fun EditText.inhibitInputSpace() {
             return if (result == " ") "" else null
         }
     })
-}
-
-/**
- * 检测
- */
-fun Context.testingContent(vararg views: EditText?): Boolean {
-    for (view in views) {
-        if (view != null) {
-            if (TextUtils.isEmpty(view.text.toString().trim { it <= ' ' })) return false
-        }
-    }
-    return true
 }
