@@ -55,8 +55,8 @@
 
             <ImageView
                 android:id="@+id/iv_right"
-                android:layout_width="30mm"
-                android:layout_height="30mm"
+                android:layout_width="40mm"
+                android:layout_height="40mm"
                 android:layout_marginHorizontal="20mm" />
 
             <TextView
