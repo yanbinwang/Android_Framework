@@ -32,7 +32,6 @@ import java.util.zip.ZipOutputStream
 @SuppressLint("QueryPermissionsNeeded")
 object FileUtil {
     private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
-    private const val TAG = "FileUtil"
 
     /**
      * 是否安装了XXX应用
@@ -115,8 +114,8 @@ object FileUtil {
     fun deleteDir(filePath: String) = deleteDirWithFile(File(filePath))
 
     @JvmStatic
-    fun deleteDirWithFile(dir: File?) {
-        if (dir == null || !dir.exists() || !dir.isDirectory) return
+    fun deleteDirWithFile(dir: File) {
+        if (!dir.exists() || !dir.isDirectory) return
         for (file in dir.listFiles()!!) {
             if (file.isFile) file.delete() //删除所有文件
             else if (file.isDirectory) deleteDirWithFile(file) //递规的方式删除文件夹
@@ -136,43 +135,42 @@ object FileUtil {
     @Throws(Exception::class)
     fun zipFolder(srcFilePath: String, zipFilePath: String) {
         //创建ZIP
-        val outZip = ZipOutputStream(FileOutputStream(zipFilePath))
+        val outputSteam = ZipOutputStream(FileOutputStream(zipFilePath))
         //创建文件
         val file = File(srcFilePath)
         //压缩
-        zipFiles(file.parent + File.separator, file.name, outZip)
+        zipFiles(file.parent + File.separator, file.name, outputSteam)
         //完成和关闭
-        outZip.finish()
-        outZip.close()
+        outputSteam.finish()
+        outputSteam.close()
     }
 
     @Throws(Exception::class)
-    private fun zipFiles(folderPath: String, fileName: String, zipOutputSteam: ZipOutputStream?) {
-        LogUtil.e(TAG, " \n压缩路径:$folderPath\n压缩文件名:$fileName")
-        if (zipOutputSteam == null) return
+    private fun zipFiles(folderPath: String, fileName: String, outputSteam: ZipOutputStream) {
+        log(" \n压缩路径:$folderPath\n压缩文件名:$fileName")
         val file = File(folderPath + fileName)
         if (file.isFile) {
-            val zipEntry = ZipEntry(fileName)
+            val entry = ZipEntry(fileName)
             val inputStream = FileInputStream(file)
-            zipOutputSteam.putNextEntry(zipEntry)
+            outputSteam.putNextEntry(entry)
             var len: Int
             val buffer = ByteArray(4096)
             while (inputStream.read(buffer).also { len = it } != -1) {
-                zipOutputSteam.write(buffer, 0, len)
+                outputSteam.write(buffer, 0, len)
             }
-            zipOutputSteam.closeEntry()
+            outputSteam.closeEntry()
         } else {
             //文件夹
             val fileList = file.list()
             //没有子文件和压缩
             if (fileList.isEmpty()) {
                 val zipEntry = ZipEntry(fileName + File.separator)
-                zipOutputSteam.putNextEntry(zipEntry)
-                zipOutputSteam.closeEntry()
+                outputSteam.putNextEntry(zipEntry)
+                outputSteam.closeEntry()
             }
             //子文件和递归
             for (i in fileList.indices) {
-                zipFiles("$folderPath$fileName/", fileList[i], zipOutputSteam)
+                zipFiles("$folderPath$fileName/", fileList[i], outputSteam)
             }
         }
     }
@@ -190,7 +188,7 @@ object FileUtil {
             try {
                 if (fileDir.exists()) zipFolder(fileDir.absolutePath, zipFile.absolutePath)
             } catch (e: Exception) {
-                LogUtil.e(TAG, "打包图片生成压缩文件异常: $e")
+                log("打包图片生成压缩文件异常: $e")
             } finally {
                 weakHandler.post { onThreadListener?.onStop() }
             }
@@ -360,10 +358,10 @@ object FileUtil {
     fun formatFileSize(fileSize: Long): String {
         val format = DecimalFormat("#.00")
         return when {
-            fileSize < 1024 -> format.format(fileSize.toDouble()) + "B"
-            fileSize < 1048576 -> format.format(fileSize.toDouble() / 1024) + "K"
-            fileSize < 1073741824 -> format.format(fileSize.toDouble() / 1048576) + "M"
-            else -> format.format(fileSize.toDouble() / 1073741824) + "G"
+            fileSize < 1024 -> "${format.format(fileSize.toDouble())}B"
+            fileSize < 1048576 -> "${format.format(fileSize.toDouble() / 1024)}K"
+            fileSize < 1073741824 -> "${format.format(fileSize.toDouble() / 1048576)}M"
+            else -> "${format.format(fileSize.toDouble() / 1073741824)}G"
         }
     }
 
@@ -426,10 +424,15 @@ object FileUtil {
     fun getCpuInfo(): String {
         try {
             val result = BufferedReader(FileReader("/proc/cpuinfo")).readLine().split(":\\s+".toRegex(), 2).toTypedArray()[1]
-            return if("0" == result) "暂无" else result
+            return if ("0" == result) "暂无" else result
         } catch (ignored: Exception) {
         }
         return "暂无"
     }
+
+    /**
+     * 日志
+     */
+    private fun log(msg: String) = LogUtil.e("FileUtil", msg)
 
 }
