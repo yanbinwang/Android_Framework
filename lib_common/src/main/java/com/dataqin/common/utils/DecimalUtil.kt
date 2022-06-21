@@ -63,6 +63,8 @@ fun Double.divide(v: Double, scale: Int = 10) = BigDecimal(this).divide(BigDecim
  */
 fun String.divide(scale: Int) = BigDecimal(this).divide(BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP).toDouble()
 
+fun Double.divide(scale: Int) = BigDecimal(this).divide(BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP).toDouble()
+
 /**
  * 当小数位不超过两位时，补0
  */
