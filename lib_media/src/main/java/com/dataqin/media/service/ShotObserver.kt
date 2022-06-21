@@ -55,7 +55,7 @@ class ShotObserver : ContentObserver(null) {
                         BitmapFactory.decodeFile(queryPath, options)
                         if (options.outWidth != -1) {
                             val file = File(queryPath)
-                            e("ScreenShotObserver", " \n生成图片的路径:$queryPath\n手机截屏的路径：${file.parent}")
+                            e("ShotObserver", " \n生成图片的路径:$queryPath\n手机截屏的路径：${file.parent}")
                             RxBus.instance.post(RxEvent(Constants.APP_SHOT_PATH, file.parent ?: ""), RxEvent(Constants.APP_SHOT_IMAGE_PATH, queryPath))
                         }
                     }
