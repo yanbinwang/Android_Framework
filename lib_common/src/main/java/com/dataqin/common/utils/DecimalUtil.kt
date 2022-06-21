@@ -17,27 +17,27 @@ import java.text.DecimalFormat
 /**
  * 加法运算
  */
-fun Double.add(v: Double) = BigDecimal(this.toString()).add(BigDecimal(v.toString())).toDouble()
+fun String.add(v: String) = BigDecimal(this).add(BigDecimal(v)).toDouble()
 
 /**
  * 减法运算
  */
-fun Double.subtract(v: Double) = BigDecimal(this.toString()).subtract(BigDecimal(v.toString())).toDouble()
+fun String.subtract(v: String) = BigDecimal(this).subtract(BigDecimal(v)).toDouble()
 
 /**
  * 乘法运算
  */
-fun Double.multiply(v: Double) = BigDecimal(this.toString()).multiply(BigDecimal(v.toString())).toDouble()
+fun String.multiply(v: String) = BigDecimal(this).multiply(BigDecimal(v)).toDouble()
 
 /**
  * 除法运算-当发生除不尽的情况时，由scale参数指定精度，以后的数字四舍五入
  */
-fun Double.divide(v: Double, scale: Int = 10) = BigDecimal(this.toString()).divide(BigDecimal(v.toString()), scale, BigDecimal.ROUND_HALF_UP).toDouble()
+fun String.divide(v: String, scale: Int = 10) = BigDecimal(this).divide(BigDecimal(v), scale, BigDecimal.ROUND_HALF_UP).toDouble()
 
 /**
  * 小数位四舍五入处理
  */
-fun Double.divide(scale: Int) = BigDecimal(this.toString()).divide(BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP).toDouble()
+fun String.divide(scale: Int) = BigDecimal(this).divide(BigDecimal("1"), scale, BigDecimal.ROUND_HALF_UP).toDouble()
 
 /**
  * 当小数位不超过两位时，补0
