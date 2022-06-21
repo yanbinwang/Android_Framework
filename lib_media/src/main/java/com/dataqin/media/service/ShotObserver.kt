@@ -20,13 +20,13 @@ import java.io.File
  *  2.安卓10开始已淘汰MediaStore.MediaColumns.DATA方法，没法捕获绝对路径，只有通过RELATIVE_PATH捕获相对路径
  */
 @SuppressLint("Range")
-class ScreenShotObserver : ContentObserver(null) {
+class ShotObserver : ContentObserver(null) {
     private var filePath = ""
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
 
     companion object {
         @JvmStatic
-        val instance by lazy { ScreenShotObserver() }
+        val instance by lazy { ShotObserver() }
     }
 
     override fun onChange(selfChange: Boolean) {

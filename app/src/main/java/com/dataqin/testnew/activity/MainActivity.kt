@@ -22,7 +22,7 @@ import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
-import com.dataqin.media.service.ScreenShotObserver
+import com.dataqin.media.service.ShotObserver
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -124,7 +124,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
-        ScreenShotObserver.instance.register()
+        ShotObserver.instance.register()
         addDisposable(RxBus.instance.toFlowable {
             when (it.getAction()) {
 //                Constants.APP_MAP_CONNECTIVITY -> MapHelper.location(this)
@@ -264,7 +264,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
 
     override fun onDestroy() {
         super.onDestroy()
-        ScreenShotObserver.instance.unregister()
+        ShotObserver.instance.unregister()
 //        LocationFactory.instance.stop()
     }
 
