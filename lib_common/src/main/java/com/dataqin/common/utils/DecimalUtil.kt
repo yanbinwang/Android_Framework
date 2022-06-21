@@ -21,12 +21,20 @@ fun String.add(v: String) = BigDecimal(this).add(BigDecimal(v)).toDouble()
 
 fun String.add(v: Double) = BigDecimal(this).add(BigDecimal(v)).toDouble()
 
+fun Double.add(v: String) = BigDecimal(this).add(BigDecimal(v)).toDouble()
+
+fun Double.add(v: Double) = BigDecimal(this).add(BigDecimal(v)).toDouble()
+
 /**
  * 减法运算
  */
 fun String.subtract(v: String) = BigDecimal(this).subtract(BigDecimal(v)).toDouble()
 
 fun String.subtract(v: Double) = BigDecimal(this).subtract(BigDecimal(v)).toDouble()
+
+fun Double.subtract(v: String) = BigDecimal(this).subtract(BigDecimal(v)).toDouble()
+
+fun Double.subtract(v: Double) = BigDecimal(this).subtract(BigDecimal(v)).toDouble()
 
 /**
  * 乘法运算
@@ -35,12 +43,20 @@ fun String.multiply(v: String) = BigDecimal(this).multiply(BigDecimal(v)).toDoub
 
 fun String.multiply(v: Double) = BigDecimal(this).multiply(BigDecimal(v)).toDouble()
 
+fun Double.multiply(v: String) = BigDecimal(this).multiply(BigDecimal(v)).toDouble()
+
+fun Double.multiply(v: Double) = BigDecimal(this).multiply(BigDecimal(v)).toDouble()
+
 /**
  * 除法运算-当发生除不尽的情况时，由scale参数指定精度，以后的数字四舍五入
  */
 fun String.divide(v: String, scale: Int = 10) = BigDecimal(this).divide(BigDecimal(v), scale, BigDecimal.ROUND_HALF_UP).toDouble()
 
 fun String.divide(v: Double, scale: Int = 10) = BigDecimal(this).divide(BigDecimal(v), scale, BigDecimal.ROUND_HALF_UP).toDouble()
+
+fun Double.divide(v: String, scale: Int = 10) = BigDecimal(this).divide(BigDecimal(v), scale, BigDecimal.ROUND_HALF_UP).toDouble()
+
+fun Double.divide(v: Double, scale: Int = 10) = BigDecimal(this).divide(BigDecimal(v), scale, BigDecimal.ROUND_HALF_UP).toDouble()
 
 /**
  * 小数位四舍五入处理
