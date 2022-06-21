@@ -1,5 +1,6 @@
 package com.dataqin.media.service
 
+import android.annotation.SuppressLint
 import android.database.ContentObserver
 import android.database.Cursor
 import android.graphics.BitmapFactory
@@ -18,10 +19,10 @@ import java.io.File
  *  1.具备读写权限
  *  2.安卓10开始已淘汰MediaStore.MediaColumns.DATA方法，没法捕获绝对路径，只有通过RELATIVE_PATH捕获相对路径
  */
+@SuppressLint("Range")
 class ScreenShotObserver : ContentObserver(null) {
     private var filePath = ""
     private val context by lazy { BaseApplication.instance?.applicationContext!! }
-    private val TAG = "ScreenShotObserver"
 
     companion object {
         @JvmStatic
@@ -31,7 +32,6 @@ class ScreenShotObserver : ContentObserver(null) {
     override fun onChange(selfChange: Boolean) {
         super.onChange(selfChange)
         //Query [ 图片媒体集 ] 包括： DCIM/ 和 Pictures/ 目录
-//        val columns = arrayOf(MediaStore.MediaColumns.DATE_ADDED, MediaStore.MediaColumns.DATA, MediaStore.Images.Media._ID, MediaStore.Images.Media.TITLE, MediaStore.Images.Media.MIME_TYPE, MediaStore.Images.Media.SIZE)
         val columns = arrayOf(
             MediaStore.MediaColumns.DATE_ADDED,
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) MediaStore.MediaColumns.RELATIVE_PATH else MediaStore.MediaColumns.DATA,
@@ -44,17 +44,9 @@ class ScreenShotObserver : ContentObserver(null) {
             cursor = context.contentResolver.query(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, MediaStore.MediaColumns.DATE_MODIFIED + " desc")
             if (cursor != null) {
                 if (cursor.moveToFirst()) {
-//                    val contentUri = ContentUris.withAppendedId(
-//                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-//                        cursor.getLong(cursor.getColumnIndex(BaseColumns._ID))
-//                    )
                     //获取监听的路径
-//                    val queryPath = cursor.getString(cursor.getColumnIndex(MediaStore.MediaColumns.DATA))
-                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        val sdPath = context.getExternalFilesDir(null)?.absolutePath ?: ""
-                        "${sdPath.split("Android")[0]}${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}"
-//                        "/storage/emulated/0/${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}"
-                    } else getQueryResult(cursor, columns[1])
+                    val queryPath = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) "${(context.getExternalFilesDir(null)?.absolutePath ?: "").split("Android")[0]}${getQueryResult(cursor, columns[1])}${getQueryResult(cursor, columns[3])}" else getQueryResult(cursor, columns[1])
+                    //保证每次获取到的路径不重复
                     if (filePath != queryPath) {
                         filePath = queryPath
                         //判断当前路径是否为图片，是的话捕获当前路径
@@ -63,7 +55,7 @@ class ScreenShotObserver : ContentObserver(null) {
                         BitmapFactory.decodeFile(queryPath, options)
                         if (options.outWidth != -1) {
                             val file = File(queryPath)
-                            e(TAG, " \n生成图片的路径:$queryPath\n手机截屏的路径：${file.parent}")
+                            e("ScreenShotObserver", " \n生成图片的路径:$queryPath\n手机截屏的路径：${file.parent}")
                             RxBus.instance.post(RxEvent(Constants.APP_SHOT_PATH, file.parent ?: ""), RxEvent(Constants.APP_SHOT_IMAGE_PATH, queryPath))
                         }
                     }
