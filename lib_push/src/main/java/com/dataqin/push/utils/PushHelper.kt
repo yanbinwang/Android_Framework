@@ -35,8 +35,8 @@ object PushHelper {
     /**
      * 获取要跳转页面的路由路径
      */
-    fun getPage(payload: PayLoad): String {
-        return when (payload.sendType) {
+    fun getPage(payload: PayLoad?): String {
+        return when (payload?.sendType) {
             "SCORE_FINE_IN", "SCORE_FINE_OUT" -> ARouterPath.StartActivity
 //            "DISOBEY_FINE_IN", "DISOBEY_FINE_OUT" -> ARouterPath.CameraActivity
             else -> ""

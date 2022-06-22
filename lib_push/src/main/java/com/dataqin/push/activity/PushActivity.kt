@@ -13,7 +13,7 @@ import com.dataqin.push.utils.PushHelper
  *  Created by wangyanbin
  *  无任何页面容器的activity，用于区分跳转的推送页面
  *  1.用户点击构建好的通知后统一先跳转到该页面，在当前页面区分启动状态，跳转至不同页面
- *  2.页面样式采用启动页StartActivity的样式
+ *  2.页面样式采用启动页StartActivity或MainActivity的样式
  */
 class PushActivity : BaseActivity<ViewBinding>() {
 
