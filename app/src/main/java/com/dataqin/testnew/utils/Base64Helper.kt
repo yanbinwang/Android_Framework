@@ -38,10 +38,8 @@ object Base64Helper {
                 //生成缓存文件
                 val cacheFile = File(storeDir, "${System.currentTimeMillis()}_cache.${suffix}")
                 path = cacheFile.absolutePath
-                val decodeBytes = Base64.decode(pure(base64), 0)
-                val outputStream: FileOutputStream?
-                outputStream = FileOutputStream(cacheFile, false)
-                outputStream.write(decodeBytes)
+                val outputStream = FileOutputStream(cacheFile, false)
+                outputStream.write(Base64.decode(pure(base64), 0))
                 outputStream.flush()
                 outputStream.close()
             } catch (e: Exception) {
