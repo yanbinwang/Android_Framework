@@ -181,8 +181,8 @@ object FileUtil {
      */
     @JvmStatic
     fun zipFolder(folderPath: String, zipPath: String, onThreadListener: OnThreadListener?) {
-        weakHandler.post { onThreadListener?.onStart() }
         Thread {
+            weakHandler.post { onThreadListener?.onStart() }
             val fileDir = File(folderPath)
             val zipFile = File(zipPath)
             try {
@@ -242,7 +242,7 @@ object FileUtil {
      */
     @JvmOverloads
     @JvmStatic
-    fun savePDFBitmap(context: Context, file: File, index: Int = 0, onThreadListener: OnThreadListener?) {
+    fun savePdfBitmap(context: Context, file: File, index: Int = 0, onThreadListener: OnThreadListener?) {
         val renderer = PdfRenderer(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
         val page = renderer.openPage(index)//选择渲染哪一页的渲染数据
         val width = page.width
@@ -256,20 +256,6 @@ object FileUtil {
         page.close()
         renderer.close()
         saveBitmap(context, bitmap, onThreadListener)
-    }
-
-    interface OnThreadListener {
-
-        /**
-         * 线程开始执行
-         */
-        fun onStart()
-
-        /**
-         * 线程停止执行
-         */
-        fun onStop(path: String? = null)
-
     }
 
     /**

@@ -5,6 +5,7 @@ import android.util.Base64
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.common.utils.file.OnThreadListener
 import java.io.File
 import java.io.FileOutputStream
 import java.util.concurrent.Executors
@@ -55,17 +56,5 @@ object Base64Helper {
      */
     @JvmStatic
     fun pure(encodedString: String) = encodedString.substring(encodedString.indexOf(",") + 1)
-
-    interface OnThreadListener {
-        /**
-         * 线程开始执行
-         */
-        fun onStart()
-
-        /**
-         * 线程停止执行
-         */
-        fun onStop(path: String? = null)
-    }
 
 }

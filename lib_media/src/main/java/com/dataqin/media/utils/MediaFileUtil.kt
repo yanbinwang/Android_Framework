@@ -11,6 +11,7 @@ import com.dataqin.base.utils.SdcardUtil
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.file.FileUtil
+import com.dataqin.common.utils.file.OnThreadListener
 import com.dataqin.media.utils.helper.VideoHelper
 import java.io.File
 import java.io.FileOutputStream
@@ -84,7 +85,7 @@ object MediaFileUtil {
      * 传入视频原路径，并通过秒数集合，批量生成图片，并打包成压缩包保存到指定路径下
      */
     @JvmStatic
-    fun setHandleVideo(videoPath: String, secondList: MutableList<Int>, zipFilePath: String, onThreadListener: FileUtil.OnThreadListener?) {
+    fun setHandleVideo(videoPath: String, secondList: MutableList<Int>, zipFilePath: String, onThreadListener: OnThreadListener?) {
         Thread {
             weakHandler.post { onThreadListener?.onStart() }
             //在‘视频抽帧’文件夹下建立一个以抽帧文件名命名的文件夹，方便后续对当前文件夹打压缩包
@@ -109,7 +110,7 @@ object MediaFileUtil {
      * base64文件流的形式加载文件，需要先下载，之后在放置
      */
     @JvmStatic
-    fun getBase64File(base64: String, suffix: String, root: String = "${Constants.APPLICATION_FILE_PATH}/缓存", clear: Boolean = true, onThreadListener: FileUtil.OnThreadListener?) {
+    fun getBase64File(base64: String, suffix: String, root: String = "${Constants.APPLICATION_FILE_PATH}/缓存", clear: Boolean = true, onThreadListener: OnThreadListener?) {
         Thread {
             weakHandler.post { onThreadListener?.onStart() }
             if (clear) FileUtil.deleteDir(root)
