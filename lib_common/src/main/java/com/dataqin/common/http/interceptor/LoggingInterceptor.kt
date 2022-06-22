@@ -34,9 +34,7 @@ internal class LoggingInterceptor : Interceptor {
             //不包含服务器地址的属于下载地址或图片加载地址，不做拦截
             !url.contains(BuildConfig.LOCALHOST) -> return chain.proceed(request)
             //上传文件接口文本量过大，请求参数不做拦截
-            url.contains("user/uploadImg") ||
-                    url.contains("evidences/partUpload") ||
-                    url.contains("evidences/upload") -> queryParameter = "文件上传"
+            url.contains("user/uploadImg") -> queryParameter = "文件上传"
             else -> {
                 val requestBody = request.body
                 val hasRequestBody = requestBody != null
