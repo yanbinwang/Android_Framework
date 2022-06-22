@@ -5,8 +5,8 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.os.Looper
 import android.view.View
-import com.dataqin.common.constant.Constants
 import com.dataqin.base.utils.WeakHandler
+import com.dataqin.common.constant.Constants
 import java.util.concurrent.Executors
 
 /**
@@ -26,7 +26,7 @@ object GenerateHelper {
         executors.execute {
             try {
                 val bitmap = loadBitmap(view)
-                weakHandler.post { onGenerateListener?.onResult(bitmap!!) }
+                weakHandler.post { onGenerateListener?.onResult(bitmap) }
             } catch (ignored: Exception) {
             } finally {
                 weakHandler.post { onGenerateListener?.onComplete() }
@@ -42,8 +42,8 @@ object GenerateHelper {
     private fun loadLayout(view: View) {
         //整个View的大小 参数是左上角 和右下角的坐标
         view.layout(0, 0, Constants.SCREEN_WIDTH, Constants.SCREEN_HEIGHT)
-        val measuredWidth: Int = View.MeasureSpec.makeMeasureSpec(Constants.SCREEN_WIDTH, View.MeasureSpec.EXACTLY)
-        val measuredHeight: Int = View.MeasureSpec.makeMeasureSpec(Constants.SCREEN_HEIGHT, View.MeasureSpec.EXACTLY)
+        val measuredWidth = View.MeasureSpec.makeMeasureSpec(Constants.SCREEN_WIDTH, View.MeasureSpec.EXACTLY)
+        val measuredHeight = View.MeasureSpec.makeMeasureSpec(Constants.SCREEN_HEIGHT, View.MeasureSpec.EXACTLY)
         view.measure(measuredWidth, measuredHeight)
         view.layout(0, 0, view.measuredWidth, view.measuredHeight)
     }
@@ -64,7 +64,7 @@ object GenerateHelper {
 
         fun onStart()
 
-        fun onResult(bitmap: Bitmap)
+        fun onResult(bitmap: Bitmap?)
 
         fun onComplete()
 
