@@ -5,6 +5,8 @@ import android.app.Activity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.ImageView
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.dataqin.base.utils.TimerHelper
 import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.media.R
@@ -28,7 +30,7 @@ import java.lang.ref.WeakReference
  *  默认-开锁可随屏幕翻转角度
  */
 @SuppressLint("StaticFieldLeak")
-object GSYVideoHelper {
+object GSYVideoHelper : DefaultLifecycleObserver {
     private var retryWithPlay = false
     private var videoType: VideoType = VideoType.MOBILE
     private var weakActivity: WeakReference<Activity>? = null
@@ -179,6 +181,29 @@ object GSYVideoHelper {
         player?.currentPlayer?.release()
         player?.release()
         orientationUtils?.releaseListener()
+    }
+
+    /**
+     * 绑定对应页面的生命周期-》对应回调重写对应方法
+     * @param lifecycleOwner
+     */
+    fun addLifecycleObserver(lifecycleOwner: LifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(this)
+    }
+
+    override fun onPause(owner: LifecycleOwner) {
+        super.onPause(owner)
+        onPause()
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        onResume()
+    }
+
+    override fun onDestroy(owner: LifecycleOwner) {
+        super.onDestroy(owner)
+        onDestroy()
     }
 
 }
