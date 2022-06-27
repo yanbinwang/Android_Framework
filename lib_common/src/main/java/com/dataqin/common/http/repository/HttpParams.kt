@@ -1,6 +1,8 @@
 package com.dataqin.common.http.repository
 
-import java.util.*
+import com.dataqin.common.utils.analysis.GsonUtil
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 
 /**
  * 请求参数类
@@ -15,5 +17,10 @@ class HttpParams {
         }
         return this
     }
+
+    /**
+     * 请求转换
+     */
+    fun params() = ((GsonUtil.objToJson(map)) ?: "").toRequestBody("application/json; charset=utf-8".toMediaType())
 
 }
