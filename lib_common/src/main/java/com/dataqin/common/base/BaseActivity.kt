@@ -208,7 +208,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         mackToastSHORT(msg, applicationContext)
     }
 
-    override fun showDialog(second: Long) {
+    override fun showIntercept(second: Long) {
         showDialog(false)
         Timer().schedule(object : TimerTask() {
             override fun run() {
