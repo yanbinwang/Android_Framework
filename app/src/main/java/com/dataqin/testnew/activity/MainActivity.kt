@@ -75,7 +75,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
 
-        navigation(ARouterPath.TransActivity).finish()
+//        navigation(ARouterPath.TransActivity).finish()
 //        PopupHelper.initialize(this)
 //        //不需要更新传一个Any，需要的传VersionModel
 //        PopupHelper.addPopup(0,Any())
@@ -101,15 +101,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             "https://gimg2.baidu.com/image_search/src=http%3A%2…sec=1628070617&t=f8d42102c61a51f746676b2ea2dbdd30")
         binding.adGallery.start(list, binding.llPoint)
 
-
-
-
 //        val adList = arrayListOf(R.mipmap.img_banner, R.mipmap.img_banner2)
 //        binding.adGallery.start(adList, binding.llPoint)
-
-
-
-
 
         binding.adGallery.setOnAdvertisingClickListener(object : OnAdvertisingClickListener {
             override fun onItemClick(index: Int) {

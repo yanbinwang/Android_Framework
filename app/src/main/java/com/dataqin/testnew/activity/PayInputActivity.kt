@@ -8,12 +8,8 @@ import com.dataqin.testnew.databinding.ActivityPayInputBinding
 import com.dataqin.testnew.widget.keyboard.InputPopup
 
 @Route(path = ARouterPath.PayInputActivity)
-class PayInputActivity :BaseTitleActivity<ActivityPayInputBinding>(){
-    private val inputPopup by lazy {
-        InputPopup(
-            this
-        )
-    }
+class PayInputActivity : BaseTitleActivity<ActivityPayInputBinding>() {
+    private val inputPopup by lazy { InputPopup(this) }
 
     override fun initView() {
         super.initView()
