@@ -212,8 +212,8 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
         ToastUtil.mackToastSHORT(msg, requireContext().applicationContext)
     }
 
-    override fun showIntercept(second: Long) {
-        showDialog(true)
+    override fun showDialog(second: Long) {
+        showDialog(false)
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 hideDialog()
