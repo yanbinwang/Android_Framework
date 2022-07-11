@@ -59,7 +59,7 @@ abstract class BaseAdapter<T> : RecyclerView.Adapter<BaseViewBindingHolder?> {
 
     override fun onBindViewHolder(holder: BaseViewBindingHolder, position: Int) {
         //注意判断当前适配器是否具有头部view
-        holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(holder.adapterPosition) }
+        holder.itemView.setOnClickListener { onItemClickListener?.onItemClick(holder.absoluteAdapterPosition) }
         convert(holder, when (itemType) {
                 BaseItemType.LIST -> data[position]
                 BaseItemType.MODEL -> t
