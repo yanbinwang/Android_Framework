@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="48mm"
+    android:paddingVertical="40mm">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="24mm"
+            android:layout_height="24mm"
+            android:src="@mipmap/ic_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14mm"
+            android:text="功能介绍"
+            android:textColor="@color/blue_1e2b8e"
+            android:textSize="36mm"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_introduce"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16mm"
+        android:lineSpacingExtra="4mm"
+        android:textColor="@color/black_111b34"
+        android:textSize="32mm"
+        tools:text="          简证APP将通知并获取手机位置权限和相机进行拍摄。在手机内存条件允许的情况下，目前限制时长为1小时。录像完成后系统将录像源文件加密存储至公有云服务器。通过SHA256算法或国密SM3算法计算数据摘要值并实时固定至区块链并生成电子数据保管单，以确保录像文件真实未篡改。" />
+
+</LinearLayout>

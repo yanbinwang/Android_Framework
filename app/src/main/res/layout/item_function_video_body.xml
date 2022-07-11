@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="48mm"
+    android:paddingVertical="40mm">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="24mm"
+            android:layout_height="24mm"
+            android:src="@mipmap/ic_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14mm"
+            android:text="操作说明"
+            android:textColor="@color/blue_1e2b8e"
+            android:textSize="36mm"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/iv_explain"
+        android:layout_width="656mm"
+        android:layout_height="1698mm"
+        android:layout_gravity="center"
+        android:layout_marginTop="32mm"
+        android:src="@mipmap/img_video_bg" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80mm"
+        android:text="使用前须知"
+        android:textColor="@color/black_111b34"
+        android:textSize="36mm"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32mm"
+        android:text="1、开始取证前请保证账户积分余额充足，请在可供录制时长内完成取证操作，超时将自动结束录屏；\n\n2、录像取证的分辨率为会根据不同手机型号动态调整。录制1分钟，会产生大约150M大小的文件。在录制取证前请检查手机内存，建议单次录制不超过一小时，长时间录制建议采取分段录制；\n\n3、取证过程中熄屏、锁屏或退出APP应用后台均会导致取证过程提前终止；\n\n4、证据进行上链保全前，请勿清理应用程序进程，否则会导致证据丢失；\n\n5、录制结束后请务必在上链保全取证详情页面预览取证视频内容，确保取证视频清晰度、完整性满足您的需求后上链保全。"
+        android:lineSpacingExtra="4mm"
+        android:layout_marginBottom="80mm"
+        android:textColor="@color/black_666f83"
+        android:textSize="32mm" />
+
+</LinearLayout>

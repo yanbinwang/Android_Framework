@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Build
 import android.os.Looper
 import android.text.TextUtils
+import android.util.SparseArray
 import android.view.View
 import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.amap.api.services.core.ServiceSettings
 import com.dataqin.base.utils.WeakHandler
@@ -18,18 +20,21 @@ import com.dataqin.common.imageloader.ImageLoader
 import com.dataqin.common.imageloader.glide.callback.progress.OnLoaderListener
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.widget.advertising.callback.OnAdvertisingClickListener
+import com.dataqin.common.widget.xrecyclerview.manager.SCommonItemDecoration
 import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.media.service.ShotObserver
 import com.dataqin.testnew.R
+import com.dataqin.testnew.adapter.FunctionAdapter
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
 import com.dataqin.testnew.presenter.contract.MainContract
 import com.dataqin.testnew.widget.popup.AddressPopup
 import com.dataqin.testnew.widget.popup.EditPopup
 import java.io.File
+import java.lang.ref.WeakReference
 
 /**
  * Created by WangYanBin
@@ -45,6 +50,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     private val presenter by lazy { createPresenter(MainPresenter::class.java) }
     private val addressPopup by lazy { AddressPopup(this) }
     private val editPopup by lazy { EditPopup(this) }
+    private val adapter by lazy { FunctionAdapter(WeakReference(this), "1") }
 
 //    override fun onCreate(savedInstanceState: Bundle?) {
 //        super.onCreate(savedInstanceState)
@@ -74,6 +80,14 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
+
+//        adapter.setPageType(type)
+        binding.rvContainer.layoutManager = LinearLayoutManager(this)
+        binding.rvContainer.adapter = adapter
+        val propMap = SparseArray<SCommonItemDecoration.ItemDecorationProps>()
+        val prop1 = SCommonItemDecoration.ItemDecorationProps(0, 0, false, false)
+        propMap.put(0, prop1)
+        binding.rvContainer.addItemDecoration(SCommonItemDecoration(propMap))
 
 //        navigation(ARouterPath.TransActivity).finish()
 //        PopupHelper.initialize(this)

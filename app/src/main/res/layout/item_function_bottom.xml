@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingHorizontal="48mm"
+    android:paddingVertical="40mm">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="24mm"
+            android:layout_height="24mm"
+            android:src="@mipmap/ic_circle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14mm"
+            android:text="视频教程"
+            android:textColor="@color/blue_1e2b8e"
+            android:textSize="36mm"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+        android:id="@+id/pv_video"
+        android:layout_width="656mm"
+        android:layout_height="400mm"
+        android:layout_gravity="center"
+        android:layout_marginTop="32mm"
+        android:background="@color/black" />
+
+</LinearLayout>
