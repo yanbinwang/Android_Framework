@@ -21,16 +21,17 @@ abstract class BaseQuickAdapter<T, VB : ViewBinding> : BaseAdapter<T> {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewBindingHolder {
         context = parent.context
-        var binding: VB? = null
+//        var binding: VB? = null
         val superclass = javaClass.genericSuperclass
         val aClass = (superclass as ParameterizedType).actualTypeArguments[1] as? Class<*>
-        try {
-            val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
-            binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
-        } catch (ignored: Exception) {
-        } finally {
-            return BaseViewBindingHolder(binding!!)
-        }
+//        try {
+//            val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
+//            binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
+//        } catch (ignored: Exception) {
+//        } finally {
+//            return BaseViewBindingHolder(binding!!)
+//        }
+        return onCreateViewBindingHolder(parent, aClass as Class<VB>)
     }
 
 }
