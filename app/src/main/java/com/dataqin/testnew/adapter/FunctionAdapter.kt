@@ -31,10 +31,8 @@ class FunctionAdapter(private var activity: WeakReference<Activity>, private var
     }
 
     override fun convert(holder: BaseViewBindingHolder, item: Any?) {
-        var binding = holder.getBinding<ViewBinding>()
-        when (binding) {
+        when (val binding = holder.getBinding<ViewBinding>()) {
             is ItemFunctionHeaderBinding -> {
-                binding = holder.getBinding<ItemFunctionHeaderBinding>()
                 when (type) {
                     "1" -> binding.tvIntroduce.text = "    简证APP将通知并获取手机位置权限和相机进行拍摄。拍照完成后系统将录像源文件加密存储至公有云服务器。通过SHA256算法或国密SM3算法计算数据摘要值并实时固定至区块链并生成电子数据保管单，以确保文件真实未篡改。"
                     "2" -> binding.tvIntroduce.text = "    简证APP将获取手机音频、定位权限进行录音取证操作，在手机内存条件允许的情况下，目前限制录制时长为1小时。录音完成后系统通过SHA256算法或国密SM3算法计算数据摘要值并实时固定至区块链生成电子数据保管单，以确保音频文件真实未篡改。接着，系统会将音频源文件加密存储至公有云服务器。"
@@ -43,7 +41,6 @@ class FunctionAdapter(private var activity: WeakReference<Activity>, private var
                 }
             }
             is ItemFunctionBottomBinding -> {
-                binding = holder.getBinding<ItemFunctionBottomBinding>()
                 GSYVideoHelper.initialize(activity.get()!!, binding.pvVideo, true)
                 when (type) {
                     "1" -> {
