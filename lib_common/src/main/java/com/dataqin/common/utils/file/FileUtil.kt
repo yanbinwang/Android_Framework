@@ -146,6 +146,30 @@ object FileUtil {
         outputSteam.close()
     }
 
+    /**
+     * 打包时打符合条件的文件生成zip
+     */
+    @JvmStatic
+    @Throws(Exception::class)
+    fun zipFolder(srcFilePath: String, zipFilePath: String, pathList: ArrayList<String>) {
+        //创建ZIP
+        val outputSteam = ZipOutputStream(FileOutputStream(zipFilePath))
+        //创建文件
+        val file = File(srcFilePath)
+        //获取目标文件下的子类
+        for (childPath in file.list()) {
+            val childFile = File(childPath)
+            val path = pathList.filter { childFile.name == File(it).name }
+            if (path.isNotEmpty() && !TextUtils.isEmpty(path[0])) {
+                log(" \n文件名：${childFile.name}满足要求，开始压缩")
+                zipFiles("${file.parent}/${file.name}/", childPath, outputSteam)
+            }
+        }
+        //完成和关闭
+        outputSteam.finish()
+        outputSteam.close()
+    }
+
     @Throws(Exception::class)
     private fun zipFiles(folderPath: String, fileName: String, outputSteam: ZipOutputStream) {
         log(" \n压缩路径:$folderPath\n压缩文件名:$fileName")
@@ -188,6 +212,22 @@ object FileUtil {
             val zipFile = File(zipPath)
             try {
                 if (fileDir.exists()) zipFolder(fileDir.absolutePath, zipFile.absolutePath)
+            } catch (e: Exception) {
+                log("打包图片生成压缩文件异常: $e")
+            } finally {
+                weakHandler.post { onThreadListener?.onStop() }
+            }
+        }.start()
+    }
+
+    @JvmStatic
+    fun zipFolder(folderPath: String, zipPath: String, pathList: ArrayList<String>, onThreadListener: OnThreadListener?) {
+        Thread {
+            weakHandler.post { onThreadListener?.onStart() }
+            val fileDir = File(folderPath)
+            val zipFile = File(zipPath)
+            try {
+                if (fileDir.exists()) zipFolder(fileDir.absolutePath, zipFile.absolutePath, pathList)
             } catch (e: Exception) {
                 log("打包图片生成压缩文件异常: $e")
             } finally {
