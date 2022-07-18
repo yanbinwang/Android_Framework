@@ -15,7 +15,7 @@ object Extras {
     const val FILE_INDEX = "fileIndex" //文件下标
 
     const val PAYLOAD = "payLoad" //透传信息
-    const val IS_CREATE = "isCreate" //是否创建
+    const val IS_EXISTS = "isExists" //是否创建
     const val IS_RUNNING = "isRunning" //是否正在运行
 
     const val WEB_URL = "webUrl" //网页链接

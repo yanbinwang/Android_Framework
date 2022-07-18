@@ -78,7 +78,7 @@ class ScreenService : Service() {
     private fun createMediaRecorder(): MediaRecorder {
         val screenFile = MediaFileUtil.getOutputFile(MediaStore.Files.FileColumns.MEDIA_TYPE_PLAYLIST)
         filePath = screenFile.toString()
-        postResult(true)
+        postEvent(true)
         return MediaRecorder().apply {
             setVideoSource(MediaRecorder.VideoSource.SURFACE)
             setAudioSource(MediaRecorder.AudioSource.MIC)
@@ -119,14 +119,14 @@ class ScreenService : Service() {
             mediaProjection = null
         } catch (ignored: Exception) {
         } finally {
-            postResult(false)
+            postEvent(false)
         }
     }
 
-    private fun postResult(create: Boolean) {
+    private fun postEvent(exists: Boolean) {
         val bundle = Bundle()
         bundle.putString(Extras.FILE_PATH, filePath)
-        bundle.putBoolean(Extras.IS_CREATE, create)
+        bundle.putBoolean(Extras.IS_EXISTS, exists)
         RxBus.instance.post(RxEvent(Constants.APP_SCREEN_FILE, bundle))
     }
 
