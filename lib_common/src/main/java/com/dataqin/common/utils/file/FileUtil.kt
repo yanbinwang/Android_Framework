@@ -12,6 +12,7 @@ import android.os.ParcelFileDescriptor
 import android.provider.MediaStore
 import android.provider.Settings
 import android.text.TextUtils
+import android.util.Base64
 import androidx.core.content.FileProvider
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
@@ -259,6 +260,31 @@ object FileUtil {
     }
 
     /**
+     * base64文件流的形式加载文件，需要先下载，之后在放置
+     */
+    @JvmStatic
+    fun saveBase64(base64: String, suffix: String, root: String = "${Constants.APPLICATION_FILE_PATH}/缓存", clear: Boolean = true, onThreadListener: OnThreadListener?) {
+        Thread {
+            weakHandler.post { onThreadListener?.onStart() }
+            if (clear) deleteDir(root)
+            val storeDir = File(root)
+            if (!storeDir.mkdirs()) storeDir.createNewFile()
+            val file = File(storeDir, "${System.currentTimeMillis()}_cache${suffix}")
+            val pdfAsBytes = Base64.decode(base64, 0)
+            val fileOutputStream: FileOutputStream?
+            try {
+                fileOutputStream = FileOutputStream(file, false)
+                fileOutputStream.write(pdfAsBytes)
+                fileOutputStream.flush()
+                fileOutputStream.close()
+            } catch (e: Exception) {
+            } finally {
+                weakHandler.post { onThreadListener?.onStop(file.absolutePath) }
+            }
+        }.start()
+    }
+
+    /**
      * 读取文件到文本（文本，找不到文件或读取错返回null）
      */
     @JvmStatic
@@ -420,5 +446,19 @@ object FileUtil {
      * 日志
      */
     private fun log(msg: String) = LogUtil.e("FileUtil", msg)
+
+    interface OnThreadListener {
+
+        /**
+         * 线程开始执行
+         */
+        fun onStart()
+
+        /**
+         * 线程停止执行
+         */
+        fun onStop(path: String? = null)
+
+    }
 
 }
