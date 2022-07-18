@@ -143,7 +143,7 @@ object CameraHelper {
 
                     override fun onVideoRecordingStart() {
                         super.onVideoRecordingStart()
-                        onVideoRecordListener?.onRecording()
+                        onVideoRecordListener?.onRecording(videoFile)
                     }
 
 //                //onVideoRecordingEnd比onVideoTaken先调取,文件此时可能还在存储

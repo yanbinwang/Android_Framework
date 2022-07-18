@@ -32,7 +32,7 @@ import com.dataqin.media.utils.helper.ScreenHelper.previewWidth
  *      android:name="com.sqkj.home.service.ScreenService"
  *      android:enabled="true"
  *      android:exported="false"
- *      android:foregroundServiceType="mediaProjection"--》 Q开始后台服务需要配置，否则录制不正常  />
+ *      android:foregroundServiceType="mediaProjection"--》 Q开始后台服务需要配置，否则录制不正常，同时息屏时间过长也会导致录制失败  />
  */
 class ScreenService : Service() {
     private var filePath = ""
