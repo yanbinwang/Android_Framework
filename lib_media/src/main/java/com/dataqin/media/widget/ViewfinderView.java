@@ -30,9 +30,9 @@ public class ViewfinderView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         Rect frame = new Rect(0, 0, getWidth(), getHeight());
-        //画笔颜色
-        int maskColor = Color.GREEN;
-        paint.setColor(maskColor);
+//        //画笔颜色
+//        int maskColor = Color.GREEN;
+//        paint.setColor(maskColor);
         //画扫描框边上的角，总共8个部分
         paint.setColor(Color.YELLOW);
 //        paint.setColor(ContextCompat.getColor(getContext(), R.color.yellow_ffdd27));
