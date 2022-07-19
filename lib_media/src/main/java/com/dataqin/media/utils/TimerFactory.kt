@@ -8,19 +8,10 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Looper
 import android.view.*
-import android.widget.ImageView
 import android.widget.TextView
 import com.dataqin.base.utils.DateUtil
-import com.dataqin.base.utils.ToastUtil
 import com.dataqin.base.utils.WeakHandler
-import com.dataqin.common.bus.RxBus
-import com.dataqin.common.bus.RxEvent
-import com.dataqin.common.constant.Constants
-import com.dataqin.common.widget.dialog.AppDialog
-import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.dataqin.media.R
-import com.dataqin.media.service.ShotService
-import com.dataqin.media.utils.helper.ShotHelper
 import java.util.*
 
 /**
@@ -60,7 +51,7 @@ class TimerFactory(var context: Context, var move: Boolean = false) {
 //            //获取当前录屏时间戳
 //            view.findViewById<ImageView>(R.id.iv_shot).setOnClickListener { if(!ShotService.start) ShotHelper.startScreenShot() }
             //设置一个自定义的弹框
-            val builder = AlertDialog.Builder(context, com.dataqin.common.R.style.dialogStyle)
+            val builder = AlertDialog.Builder(context, R.style.dialogStyle)
             builder.setView(view)
             tickDialog = builder.create()
             tickDialog?.apply {
