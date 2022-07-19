@@ -2,12 +2,10 @@ package com.dataqin.media.utils
 
 import android.content.Context
 import android.media.MediaPlayer
-import android.os.Looper
 import android.provider.MediaStore
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.LogUtil
 import com.dataqin.base.utils.SdcardUtil
-import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.constant.Constants
 import java.io.File
 import java.util.*
@@ -17,7 +15,6 @@ import java.util.*
  *  相机文件管理工具类
  */
 object MediaFileUtil {
-    private val weakHandler by lazy { WeakHandler(Looper.getMainLooper()) }
     private const val TAG = "MediaFileUtil"
 
     /**
