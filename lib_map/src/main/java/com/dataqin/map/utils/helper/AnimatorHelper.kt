@@ -39,7 +39,7 @@ fun View.shown() {
     if(View.VISIBLE == visibility) return
     isEnabled = false
     visibility = View.VISIBLE
-    startAnimation(AnimationUtils.loadAnimation(context, com.dataqin.common.R.anim.set_translate_bottom_in))
+    startAnimation(AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_in))
     weakHandler.postDelayed({
         isEnabled = true
     }, 500)
@@ -52,7 +52,7 @@ fun View.shown() {
 fun View.hidden() {
     if(View.GONE == visibility) return
     isEnabled = false
-    startAnimation(AnimationUtils.loadAnimation(context, com.dataqin.common.R.anim.set_translate_bottom_out))
+    startAnimation(AnimationUtils.loadAnimation(context, R.anim.set_translate_bottom_out))
     weakHandler.postDelayed({
         isEnabled = true
         visibility = View.GONE

@@ -28,7 +28,7 @@ class WechatFactory {
         wxApi.registerApp(Constants.WX_APP_ID)
         //开始支付
         if (!wxApi.isWXAppInstalled) {
-            doResult(context, context.getString(com.dataqin.common.R.string.toast_wechat_uninstall))
+            doResult(context, context.getString(R.string.toast_wechat_uninstall))
             return
         }
         if (!wxApi.isWXAppSupportAPI) {

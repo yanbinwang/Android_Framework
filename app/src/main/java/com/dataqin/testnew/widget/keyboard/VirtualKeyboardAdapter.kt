@@ -17,7 +17,7 @@ class VirtualKeyboardAdapter(var list: MutableList<Map<String, String>>) : BaseQ
                         relKeyboardDelete.visibility = View.INVISIBLE
                         tvKeyboard.visibility = View.VISIBLE
                         tvKeyboard.text = list[position]["name"]
-                        tvKeyboard.setBackgroundColor(ContextCompat.getColor(context!!, com.dataqin.common.R.color.grey_b3b3b3))
+                        tvKeyboard.setBackgroundColor(ContextCompat.getColor(context!!, R.color.grey_b3b3b3))
                     }
                     11 -> {
                         tvKeyboard.setBackgroundResource(R.mipmap.img_keyboard_delete)
