@@ -179,11 +179,7 @@ object ConfigHelper {
     private fun getDeviceId(): String? {
         val telephonyManager = (context.getSystemService(Context.TELEPHONY_SERVICE) as TelephonyManager)
         return try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                telephonyManager.imei
-            } else {
-                telephonyManager.deviceId
-            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) telephonyManager.imei else telephonyManager.deviceId
         } catch (ignored: SecurityException) {
             null
         }
@@ -193,14 +189,10 @@ object ConfigHelper {
      * 获取当前app version code 版本号
      */
     private fun getAppVersionCode(): Long {
-        var appVersionCode: Long = 0
+        var appVersionCode = 0L
         try {
             val packageInfo = context.applicationContext.packageManager.getPackageInfo(context.packageName!!, 0)
-            appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                packageInfo.longVersionCode
-            } else {
-                packageInfo.versionCode.toLong()
-            }
+            appVersionCode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) packageInfo.longVersionCode else packageInfo.versionCode.toLong()
         } catch (ignored: PackageManager.NameNotFoundException) {
         }
         return appVersionCode
