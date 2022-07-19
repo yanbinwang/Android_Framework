@@ -6,6 +6,7 @@ import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
+import com.dataqin.base.utils.ToastUtil
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode
@@ -46,9 +47,12 @@ object ShotHelper {
      */
     @JvmStatic
     fun startScreenShot() {
-        val mediaProjectionManager = weakActivity?.get()?.getSystemService(AppCompatActivity.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
-        val permissionIntent = mediaProjectionManager.createScreenCaptureIntent()
-        weakActivity?.get()?.startActivityForResult(permissionIntent, RequestCode.MEDIA_REQUEST)
+        if (!ShotService.launch) {
+            ToastUtil.mackToastSHORT("请授权后再操作", weakActivity?.get()!!)
+            val mediaProjectionManager = weakActivity?.get()?.getSystemService(AppCompatActivity.MEDIA_PROJECTION_SERVICE) as MediaProjectionManager
+            val permissionIntent = mediaProjectionManager.createScreenCaptureIntent()
+            weakActivity?.get()?.startActivityForResult(permissionIntent, RequestCode.MEDIA_REQUEST)
+        } else ShotService.startCapture(weakActivity?.get()!!)
     }
 
     /**
@@ -66,6 +70,6 @@ object ShotHelper {
      * 结束截屏
      */
     @JvmStatic
-    fun stopScreen() = weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ShotService::class.java))
+    fun stopScreenShot() = weakActivity?.get()?.stopService(Intent(weakActivity?.get()!!, ShotService::class.java))
 
 }

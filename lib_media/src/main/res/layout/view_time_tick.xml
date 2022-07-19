@@ -3,41 +3,52 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="10mm"
+    android:layout_gravity="right"
     android:gravity="right"
-    android:layout_gravity="right">
+    android:orientation="vertical"
+    android:padding="10mm">
 
-    <TextView
-        android:id="@+id/tv_timer"
+    <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="30mm"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_time_tick"
         android:gravity="center"
-        android:background="@drawable/shape_time_tick"
-        android:paddingHorizontal="5mm"
-        android:paddingVertical="3mm"
-        android:drawablePadding="5mm"
-        android:drawableLeft="@mipmap/ic_media_screen"
-        android:textColor="@color/white"
-        android:textSize="18mm"
-        tools:text="00:00" />
+        android:paddingHorizontal="10mm"
+        android:paddingVertical="5mm">
 
-    <ImageView
-        android:id="@+id/tv_stop"
-        android:layout_width="30mm"
-        android:layout_height="30mm"
-        android:padding="5mm"
-        android:layout_marginTop="10mm"
-        android:background="@drawable/shape_time_tick"
-        android:src="@mipmap/ic_media_stop"/>
+        <ImageView
+            android:layout_width="20mm"
+            android:layout_height="20mm"
+            android:src="@mipmap/ic_launcher" />
 
-    <ImageView
-        android:id="@+id/tv_shot"
-        android:layout_width="30mm"
-        android:layout_height="30mm"
-        android:padding="5mm"
-        android:layout_marginTop="10mm"
-        android:background="@drawable/shape_time_tick"
-        android:src="@mipmap/ic_media_shot"/>
+        <TextView
+            android:id="@+id/tv_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5mm"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="18mm"
+            tools:text="00:00:00" />
+
+    </LinearLayout>
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_stop"-->
+    <!--        android:layout_width="30mm"-->
+    <!--        android:layout_height="30mm"-->
+    <!--        android:padding="5mm"-->
+    <!--        android:layout_marginTop="10mm"-->
+    <!--        android:background="@drawable/shape_time_tick"-->
+    <!--        android:src="@mipmap/ic_media_stop"/>-->
+
+    <!--    <ImageView-->
+    <!--        android:id="@+id/iv_shot"-->
+    <!--        android:layout_width="30mm"-->
+    <!--        android:layout_height="30mm"-->
+    <!--        android:padding="5mm"-->
+    <!--        android:layout_marginTop="10mm"-->
+    <!--        android:background="@drawable/shape_time_tick"-->
+    <!--        android:src="@mipmap/ic_media_shot"/>-->
 
 </LinearLayout>

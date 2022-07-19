@@ -41,6 +41,8 @@ class ShotService : Service() {
     private var virtualDisplay: VirtualDisplay? = null
 
     companion object {
+        var launch = false//服务是否启动
+        var start = false
         var imageReader: ImageReader? = null
 
         @JvmStatic
@@ -60,9 +62,11 @@ class ShotService : Service() {
             image.close()
             FileUtil.saveBitmap(context, captureBit, object : FileUtil.OnThreadListener {
                 override fun onStart() {
+                    start = true
                 }
 
                 override fun onStop(path: String?) {
+                    start = false
                 }
             })
         }
@@ -71,18 +75,19 @@ class ShotService : Service() {
     override fun onCreate() {
         super.onCreate()
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            startForeground(1, Notification())
+            startForeground(2, Notification())
         } else {
             val notificationManager = getSystemService(NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(NotificationChannel(packageName, packageName, NotificationManager.IMPORTANCE_DEFAULT))
             val builder = NotificationCompat.Builder(this, packageName)
-            startForeground(1, builder.build())
+            startForeground(2, builder.build())
         }
         stopForeground(true)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         try {
+            launch = true
             resultCode = intent?.getIntExtra(Extras.RESULT_CODE, -1) ?: 0
             resultData = intent?.getParcelableExtra(Extras.BUNDLE_BEAN)
             mediaProjection = createMediaProjection()
@@ -112,6 +117,8 @@ class ShotService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         try {
+            launch = false
+            start = false
             virtualDisplay?.release()
             virtualDisplay = null
             imageReader?.close()

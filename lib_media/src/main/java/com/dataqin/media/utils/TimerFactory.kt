@@ -19,6 +19,8 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.widget.dialog.AppDialog
 import com.dataqin.common.widget.dialog.callback.OnDialogListener
 import com.dataqin.media.R
+import com.dataqin.media.service.ShotService
+import com.dataqin.media.utils.helper.ShotHelper
 import java.util.*
 
 /**
@@ -43,20 +45,20 @@ class TimerFactory(var context: Context, var move: Boolean = false) {
         if (null == tickDialog) {
             val view = LayoutInflater.from(context).inflate(R.layout.view_time_tick, null)
             tvTimer = view.findViewById(R.id.tv_timer)
-            //停止录屏
-            view.findViewById<ImageView>(R.id.tv_stop).setOnClickListener {
-                AppDialog.with(context).setOnDialogListener(object : OnDialogListener {
-                    override fun onConfirm() {
-                        ToastUtil.mackToastSHORT("结束录屏", context)
-                        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_STOP))
-                    }
-
-                    override fun onCancel() {
-                    }
-                }).setParams("系统提示", "是否结束录屏", "确定", "取消").setType().show()
-            }
-            //获取当前录屏时间戳
-            view.findViewById<ImageView>(R.id.tv_shot).setOnClickListener { ToastUtil.mackToastSHORT("截取时间戳：${DateUtil.getSecondFormat(timerCount - 1)}", context) }
+//            //停止录屏
+//            view.findViewById<ImageView>(R.id.iv_stop).setOnClickListener {
+//                AppDialog.with(context).setOnDialogListener(object : OnDialogListener {
+//                    override fun onConfirm() {
+//                        ToastUtil.mackToastSHORT("结束录屏", context)
+//                        RxBus.instance.post(RxEvent(Constants.APP_SCREEN_STOP))
+//                    }
+//
+//                    override fun onCancel() {
+//                    }
+//                }).setParams("系统提示", "是否结束录屏", "确定", "取消").setType().show()
+//            }
+//            //获取当前录屏时间戳
+//            view.findViewById<ImageView>(R.id.iv_shot).setOnClickListener { if(!ShotService.start) ShotHelper.startScreenShot() }
             //设置一个自定义的弹框
             val builder = AlertDialog.Builder(context, com.dataqin.common.R.style.dialogStyle)
             builder.setView(view)
@@ -74,7 +76,6 @@ class TimerFactory(var context: Context, var move: Boolean = false) {
                     params?.height = view.measuredHeight
                     window?.attributes = params
                     window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
-//                    window?.setBackgroundDrawable(null)//透明
                     //配置移动
                     if (null != params && move) {
                         view.setOnTouchListener(object : View.OnTouchListener {

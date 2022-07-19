@@ -1,14 +1,15 @@
 package com.dataqin.testnew.activity
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Build
 import android.os.Looper
+import android.provider.Settings
 import android.text.TextUtils
 import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.amap.api.services.core.ServiceSettings
-import com.dataqin.base.utils.TimerHelper
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.bus.RxBus
@@ -24,7 +25,7 @@ import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.media.service.ShotObserver
-import com.dataqin.media.service.ShotService
+import com.dataqin.media.utils.helper.ScreenHelper
 import com.dataqin.media.utils.helper.ShotHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
@@ -116,8 +117,14 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         ServiceSettings.updatePrivacyShow(this, true, true)
         ServiceSettings.updatePrivacyAgree(this, true)
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(this)) {
+            val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            intent.data = Uri.parse("package:${packageName}")
+            startActivity(intent)
+            return
+        }
+        ScreenHelper.initialize(this)
         ShotHelper.initialize(this)
-        ShotHelper.startScreenShot()
     }
 
     override fun initEvent() {
@@ -204,7 +211,8 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test4 -> binding.tvView.hidden()
 //            R.id.btn_test5 -> LocationFactory.instance.settingGps(activity.get()!!)
             R.id.btn_test5 -> {
-                navigation(ARouterPath.PayInputActivity)
+                ScreenHelper.startScreen()
+//                navigation(ARouterPath.PayInputActivity)
 //                navigation(ARouterPath.PasswordInputActivity)
 //                val intent =  Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
 //                intent.setData(Uri.parse("package:" + getPackageName()));
@@ -259,13 +267,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 showToast("没开")
             }
         }
+        if (requestCode == RequestCode.SERVICE_REQUEST&&resultCode == RESULT_OK) {
+            ScreenHelper.startScreenResult(resultCode, data)
+        }
         if (requestCode == RequestCode.MEDIA_REQUEST&&resultCode == RESULT_OK) {
             ShotHelper.startScreenShot(resultCode, data)
-            TimerHelper.schedule(object :TimerHelper.OnTaskListener{
-                override fun run() {
-                    ShotService.startCapture(this@MainActivity)
-                }
-            },4000)
         }
     }
 
