@@ -8,6 +8,7 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import com.alibaba.android.arouter.facade.annotation.Route
 import com.amap.api.services.core.ServiceSettings
+import com.dataqin.base.utils.TimerHelper
 import com.dataqin.base.utils.WeakHandler
 import com.dataqin.common.base.BaseTitleActivity
 import com.dataqin.common.bus.RxBus
@@ -23,6 +24,8 @@ import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
 import com.dataqin.media.service.ShotObserver
+import com.dataqin.media.service.ShotService
+import com.dataqin.media.utils.helper.ShotHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.MainPresenter
@@ -112,6 +115,9 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         //高德地图隐私政策合规
         ServiceSettings.updatePrivacyShow(this, true, true)
         ServiceSettings.updatePrivacyAgree(this, true)
+
+        ShotHelper.initialize(this)
+        ShotHelper.startScreenShot()
     }
 
     override fun initEvent() {
@@ -252,6 +258,14 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             } else {
                 showToast("没开")
             }
+        }
+        if (requestCode == RequestCode.MEDIA_REQUEST&&resultCode == RESULT_OK) {
+            ShotHelper.startScreenShot(resultCode, data)
+            TimerHelper.schedule(object :TimerHelper.OnTaskListener{
+                override fun run() {
+                    ShotService.startCapture(this@MainActivity)
+                }
+            },4000)
         }
     }
 
