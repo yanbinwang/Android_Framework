@@ -75,7 +75,7 @@ class TimerFactory(var context: Context, var move: Boolean = false) {
                     window?.attributes = params
                     window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))//透明
 //                    window?.setBackgroundDrawable(null)//透明
-                    //配置移动，只支持上下
+                    //配置移动
                     if (null != params && move) {
                         view.setOnTouchListener(object : View.OnTouchListener {
                             private var lastX = 0
