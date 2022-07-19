@@ -125,13 +125,11 @@
         <!-- ******************************************************服务****************************************************** -->
         <!-- 高德地图 -->
         <service android:name="com.amap.api.location.APSService" />
-
         <service
-            android:name="com.dataqin.media.service.ShotService"
+            android:name="com.dataqin.media.service.ScreenService"
             android:enabled="true"
             android:exported="false"
             android:foregroundServiceType="mediaProjection" />
-
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"
