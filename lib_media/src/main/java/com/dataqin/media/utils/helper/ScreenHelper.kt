@@ -5,7 +5,6 @@ import android.content.Intent
 import android.media.projection.MediaProjectionManager
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
-import com.dataqin.base.utils.TimerHelper
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.constant.Extras
 import com.dataqin.common.constant.RequestCode

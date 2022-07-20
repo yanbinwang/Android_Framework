@@ -2,6 +2,7 @@ package com.dataqin.common.utils.helper
 
 import android.annotation.SuppressLint
 import android.app.Activity
+import android.app.ActivityManager
 import android.app.Application
 import android.content.Context
 import android.content.pm.PackageManager
@@ -95,6 +96,18 @@ object ConfigHelper {
         view.onTouchEvent(upEvent)
         downEvent.recycle()
         upEvent.recycle()
+    }
+
+    /**
+     * 在进程中去寻找当前APP的信息，判断是否在运行
+     * 100表示取的最大的任务数，info.topActivity表示当前正在运行的Activity，info.baseActivity表系统后台有此进程在运行
+     */
+    fun isAppOnForeground(): Boolean {
+        val processes = (context.getSystemService(Context.ACTIVITY_SERVICE) as ActivityManager).runningAppProcesses ?: return false
+        for (process in processes) {
+            if (process.importance == ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND && process.processName.equals(context.packageName)) return true
+        }
+        return false
     }
 
     /**

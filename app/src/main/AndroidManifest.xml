@@ -24,16 +24,34 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <!-- 麦克风 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 存储空间 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <!-- 安卓11查询权限 -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
     <uses-permission
         android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
         tools:ignore="ScopedStorage" />
+
+    <queries>
+        <!--支付宝-正式环境-->
+        <package android:name="com.eg.android.AlipayGphone" />
+        <!--支付宝-沙箱环境-->
+        <package android:name="com.eg.android.AlipayGphoneRC" />
+        <package android:name="hk.alipay.wallet" />
+        <!--微信-->
+        <package android:name="com.tencent.mm" />
+        <!--地图-->
+        <package android:name="com.baidu.BaiduMap" />
+        <package android:name="com.autonavi.minimap" />
+    </queries>
 
     <application
         android:name=".MyApplication"
