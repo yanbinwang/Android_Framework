@@ -34,7 +34,7 @@ class TimerFactory(var context: Context, var move: Boolean = true) {
      */
     init {
         if (null == tickDialog) {
-            val view = LayoutInflater.from(context).inflate(R.layout.view_time_tick, null)
+            val view = LayoutInflater.from(context).inflate(R.layout.view_floating_timer, null)
             tvTimer = view.findViewById(R.id.tv_timer)
             //设置一个自定义的弹框
             val builder = AlertDialog.Builder(context, R.style.dialogStyle)

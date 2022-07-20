@@ -99,7 +99,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     //基础库
     implementation project(':lib_map')
-    implementation project(':lib_pay')
+//    implementation project(':lib_pay')
     implementation project(':lib_media')
     implementation 'com.joanzapata.pdfview:android-pdfview:1.0.4@aar'
     //页面路由
