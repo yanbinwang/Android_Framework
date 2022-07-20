@@ -41,10 +41,17 @@ class ShotService : Service() {
     private var virtualDisplay: VirtualDisplay? = null
 
     companion object {
+        var launch = false
+        var saving = false
         var imageReader: ImageReader? = null
 
         @JvmStatic
-        fun startCapture(context: Context) {
+        fun capture(context: Context) {
+            if(launch && !saving) startCapture(context)
+        }
+
+        @JvmStatic
+        private fun startCapture(context: Context) {
             //生成图片保存到本地
             val image = imageReader?.acquireLatestImage()
             val width = image?.width ?: 0
@@ -60,9 +67,11 @@ class ShotService : Service() {
             image.close()
             FileUtil.saveBitmap(context, captureBit, object : FileUtil.OnThreadListener {
                 override fun onStart() {
+                    saving = true
                 }
 
                 override fun onStop(path: String?) {
+                    saving = false
                 }
             })
         }
@@ -83,6 +92,7 @@ class ShotService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         try {
+            launch = true
             resultCode = intent?.getIntExtra(Extras.RESULT_CODE, -1) ?: 0
             resultData = intent?.getParcelableExtra(Extras.BUNDLE_BEAN)
             mediaProjection = createMediaProjection()
@@ -112,6 +122,8 @@ class ShotService : Service() {
     override fun onDestroy() {
         super.onDestroy()
         try {
+            launch = false
+            saving = false
             virtualDisplay?.release()
             virtualDisplay = null
             imageReader?.close()

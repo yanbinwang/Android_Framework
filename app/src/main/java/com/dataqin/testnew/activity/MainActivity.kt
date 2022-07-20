@@ -18,7 +18,9 @@ import com.dataqin.map.utils.helper.fadeIn
 import com.dataqin.map.utils.helper.fadeOut
 import com.dataqin.map.utils.helper.hidden
 import com.dataqin.map.utils.helper.shown
+import com.dataqin.media.service.ShotService
 import com.dataqin.media.utils.helper.ScreenHelper
+import com.dataqin.media.utils.helper.ShotHelper
 import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
@@ -33,12 +35,12 @@ import com.dataqin.testnew.presenter.contract.MainContract
  */
 @Route(path = ARouterPath.MainActivity)
 class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListener, MainContract.View {
-    private var srcPath = ""
 
     override fun initView() {
         super.initView()
         titleBuilder.setTitle("控制台").hideBack()
         ScreenHelper.initialize(this)
+        ShotHelper.initialize(this)
     }
 
     override fun initEvent() {
@@ -46,7 +48,7 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
         addDisposable(RxBus.instance.toFlowable {
             when (it.getAction()) {
-                Constants.APP_SHOT_PATH -> srcPath = it.getString()
+                Constants.APP_SHOT -> if (ShotService.launch) ShotService.capture(this) else ShotHelper.startScreenShot()
             }
         })
     }
@@ -83,6 +85,11 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         if (requestCode == RequestCode.SERVICE_REQUEST) {
             if (resultCode == RESULT_OK) {
                 ScreenHelper.startScreenResult(resultCode,data)
+            }
+        }
+        if (requestCode == RequestCode.MEDIA_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                ShotHelper.startScreenShot(resultCode,data)
             }
         }
     }

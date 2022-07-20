@@ -7,9 +7,13 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Looper
 import android.view.*
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.dataqin.base.utils.DateUtil
 import com.dataqin.base.utils.WeakHandler
+import com.dataqin.common.bus.RxBus
+import com.dataqin.common.bus.RxEvent
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.dataqin.media.R
 import java.util.*
@@ -36,6 +40,7 @@ class TimerFactory(var context: Context, var move: Boolean = true) {
         if (null == tickDialog) {
             val view = LayoutInflater.from(context).inflate(R.layout.view_floating_timer, null)
             tvTimer = view.findViewById(R.id.tv_timer)
+            view.findViewById<LinearLayout>(R.id.ll_shot).setOnClickListener { RxBus.instance.post(RxEvent(Constants.APP_SHOT)) }
             //设置一个自定义的弹框
             val builder = AlertDialog.Builder(context, R.style.dialogStyle)
             builder.setView(view)
