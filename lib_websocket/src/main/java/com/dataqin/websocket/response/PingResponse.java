@@ -14,7 +14,7 @@ import org.java_websocket.framing.Framedata;
 public class PingResponse implements Response<Framedata> {
     private Framedata framedata;
 
-    PingResponse() {
+    public PingResponse() {
     }
 
     @Override

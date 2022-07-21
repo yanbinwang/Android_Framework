@@ -49,7 +49,7 @@ public class ErrorResponse {
      */
     public static final int ERROR_UN_INIT = 2;
 
-    ErrorResponse() {
+    public ErrorResponse() {
     }
 
     /**

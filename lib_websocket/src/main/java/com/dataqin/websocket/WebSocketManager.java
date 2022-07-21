@@ -44,7 +44,7 @@ public class WebSocketManager {
     private final ResponseProcessEngine mResponseProcessEngine;
     private static final String TAG = "WSManager";
 
-    WebSocketManager(WebSocketSetting setting, WebSocketEngine webSocketEngine, ResponseProcessEngine responseProcessEngine) {
+    public WebSocketManager(WebSocketSetting setting, WebSocketEngine webSocketEngine, ResponseProcessEngine responseProcessEngine) {
         this.mSetting = setting;
         this.mWebSocketEngine = webSocketEngine;
         this.mResponseProcessEngine = responseProcessEngine;
@@ -274,7 +274,7 @@ public class WebSocketManager {
      * 重新连接一次,
      * for {@link ReconnectManager}
      */
-    void reconnectOnce() {
+    public void reconnectOnce() {
         if (destroyed) {
             LogTable.e(TAG, "This WebSocketManager is destroyed!");
             return;

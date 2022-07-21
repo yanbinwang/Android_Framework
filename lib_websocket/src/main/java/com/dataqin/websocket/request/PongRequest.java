@@ -16,7 +16,7 @@ public class PongRequest implements Request<PingFrame> {
     private PingFrame pingFrame;
     private static final Queue<PongFrame> PONG_POOL = new ArrayDeque<>(7);
 
-    PongRequest() {
+    public PongRequest() {
     }
 
     @Override

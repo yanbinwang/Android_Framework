@@ -13,7 +13,7 @@ import java.util.Collection;
 public class CollectionFrameDataRequest implements Request<Collection<Framedata>> {
     private Collection<Framedata> data;
 
-    CollectionFrameDataRequest() {
+    public CollectionFrameDataRequest() {
     }
 
     @Override

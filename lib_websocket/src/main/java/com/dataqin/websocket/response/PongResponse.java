@@ -14,7 +14,7 @@ import org.java_websocket.framing.Framedata;
 public class PongResponse implements Response<Framedata> {
     private Framedata framedata;
 
-    PongResponse() {
+    public PongResponse() {
     }
 
     @Override

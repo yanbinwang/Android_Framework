@@ -12,7 +12,7 @@ import java.nio.ByteBuffer;
 public class ByteBufferRequest implements Request<ByteBuffer> {
     private ByteBuffer data;
 
-    ByteBufferRequest() {
+    public ByteBufferRequest() {
     }
 
     @Override

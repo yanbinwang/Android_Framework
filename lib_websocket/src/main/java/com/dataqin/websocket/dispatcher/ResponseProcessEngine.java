@@ -46,7 +46,7 @@ public class ResponseProcessEngine {
         mThread.add(entity);
     }
 
-    static class EngineEntity {
+    public static class EngineEntity {
         boolean isError;
         Response response;
         ErrorResponse errorResponse;

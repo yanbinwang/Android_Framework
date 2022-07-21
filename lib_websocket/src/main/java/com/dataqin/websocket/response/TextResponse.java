@@ -14,7 +14,7 @@ import com.dataqin.websocket.dispatcher.ResponseDelivery;
 public class TextResponse implements Response<String> {
     private String responseText;
 
-    TextResponse() {
+    public TextResponse() {
     }
 
     @Override

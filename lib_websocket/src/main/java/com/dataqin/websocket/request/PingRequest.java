@@ -9,7 +9,7 @@ import org.java_websocket.client.WebSocketClient;
  */
 public class PingRequest implements Request<Object> {
 
-    PingRequest() {
+    public PingRequest() {
     }
 
     @Override

@@ -20,12 +20,12 @@ public class WebSocketEngine {
     private final OptionThread mOptionThread;
     private static final String TAG = "WSWebSocketEngine";
 
-    WebSocketEngine() {
+    public WebSocketEngine() {
         mOptionThread = new OptionThread();
         mOptionThread.start();
     }
 
-    void sendRequest(WebSocketWrapper webSocket, Request request, SocketWrapperListener listener) {
+    public void sendRequest(WebSocketWrapper webSocket, Request request, SocketWrapperListener listener) {
         if (mOptionThread.mHandler == null) {
             listener.onSendDataError(request, ErrorResponse.ERROR_UN_INIT, null);
         } else {
@@ -37,7 +37,7 @@ public class WebSocketEngine {
         }
     }
 
-    void connect(WebSocketWrapper webSocket, SocketWrapperListener listener) {
+    public void connect(WebSocketWrapper webSocket, SocketWrapperListener listener) {
         if (mOptionThread.mHandler == null) {
             listener.onConnectFailed(new Exception("WebSocketEngine not start!"));
         } else {
@@ -48,7 +48,7 @@ public class WebSocketEngine {
         }
     }
 
-    void disConnect(WebSocketWrapper webSocket, SocketWrapperListener listener) {
+    public void disConnect(WebSocketWrapper webSocket, SocketWrapperListener listener) {
         if (mOptionThread.mHandler != null) {
             ReRunnable runnable = ReRunnable.obtain();
             runnable.type = 2;
@@ -59,7 +59,7 @@ public class WebSocketEngine {
         }
     }
 
-    void destroyWebSocket(WebSocketWrapper webSocket) {
+    public void destroyWebSocket(WebSocketWrapper webSocket) {
         if (mOptionThread.mHandler != null) {
             ReRunnable runnable = ReRunnable.obtain();
             runnable.type = 3;

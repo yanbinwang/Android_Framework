@@ -45,12 +45,12 @@ public class WebSocketWrapper {
     private final WebSocketSetting mSetting;
     private static final String TAG = "WSWrapper";
 
-    WebSocketWrapper(WebSocketSetting setting, SocketWrapperListener socketListener) {
+    public WebSocketWrapper(WebSocketSetting setting, SocketWrapperListener socketListener) {
         this.mSetting = setting;
         this.mSocketListener = socketListener;
     }
 
-    void connect() {
+    public void connect() {
         if (destroyed) {
             return;
         }
@@ -98,7 +98,7 @@ public class WebSocketWrapper {
     /**
      * 重新连接
      */
-    void reconnect() {
+    public void reconnect() {
         needClose = false;
         if (connectStatus == 0) {
             connect();
@@ -108,7 +108,7 @@ public class WebSocketWrapper {
     /**
      * 断开连接
      */
-    void disConnect() {
+    public void disConnect() {
         needClose = true;
         if (connectStatus == 2) {
             LogTable.i(TAG, "WebSocket disconnecting...");
@@ -124,7 +124,7 @@ public class WebSocketWrapper {
      *
      * @param request 请求数据
      */
-    void send(Request request) {
+    public void send(Request request) {
         if (mWebSocket == null) {
             return;
         }
@@ -169,14 +169,14 @@ public class WebSocketWrapper {
      * 1-正在连接
      * 2-已连接
      */
-    int getConnectState() {
+    public int getConnectState() {
         return connectStatus;
     }
 
     /**
      * 彻底销毁资源
      */
-    void destroy() {
+    public void destroy() {
         destroyed = true;
         disConnect();
         if (connectStatus == 0) {

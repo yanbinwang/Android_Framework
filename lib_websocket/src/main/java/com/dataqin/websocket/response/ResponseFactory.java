@@ -59,23 +59,23 @@ public class ResponseFactory {
         return response;
     }
 
-    static void releaseErrorResponse(ErrorResponse response) {
+    public static void releaseErrorResponse(ErrorResponse response) {
         ERROR_RESPONSE_POOL.offer(response);
     }
 
-    static void releaseTextResponse(TextResponse response) {
+    public static void releaseTextResponse(TextResponse response) {
         TEXT_RESPONSE_POOL.offer(response);
     }
 
-    static void releaseByteBufferResponse(ByteBufferResponse response) {
+    public static void releaseByteBufferResponse(ByteBufferResponse response) {
         BYTE_BUFFER_RESPONSE_POOL.offer(response);
     }
 
-    static void releasePingResponse(PingResponse response) {
+    public static void releasePingResponse(PingResponse response) {
         PING_RESPONSE_POOL.offer(response);
     }
 
-    static void releasePongResponse(PongResponse response) {
+    public static void releasePongResponse(PongResponse response) {
         PONG_RESPONSE_POOL.offer(response);
     }
 

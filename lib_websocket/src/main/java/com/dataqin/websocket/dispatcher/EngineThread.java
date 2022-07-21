@@ -48,7 +48,7 @@ public class EngineThread extends Thread {
         }
     }
 
-    void add(final ResponseProcessEngine.EngineEntity entity) {
+    public void add(final ResponseProcessEngine.EngineEntity entity) {
         if (!jobQueue.offer(entity)) {
             LogTable.e(TAG, "Offer response to Engine failed!start an thread to put.");
             if (executorService == null) {
@@ -74,7 +74,7 @@ public class EngineThread extends Thread {
     /**
      * 结束线程
      */
-    void quit() {
+    public void quit() {
         stop = true;
         jobQueue.clear();
         EngineThread.this.interrupt();

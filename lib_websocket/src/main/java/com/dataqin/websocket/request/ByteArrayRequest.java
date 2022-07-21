@@ -9,7 +9,7 @@ import org.java_websocket.client.WebSocketClient;
  */
 public class ByteArrayRequest implements Request<byte[]> {
 
-    ByteArrayRequest() {
+    public ByteArrayRequest() {
     }
 
     private byte[] data;

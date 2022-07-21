@@ -11,7 +11,7 @@ import org.java_websocket.framing.Framedata;
 public class FrameDataRequest implements Request<Framedata> {
     private Framedata framedata;
 
-    FrameDataRequest() {
+    public FrameDataRequest() {
     }
 
     @Override

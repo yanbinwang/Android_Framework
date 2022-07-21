@@ -12,7 +12,7 @@ import org.java_websocket.client.WebSocketClient;
 public class StringRequest implements Request<String> {
     private String requestText;
 
-    StringRequest() {
+    public StringRequest() {
     }
 
     @Override

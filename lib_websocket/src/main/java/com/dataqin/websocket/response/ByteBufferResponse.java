@@ -13,7 +13,7 @@ import java.nio.ByteBuffer;
 public class ByteBufferResponse implements Response<ByteBuffer> {
     private ByteBuffer data;
 
-    ByteBufferResponse() {
+    public ByteBufferResponse() {
     }
 
     @Override

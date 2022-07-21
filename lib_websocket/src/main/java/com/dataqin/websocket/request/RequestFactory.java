@@ -78,31 +78,31 @@ public class RequestFactory {
         return request;
     }
 
-    static void releaseByteArrayRequest(ByteArrayRequest request) {
+    public static void releaseByteArrayRequest(ByteArrayRequest request) {
         BYTE_ARRAY_REQUEST_POOL.offer(request);
     }
 
-    static void releaseByteBufferRequest(ByteBufferRequest request) {
+    public static void releaseByteBufferRequest(ByteBufferRequest request) {
         BYTE_BUFFER_REQUEST_POOL.offer(request);
     }
 
-    static void releaseStringRequest(StringRequest request) {
+    public static void releaseStringRequest(StringRequest request) {
         STRING_REQUEST_POOL.offer(request);
     }
 
-    static void releasePingRequest(PingRequest request) {
+    public static void releasePingRequest(PingRequest request) {
         PING_REQUEST_POOL.offer(request);
     }
 
-    static void releasePongRequest(PongRequest request) {
+    public static void releasePongRequest(PongRequest request) {
         PONG_REQUEST_POOL.offer(request);
     }
 
-    static void releaseFrameDataRequest(FrameDataRequest request) {
+    public static void releaseFrameDataRequest(FrameDataRequest request) {
         FRAME_DATA_REQUEST_POOL.offer(request);
     }
 
-    static void releaseCollectionFrameRequest(CollectionFrameDataRequest request) {
+    public static void releaseCollectionFrameRequest(CollectionFrameDataRequest request) {
         COLLECTION_FRAME_REQUEST_POOL.offer(request);
     }
 
