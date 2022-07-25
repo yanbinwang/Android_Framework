@@ -64,9 +64,9 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
             R.id.btn_test3 -> binding.tvView.shown()
             R.id.btn_test4 -> binding.tvView.hidden()
             R.id.btn_test5 -> {
-                PermissionHelper.with(this).setPermissionCallBack(object :OnPermissionCallBack{
+                PermissionHelper.with(this).setPermissionCallBack(object : OnPermissionCallBack {
                     override fun onPermission(isGranted: Boolean) {
-                        if(isGranted) {
+                        if (isGranted) {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(baseContext)) {
                                 showToast("请授权上层显示")
                                 val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
@@ -84,12 +84,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == RequestCode.SERVICE_REQUEST) {
             if (resultCode == RESULT_OK) {
-                ScreenHelper.startScreenResult(resultCode,data)
+                ScreenHelper.startScreenResult(resultCode, data)
             }
         }
         if (requestCode == RequestCode.MEDIA_REQUEST) {
             if (resultCode == RESULT_OK) {
-                ShotHelper.startScreenShot(resultCode,data)
+                ShotHelper.startScreenShot(resultCode, data)
             }
         }
     }
