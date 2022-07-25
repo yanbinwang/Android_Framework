@@ -45,14 +45,19 @@ class ShotService : Service() {
         var saving = false
         var imageReader: ImageReader? = null
 
+        /**
+         * 服务截屏的方法
+         */
         @JvmStatic
         fun capture(context: Context) {
             if(launch && !saving) startCapture(context)
         }
 
+        /**
+         * 生成图片保存到本地
+         */
         @JvmStatic
         private fun startCapture(context: Context) {
-            //生成图片保存到本地
             val image = imageReader?.acquireLatestImage()
             val width = image?.width ?: 0
             val height = image?.height ?: 0
