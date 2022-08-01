@@ -62,12 +62,6 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 Constants.APP_SHOT -> if (ShotService.launch) ShotService.capture(this) else ShotHelper.startScreenShot()
             }
         })
-
-//        binding.rlRotate.apply {
-//            post {
-//                setMapping(measuredWidth,measuredHeight)
-//            }
-//        }
     }
 
     override fun getOperation() {
