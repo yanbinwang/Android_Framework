@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
  */
 public class RotateLayout extends RelativeLayout {
     private boolean inflateLock;
-    private int width, height, rotation;//初始宽，初始高，旋转角度
+    private int width, height, rotate;//初始宽，初始高，旋转角度
     private float x, y;//初始x，y
     private final OrientationEventListener eventListener = new OrientationEventListener(getContext()) {
         @Override
@@ -18,19 +18,19 @@ public class RotateLayout extends RelativeLayout {
             if (orientation == ORIENTATION_UNKNOWN) return;
             //下面是手机旋转准确角度与四个方向角度（0 90 180 270）的转换
             int SENSOR_ANGLE = 10;
-            int rotation;
+            int rotate;
             if (orientation > 360 - SENSOR_ANGLE || orientation < SENSOR_ANGLE) {
-                rotation = 0;
+                rotate = 0;
             } else if (orientation > 90 - SENSOR_ANGLE && orientation < 90 + SENSOR_ANGLE) {
-                rotation = 270;
+                rotate = 270;
             } else if (orientation > 180 - SENSOR_ANGLE && orientation < 180 + SENSOR_ANGLE) {
-                rotation = 180;
+                rotate = 180;
             } else if (orientation > 270 - SENSOR_ANGLE && orientation < 270 + SENSOR_ANGLE) {
-                rotation = 90;
+                rotate = 90;
             } else {
                 return;
             }
-            setRotate(rotation);
+            setRotate(rotate);
         }
     };
 
@@ -44,20 +44,6 @@ public class RotateLayout extends RelativeLayout {
 
     public RotateLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-    }
-
-    @Override
-    protected void onDetachedFromWindow() {
-        super.onDetachedFromWindow();
-        inflateLock = false;
-    }
-
-    public void enable() {
-        eventListener.enable();
-    }
-
-    public void disable() {
-        eventListener.disable();
     }
 
     /**
@@ -76,15 +62,46 @@ public class RotateLayout extends RelativeLayout {
     }
 
     /**
-     * 旋转
-     *
-     * @param rotation
+     * 销毁时解除锁定
      */
-    public void setRotate(int rotation) {
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        inflateLock = false;
+    }
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         if (inflateLock) {
-            this.rotation = rotation;
-            this.setRotation(rotation);
-            boolean portrait = rotation == 0 || rotation == 180;
+            //根据记录的原生比例调整坐标轴
+            boolean portrait = rotate == 0 || rotate == 180;
+            setMeasuredDimension(portrait ? width : height, portrait ? height : width);
+            if (rotate == 90) {
+                setPivotX(x);
+                setPivotY(x);
+            }
+            if (rotate == 180) {
+                setPivotX(x);
+                setPivotY(y);
+            }
+            if (rotate == 270) {
+                setPivotX(y);
+                setPivotY(y);
+            }
+        }
+    }
+
+    /**
+     * 旋转时候宽高替换
+     *
+     * @param rotate
+     */
+    private void setRotate(int rotate) {
+        if (inflateLock) {
+            this.rotate = rotate;
+            this.setRotation(rotate);
+            boolean portrait = rotate == 0 || rotate == 180;
             LayoutParams params = (LayoutParams) getLayoutParams();
             params.width = portrait ? width : height;
             params.height = portrait ? height : width;
@@ -93,26 +110,26 @@ public class RotateLayout extends RelativeLayout {
         }
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        if (inflateLock) {
-            //根据记录的原生比例调整坐标轴
-            boolean portrait = rotation == 0 || rotation == 180;
-            setMeasuredDimension(portrait ? width : height, portrait ? height : width);
-            if (rotation == 90) {
-                setPivotX(x);
-                setPivotY(x);
-            }
-            if (rotation == 180) {
-                setPivotX(x);
-                setPivotY(y);
-            }
-            if (rotation == 270) {
-                setPivotX(y);
-                setPivotY(y);
-            }
-        }
+    /**
+     * 获取当前方向角
+     * @return
+     */
+    public int getRotate() {
+        return rotate;
+    }
+
+    /**
+     * 页面注册监听
+     */
+    public void enable() {
+        eventListener.enable();
+    }
+
+    /**
+     * 页面销毁监听
+     */
+    public void disable() {
+        eventListener.disable();
     }
 
 }
