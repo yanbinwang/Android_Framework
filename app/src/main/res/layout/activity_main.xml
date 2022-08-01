@@ -75,4 +75,58 @@
 
     </RelativeLayout>
 
+    <com.dataqin.testnew.widget.RotateLayout
+        android:id="@+id/rl_rotate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/red_ff5b29"
+                android:padding="20mm"
+                android:text="测试测试"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/black"
+                android:padding="20mm"
+                android:layout_alignParentEnd="true"
+                android:text="测试测试"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/grey_b3b3b3"
+                android:padding="20mm"
+                android:layout_alignParentEnd="true"
+                android:text="测试测试"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/blue_3d81f2"
+                android:padding="20mm"
+                android:text="测试测试"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+        </RelativeLayout>
+
+    </com.dataqin.testnew.widget.RotateLayout>
+
 </RelativeLayout>

@@ -25,6 +25,7 @@ import com.dataqin.testnew.R
 import com.dataqin.testnew.databinding.ActivityMainBinding
 import com.dataqin.testnew.presenter.contract.MainContract
 
+
 /**
  * Created by WangYanBin
  * 地图库采用高德地图，获取经纬度必须具备定位权限
@@ -43,6 +44,16 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
         ShotHelper.initialize(this)
     }
 
+    override fun onStart() {
+        super.onStart()
+        binding.rlRotate.enable()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        binding.rlRotate.disable()
+    }
+
     override fun initEvent() {
         super.initEvent()
         onClick(this, binding.btnTest, binding.btnTest2, binding.btnTest3, binding.btnTest4, binding.btnTest5)
@@ -51,6 +62,12 @@ class MainActivity : BaseTitleActivity<ActivityMainBinding>(), View.OnClickListe
                 Constants.APP_SHOT -> if (ShotService.launch) ShotService.capture(this) else ShotHelper.startScreenShot()
             }
         })
+
+//        binding.rlRotate.apply {
+//            post {
+//                setMapping(measuredWidth,measuredHeight)
+//            }
+//        }
     }
 
     override fun getOperation() {
