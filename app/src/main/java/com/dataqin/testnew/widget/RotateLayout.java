@@ -6,7 +6,7 @@ import android.view.OrientationEventListener;
 import android.widget.RelativeLayout;
 
 /**
- * 屏幕宽高由外层注入，第一次记录对应的宽高，打开锁
+ * 记录对应的宽高，坐标轴
  */
 public class RotateLayout extends RelativeLayout {
     private boolean inflateLock;
