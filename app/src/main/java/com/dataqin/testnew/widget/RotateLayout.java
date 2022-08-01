@@ -97,7 +97,7 @@ public class RotateLayout extends RelativeLayout {
      *
      * @param rotate
      */
-    private void setRotate(int rotate) {
+    public void setRotate(int rotate) {
         if (inflateLock) {
             this.rotate = rotate;
             this.setRotation(rotate);
