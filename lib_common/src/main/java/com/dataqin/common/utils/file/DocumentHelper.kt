@@ -17,7 +17,7 @@ object DocumentHelper {
      * @param filePath  分割文件地址
      * @param fileSize 分割文件大小
      */
-    class TmpInfo(var filePath: String? = null, var fileSize: Long = 0)
+    class TmpInfo(var filePath: String? = null, var filePointer: Long = 0)
 
     /**
      * 文件分割
@@ -45,9 +45,9 @@ object DocumentHelper {
                 val begin = offSet
                 val end = (i + 1) * maxSize
                 val tmpInfo = getWrite(targetFile.absolutePath, i, begin, end)
-                offSet = tmpInfo.fileSize
+                offSet = tmpInfo.filePointer
                 splitList.add(tmpInfo.filePath ?: "")
-            }
+            }//记5个值length，i，offSet，count,splitList
             if (length - offSet > 0) splitList.add(getWrite(targetFile.absolutePath, count - 1, offSet, length).filePath ?: "")
             accessFile.close()
         } catch (e: Exception) {
@@ -61,6 +61,28 @@ object DocumentHelper {
         }
         return splitList
     }
+
+    /**
+     * 传入记录的分片文件信息，如果丢失，则相当于重新分片
+     * 切片时记录每个切片的offSet（即filePointer）
+     */
+    private fun split(filePath: String, length: Long, i: Int, count: Int) :String? {
+        //此处取出数据库中的offSet进行赋值
+        var offSet = 0L
+        //如果分片已经执行完毕了，再次获取一下文件长度和累计
+        if (i + 1 == count) {
+            if (length - offSet > 0) return getWrite(filePath, count - 1, offSet, length).filePath
+        }
+        //开始切片
+        val end = (i + 1) * (length / count)
+        val tmpInfo = getWrite(filePath, i, offSet, end)
+        offSet = tmpInfo.filePointer
+        //需要重新记录一次数据库，记录i，offset
+
+        if (length - offSet > 0) return getWrite(filePath, count - 1, offSet, length).filePath
+        return ""
+    }
+
 
     /**
      * 开始创建并写入tmp文件
@@ -91,7 +113,7 @@ object DocumentHelper {
                 outAccessFile.write(b, 0, n)
             }
             //关闭输入输出流,赋值
-            info.fileSize = inAccessFile.filePointer
+            info.filePointer = inAccessFile.filePointer
             inAccessFile.close()
             outAccessFile.close()
             info.filePath = tmpFile.absolutePath
