@@ -71,16 +71,15 @@ object DocumentHelper {
         var offSet = 0L
         //如果分片已经执行完毕了，再次获取一下文件长度和累计
         if (i + 1 == count) {
-            if (length - offSet > 0) return getWrite(filePath, count - 1, offSet, length).filePath
+            return if (length - offSet > 0) getWrite(filePath, count - 1, offSet, length).filePath else ""
         }
         //开始切片
         val end = (i + 1) * (length / count)
         val tmpInfo = getWrite(filePath, i, offSet, end)
         offSet = tmpInfo.filePointer
         //需要重新记录一次数据库，记录i，offset
-
         if (length - offSet > 0) return getWrite(filePath, count - 1, offSet, length).filePath
-        return ""
+        return tmpInfo.filePath
     }
 
 
