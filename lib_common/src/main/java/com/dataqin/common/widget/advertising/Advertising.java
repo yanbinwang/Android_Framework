@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -73,8 +74,10 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
 
     private void initialize() {
         banner = new ViewPager2(getContext());
-        //去除水波纹
-        banner.getChildAt(0).setOverScrollMode(View.OVER_SCROLL_NEVER);
+        RecyclerView recycler = (RecyclerView) banner.getChildAt(0);
+        recycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
+        recycler.setHasFixedSize(true);
+        recycler.setNestedScrollingEnabled(false);
         banner.setAdapter(adapter);
         banner.setOrientation(ORIENTATION_HORIZONTAL);
         banner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
