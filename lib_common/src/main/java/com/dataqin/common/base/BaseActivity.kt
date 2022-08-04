@@ -2,7 +2,6 @@ package com.dataqin.common.base
 
 import android.app.Activity
 import android.content.Context
-import android.content.res.Resources
 import android.os.Bundle
 import android.os.Parcelable
 import android.view.LayoutInflater
@@ -26,7 +25,6 @@ import com.dataqin.common.constant.Extras
 import com.dataqin.common.utils.builder.StatusBarBuilder
 import com.dataqin.common.widget.dialog.LoadingDialog
 import io.reactivex.rxjava3.disposables.Disposable
-import me.jessyan.autosize.AutoSizeCompat
 import java.io.Serializable
 import java.lang.ref.WeakReference
 import java.lang.reflect.ParameterizedType
@@ -41,11 +39,11 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     protected lateinit var binding: VB
     protected val activity by lazy { WeakReference<Activity>(this) } //基类activity弱引用
     protected val context by lazy { WeakReference<Context>(this) }//基类context弱引用
-    protected val statusBarBuilder by lazy { StatusBarBuilder(this) }//状态栏工具类
+    protected val statusBarBuilder by lazy { StatusBarBuilder(window) }//状态栏工具类
     private var presenter: BasePresenter<*>? = null//P层
     private val rxManager by lazy { RxManager() } //事务管理器
     private val loadingDialog by lazy { LoadingDialog(this) }//刷新球控件，相当于加载动画
-    private val TAG = javaClass.simpleName.toLowerCase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
+    private val TAG = javaClass.simpleName.lowercase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected fun addDisposable(disposable: Disposable?) {
@@ -59,8 +57,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
             try {
                 presenter = pClass.newInstance()
                 presenter?.initialize(this, this, this)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (ignored: Exception) {
             }
         }
         return presenter as P
@@ -75,8 +72,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                 val method = vbClass?.getDeclaredMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, layoutInflater) as VB
                 setContentView(binding.root)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (ignored: Exception) {
             }
         }
         initView()
@@ -91,9 +87,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     override fun initEvent() {
         addDisposable(instance.toFlowable {
             when (it.getAction()) {
-                Constants.APP_USER_LOGIN_OUT -> if ("mainactivity" != TAG) {
-                    finish()
-                }
+                Constants.APP_USER_LOGIN_OUT -> if ("mainactivity" != TAG) finish()
             }
         })
     }
@@ -112,18 +106,13 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         return false
     }
 
+    /**
+     *  android:configChanges="orientation|keyboardHidden|locale"
+     *  android:windowSoftInputMode="stateVisible|adjustPan"
+     */
     override fun openDecor(view: View?) {
-        closeDecor(view)
-        Timer().schedule(object : TimerTask() {
-            override fun run() {
-                (getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(
-                    0,
-                    InputMethodManager.HIDE_NOT_ALWAYS
-                )
-            }
-        }, 200)
-        val inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(view, 2)
+        getFocus(view)
+        (getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager).toggleSoftInput(0, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
     override fun closeDecor(view: View?) {
@@ -138,14 +127,14 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         view?.findFocus() //获取焦点
     }
 
-    override fun getParameters(view: View?): String? {
+    override fun getParameters(view: View?): String {
         return when (view) {
             is EditText -> view.text.toString().trim { it <= ' ' }
             is TextView -> view.text.toString().trim { it <= ' ' }
             is CheckBox -> view.text.toString().trim { it <= ' ' }
             is RadioButton -> view.text.toString().trim { it <= ' ' }
             is Button -> view.text.toString().trim { it <= ' ' }
-            else -> null
+            else -> ""
         }
     }
 
@@ -208,12 +197,6 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
         }
         log("onDestroy...")
     }
-
-    override fun getResources(): Resources {
-        AutoSizeCompat.autoConvertDensityOfGlobal(super.getResources())
-        AutoSizeCompat.autoConvertDensity(super.getResources(), 750f, true)
-        return super.getResources()
-    }
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="BaseView实现方法-初始化一些工具类和全局的订阅">
@@ -226,7 +209,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
     }
 
     override fun showIntercept(second: Long) {
-        showDialog(true)
+        showDialog(false)
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 hideDialog()
@@ -265,7 +248,7 @@ abstract class BaseActivity<VB : ViewBinding> : AppCompatActivity(), BaseImpl, B
                     cls == Double::class.javaPrimitiveType -> postcard.withDouble(key, value as Double)
                     cls == CharArray::class.java -> postcard.withCharArray(key, value as CharArray?)
                     cls == Bundle::class.java -> postcard.withBundle(key, value as Bundle?)
-                    else -> throw RuntimeException("不支持参数类型" + ": " + cls.simpleName)
+                    else -> throw RuntimeException("不支持参数类型: ${cls.simpleName}")
                 }
             }
         }

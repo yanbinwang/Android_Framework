@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/grey_f6f8ff"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_bmap"
+                android:layout_width="match_parent"
+                android:layout_height="88mm"
+                android:gravity="center"
+                android:text="@string/label_window_bmap"
+                android:textColor="@color/black_010026"
+                android:textSize="30mm" />
+
+            <TextView
+                android:id="@+id/tv_amap"
+                android:layout_width="match_parent"
+                android:layout_height="88mm"
+                android:layout_marginTop="1dp"
+                android:gravity="center"
+                android:text="@string/label_window_amap"
+                android:textColor="@color/black_010026"
+                android:textSize="30mm" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="88mm"
+            android:layout_marginTop="20mm"
+            android:background="@color/white"
+            android:gravity="center"
+            android:text="@string/label_window_cancel"
+            android:textColor="@color/black_010026"
+            android:textSize="30mm" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,6 +7,6 @@ package com.dataqin.common.widget.xrecyclerview.callback
  */
 interface OnItemClickListener {
 
-    fun setOnItemClickListener(position: Int)
+    fun onItemClick(position: Int)
 
 }

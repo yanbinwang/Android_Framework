@@ -1,36 +1,132 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/id_container"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="20mm">
+    android:background="@color/blue_2e60df">
 
-    <Button
-        android:id="@+id/btn_create"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="80mm"
-        android:onClick="onClick"
-        android:text="生成证书"
-        android:background="@color/black"
-        android:textColor="@color/white"
-        android:textSize="32mm" />
+        android:layout_height="match_parent"
+        android:padding="20mm">
 
-    <ImageView
-        android:id="@+id/iv_certificate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_create2"
-        android:layout_width="400mm"
-        android:layout_height="80mm"
-        android:layout_marginTop="50mm"
-        android:layout_gravity="center_horizontal"
-        android:onClick="onClick"
-        android:text="展示2"
-        android:background="@color/red_e76161"
-        android:textColor="@color/white"
-        android:textSize="32mm" />
+            <Button
+                android:id="@+id/btn_test"
+                android:layout_width="match_parent"
+                android:layout_height="80mm"
+                android:background="@color/black"
+                android:text="渐隐-进入"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
 
-</LinearLayout>
+            <Button
+                android:id="@+id/btn_test2"
+                android:layout_width="match_parent"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:background="@color/black"
+                android:text="渐隐-退出"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <Button
+                android:id="@+id/btn_test3"
+                android:layout_width="match_parent"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:background="@color/black"
+                android:text="弹出-进入"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <Button
+                android:id="@+id/btn_test4"
+                android:layout_width="match_parent"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:background="@color/black"
+                android:text="弹出-退出"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+            <Button
+                android:id="@+id/btn_test5"
+                android:layout_width="match_parent"
+                android:layout_height="80mm"
+                android:layout_marginTop="20mm"
+                android:background="@color/black"
+                android:text="GPS检测设置"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_view"
+            android:layout_width="match_parent"
+            android:layout_height="200mm"
+            android:layout_alignParentBottom="true"
+            android:background="@color/black"
+            android:visibility="gone" />
+
+    </RelativeLayout>
+
+    <com.dataqin.testnew.widget.RotateLayout
+        android:id="@+id/rl_rotate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/red_ff5b29"
+                android:padding="20mm"
+                android:text="测试测试"
+                android:textColor="@color/white"
+                android:textSize="32mm" />
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_alignParentBottom="true"-->
+<!--                android:background="@color/black"-->
+<!--                android:padding="20mm"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:text="测试测试"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="32mm" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/grey_b3b3b3"-->
+<!--                android:padding="20mm"-->
+<!--                android:layout_alignParentEnd="true"-->
+<!--                android:text="测试测试"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="32mm" />-->
+
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:background="@color/blue_3d81f2"-->
+<!--                android:padding="20mm"-->
+<!--                android:text="测试测试"-->
+<!--                android:textColor="@color/white"-->
+<!--                android:textSize="32mm" />-->
+
+        </RelativeLayout>
+
+    </com.dataqin.testnew.widget.RotateLayout>
+
+</RelativeLayout>

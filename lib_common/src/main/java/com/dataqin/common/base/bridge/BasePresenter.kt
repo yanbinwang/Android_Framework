@@ -4,7 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import com.dataqin.common.base.page.PageHandler
+import com.dataqin.common.base.page.getEmptyView
 import com.dataqin.common.bus.RxManager
 import com.dataqin.common.widget.empty.EmptyLayout
 import com.dataqin.common.widget.xrecyclerview.XRecyclerView
@@ -34,14 +34,29 @@ abstract class BasePresenter<T : BaseView> {
     }
 
     fun setEmptyView(container: ViewGroup) {
-        this.softEmpty = SoftReference(PageHandler.getEmptyView(container))
-        showEmptyView()
+        this.softEmpty = SoftReference(container.getEmptyView())
     }
 
     fun setEmptyView(xRecyclerView: XRecyclerView) {
-        this.softEmpty = SoftReference(PageHandler.getEmptyView(xRecyclerView))
+        this.softEmpty = SoftReference(xRecyclerView.emptyView)
         this.softRecycler = SoftReference(xRecyclerView)
-        showEmptyView()
+    }
+
+    fun getEmptyView() = softEmpty?.get()!!
+
+    fun getRecyclerView() = softRecycler?.get()!!
+
+    fun getString(resId: Int) = weakContext?.get()?.getString(resId)!!
+
+    fun disposeView() {
+        softRecycler?.get()?.finishRefreshing()
+        softEmpty?.get()?.visibility = View.GONE
+    }
+
+    @JvmOverloads
+    fun showEmpty(imgInt: Int = -1, text: String = "") {
+        softEmpty?.get()?.visibility = View.VISIBLE
+        softEmpty?.get()?.showEmpty(imgInt, text)
     }
 
     fun detachView() {
@@ -59,20 +74,7 @@ abstract class BasePresenter<T : BaseView> {
         }
     }
 
-    protected fun showEmptyView() {
-        softEmpty?.get()?.showLoading()
-    }
-
-    protected fun hideEmptyView() {
-        softRecycler?.get()?.finishRefreshing()
-        softEmpty?.get()?.visibility = View.GONE
-    }
-
     protected fun getView() = softView?.get() as? T
-
-    protected fun getEmpty() = softEmpty?.get()
-
-    protected fun getRecycler() = softRecycler?.get()
 
     protected fun getActivity() = weakActivity?.get()
 

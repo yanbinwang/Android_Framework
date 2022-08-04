@@ -10,9 +10,11 @@ import com.bumptech.glide.load.engine.cache.LruResourceCache
 import com.bumptech.glide.load.engine.cache.MemorySizeCalculator
 import com.bumptech.glide.load.model.GlideUrl
 import com.bumptech.glide.module.AppGlideModule
+import com.dataqin.common.imageloader.glide.callback.progress.ProgressInterceptor
 import okhttp3.OkHttpClient
 import java.io.InputStream
 import java.util.concurrent.TimeUnit
+
 
 /**
  * author: wyb
@@ -24,16 +26,16 @@ open class GlideModule : AppGlideModule() {
     private val okHttpClient by lazy {
         OkHttpClient.Builder()
             .connectTimeout(6, TimeUnit.SECONDS)//设置连接超时
-            .writeTimeout(2, TimeUnit.HOURS)//设置写超时
-            .readTimeout(2, TimeUnit.HOURS)//设置读超时
+            .writeTimeout(1, TimeUnit.HOURS)//设置写超时
+            .readTimeout(1, TimeUnit.HOURS)//设置读超时
             .retryOnConnectionFailure(true)
+            .addInterceptor(ProgressInterceptor())//拦截下请求，监听加载进度
             .build()
     }
 
     override fun applyOptions(context: Context, builder: GlideBuilder) {
         //        int memoryCacheSizeBytes = 1024 * 1024 * 20; // 20mb
         //        builder.setMemoryCache(new LruResourceCache(memoryCacheSizeBytes));
-
         //        //使用ActivityManager获取当前设备的内存情况，如果是处于lowMemory的时候，将图片的DecodeFormat设置为 RGB_565 ，
         //        //RGB_565 和默认的 ARGB_8888 比，每个像素会少 2 个byte，这样，等于一张同样的图片，加载到内存中会少一半内存的占用
         //        //（ARGB_8888 每个像素占 4 byte）
@@ -43,7 +45,6 @@ open class GlideModule : AppGlideModule() {
         //            activityManager.getMemoryInfo(memoryInfo);
         //            builder.setDefaultRequestOptions((new RequestOptions()).format(memoryInfo.lowMemory? DecodeFormat.PREFER_RGB_565 : DecodeFormat.PREFER_ARGB_8888));
         //        }
-
         val calculator = MemorySizeCalculator.Builder(context).setMemoryCacheScreens(2f).build()
         builder.setMemoryCache(LruResourceCache(calculator.memoryCacheSize.toLong()))
     }

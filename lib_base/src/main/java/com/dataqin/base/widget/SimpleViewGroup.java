@@ -2,11 +2,10 @@ package com.dataqin.base.widget;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * 自定义控件继承viewgroup需要清除边距，使用当前类做处理
+ * 自定义控件继承ViewGroup需要清除边距，使用当前类做处理
  */
 public abstract class SimpleViewGroup extends ViewGroup {
 
@@ -29,36 +28,34 @@ public abstract class SimpleViewGroup extends ViewGroup {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View v = getChildAt(i);
-            v.measure(widthMeasureSpec, heightMeasureSpec);
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).measure(widthMeasureSpec, heightMeasureSpec);
         }
     }
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        int childCount = getChildCount();
-        for (int i = 0; i < childCount; i++) {
-            View v = getChildAt(i);
-            v.layout(0, 0, r, b);
+        for (int i = 0; i < getChildCount(); i++) {
+            getChildAt(i).layout(0, 0, r, b);
         }
     }
 
     @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
-        if (detectionInflate()) draw();
+        if (onFinish()) drawView();
     }
 
-    //检测布局绘制
-    protected boolean detectionInflate() {
+    /**
+     * 检测布局绘制
+     */
+    protected boolean onFinish() {
         return getChildCount() <= 0;
     }
 
     /**
      * 容器在new的时候不会走onFinishInflate方法，需要手动调取
      */
-    public abstract void draw();
+    public abstract void drawView();
 
 }

@@ -25,24 +25,21 @@ class RetrofitFactory private constructor() {
     //纯粹的网络请求，不加任何拦截
     private val retrofit2 by lazy {
         Retrofit.Builder()
-            .client(
-                OkHttpClient.Builder()
+            .client(OkHttpClient.Builder()
                     .connectTimeout(6, TimeUnit.SECONDS)//设置连接超时
                     .writeTimeout(2, TimeUnit.HOURS)//设置写超时
                     .readTimeout(2, TimeUnit.HOURS)//设置读超时
                     .retryOnConnectionFailure(true)
-                    .build()
-            )
+                    .build())
             .baseUrl(BuildConfig.LOCALHOST)
             .addConverterFactory(GsonConverterFactory.create())
+            .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
     }
 
     companion object {
         @JvmStatic
-        val instance: RetrofitFactory by lazy {
-            RetrofitFactory()
-        }
+        val instance by lazy { RetrofitFactory() }
     }
 
     //获取一个请求API

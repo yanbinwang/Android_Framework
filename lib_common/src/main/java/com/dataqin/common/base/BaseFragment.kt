@@ -41,7 +41,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
     private var presenter: BasePresenter<*>? = null//P层
     private val rxManager by lazy { RxManager() } //事务管理器
     private val loadingDialog by lazy { LoadingDialog(getContext()) }//刷新球控件，相当于加载动画
-    private val TAG = javaClass.simpleName.toLowerCase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
+    private val TAG = javaClass.simpleName.lowercase(Locale.getDefault()) //额外数据，查看log，观察当前activity是否被销毁
 
     // <editor-fold defaultstate="collapsed" desc="基类方法">
     protected fun addDisposable(disposable: Disposable?) {
@@ -55,8 +55,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
             try {
                 presenter = pClass.newInstance()
                 presenter?.initialize(activity.get(), context.get(), this)
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (ignored: Exception) {
             }
         }
         return presenter as P
@@ -69,18 +68,24 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
         try {
             val method = aClass.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
             binding = method.invoke(null, layoutInflater, container, false) as VB
-        } catch (e: Exception) {
-            e.printStackTrace()
+        } catch (ignored: Exception) {
         }
         return binding.root
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         initView()
         initEvent()
         initData()
     }
+
+//    override fun onActivityCreated(savedInstanceState: Bundle?) {
+//        super.onActivityCreated(savedInstanceState)
+//        initView()
+//        initEvent()
+//        initData()
+//    }
 
     override fun initView() {
         ARouter.getInstance().inject(this)
@@ -126,14 +131,14 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
         view?.findFocus() //获取焦点
     }
 
-    override fun getParameters(view: View?): String? {
+    override fun getParameters(view: View?): String {
         return when (view) {
             is EditText -> view.text.toString().trim { it <= ' ' }
             is TextView -> view.text.toString().trim { it <= ' ' }
             is CheckBox -> view.text.toString().trim { it <= ' ' }
             is RadioButton -> view.text.toString().trim { it <= ' ' }
             is Button -> view.text.toString().trim { it <= ' ' }
-            else -> null
+            else -> ""
         }
     }
 
@@ -208,7 +213,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
     }
 
     override fun showIntercept(second: Long) {
-        showDialog(true)
+        showDialog(false)
         Timer().schedule(object : TimerTask() {
             override fun run() {
                 hideDialog()
@@ -247,7 +252,7 @@ abstract class BaseFragment<VB : ViewBinding> : Fragment(), BaseImpl, BaseView {
                     cls == Double::class.javaPrimitiveType -> postcard.withDouble(key, value as Double)
                     cls == CharArray::class.java -> postcard.withCharArray(key, value as CharArray?)
                     cls == Bundle::class.java -> postcard.withBundle(key, value as Bundle?)
-                    else -> throw RuntimeException("不支持参数类型" + ": " + cls.simpleName)
+                    else -> throw RuntimeException("不支持参数类型: ${cls.simpleName}")
                 }
             }
         }

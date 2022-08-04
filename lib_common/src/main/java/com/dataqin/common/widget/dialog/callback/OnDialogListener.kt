@@ -6,8 +6,8 @@ package com.dataqin.common.widget.dialog.callback
  */
 interface OnDialogListener {
 
-    fun onDialogConfirm()
+    fun onConfirm()
 
-    fun onDialogCancel()
+    fun onCancel()
 
 }

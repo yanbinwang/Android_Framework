@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="238mm">
+
+            <LinearLayout
+                android:id="@+id/ll_wechat"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="98mm"
+                    android:layout_height="98mm"
+                    android:src="@mipmap/ic_wechat" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16mm"
+                    android:text="@string/label_window_wechat"
+                    android:textColor="@color/black_010026"
+                    android:textSize="28mm" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_wechat_moments"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="98mm"
+                    android:layout_height="98mm"
+                    android:src="@mipmap/ic_wechat_moments" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16mm"
+                    android:text="@string/label_window_wechat_moments"
+                    android:textColor="@color/black_010026"
+                    android:textSize="28mm" />
+
+            </LinearLayout>
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
+
+        </LinearLayout>
+
+        <View style="@style/lineWidth" />
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="88mm"
+            android:gravity="center"
+            android:text="@string/label_window_cancel"
+            android:textColor="@color/black_010026"
+            android:textSize="30mm" />
+
+    </LinearLayout>
+
+</RelativeLayout>

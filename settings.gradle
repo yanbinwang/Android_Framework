@@ -1,6 +1,18 @@
+pluginManagement {
+    apply from: 'config.gradle'
+    addRepos(repositories)
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    addRepos(repositories)
+}
+rootProject.name = "Android_Framework"
 include ':app'
-include ':lib_media'
-include ':lib_slicing'
 include ':lib_common'
 include ':lib_base'
-rootProject.name = "Android_Framework"
+include ':lib_share'
+include ':lib_map'
+include ':lib_pay'
+include ':lib_push'
+include ':lib_media'
+include ':lib_websocket'

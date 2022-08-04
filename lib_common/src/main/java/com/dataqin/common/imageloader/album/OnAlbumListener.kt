@@ -7,6 +7,6 @@ package com.dataqin.common.imageloader.album
  */
 interface OnAlbumListener {
 
-    fun onAlbumListener(albumPath: String?)
+    fun onAlbum(albumPath: String?)
 
 }

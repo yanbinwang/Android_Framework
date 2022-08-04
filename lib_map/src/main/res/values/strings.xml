@@ -1,0 +1,8 @@
+<resources>
+    <!-- app内的view显示字段 -->
+    <string name="label_window_amap">高德地图</string>
+    <string name="label_window_bmap">百度地图</string>
+    <string name="label_window_gps">定位失败，请打开手机GPS</string>
+<!--    <string name="toast_download_url_error">链接地址不合法</string>-->
+
+</resources>

@@ -1,12 +1,13 @@
 package com.dataqin.common.base
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.WindowManager
+import android.os.Build
+import android.transition.Slide
+import android.transition.Visibility
+import android.view.*
 import android.widget.PopupWindow
 import androidx.viewbinding.ViewBinding
 import com.dataqin.common.R
@@ -18,9 +19,10 @@ import java.lang.reflect.ParameterizedType
  * 所有弹出窗口的基类，弹框本身操作并不应该复杂，只拿取对应的binding即可
  * 如果具有复杂的交互则直接写成activity加入对应的透明动效
  */
+@SuppressLint("NewApi")
 abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
     protected lateinit var binding: VB
-    protected var weakActivity: WeakReference<Activity>? = null
+    private var weakActivity: WeakReference<Activity>? = null
     private var layoutParams: WindowManager.LayoutParams? = null
     private var dark = false
 
@@ -46,20 +48,45 @@ abstract class BasePopupWindow<VB : ViewBinding> : PopupWindow {
                 val vbClass = type.actualTypeArguments[0] as? Class<VB>
                 val method = vbClass?.getMethod("inflate", LayoutInflater::class.java)
                 binding = method?.invoke(null, weakActivity?.get()?.layoutInflater) as VB
-            } catch (e: Exception) {
-                e.printStackTrace()
+            } catch (ignored: Exception) {
             }
             contentView = binding.root
             isFocusable = true
             isOutsideTouchable = true
             setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-            animationStyle = R.style.pushBottomAnimStyle //默认底部弹出，可重写
+            setTransition()
             height = ViewGroup.LayoutParams.WRAP_CONTENT
             width = ViewGroup.LayoutParams.MATCH_PARENT
             softInputMode = WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
             setDismissAttributes()
         }
     }
+
+    //默认底部弹出，可重写
+    protected fun setTransition(setting: Boolean = true) {
+        if (setting) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                enterTransition = Slide().apply {
+                    duration = 500
+                    mode = Visibility.MODE_IN
+                    slideEdge = Gravity.BOTTOM
+                }
+                setExitTransition(Slide().apply {
+                    duration = 500
+                    mode = Visibility.MODE_OUT
+                    slideEdge = Gravity.BOTTOM
+                })
+            } else {
+                animationStyle = R.style.pushBottomAnimStyle
+            }
+        } else {
+//            enterTransition = null
+//            exitTransition = null
+            animationStyle = -1
+        }
+    }
+
+    protected fun getActivity() = weakActivity?.get()
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="重写方法">

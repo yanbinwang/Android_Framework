@@ -7,10 +7,18 @@ package com.dataqin.common.constant
  */
 object ARouterPath {
     //main模块
-    const val ShotActivity = "/app/ShotActivity" //启动页
+    const val StartActivity = "/app/StartActivity"
     const val MainActivity = "/app/MainActivity" //首页
+    const val ScaleActivity = "/app/ScaleActivity"
+    const val VideoTapActivity = "/app/VideoTapActivity"
+    const val RecordActivity = "/app/RecordActivity"
+    const val TransActivity = "/app/TransActivity"
+    const val PdfActivity = "/app/PdfActivity"
+    const val PasswordInputActivity = "/app/PasswordInputActivity"
+    const val PayInputActivity = "/app/PayInputActivity"
+
     //homepage模块
-    const val TestActivity = "/homepage/TestActivity" //锁定ip页
+//    const val ShotActivity = "/app/ShotActivity" //锁定ip页
     //    const val WebViewActivity = "/homepage/webView" //全局网页
 //    const val ScanActivity = "/homepage/scan" //全局扫码页
 ////    //assets模块

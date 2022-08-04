@@ -16,6 +16,8 @@ import androidx.core.content.ContextCompat;
 import com.dataqin.base.widget.SimpleViewGroup;
 import com.dataqin.common.R;
 
+import static com.dataqin.common.utils.NetWorkUtil.isNetworkAvailable;
+
 /**
  * Created by android on 2017/8/7.
  *
@@ -24,19 +26,17 @@ import com.dataqin.common.R;
  * 数据为空时候显示的页面（适用于列表，详情等）
  * 情况如下：
  * <p>
- * 1.加载中
- * 2.加载错误(只有断网情况下会显示点击刷新按钮)
- * 3.空布局(没有数据的时候显示)
+ * 1.加载中-无按钮
+ * 2.空数据-无按钮
+ * 3.加载错误(无网络，服务器错误)-有按钮
  */
 @SuppressLint("InflateParams")
 public class EmptyLayout extends SimpleViewGroup {
-    private View contextView;
-    private ImageView ivEmpty;//内容
+    private View view;
+    private ImageView ivEmpty;//图案
     private TextView tvEmpty;//文本
-    private TextView tvRefresh;//刷新
+    private TextView tvRefresh;//刷新按钮
     private OnEmptyRefreshListener onEmptyRefreshListener;
-    private static final String EMPTY_TXT = "没有数据";//数据为空时的内容
-    private static final String ERROR_TXT = "没有网络";//数据加载失败的内容
 
     public EmptyLayout(Context context) {
         super(context);
@@ -55,80 +55,93 @@ public class EmptyLayout extends SimpleViewGroup {
 
     private void initialize() {
         Context context = getContext();
-        contextView = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
-        ivEmpty = contextView.findViewById(R.id.iv_empty);
-        tvEmpty = contextView.findViewById(R.id.tv_empty);
-        tvRefresh = contextView.findViewById(R.id.tv_refresh);
+        view = LayoutInflater.from(context).inflate(R.layout.view_empty, null);
+        ivEmpty = view.findViewById(R.id.iv_empty);
+        tvEmpty = view.findViewById(R.id.tv_empty);
+        tvRefresh = view.findViewById(R.id.tv_refresh);
+        //设置样式
+        view.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
+        view.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_f6f8ff));
+        //设置监听
         tvRefresh.setOnClickListener(v -> {
             //进入加载中，并停止刷新动画
             showLoading();
             if (null != onEmptyRefreshListener) {
-                onEmptyRefreshListener.onRefreshListener();
+                onEmptyRefreshListener.onRefreshClick();
             }
         });
-        contextView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT));//设置LayoutParams
-        contextView.setBackgroundColor(ContextCompat.getColor(context, R.color.gray_f6f8ff));
-        contextView.setOnClickListener(null);
+        view.setOnClickListener(null);
         showLoading();
     }
 
     @Override
-    public void draw() {
-        if (detectionInflate()) addView(contextView);
+    public void drawView() {
+        if (onFinish()) addView(view);
     }
 
-    //设置列表所需的emptyview
+    /**
+     * 设置列表所需的emptyview
+     */
     public View setListView(View listView) {
-        removeView(contextView);
-        ((ViewGroup) listView.getParent()).addView(contextView);//添加到当前的View hierarchy
-        return contextView;
+        removeView(view);
+        ((ViewGroup) listView.getParent()).addView(view);//添加到当前的View hierarchy
+        return view;
     }
 
-    //当数据正在加载的时候显示（接口返回快速时会造成闪屏）
+    /**
+     * 数据加载中
+     */
     public void showLoading() {
-        ivEmpty.setVisibility(View.GONE);
-        tvEmpty.setVisibility(View.GONE);
+        setVisibility(View.VISIBLE);
+        ivEmpty.setImageResource(R.mipmap.img_data_loading);
+        tvEmpty.setText(getContext().getString(R.string.label_data_loading));
         tvRefresh.setVisibility(View.GONE);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)
     public void showEmpty() {
         showEmpty(-1, null);
     }
 
-    //当数据为空时(显示需要显示的图片，以及内容字)---传入图片-1：原图 0：不需要图片 default：传入的图片
-    public void showEmpty(int resId, String emptyText) {
-        ivEmpty.setBackgroundResource(0);
-        if (-1 == resId) {
-            ivEmpty.setVisibility(View.VISIBLE);
-            ivEmpty.setImageResource(R.mipmap.img_data_empty);
-        } else if (0 == resId) {
-            ivEmpty.setVisibility(View.GONE);
-        } else {
-            ivEmpty.setVisibility(View.VISIBLE);
-            ivEmpty.setImageResource(resId);
-        }
-        tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText(TextUtils.isEmpty(emptyText) ? EMPTY_TXT : emptyText);
-        tvRefresh.setVisibility(View.VISIBLE);
+    /**
+     * 数据为空--只会在200并且无数据的时候展示
+     */
+    public void showEmpty(int resId, String text) {
+        setVisibility(View.VISIBLE);
+        ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_empty : resId);
+        tvEmpty.setText(TextUtils.isEmpty(text) ? getContext().getString(R.string.label_data_empty) : text);
+        tvRefresh.setVisibility(View.GONE);
     }
 
-    //当数据错误时（没有网络）
     public void showError() {
-        ivEmpty.setVisibility(View.VISIBLE);
-        ivEmpty.setBackgroundResource(0);
-        ivEmpty.setImageResource(R.mipmap.img_net_err);
-        tvEmpty.setVisibility(View.VISIBLE);
-        tvEmpty.setText(ERROR_TXT);
+        showError(-1, null);
+    }
+
+    /**
+     * 数据加载失败-无网络，服务器请求
+     * 无网络优先级最高
+     */
+    public void showError(int resId, String text) {
+        setVisibility(View.VISIBLE);
+        if(!isNetworkAvailable()){
+            ivEmpty.setImageResource(R.mipmap.img_data_net_error);
+            tvEmpty.setText(getContext().getString(R.string.label_data_net_error));
+        }else{
+            ivEmpty.setImageResource(-1 == resId ? R.mipmap.img_data_error : resId);
+            tvEmpty.setText(TextUtils.isEmpty(text) ? getContext().getString(R.string.label_data_error) : text);
+        }
         tvRefresh.setVisibility(View.VISIBLE);
     }
 
-    //设置背景颜色
+    /**
+     * 设置背景颜色
+     */
     public void setBackgroundColor(int color) {
-        contextView.setBackgroundColor(color);
+        view.setBackgroundColor(color);
     }
 
-    //设置点击
+    /**
+     * 设置点击
+     */
     public void setOnEmptyRefreshListener(OnEmptyRefreshListener onEmptyRefreshListener) {
         this.onEmptyRefreshListener = onEmptyRefreshListener;
     }

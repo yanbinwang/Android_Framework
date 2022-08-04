@@ -10,14 +10,48 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <!-- 定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
     <!-- 麦克风 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <!-- 存储空间 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 安卓11查询权限 -->
+    <uses-permission
+        android:name="android.permission.QUERY_ALL_PACKAGES"
+        tools:ignore="QueryAllPackagesPermission" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        tools:ignore="ScopedStorage" />
+
+    <queries>
+        <!--支付宝-正式环境-->
+        <package android:name="com.eg.android.AlipayGphone" />
+        <!--支付宝-沙箱环境-->
+        <package android:name="com.eg.android.AlipayGphoneRC" />
+        <package android:name="hk.alipay.wallet" />
+        <!--微信-->
+        <package android:name="com.tencent.mm" />
+        <!--地图-->
+        <package android:name="com.baidu.BaiduMap" />
+        <package android:name="com.autonavi.minimap" />
+    </queries>
 
     <application
         android:name=".MyApplication"
@@ -26,12 +60,20 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:largeHeap="true"
+        android:preserveLegacyExternalStorage="true"
+        android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        tools:ignore="LockedOrientationActivity"
         tools:replace="android:allowBackup,android:icon,android:theme,android:label"
-        tools:targetApi="m">
+        tools:targetApi="r">
+
+        <!--全屏设置-->
+        <meta-data
+            android:name="android.notch_support"
+            android:value="true" />
 
         <meta-data
             android:name="design_width_in_dp"
@@ -41,11 +83,22 @@
             android:name="design_height_in_dp"
             android:value="1334" />
 
+        <!-- 高德key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="42bee6a932268088f48093512149053f" />
+
+        <!--        &lt;!&ndash; 个推appid &ndash;&gt;-->
+        <!--        <meta-data-->
+        <!--            android:name="PUSH_APPID"-->
+        <!--            android:value="个推SDK的appid" />-->
+
+        <!-- 引导 -->
         <activity
             android:name=".activity.SplashActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
-            android:theme="@style/startTheme">
+            android:theme="@style/splashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -53,14 +106,53 @@
             </intent-filter>
         </activity>
 
+        <!-- 启动页 -->
+        <activity
+            android:name=".activity.StartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/blueTheme" />
+
         <activity
             android:name=".activity.MainActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/whiteTheme"
+            android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".activity.ScaleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/blackTheme" />
+
+        <activity
+            android:name=".activity.TransActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/fullScreenTransTheme" />
+
+        <activity
+            android:name=".activity.PdfActivity"
             android:screenOrientation="portrait" />
 
         <activity
-            android:name=".activity.TestActivity"
+            android:name=".activity.PasswordInputActivity"
             android:screenOrientation="portrait" />
 
+        <activity
+            android:name=".activity.PayInputActivity"
+            android:screenOrientation="portrait" />
+
+        <!-- ******************************************************服务****************************************************** -->
+        <!-- 高德地图 -->
+        <service android:name="com.amap.api.location.APSService" />
+        <service
+            android:name="com.dataqin.media.service.ScreenService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
+        <service
+            android:name="com.dataqin.media.service.ShotService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
         <!-- ******************************************************解决安卓N+跳系统安装闪退****************************************************** -->
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@color/white"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="88mm">
+
+            <TextView
+                android:id="@+id/tv_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingHorizontal="20mm"
+                android:text="取消"
+                android:textColor="@color/grey_888888"
+                android:textSize="28mm" />
+
+            <TextView
+                android:id="@+id/tv_sure"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:paddingHorizontal="20mm"
+                android:text="确定"
+                android:textColor="@color/black"
+                android:textSize="28mm" />
+
+        </RelativeLayout>
+
+        <View style="@style/lineWidth" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="500mm">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <com.aigestudio.wheelpicker.WheelPicker
+                    android:id="@+id/wp_city"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.aigestudio.wheelpicker.WheelPicker
+                    android:id="@+id/wp_province"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+                <com.aigestudio.wheelpicker.WheelPicker
+                    android:id="@+id/wp_proper"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="88mm"
+                android:layout_centerInParent="true"
+                android:orientation="vertical">
+
+                <View style="@style/lineWidth" />
+
+                <View
+                    style="@style/lineWidth"
+                    android:layout_alignParentBottom="true" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

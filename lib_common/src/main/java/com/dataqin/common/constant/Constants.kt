@@ -1,6 +1,5 @@
 package com.dataqin.common.constant
 
-import android.os.Environment
 import com.dataqin.common.BaseApplication
 
 /**
@@ -13,6 +12,8 @@ object Constants {
     var SCREEN_WIDTH = 0//手机宽度
     @JvmField
     var SCREEN_HEIGHT = 0//手机高度
+    @JvmField
+    var SCREEN_DENSITY = 0//手机比值
     @JvmField
     var STATUS_BAR_HEIGHT = 0//导航栏高度
     //------gradle4.1.0开始，库中不提供VERSION_CODE和VERSION_NAME，在主app中获取，赋值给全局静态变量------
@@ -28,30 +29,39 @@ object Constants {
     @JvmField
     var DEVICE_ID: String? = null//当前手机设备id
     @JvmField
+    var LATLNG_JSON: String? = null//经纬度json
+    @JvmField
     var APPLICATION_FILE_PATH: String? = null//默认文件保存路径，sd卡下的应用名文件夹
     @JvmField
     var SDCARD_PATH = BaseApplication.instance?.getExternalFilesDir(null)?.absolutePath//sd卡的根路径mnt/sdcard-访问这个目录不需要动态申请STORAGE权限
-    //    var SDCARD_PATH = Environment.getExternalStorageDirectory().absolutePath//sd卡的根路径mnt/sdcard
 
     //app内接口的一些默认配置字段
-    const val APPLICATION_ID = "com.sqkj.oea"//当前包名
+    const val WX_APP_ID = "wx6bf57aa4b141c647" //微信的appId
+    const val APPLICATION_ID = "com.dataqin.testnew"//当前包名
     const val APPLICATION_NAME = "简证"//当前应用名
     const val LOGIN_INTERCEPTOR_CODE = 1 //阿里路由登录全局拦截器编号
-    const val PUSH_NOTIFY_ID = 0 //固定通知id
+//    const val PUSH_NOTIFY_ID = 0 //固定通知id
     const val PUSH_CHANNEL_ID = "dataqin" //推送渠道id
     const val PUSH_CHANNEL_NAME = "数秦科技" //推送渠道名
-    const val CAMERA_FILE_PATH = "Photo"
-    const val VIDEO_FILE_PATH = "Video"
-    const val AUDIO_FILE_PATH = "Audio"
-    const val SCREEN_FILE_PATH = "Screen"
 
     //MMKV存储字段
+    const val KEY_INITIAL = "keyInitial" //初次安装
     const val KEY_USER_MODEL = "keyUserModel" //用户类json
 
     //系统广播
-    const val APP_USER_LOGIN = "com.bitnew.tech.APP_USER_LOGIN"//用户登录
-    const val APP_USER_LOGIN_OUT = "com.bitnew.tech.APP_USER_LOGIN_OUT"//用户注销
-    const val APP_SHARE_SUCCESS = "com.bitnew.tech.APP_SHARE_SUCCESS"//分享成功
-    const val APP_SHARE_CANCEL = "com.bitnew.tech.APP_SHARE_CANCEL"//分享取消
-    const val APP_SHARE_FAILURE = "com.bitnew.tech.APP_SHARE_FAILURE"//分享失败
+    const val APP_USER_LOGIN = "$APPLICATION_ID.APP_USER_LOGIN"//用户登录
+    const val APP_USER_LOGIN_OUT = "$APPLICATION_ID.APP_USER_LOGIN_OUT"//用户注销
+    const val APP_MAP_CONNECTIVITY = "$APPLICATION_ID.APP_MAP_CONNECTIVITY"//地图网络状态
+    const val APP_SCREEN_FILE = "$APPLICATION_ID.APP_SCREEN_FILE"//录屏文件创建
+    const val APP_SCREEN_STOP = "$APPLICATION_ID.APP_SCREEN_STOP"//停止录屏
+    const val APP_SHOT_PATH = "$APPLICATION_ID.APP_SHOT_PATH"//系统截屏地址
+    const val APP_SHOT_IMAGE_PATH = "$APPLICATION_ID.APP_SHOT_IMAGE_PATH"//系统截屏图片地址
+    const val APP_SHOT = "$APPLICATION_ID.APP_SHOT"//系统截屏
+    const val APP_PAY_SUCCESS = "$APPLICATION_ID.APP_PAY_SUCCESS" //支付成功广播字段
+    const val APP_PAY_FAILURE = "$APPLICATION_ID.APP_PAY_FAILURE" //支付失败广播字段
+//    const val APP_PAY_CANCEL = "$APPLICATION_ID.APP_PAY_CANCEL" //支付取消广播字段
+//    const val APP_PAY_ERROR = "$APPLICATION_ID.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
+    const val APP_SHARE_SUCCESS = "$APPLICATION_ID.APP_SHARE_SUCCESS"//分享成功
+    const val APP_SHARE_CANCEL = "$APPLICATION_ID.APP_SHARE_CANCEL"//分享取消
+    const val APP_SHARE_FAILURE = "$APPLICATION_ID.APP_SHARE_FAILURE"//分享失败
 }

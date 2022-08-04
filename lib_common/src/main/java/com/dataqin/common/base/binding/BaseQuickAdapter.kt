@@ -1,5 +1,6 @@
 package com.dataqin.common.base.binding
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.viewbinding.ViewBinding
@@ -10,6 +11,7 @@ import java.lang.reflect.ParameterizedType
  * 快捷适配器，传入对应的ViewBinding即可
  */
 abstract class BaseQuickAdapter<T, VB : ViewBinding> : BaseAdapter<T> {
+    protected var context: Context? = null
 
     constructor() : super()
 
@@ -18,16 +20,18 @@ abstract class BaseQuickAdapter<T, VB : ViewBinding> : BaseAdapter<T> {
     constructor(list: MutableList<T>?) : super(list)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewBindingHolder {
-        var binding: VB? = null
+        context = parent.context
+//        var binding: VB? = null
         val superclass = javaClass.genericSuperclass
         val aClass = (superclass as ParameterizedType).actualTypeArguments[1] as? Class<*>
-        try {
-            val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
-            binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return BaseViewBindingHolder(binding!!)
+//        try {
+//            val method = aClass?.getDeclaredMethod("inflate", LayoutInflater::class.java, ViewGroup::class.java, Boolean::class.javaPrimitiveType)
+//            binding = method?.invoke(null, LayoutInflater.from(parent.context), parent, false) as VB
+//        } catch (ignored: Exception) {
+//        } finally {
+//            return BaseViewBindingHolder(binding!!)
+//        }
+        return onCreateViewBindingHolder(parent, aClass as Class<VB>)
     }
 
 }

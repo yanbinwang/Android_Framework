@@ -1,29 +1,29 @@
 package com.dataqin.common
 
+import android.annotation.SuppressLint
 import android.app.Application
+import android.content.Context
+import android.net.ConnectivityManager
+import android.net.NetworkRequest
 import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
-import com.dataqin.base.utils.LogUtil.d
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
-import com.dataqin.common.dao.DaoMaster
-import com.dataqin.common.dao.DaoSession
-import com.dataqin.common.imageloader.glide.callback.GlideAlbumLoader
+import com.dataqin.common.base.proxy.NetworkCallbackImpl
+import com.dataqin.common.imageloader.album.AlbumGlideLoader
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
 import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.QbSdk.PreInitCallback
 import com.yanzhenjie.album.Album
 import com.yanzhenjie.album.AlbumConfig
 import me.jessyan.autosize.AutoSizeConfig
 import me.jessyan.autosize.unit.Subunits
-import org.greenrobot.greendao.database.Database
 import java.util.*
 
 /**
  * Created by WangYanBin on 2020/8/14.
  */
+@SuppressLint("MissingPermission")
 open class BaseApplication : Application() {
-    var daoSession: DaoSession? = null
 
     companion object {
         @JvmField
@@ -45,28 +45,17 @@ open class BaseApplication : Application() {
         //初始化图片库类
         Album.initialize(
             AlbumConfig.newBuilder(this)
-                .setAlbumLoader(GlideAlbumLoader()) //设置Album加载器。
+                .setAlbumLoader(AlbumGlideLoader()) //设置Album加载器。
                 .setLocale(Locale.CHINA) //强制设置在任何语言下都用中文显示。
-                .build()
-        )
+                .build())
         //x5内核初始化接口
-        QbSdk.initX5Environment(applicationContext, object : PreInitCallback {
-            override fun onViewInitFinished(arg0: Boolean) {
-                //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                d(" onViewInitFinished is $arg0")
-            }
-
-            override fun onCoreInitFinished() {}
-        })
-        //阿里路由跳转初始化
+        QbSdk.initX5Environment(applicationContext, null)
+        //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
         if (BuildConfig.ISDEBUG) {
-            //打印日志
-            ARouter.openLog()
+            ARouter.openLog()//打印日志
             ARouter.openDebug()
         }
-//        //异常捕获初始化
-//        CrashHandler.instance
-        //开启调试模式(如果在InstantRun模式下运行，必须开启调试模式！线上版本需要关闭,否则有安全风险)
+        //阿里路由跳转初始化
         ARouter.init(this)
         //腾讯读写mmkv初始化
         MMKV.initialize(this)
@@ -74,11 +63,8 @@ open class BaseApplication : Application() {
         ConfigHelper.initialize(this)
         //防止短时间内多次点击，弹出多个activity 或者 dialog ，等操作
         registerActivityLifecycleCallbacks(ApplicationActivityLifecycleCallbacks())
-        //数据库初始化
-        val openHelper = DaoMaster.DevOpenHelper(this, "oes.db", null)
-        val db: Database = openHelper.readableDb
-        val daoMaster = DaoMaster(db)
-        daoSession = daoMaster.newSession()
+//        //注册网络监听->接地图实时定位可以注册
+//        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).registerNetworkCallback(NetworkRequest.Builder().build(), NetworkCallbackImpl())
     }
 
 }

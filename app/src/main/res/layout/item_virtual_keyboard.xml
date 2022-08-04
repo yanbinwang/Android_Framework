@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/grey_f7f7f7">
+
+    <TextView
+        android:id="@+id/tv_keyboard"
+        android:layout_width="match_parent"
+        android:layout_height="120mm"
+        android:layout_centerInParent="true"
+        android:background="@drawable/selector_keyboard"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/grey_333333"
+        android:textSize="52mm" />
+
+    <RelativeLayout
+        android:id="@+id/rel_keyboard_delete"
+        android:layout_width="match_parent"
+        android:layout_height="120mm"
+        android:layout_centerInParent="true"
+        android:background="@drawable/selector_keyboard">
+
+        <ImageView
+            android:layout_width="140mm"
+            android:layout_height="60mm"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/img_keyboard_delete" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

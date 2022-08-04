@@ -32,7 +32,7 @@ internal class RetryServerInterceptor : Interceptor {
         val newRequest = request.newBuilder().url(request.url.toString().replace(BuildConfig.LOCALHOST, server)).build()
         try {
             response = chain.proceed(newRequest)
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
         }
         return response!!
     }

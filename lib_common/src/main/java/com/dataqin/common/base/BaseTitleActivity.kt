@@ -2,11 +2,8 @@ package com.dataqin.common.base
 
 import android.view.View
 import androidx.viewbinding.ViewBinding
-import com.dataqin.common.base.page.PageHandler
 import com.dataqin.common.databinding.ActivityBaseBinding
 import com.dataqin.common.utils.builder.TitleBuilder
-import com.dataqin.common.widget.empty.EmptyLayout
-import com.dataqin.common.widget.xrecyclerview.XRecyclerView
 
 /**
  * Created by WangYanBin on 2020/6/10.

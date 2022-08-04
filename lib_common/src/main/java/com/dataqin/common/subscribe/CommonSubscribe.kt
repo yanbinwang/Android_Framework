@@ -1,9 +1,6 @@
 package com.dataqin.common.subscribe
 
 import com.dataqin.common.http.factory.RetrofitFactory
-import com.dataqin.common.http.repository.ApiResponse
-import io.reactivex.rxjava3.core.Flowable
-import okhttp3.ResponseBody
 
 /**
  * author:wyb
@@ -13,17 +10,11 @@ object CommonSubscribe : CommonApi {
     private val commonApi by lazy { RetrofitFactory.instance.create(CommonApi::class.java) }
     private val downloadApi by lazy { RetrofitFactory.instance.create2(CommonApi::class.java) }
 
-    override fun getDownloadApi(downloadUrl: String): Flowable<ResponseBody> {
-        return downloadApi.getDownloadApi(downloadUrl)
-    }
+    override fun getDownloadApi(downloadUrl: String) = downloadApi.getDownloadApi(downloadUrl)
 
-    override fun getSendVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return commonApi.getSendVerificationApi(agent, map)
-    }
+    override fun getSendVerificationApi(agent: String, map: Map<String, String>)= commonApi.getSendVerificationApi(agent, map)
 
-    override fun getVerificationApi(agent: String, map: Map<String, String>): Flowable<ApiResponse<Any>> {
-        return commonApi.getVerificationApi(agent, map)
-    }
+    override fun getVerificationApi(agent: String, map: Map<String, String>) = commonApi.getVerificationApi(agent, map)
 
 //    //上传图片接口
 //    fun getUploadFile(header: Int, partList: MutableList<MultipartBody.Part>, resourceSubscriber: ResourceSubscriber<BaseBean<UploadBean>>): Disposable {

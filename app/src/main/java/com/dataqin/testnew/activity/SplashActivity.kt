@@ -3,6 +3,9 @@ package com.dataqin.testnew.activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.viewbinding.ViewBinding
+import com.dataqin.common.base.BaseActivity
+import com.dataqin.common.constant.ARouterPath
 
 /**
  *  Created by wangyanbin
@@ -20,7 +23,7 @@ class SplashActivity : AppCompatActivity() {
             finish()
             return
         }
-        startActivity(Intent(this, MainActivity::class.java))
+        startActivity(Intent(this, StartActivity::class.java))
         finish()
     }
 
