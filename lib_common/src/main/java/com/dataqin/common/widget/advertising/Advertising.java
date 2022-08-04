@@ -2,12 +2,15 @@ package com.dataqin.common.widget.advertising;
 
 import static androidx.viewpager2.widget.ViewPager2.ORIENTATION_HORIZONTAL;
 
+import android.animation.Animator;
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Looper;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -47,6 +50,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
     private ViewPager2 banner;//广告容器
     private LinearLayout ovalLayout;//圆点容器
     private OnAdvertisingClickListener onAdvertisingClickListener;//监听
+    private static int previousValue;//保存前一个animatedValue
     private final int halfPosition = Integer.MAX_VALUE / 2;//计算中心值
     private final AdvertisingAdapter adapter = new AdvertisingAdapter();//图片适配器
     private final WeakHandler weakHandler = new WeakHandler(Looper.getMainLooper());//切线程
@@ -205,12 +209,54 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
                             int current = banner.getCurrentItem();
                             int position = current + 1;
                             if (current == 0 || current == Integer.MAX_VALUE) position = halfPosition - (halfPosition % list.size());
-                            banner.setCurrentItem(position);
+                            setCurrentItem(position, 1000);
                         });
                     }
                 }
             }, 3000, 3000);
         }
+    }
+
+    /**
+     * 设置当前Item
+     *
+     * @param item     下一个跳转的item
+     * @param duration scroll时长
+     */
+    private void setCurrentItem(int item, long duration) {
+        previousValue = 0;
+        int currentItem = banner.getCurrentItem();
+        int pagePxWidth = banner.getWidth();
+        int pxToDrag = pagePxWidth * (item - currentItem);
+        final ValueAnimator animator = ValueAnimator.ofInt(0, pxToDrag);
+        animator.addUpdateListener(animation -> {
+            int currentValue = (int) animation.getAnimatedValue();
+            float currentPxToDrag = (float) (currentValue - previousValue);
+            banner.fakeDragBy(-currentPxToDrag);
+            previousValue = currentValue;
+        });
+        animator.addListener(new Animator.AnimatorListener() {
+            @Override
+            public void onAnimationStart(Animator animation) {
+                banner.beginFakeDrag();
+            }
+
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                banner.endFakeDrag();
+            }
+
+            @Override
+            public void onAnimationCancel(Animator animation) {
+            }
+
+            @Override
+            public void onAnimationRepeat(Animator animation) {
+            }
+        });
+        animator.setInterpolator(new AccelerateDecelerateInterpolator());
+        animator.setDuration(duration);
+        animator.start();
     }
 
     /**
