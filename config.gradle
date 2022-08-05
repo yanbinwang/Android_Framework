@@ -93,15 +93,15 @@ build_config.LOCALHOST_DEBUG = "\"https://netcar.dev.yoogate.cn/\""//测试环�
 build_config.LOCALHOST_RELEASE = "\"https://netcar.yoogate.cn/\""//生产环境
 ext.build_config = build_config
 
-//全局build配置
-def addRepos(repositories) {
-    repositories.gradlePluginPortal()
-    repositories.google()
-//    repositories.jcenter()
-    repositories.mavenCentral()
-    repositories.flatDir { dirs 'libs' }
-    repositories.maven { url 'https://jitpack.io' }
-    repositories.maven { url 'https://mvn.mob.com/android' }
-    repositories.maven { url 'https://mvn.getui.com/nexus/content/repositories/releases/' }
-}
+////全局build配置
+//def addRepos(repositories) {
+//    repositories.gradlePluginPortal()
+//    repositories.google()
+////    repositories.jcenter()
+//    repositories.mavenCentral()
+//    repositories.flatDir { dirs 'libs' }
+//    repositories.maven { url 'https://jitpack.io' }
+//    repositories.maven { url 'https://mvn.mob.com/android' }
+//    repositories.maven { url 'https://mvn.getui.com/nexus/content/repositories/releases/' }
+//}
 ext.addRepos = this.&addRepos
