@@ -1,10 +1,21 @@
 pluginManagement {
-    apply from: 'config.gradle'
-    addRepos(repositories)
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
 }
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
-    addRepos(repositories)
+    repositories {
+        maven { url 'https://jitpack.io' }
+        maven { url 'https://mvn.mob.com/android' }
+        maven { url 'https://mvn.getui.com/nexus/content/repositories/releases/' }
+        maven { url "https://maven.aliyun.com/repository/public" }
+        flatDir { dirs 'libs' }
+        google()
+        mavenCentral()
+    }
 }
 rootProject.name = "Android_Framework"
 include ':app'
