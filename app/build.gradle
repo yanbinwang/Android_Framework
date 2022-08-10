@@ -92,7 +92,7 @@ android {
             applicationVariants.all { variant ->
                 variant.outputs.all {
                     //输出apk---包名_v版本名_日期.apk
-                    outputFileName = "example_v${variant.versionName}_" + new Date().format('yyyyMMdd') + ".apk"
+                    outputFileName = "example_v${variant.versionName}_${new Date().format('yyyyMMdd')}.apk"
                 }
             }
         }
