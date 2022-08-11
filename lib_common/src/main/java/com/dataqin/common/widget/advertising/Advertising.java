@@ -77,7 +77,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
         RecyclerView recycler = (RecyclerView) banner.getChildAt(0);
         recycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
         recycler.setHasFixedSize(true);
-//        recycler.setNestedScrollingEnabled(false);
+        recycler.setNestedScrollingEnabled(false);
 //        recycler.setVerticalScrollBarEnabled(false);
         banner.setAdapter(adapter);
         banner.setOrientation(ORIENTATION_HORIZONTAL);
@@ -197,7 +197,7 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
         //设置默认选中的起始位置
         int position = 0;
         if (list.size() > 1) position = halfPosition - (halfPosition % list.size());
-        banner.setCurrentItem(position, false);
+        if (!banner.isFakeDragging()) banner.setCurrentItem(position, false);
     }
 
     /**
