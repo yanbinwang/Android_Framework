@@ -77,8 +77,8 @@ public class Advertising extends SimpleViewGroup implements AdvertisingImpl, Def
         RecyclerView recycler = (RecyclerView) banner.getChildAt(0);
         recycler.setOverScrollMode(View.OVER_SCROLL_NEVER);
         recycler.setHasFixedSize(true);
-        recycler.setNestedScrollingEnabled(false);
-        recycler.setVerticalScrollBarEnabled(false);
+//        recycler.setNestedScrollingEnabled(false);
+//        recycler.setVerticalScrollBarEnabled(false);
         banner.setAdapter(adapter);
         banner.setOrientation(ORIENTATION_HORIZONTAL);
         banner.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
