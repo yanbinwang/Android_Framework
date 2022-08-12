@@ -9,6 +9,8 @@ import com.alibaba.android.arouter.launcher.ARouter
 import com.dataqin.base.BuildConfig
 import com.dataqin.common.base.proxy.ApplicationActivityLifecycleCallbacks
 import com.dataqin.common.base.proxy.NetworkCallbackImpl
+import com.dataqin.common.dao.DaoMaster
+import com.dataqin.common.dao.DaoSession
 import com.dataqin.common.imageloader.album.AlbumGlideLoader
 import com.dataqin.common.utils.helper.ConfigHelper
 import com.tencent.mmkv.MMKV
@@ -24,6 +26,7 @@ import java.util.*
  */
 @SuppressLint("MissingPermission")
 open class BaseApplication : Application() {
+    var daoSession: DaoSession? = null
 
     companion object {
         @JvmField
@@ -43,8 +46,7 @@ open class BaseApplication : Application() {
             .setSupportDP(false)
             .setSupportSP(false).supportSubunits = Subunits.MM
         //初始化图片库类
-        Album.initialize(
-            AlbumConfig.newBuilder(this)
+        Album.initialize(AlbumConfig.newBuilder(this)
                 .setAlbumLoader(AlbumGlideLoader()) //设置Album加载器。
                 .setLocale(Locale.CHINA) //强制设置在任何语言下都用中文显示。
                 .build())
@@ -63,6 +65,8 @@ open class BaseApplication : Application() {
         ConfigHelper.initialize(this)
         //防止短时间内多次点击，弹出多个activity 或者 dialog ，等操作
         registerActivityLifecycleCallbacks(ApplicationActivityLifecycleCallbacks())
+        //数据库初始化
+        daoSession = DaoMaster(DaoMaster.DevOpenHelper(this, "test.db", null).readableDb).newSession()
 //        //注册网络监听->接地图实时定位可以注册
 //        (getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).registerNetworkCallback(NetworkRequest.Builder().build(), NetworkCallbackImpl())
     }

@@ -19,6 +19,8 @@ object DocumentHelper {
      */
     class TmpInfo(var filePath: String? = null, var filePointer: Long = 0)
 
+    class SplitInfo(var filePath: String? = null, var filePointer: Long = 0, var index: Int, var totalNum:Int)
+
     /**
      * 文件分割
      *
@@ -65,19 +67,14 @@ object DocumentHelper {
     /**
      * 传入记录的分片文件信息，如果丢失，则相当于重新分片
      * 切片时记录每个切片的offSet（即filePointer）
+     * 取出数据库中的filePointer以及index
      */
-    private fun split(filePath: String, length: Long, index: Int, count: Int) {
-        //此处取出数据库中的offSet进行赋值
-        var offSet = 0L
+    @JvmStatic
+    fun split(filePath: String, length: Long, filePointer: Long, index: Int, count: Int): SplitInfo {
         //开始切片
         val end = (index + 1) * (length / count)
-        val tmpInfo = getWrite(filePath, index, offSet, end)
-        offSet = tmpInfo.filePointer
-        //需要重新记录一次数据库，记录index，offset
-
-
-        //再次做一次判断
-        if (length - offSet > 0) getWrite(filePath, count - 1, offSet, length)
+        val model = getWrite(filePath, index, filePointer, end)
+        return SplitInfo(model.filePath, model.filePointer, index, count)
     }
 
     /**

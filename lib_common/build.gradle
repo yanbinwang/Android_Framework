@@ -2,6 +2,7 @@ plugins {
     id 'com.android.library'
     id 'org.jetbrains.kotlin.android'
     id 'kotlin-kapt'
+    id 'org.greenrobot.greendao'
 }
 
 android {
@@ -25,6 +26,12 @@ android {
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    greendao {
+        schemaVersion build_database.schemaVersion
+        daoPackage build_database.daoPackage
+        targetGenDir build_database.targetGenDir
     }
 
     buildTypes {
@@ -79,4 +86,5 @@ dependencies {
     api deps.guide
     api deps.wechat
     api deps.wheelpicker
+    api deps.greendao
 }

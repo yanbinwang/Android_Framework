@@ -59,6 +59,10 @@ object Constants {
     const val APP_SHOT = "$APPLICATION_ID.APP_SHOT"//系统截屏
     const val APP_PAY_SUCCESS = "$APPLICATION_ID.APP_PAY_SUCCESS" //支付成功广播字段
     const val APP_PAY_FAILURE = "$APPLICATION_ID.APP_PAY_FAILURE" //支付失败广播字段
+
+    const val APP_EVIDENCE_UPDATE = "${APPLICATION_ID}.APP_EVIDENCE_UPDATE"//更新数据
+    const val APP_EVIDENCE_EXTRAS_UPDATE = "${APPLICATION_ID}.APP_EVIDENCE_EXTRAS_UPDATE"//更新文件待上传数据
+
 //    const val APP_PAY_CANCEL = "$APPLICATION_ID.APP_PAY_CANCEL" //支付取消广播字段
 //    const val APP_PAY_ERROR = "$APPLICATION_ID.APP_PAY_ERROR" //支付提示广播（出现未安装支付软件）
     const val APP_SHARE_SUCCESS = "$APPLICATION_ID.APP_SHARE_SUCCESS"//分享成功

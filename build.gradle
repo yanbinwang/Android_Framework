@@ -2,8 +2,10 @@
 buildscript {
     apply from: 'config.gradle'
     ext.mobsdk_version = '2018.0319.1724'
+    ext.greendao_version = '3.3.0'
     dependencies {
         classpath "com.mob.sdk:MobSDK:$mobsdk_version"
+        classpath "org.greenrobot:greendao-gradle-plugin:$greendao_version"
     }
 }
 
