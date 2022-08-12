@@ -47,7 +47,7 @@ object DocumentHelper {
                 val tmpInfo = getWrite(targetFile.absolutePath, i, begin, end)
                 offSet = tmpInfo.filePointer
                 splitList.add(tmpInfo.filePath ?: "")
-            }//记5个值length，i，offSet，count,splitList
+            }
             if (length - offSet > 0) splitList.add(getWrite(targetFile.absolutePath, count - 1, offSet, length).filePath ?: "")
             accessFile.close()
         } catch (e: Exception) {
@@ -66,22 +66,19 @@ object DocumentHelper {
      * 传入记录的分片文件信息，如果丢失，则相当于重新分片
      * 切片时记录每个切片的offSet（即filePointer）
      */
-    private fun split(filePath: String, length: Long, i: Int, count: Int) :String? {
+    private fun split(filePath: String, length: Long, index: Int, count: Int) {
         //此处取出数据库中的offSet进行赋值
         var offSet = 0L
-        //如果分片已经执行完毕了，再次获取一下文件长度和累计
-        if (i + 1 == count) {
-            return if (length - offSet > 0) getWrite(filePath, count - 1, offSet, length).filePath else ""
-        }
         //开始切片
-        val end = (i + 1) * (length / count)
-        val tmpInfo = getWrite(filePath, i, offSet, end)
+        val end = (index + 1) * (length / count)
+        val tmpInfo = getWrite(filePath, index, offSet, end)
         offSet = tmpInfo.filePointer
-        //需要重新记录一次数据库，记录i，offset
-        if (length - offSet > 0) return getWrite(filePath, count - 1, offSet, length).filePath
-        return tmpInfo.filePath
-    }
+        //需要重新记录一次数据库，记录index，offset
 
+
+        //再次做一次判断
+        if (length - offSet > 0) getWrite(filePath, count - 1, offSet, length)
+    }
 
     /**
      * 开始创建并写入tmp文件
