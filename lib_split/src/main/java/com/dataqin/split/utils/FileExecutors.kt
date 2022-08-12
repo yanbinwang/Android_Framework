@@ -92,11 +92,7 @@ object FileExecutors {
                         //成功删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
                         //赋值，进度+1，下标+1
-                        FileHelper.setFilePointer(
-                            sourcePath,
-                            tmpInfo.filePointer,
-                            tmpInfo.index + 1
-                        )
+                        FileHelper.setFilePointer(sourcePath, tmpInfo.filePointer, tmpInfo.index + 1)
                         //重新获取一下当前存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
