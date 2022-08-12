@@ -73,10 +73,7 @@ object FileExecutors {
                 }
                 else -> toUpload(sourcePath, fileType, baoquan_no, extras, isZip)
             }
-        } else LogUtil.e(
-            TAG,
-            " \n————————————————————————文件上传————————————————————————\n正在上传:$sourcePath\n————————————————————————文件上传————————————————————————"
-        )
+        } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:$sourcePath\n————————————————————————文件上传————————————————————————")
     }
 
     private fun toPartUpload(sourcePath: String, tmpInfo: DocumentHelper.SplitInfo, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
@@ -125,6 +122,7 @@ object FileExecutors {
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
                         if (msg == "该保全号信息有误") {
+                            FileUtil.deleteFile(tmpInfo.filePath)
                             FileUtil.deleteFile(sourcePath)
                             FileHelper.delete(sourcePath)
                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
