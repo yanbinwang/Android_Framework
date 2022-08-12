@@ -55,12 +55,12 @@ object FileExecutors {
      */
     fun submit(sourcePath: String, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
         if (!FileHelper.isUpload(sourcePath)) {
-            LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n开始上传:$sourcePath\n————————————————————————文件上传————————————————————————")
+            LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n开始上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
             when (fileType) {
                 "3", "4" -> {
                     if (File(sourcePath).length() >= 100 * 1024 * 1024) {
                         executors.execute {
-                            val model = queryDB(sourcePath, baoquan_no, extras)
+                            val model = queryFileDB(sourcePath, baoquan_no, extras)
                             FileHelper.setFileUpload(sourcePath, true)
                             //先插一条数据并刷出来，切片需要一定的时间
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
@@ -73,7 +73,7 @@ object FileExecutors {
                 }
                 else -> toUpload(sourcePath, fileType, baoquan_no, extras, isZip)
             }
-        } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:$sourcePath\n————————————————————————文件上传————————————————————————")
+        } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
     }
 
     private fun toPartUpload(sourcePath: String, tmpInfo: DocumentHelper.SplitInfo, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
@@ -92,7 +92,11 @@ object FileExecutors {
                         //成功删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
                         //赋值，进度+1，下标+1
-                        FileHelper.setFilePointer(sourcePath, tmpInfo.filePointer, tmpInfo.index + 1)
+                        FileHelper.setFilePointer(
+                            sourcePath,
+                            tmpInfo.filePointer,
+                            tmpInfo.index + 1
+                        )
                         //重新获取一下当前存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
@@ -116,7 +120,7 @@ object FileExecutors {
                                     })
                             }
                         }
-                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：$sourcePath\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
+                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                     }
 
                     override fun onFailed(e: Throwable?, msg: String?) {
@@ -127,7 +131,7 @@ object FileExecutors {
                             FileHelper.delete(sourcePath)
                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
                         } else FileHelper.setFileState(sourcePath, false)
-                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：" + if (TextUtils.isEmpty(msg)) e.toString() else "$msg\n————————————————————————文件上传-分片————————————————————————")
+                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传-分片————————————————————————")
                     }
 
                     override fun onComplete() {
@@ -140,7 +144,7 @@ object FileExecutors {
     }
 
     private fun toUpload(sourcePath: String, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
-        FileHelper.insert(queryDB(sourcePath, baoquan_no, extras))
+        FileHelper.insert(queryFileDB(sourcePath, baoquan_no, extras))
         RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
         executors.execute {
             var complete = false
@@ -169,7 +173,7 @@ object FileExecutors {
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
                         FileHelper.setFileState(sourcePath)
-                        LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：" + if (TextUtils.isEmpty(msg)) e.toString() else "$msg\n————————————————————————文件上传————————————————————————")
+                        LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传————————————————————————")
                     }
 
                     override fun onComplete() {
@@ -187,7 +191,7 @@ object FileExecutors {
         executors.isShutdown
     }
 
-    private fun queryDB(sourcePath: String, baoquan_no: String, extras: String): MobileFileDB {
+    private fun queryFileDB(sourcePath: String, baoquan_no: String, extras: String): MobileFileDB {
         var model = FileHelper.query(sourcePath)
         if (model == null) model = MobileFileDB(sourcePath, AccountHelper.getUserId(), baoquan_no, extras, 0, 0, true, false)
         return model
