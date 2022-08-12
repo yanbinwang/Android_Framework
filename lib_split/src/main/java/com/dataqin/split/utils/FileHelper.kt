@@ -70,7 +70,7 @@ object FileHelper {
 
     //接口上传成功调取
     @JvmStatic
-    fun setFilePointer(sourcePath: String, filePointer: Long, index: Int) {
+    fun insert(sourcePath: String, filePointer: Long, index: Int) {
         val model = query(sourcePath)
         if (null != model) {
             model.filePointer = filePointer
@@ -81,7 +81,7 @@ object FileHelper {
 
     //标记文件的状态
     @JvmStatic
-    fun setFileState(sourcePath: String, complete: Boolean = false) {
+    fun updateState(sourcePath: String, complete: Boolean = false) {
         val model = query(sourcePath)
         if (null != model) {
             model.complete = complete
@@ -92,11 +92,21 @@ object FileHelper {
 
     //开始上传文件
     @JvmStatic
-    fun setFileUpload(sourcePath: String, upload: Boolean = true) {
+    fun update(sourcePath: String, upload: Boolean = true) {
         val model = query(sourcePath)
         if (null != model) {
             model.upload = upload
             dao.update(model)
+        }
+    }
+
+    @JvmStatic
+    fun updateAll(upload: Boolean = false) {
+        val daoList = query()
+        if (null != daoList) {
+            for (model in daoList) {
+                update(model.sourcePath, upload)
+            }
         }
     }
 

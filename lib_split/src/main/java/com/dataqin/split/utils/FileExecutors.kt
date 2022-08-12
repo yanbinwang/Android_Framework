@@ -60,9 +60,11 @@ object FileExecutors {
                 "3", "4" -> {
                     if (File(sourcePath).length() >= 100 * 1024 * 1024) {
                         executors.execute {
+                            //查询出数据，并重新插入
                             val model = queryFileDB(sourcePath, baoquan_no, extras)
-                            FileHelper.setFileUpload(sourcePath, true)
+                            FileHelper.insert(model)
                             //先插一条数据并刷出来，切片需要一定的时间
+                            FileHelper.update(sourcePath, true)
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //获取分片
                             val tmp = FileHelper.submit(model)
@@ -91,14 +93,14 @@ object FileExecutors {
                         super.onSuccess(data)
                         //成功删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
-                        //赋值，进度+1，下标+1
-                        FileHelper.setFilePointer(sourcePath, tmpInfo.filePointer, tmpInfo.index + 1)
                         //重新获取一下当前存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
                             if (model.index + 1 < tmpInfo.totalNum) {
                                 //重新获取一下拓片
                                 val nextTmp = FileHelper.submit(model)
+                                //赋值，进度+1，下标+1
+                                FileHelper.insert(sourcePath, nextTmp.filePointer, tmpInfo.index + 1)
                                 weakHandler.post { toPartUpload(sourcePath, nextTmp, fileType, baoquan_no, extras, isZip) }
                             }
                             if (model.index + 1 == tmpInfo.totalNum) {
@@ -109,7 +111,7 @@ object FileExecutors {
                                             super.onComplete()
                                             //删除源文件，清空表
                                             FileUtil.deleteFile(sourcePath)
-                                            FileHelper.setFileState(sourcePath, true)
+                                            FileHelper.updateState(sourcePath, true)
                                             FileHelper.delete(sourcePath)
                                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
                                         }
@@ -126,7 +128,7 @@ object FileExecutors {
                             FileUtil.deleteFile(sourcePath)
                             FileHelper.delete(sourcePath)
                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
-                        } else FileHelper.setFileState(sourcePath, false)
+                        } else FileHelper.updateState(sourcePath, false)
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传-分片————————————————————————")
                     }
 
@@ -161,14 +163,14 @@ object FileExecutors {
                         super.onSuccess(data)
                         complete = true
                         FileUtil.deleteFile(sourcePath)
-                        FileHelper.setFileState(sourcePath, true)
+                        FileHelper.updateState(sourcePath, true)
                         FileHelper.delete(sourcePath)
                         LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：$sourcePath\n上传状态：成功\n————————————————————————文件上传————————————————————————")
                     }
 
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
-                        FileHelper.setFileState(sourcePath)
+                        FileHelper.updateState(sourcePath)
                         LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传————————————————————————")
                     }
 
