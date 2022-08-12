@@ -96,11 +96,11 @@ object FileExecutors {
                         //重新获取一下当前存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
-                            if (model.index + 1 < tmpInfo.totalNum) {
+                            //赋值，进度+1，下标+1
+                            FileHelper.insert(sourcePath, tmpInfo.filePointer, model.index + 1)
+                            if (model.index + 1 < tmpInfo.totalNum - 1) {
                                 //重新获取一下拓片
                                 val nextTmp = FileHelper.submit(model)
-                                //赋值，进度+1，下标+1
-                                FileHelper.insert(sourcePath, nextTmp.filePointer, tmpInfo.index + 1)
                                 weakHandler.post { toPartUpload(sourcePath, nextTmp, fileType, baoquan_no, extras, isZip) }
                             }
                             if (model.index + 1 == tmpInfo.totalNum) {

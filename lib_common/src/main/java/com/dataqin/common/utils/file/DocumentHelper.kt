@@ -19,7 +19,7 @@ object DocumentHelper {
      */
     class TmpInfo(var filePath: String? = null, var filePointer: Long = 0)
 
-    class SplitInfo(var filePath: String? = null, var filePointer: Long = 0, var index: Int, var totalNum:Int)
+    class SplitInfo(var filePath: String? = null, var filePointer: Long = 0, var totalNum:Int)
 
     /**
      * 文件分割
@@ -74,7 +74,7 @@ object DocumentHelper {
         //开始切片
         val end = (index + 1) * (length / count)
         val model = getWrite(filePath, index, filePointer, end)
-        return SplitInfo(model.filePath, model.filePointer, index, count)
+        return SplitInfo(model.filePath, model.filePointer, count)
     }
 
     /**
