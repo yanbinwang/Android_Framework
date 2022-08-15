@@ -2,11 +2,14 @@ package com.dataqin.split.utils
 
 import android.text.TextUtils
 import com.dataqin.common.BaseApplication
+import com.dataqin.common.constant.Constants
 import com.dataqin.common.dao.MobileFileDBDao
 import com.dataqin.common.model.MobileFileDB
 import com.dataqin.common.utils.file.DocumentHelper
+import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.helper.AccountHelper
 import java.io.File
+import java.io.RandomAccessFile
 
 object FileHelper {
     private val dao by lazy { BaseApplication.instance?.daoSession!!.mobileFileDBDao }
@@ -57,6 +60,35 @@ object FileHelper {
     // </editor-fold>
 
     // <editor-fold defaultstate="collapsed" desc="项目操作方法">
+    //获取查表的路径
+    @JvmStatic
+    fun getSourcePath(type: String, title: String): String {
+        return "${Constants.APPLICATION_FILE_PATH}/证据文件/${AccountHelper.getUserId()}/${
+            when (type) {
+                "1" -> "拍照"
+                "2" -> "录像"
+                "3" -> "录音"
+                else -> "录屏"
+            }
+        }取证/${title}"
+    }
+
+    @JvmStatic
+    fun sort(serverList: MutableList<String>) {
+        //查询手机内存储的集合
+        val localList = query()
+        if (null != localList) {
+            for (model in localList.filter { !serverList.contains(it.sourcePath) }) {
+                delete(model)
+                //删除对应的断点续传文件夹
+                val file = File(model.sourcePath)
+                val fileName = file.name.split(".")[0]
+                FileUtil.deleteDir("${file.parent}/${fileName}_record")
+                //删除源文件
+                FileUtil.deleteFile(model.sourcePath)
+            }
+        }
+    }
 
     //外层先query查找对应数据库，没有找到值的话，重新insert，找到值的话，获取里面的内容
     @JvmStatic
@@ -65,10 +97,11 @@ object FileHelper {
         val cutSize = (100 * 1024 * 1024).toLong()
         val targetLength = targetFile.length()
         val count = if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt()
-        return DocumentHelper.split(model.sourcePath, targetLength, model.filePointer, model.index, count)
+        val accessFile = RandomAccessFile(targetFile, "r")
+        return DocumentHelper.split(model.sourcePath, accessFile.length(), model.filePointer, model.index, count)
     }
 
-    //接口上传成功调取
+    //接口回调299成功存储此次断点和下标
     @JvmStatic
     fun update(sourcePath: String, filePointer: Long, index: Int) {
         val model = query(sourcePath)
@@ -76,17 +109,6 @@ object FileHelper {
             model.filePointer = filePointer
             model.index = index
             insert(model)
-        }
-    }
-
-    //标记文件的状态
-    @JvmStatic
-    fun updateState(sourcePath: String, complete: Boolean = false) {
-        val model = query(sourcePath)
-        if (null != model) {
-            model.complete = complete
-            model.upload = false
-            dao.update(model)
         }
     }
 
@@ -100,6 +122,7 @@ object FileHelper {
         }
     }
 
+    //更新所有文件的上传状态
     @JvmStatic
     fun updateAll(upload: Boolean = false) {
         val daoList = query()
@@ -110,13 +133,15 @@ object FileHelper {
         }
     }
 
-    //文件是否上传完成
+    //标记文件此时的状态
     @JvmStatic
-    fun isComplete(sourcePath: String): Boolean {
-        var isComplete = true
+    fun complete(sourcePath: String, complete: Boolean = false) {
         val model = query(sourcePath)
-        if (null != model) isComplete = model.complete
-        return isComplete
+        if (null != model) {
+            model.complete = complete
+            model.upload = false
+            dao.update(model)
+        }
     }
 
     //文件是否正在上传
@@ -126,6 +151,15 @@ object FileHelper {
         val model = query(sourcePath)
         if (null != model) isUpload = model.upload
         return isUpload
+    }
+
+    //文件是否上传完成
+    @JvmStatic
+    fun isComplete(sourcePath: String): Boolean {
+        var isComplete = true
+        val model = query(sourcePath)
+        if (null != model) isComplete = model.complete
+        return isComplete
     }
     // </editor-fold>
 }
