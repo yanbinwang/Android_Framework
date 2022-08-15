@@ -53,32 +53,35 @@ object FileExecutors {
      * fileType-文件类型
      * extrasJson-轮询失败用于取得历史数据，再次发起提交
      */
-    fun submit(sourcePath: String, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
+    fun submit(sourcePath: String, fileType: String, baoquan_no: String, isZip: Boolean = false) {
         if (!FileHelper.isUpload(sourcePath)) {
             LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n开始上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
             when (fileType) {
                 "3", "4" -> {
                     if (File(sourcePath).length() >= 100 * 1024 * 1024) {
                         executors.execute {
-                            //查询出数据，并重新插入
-                            val model = queryFileDB(sourcePath, baoquan_no, extras)
+                            //查询/创建一条用于存表的数据，并重新插入一次
+                            val model = query(sourcePath, baoquan_no)
                             FileHelper.insert(model)
-                            //先插一条数据并刷出来，切片需要一定的时间
+                            //先将当前查询/创建的数据在未上传列表内刷出来，文件分片需要一些时间
                             FileHelper.update(sourcePath, true)
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
-                            //获取分片
+                            //获取一次当前下标，如果非0则+1
+                            val position = if (model.index != 0) model.index + 1 else 0
+                            model.index = position
+                            //开始分片，并获取分片信息
                             val tmp = FileHelper.submit(model)
-                            weakHandler.post { toPartUpload(sourcePath, tmp, fileType, baoquan_no, extras, isZip) }
+                            weakHandler.post { toPartUpload(position, sourcePath, tmp, fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
-                    } else toUpload(sourcePath, fileType, baoquan_no, extras, isZip)
+                    } else toUpload(sourcePath, fileType, baoquan_no, isZip)
                 }
-                else -> toUpload(sourcePath, fileType, baoquan_no, extras, isZip)
+                else -> toUpload(sourcePath, fileType, baoquan_no, isZip)
             }
         } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
     }
 
-    private fun toPartUpload(sourcePath: String, tmpInfo: DocumentHelper.SplitInfo, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
+    private fun toPartUpload(position: Int, sourcePath: String, tmpInfo: DocumentHelper.SplitInfo, fileType: String, baoquan_no: String, isZip: Boolean = false) {
         executors.execute {
             val paramsFile = File(tmpInfo.filePath ?: "")
             val builder = MultipartBody.Builder()
@@ -91,32 +94,20 @@ object FileExecutors {
                 .subscribeWith(object : HttpSubscriber<Any>() {
                     override fun onSuccess(data: Any?) {
                         super.onSuccess(data)
-                        //成功删除这个切片
+                        //成功记录此次分片，并删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
-                        //重新获取一下当前存储的值
+                        FileHelper.update(sourcePath, tmpInfo.filePointer, position)
+                        //重新获取当前数据库中存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
-                            //赋值，进度+1，下标+1
-                            FileHelper.insert(sourcePath, tmpInfo.filePointer, model.index + 1)
-                            if (model.index + 1 < tmpInfo.totalNum) {
-                                //重新获取一下拓片
+                            val index = model.index+1
+                            if (index < tmpInfo.totalNum) {
+                                model.index = index
+                                //获取下一块分片,并且记录
                                 val nextTmp = FileHelper.submit(model)
-                                weakHandler.post { toPartUpload(sourcePath, nextTmp, fileType, baoquan_no, extras, isZip) }
-                            }
-                            if (model.index + 1 == tmpInfo.totalNum) {
-                                SplitSubscribe.getPartCombineApi(HttpParams().append("baoquan_no", baoquan_no).map)
-                                    .compose(RxSchedulers.ioMain())
-                                    .subscribeWith(object : HttpSubscriber<Any>() {
-                                        override fun onComplete() {
-                                            super.onComplete()
-                                            //删除源文件，清空表
-                                            FileUtil.deleteFile(sourcePath)
-                                            FileHelper.updateState(sourcePath, true)
-                                            FileHelper.delete(sourcePath)
-                                            weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
-                                        }
-                                    })
-                            }
+                                //再开启下一次传输
+                                weakHandler.post { toPartUpload(index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
+                            } else if (index >= tmpInfo.totalNum) toCombinePart(sourcePath, baoquan_no, fileType)
                         }
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                     }
@@ -141,8 +132,23 @@ object FileExecutors {
         executors.isShutdown
     }
 
-    private fun toUpload(sourcePath: String, fileType: String, baoquan_no: String, extras: String, isZip: Boolean = false) {
-        FileHelper.insert(queryFileDB(sourcePath, baoquan_no, extras))
+    private fun toCombinePart(sourcePath: String, baoquan_no: String, fileType: String) {
+        SplitSubscribe.getPartCombineApi(HttpParams().append("baoquan_no", baoquan_no).map)
+            .compose(RxSchedulers.ioMain())
+            .subscribeWith(object : HttpSubscriber<Any>() {
+                override fun onComplete() {
+                    super.onComplete()
+                    //删除源文件，清空表
+                    FileUtil.deleteFile(sourcePath)
+                    FileHelper.updateState(sourcePath, true)
+                    FileHelper.delete(sourcePath)
+                    weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
+                }
+            })
+    }
+
+    private fun toUpload(sourcePath: String, fileType: String, baoquan_no: String, isZip: Boolean = false) {
+        FileHelper.insert(query(sourcePath, baoquan_no))
         RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
         executors.execute {
             var complete = false
@@ -189,9 +195,9 @@ object FileExecutors {
         executors.isShutdown
     }
 
-    private fun queryFileDB(sourcePath: String, baoquan_no: String, extras: String): MobileFileDB {
+    private fun query(sourcePath: String, baoquan_no: String): MobileFileDB {
         var model = FileHelper.query(sourcePath)
-        if (model == null) model = MobileFileDB(sourcePath, AccountHelper.getUserId(), baoquan_no, extras, 0, 0, true, false)
+        if (model == null) model = MobileFileDB(sourcePath, AccountHelper.getUserId(), baoquan_no, 0, 0, true, false)
         return model
     }
 

@@ -27,11 +27,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
         public final static Property SourcePath = new Property(0, String.class, "sourcePath", true, "SOURCE_PATH");
         public final static Property UserId = new Property(1, String.class, "userId", false, "USER_ID");
         public final static Property Baoquan = new Property(2, String.class, "baoquan", false, "BAOQUAN");
-        public final static Property Extras = new Property(3, String.class, "extras", false, "EXTRAS");
-        public final static Property Index = new Property(4, int.class, "index", false, "INDEX");
-        public final static Property FilePointer = new Property(5, long.class, "filePointer", false, "FILE_POINTER");
-        public final static Property Upload = new Property(6, boolean.class, "upload", false, "UPLOAD");
-        public final static Property Complete = new Property(7, boolean.class, "complete", false, "COMPLETE");
+        public final static Property Index = new Property(3, int.class, "index", false, "INDEX");
+        public final static Property FilePointer = new Property(4, long.class, "filePointer", false, "FILE_POINTER");
+        public final static Property Upload = new Property(5, boolean.class, "upload", false, "UPLOAD");
+        public final static Property Complete = new Property(6, boolean.class, "complete", false, "COMPLETE");
     }
 
 
@@ -50,11 +49,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
                 "\"SOURCE_PATH\" TEXT PRIMARY KEY NOT NULL ," + // 0: sourcePath
                 "\"USER_ID\" TEXT," + // 1: userId
                 "\"BAOQUAN\" TEXT," + // 2: baoquan
-                "\"EXTRAS\" TEXT," + // 3: extras
-                "\"INDEX\" INTEGER NOT NULL ," + // 4: index
-                "\"FILE_POINTER\" INTEGER NOT NULL ," + // 5: filePointer
-                "\"UPLOAD\" INTEGER NOT NULL ," + // 6: upload
-                "\"COMPLETE\" INTEGER NOT NULL );"); // 7: complete
+                "\"INDEX\" INTEGER NOT NULL ," + // 3: index
+                "\"FILE_POINTER\" INTEGER NOT NULL ," + // 4: filePointer
+                "\"UPLOAD\" INTEGER NOT NULL ," + // 5: upload
+                "\"COMPLETE\" INTEGER NOT NULL );"); // 6: complete
     }
 
     /** Drops the underlying database table. */
@@ -81,15 +79,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
         if (baoquan != null) {
             stmt.bindString(3, baoquan);
         }
- 
-        String extras = entity.getExtras();
-        if (extras != null) {
-            stmt.bindString(4, extras);
-        }
-        stmt.bindLong(5, entity.getIndex());
-        stmt.bindLong(6, entity.getFilePointer());
-        stmt.bindLong(7, entity.getUpload() ? 1L: 0L);
-        stmt.bindLong(8, entity.getComplete() ? 1L: 0L);
+        stmt.bindLong(4, entity.getIndex());
+        stmt.bindLong(5, entity.getFilePointer());
+        stmt.bindLong(6, entity.getUpload() ? 1L: 0L);
+        stmt.bindLong(7, entity.getComplete() ? 1L: 0L);
     }
 
     @Override
@@ -110,15 +103,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
         if (baoquan != null) {
             stmt.bindString(3, baoquan);
         }
- 
-        String extras = entity.getExtras();
-        if (extras != null) {
-            stmt.bindString(4, extras);
-        }
-        stmt.bindLong(5, entity.getIndex());
-        stmt.bindLong(6, entity.getFilePointer());
-        stmt.bindLong(7, entity.getUpload() ? 1L: 0L);
-        stmt.bindLong(8, entity.getComplete() ? 1L: 0L);
+        stmt.bindLong(4, entity.getIndex());
+        stmt.bindLong(5, entity.getFilePointer());
+        stmt.bindLong(6, entity.getUpload() ? 1L: 0L);
+        stmt.bindLong(7, entity.getComplete() ? 1L: 0L);
     }
 
     @Override
@@ -132,11 +120,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
             cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0), // sourcePath
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // userId
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // baoquan
-            cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // extras
-            cursor.getInt(offset + 4), // index
-            cursor.getLong(offset + 5), // filePointer
-            cursor.getShort(offset + 6) != 0, // upload
-            cursor.getShort(offset + 7) != 0 // complete
+            cursor.getInt(offset + 3), // index
+            cursor.getLong(offset + 4), // filePointer
+            cursor.getShort(offset + 5) != 0, // upload
+            cursor.getShort(offset + 6) != 0 // complete
         );
         return entity;
     }
@@ -146,11 +133,10 @@ public class MobileFileDBDao extends AbstractDao<MobileFileDB, String> {
         entity.setSourcePath(cursor.isNull(offset + 0) ? null : cursor.getString(offset + 0));
         entity.setUserId(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setBaoquan(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setExtras(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
-        entity.setIndex(cursor.getInt(offset + 4));
-        entity.setFilePointer(cursor.getLong(offset + 5));
-        entity.setUpload(cursor.getShort(offset + 6) != 0);
-        entity.setComplete(cursor.getShort(offset + 7) != 0);
+        entity.setIndex(cursor.getInt(offset + 3));
+        entity.setFilePointer(cursor.getLong(offset + 4));
+        entity.setUpload(cursor.getShort(offset + 5) != 0);
+        entity.setComplete(cursor.getShort(offset + 6) != 0);
      }
     
     @Override

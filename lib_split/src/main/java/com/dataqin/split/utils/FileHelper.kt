@@ -70,7 +70,7 @@ object FileHelper {
 
     //接口上传成功调取
     @JvmStatic
-    fun insert(sourcePath: String, filePointer: Long, index: Int) {
+    fun update(sourcePath: String, filePointer: Long, index: Int) {
         val model = query(sourcePath)
         if (null != model) {
             model.filePointer = filePointer
