@@ -55,6 +55,17 @@ android {
     }
 
     buildTypes {
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            tasks.whenTaskAdded { task ->
+                if (task.name.contains("DebugApkListingFileRedirect")) { // 过滤debug
+                    task.enabled = false
+                }
+            }
+        }
+
         release {
             //架构支持
             ndk {
@@ -83,7 +94,7 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
 
-            tasks.whenTaskAdded {task ->
+            tasks.whenTaskAdded { task ->
                 if (task.name.contains("ReleaseApkListingFileRedirect")) { // 过滤release
                     task.enabled = false
                 }
