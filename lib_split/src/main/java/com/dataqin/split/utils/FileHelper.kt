@@ -92,11 +92,21 @@ object FileHelper {
     //外层先query查找对应数据库，没有找到值的话，重新insert，找到值的话，获取里面的内容
     @JvmStatic
     fun split(fileDB: MobileFileDB): DocumentHelper.TmpInfo {
+        //获取切片源文件
         val targetFile = File(fileDB.sourcePath)
+        //设置每片切片大小
         val cutSize = (100 * 1024 * 1024).toLong()
+        //获取源文件大小
         val targetLength = targetFile.length()
-        val maxSize = targetLength / (if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt())
-        val end = (fileDB.index + 1) * maxSize
+        //计算切片的片数
+        val count = if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize) else targetLength.div(cutSize).plus(1)
+        //计算每片切片的实际大小
+        val maxSize = targetLength / count
+        //确定切割的结尾
+        var end = (fileDB.index + 1) * maxSize
+        //如果当前是分片的最后一片，结尾为文件本身长度
+        if(fileDB.index + 1 >= count) end = targetLength
+        //返回切割好的信息
         return DocumentHelper.getWrite(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
     }
 

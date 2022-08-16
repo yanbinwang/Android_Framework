@@ -17,13 +17,13 @@ object DocumentHelper {
      * @param filePath  分割文件地址
      * @param fileSize 分割文件大小
      */
-    class TmpInfo{
+    class TmpInfo {
         var filePath: String? = null
         var filePointer: Long = 0
 
-        fun getTotal() :Int{
+        fun getTotal(): Int {
             val cutSize = 100 * 1024 * 1024
-            val targetLength = File(filePath?:"").length()
+            val targetLength = File(filePath ?: "").length()
             return if (targetLength.mod(cutSize) == 0) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt()
         }
     }
