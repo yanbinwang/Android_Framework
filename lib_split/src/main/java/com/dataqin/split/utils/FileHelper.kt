@@ -9,6 +9,7 @@ import com.dataqin.common.utils.file.DocumentHelper
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.helper.AccountHelper
 import java.io.File
+import java.io.RandomAccessFile
 
 object FileHelper {
     private val dao by lazy { BaseApplication.instance?.daoSession!!.mobileFileDBDao }
@@ -96,18 +97,20 @@ object FileHelper {
         val targetFile = File(fileDB.sourcePath)
         //设置每片切片大小
         val cutSize = (100 * 1024 * 1024).toLong()
-        //获取源文件大小
-        val targetLength = targetFile.length()
+        //获取目标文件,预分配文件所占的空间,在磁盘中创建一个指定大小的文件(r:只读)
+        val accessFile = RandomAccessFile(targetFile, "r")
+        //文件的总大小
+        val length = accessFile.length()
         //计算切片的片数
-        val count = if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize) else targetLength.div(cutSize).plus(1)
+        val count = if (length.mod(cutSize) == 0L) length.div(cutSize) else length.div(cutSize).plus(1)
         //计算每片切片的实际大小
-        val maxSize = targetLength / count
+        val maxSize = length.div(count)
         //确定切割的结尾
-        var end = (fileDB.index + 1) * maxSize
+        var end = (fileDB.index + 1).times(maxSize)
         //如果当前是分片的最后一片，结尾为文件本身长度
-        if(fileDB.index + 1 >= count) end = targetLength
+        if(fileDB.index + 1 >= count) end = length
         //返回切割好的信息
-        return DocumentHelper.getWrite(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
+        return DocumentHelper.write(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
     }
 
     //接口回调200成功存储此次断点和下标

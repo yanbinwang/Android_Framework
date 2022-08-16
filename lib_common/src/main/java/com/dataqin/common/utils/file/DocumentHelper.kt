@@ -53,11 +53,11 @@ object DocumentHelper {
             for (i in 0 until count - 1) {
                 val begin = offSet
                 val end = (i + 1) * maxSize
-                val tmpInfo = getWrite(targetFile.absolutePath, i, begin, end)
+                val tmpInfo = write(targetFile.absolutePath, i, begin, end)
                 offSet = tmpInfo.filePointer
                 splitList.add(tmpInfo.filePath ?: "")
             }
-            if (length - offSet > 0) splitList.add(getWrite(targetFile.absolutePath, count - 1, offSet, length).filePath ?: "")
+            if (length - offSet > 0) splitList.add(write(targetFile.absolutePath, count - 1, offSet, length).filePath ?: "")
             accessFile.close()
         } catch (e: Exception) {
         } finally {
@@ -79,7 +79,7 @@ object DocumentHelper {
      * @param end   结束指针的位置
      */
     @JvmStatic
-    fun getWrite(filePath: String, index: Int, begin: Long, end: Long): TmpInfo {
+    fun write(filePath: String, index: Int, begin: Long, end: Long): TmpInfo {
         val info = TmpInfo()
         try {
             //源文件
