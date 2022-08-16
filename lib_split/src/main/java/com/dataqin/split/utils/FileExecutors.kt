@@ -66,12 +66,9 @@ object FileExecutors {
                             //先将当前查询/创建的数据在未上传列表内刷出来，文件分片需要一些时间
                             FileHelper.update(sourcePath, true)
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
-                            //获取一次当前下标，如果非0则+1
-                            val position = if (model.index != 0) model.index + 1 else 0
-                            model.index = position
                             //开始分片，并获取分片信息
                             val tmp = FileHelper.submit(model)
-                            weakHandler.post { toPartUpload(position, sourcePath, tmp, fileType, baoquan_no, isZip) }
+                            weakHandler.post { toPartUpload(model.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
                     } else toUpload(sourcePath, fileType, baoquan_no, isZip)
@@ -100,7 +97,7 @@ object FileExecutors {
                         //重新获取当前数据库中存储的值
                         val model = FileHelper.query(sourcePath)
                         if (null != model) {
-                            val index = model.index+1
+                            val index = model.index + 1
                             if (index < tmpInfo.totalNum) {
                                 model.index = index
                                 //获取下一块分片,并且记录
@@ -119,7 +116,7 @@ object FileExecutors {
                             FileUtil.deleteFile(sourcePath)
                             FileHelper.delete(sourcePath)
                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
-                        } else FileHelper.updateState(sourcePath, false)
+                        } else FileHelper.update(sourcePath, false)
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传-分片————————————————————————")
                     }
 
@@ -140,7 +137,7 @@ object FileExecutors {
                     super.onComplete()
                     //删除源文件，清空表
                     FileUtil.deleteFile(sourcePath)
-                    FileHelper.updateState(sourcePath, true)
+                    FileHelper.update(sourcePath, true)
                     FileHelper.delete(sourcePath)
                     weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
                 }
@@ -169,14 +166,14 @@ object FileExecutors {
                         super.onSuccess(data)
                         complete = true
                         FileUtil.deleteFile(sourcePath)
-                        FileHelper.updateState(sourcePath, true)
+                        FileHelper.update(sourcePath, true)
                         FileHelper.delete(sourcePath)
                         LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：$sourcePath\n上传状态：成功\n————————————————————————文件上传————————————————————————")
                     }
 
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
-                        FileHelper.updateState(sourcePath)
+                        FileHelper.update(sourcePath)
                         LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传————————————————————————")
                     }
 

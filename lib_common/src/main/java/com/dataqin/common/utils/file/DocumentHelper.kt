@@ -73,8 +73,8 @@ object DocumentHelper {
     fun split(filePath: String, length: Long, filePointer: Long, index: Int, count: Int): SplitInfo {
         //开始切片
         val end = (index + 1) * (length / count)
-        val model = getWrite(filePath, index, filePointer, end)
-        return SplitInfo(model.filePath, model.filePointer, count)
+        val writeInfo = getWrite(filePath, index, filePointer, end)
+        return SplitInfo(writeInfo.filePath, writeInfo.filePointer, count)
     }
 
     /**

@@ -101,7 +101,7 @@ object FileHelper {
         return DocumentHelper.split(model.sourcePath, accessFile.length(), model.filePointer, model.index, count)
     }
 
-    //接口回调299成功存储此次断点和下标
+    //接口回调200成功存储此次断点和下标
     @JvmStatic
     fun update(sourcePath: String, filePointer: Long, index: Int) {
         val model = query(sourcePath)
