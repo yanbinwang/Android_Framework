@@ -61,14 +61,14 @@ object FileExecutors {
                     if (File(sourcePath).length() >= 100 * 1024 * 1024) {
                         executors.execute {
                             //查询/创建一条用于存表的数据，并重新插入一次
-                            val model = query(sourcePath, baoquan_no)
-                            FileHelper.insert(model)
+                            val fileDB = query(sourcePath, baoquan_no)
+                            FileHelper.insert(fileDB)
                             //先将当前查询/创建的数据在未上传列表内刷出来，文件分片需要一些时间
                             FileHelper.update(sourcePath, true)
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //开始分片，并获取分片信息
-                            val tmp = FileHelper.submit(model)
-                            weakHandler.post { toPartUpload(model.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
+                            val tmp = FileHelper.split(fileDB)
+                            weakHandler.post { toPartUpload(fileDB.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
                     } else toUpload(sourcePath, fileType, baoquan_no, isZip)
@@ -78,13 +78,13 @@ object FileExecutors {
         } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
     }
 
-    private fun toPartUpload(position: Int, sourcePath: String, tmpInfo: DocumentHelper.SplitInfo, fileType: String, baoquan_no: String, isZip: Boolean = false) {
+    private fun toPartUpload(position: Int, sourcePath: String, tmpInfo: DocumentHelper.TmpInfo, fileType: String, baoquan_no: String, isZip: Boolean = false) {
         executors.execute {
             val paramsFile = File(tmpInfo.filePath ?: "")
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
             builder.addFormDataPart("baoquan", baoquan_no)
-            builder.addFormDataPart("totalNum", tmpInfo.totalNum.toString())
+            builder.addFormDataPart("totalNum", tmpInfo.getTotal().toString())
             builder.addFormDataPart("file", paramsFile.name, paramsFile.asRequestBody((if (isZip) "zip" else "video").toMediaTypeOrNull()))
             SplitSubscribe.getPartUploadApi(builder.build().parts)
                 .compose(RxSchedulers.ioMain())
@@ -95,16 +95,16 @@ object FileExecutors {
                         FileUtil.deleteFile(tmpInfo.filePath)
                         FileHelper.update(sourcePath, tmpInfo.filePointer, position)
                         //重新获取当前数据库中存储的值
-                        val model = FileHelper.query(sourcePath)
-                        if (null != model) {
-                            val index = model.index + 1
-                            if (index < tmpInfo.totalNum) {
-                                model.index = index
+                        val fileDB = FileHelper.query(sourcePath)
+                        if (null != fileDB) {
+                            val index = fileDB.index + 1
+                            if (index < tmpInfo.getTotal()) {
+                                fileDB.index = index
                                 //获取下一块分片,并且记录
-                                val nextTmp = FileHelper.submit(model)
+                                val nextTmp = FileHelper.split(fileDB)
                                 //再开启下一次传输
                                 weakHandler.post { toPartUpload(index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
-                            } else if (index >= tmpInfo.totalNum) toCombinePart(sourcePath, baoquan_no, fileType)
+                            } else if (index >= tmpInfo.getTotal()) toCombinePart(sourcePath, baoquan_no, fileType)
                         }
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                     }

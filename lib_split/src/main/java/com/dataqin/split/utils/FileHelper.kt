@@ -9,7 +9,6 @@ import com.dataqin.common.utils.file.DocumentHelper
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.helper.AccountHelper
 import java.io.File
-import java.io.RandomAccessFile
 
 object FileHelper {
     private val dao by lazy { BaseApplication.instance?.daoSession!!.mobileFileDBDao }
@@ -92,13 +91,13 @@ object FileHelper {
 
     //外层先query查找对应数据库，没有找到值的话，重新insert，找到值的话，获取里面的内容
     @JvmStatic
-    fun submit(model: MobileFileDB): DocumentHelper.SplitInfo {
-        val targetFile = File(model.sourcePath)
+    fun split(fileDB: MobileFileDB): DocumentHelper.TmpInfo {
+        val targetFile = File(fileDB.sourcePath)
         val cutSize = (100 * 1024 * 1024).toLong()
         val targetLength = targetFile.length()
-        val count = if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt()
-        val accessFile = RandomAccessFile(targetFile, "r")
-        return DocumentHelper.split(model.sourcePath, accessFile.length(), model.filePointer, model.index, count)
+        val maxSize = targetLength / (if (targetLength.mod(cutSize) == 0L) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt())
+        val end = (fileDB.index + 1) * maxSize
+        return DocumentHelper.getWrite(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
     }
 
     //接口回调200成功存储此次断点和下标

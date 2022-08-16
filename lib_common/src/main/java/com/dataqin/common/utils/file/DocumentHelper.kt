@@ -17,9 +17,16 @@ object DocumentHelper {
      * @param filePath  分割文件地址
      * @param fileSize 分割文件大小
      */
-    class TmpInfo(var filePath: String? = null, var filePointer: Long = 0)
+    class TmpInfo{
+        var filePath: String? = null
+        var filePointer: Long = 0
 
-    class SplitInfo(var filePath: String? = null, var filePointer: Long = 0, var totalNum:Int)
+        fun getTotal() :Int{
+            val cutSize = 100 * 1024 * 1024
+            val targetLength = File(filePath?:"").length()
+            return if (targetLength.mod(cutSize) == 0) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt()
+        }
+    }
 
     /**
      * 文件分割
@@ -65,19 +72,6 @@ object DocumentHelper {
     }
 
     /**
-     * 传入记录的分片文件信息，如果丢失，则相当于重新分片
-     * 切片时记录每个切片的offSet（即filePointer）
-     * 取出数据库中的filePointer以及index
-     */
-    @JvmStatic
-    fun split(filePath: String, length: Long, filePointer: Long, index: Int, count: Int): SplitInfo {
-        //开始切片
-        val end = (index + 1) * (length / count)
-        val writeInfo = getWrite(filePath, index, filePointer, end)
-        return SplitInfo(writeInfo.filePath, writeInfo.filePointer, count)
-    }
-
-    /**
      * 开始创建并写入tmp文件
      * @param filePath  源文件地址
      * @param index 源文件的顺序标识
@@ -85,7 +79,7 @@ object DocumentHelper {
      * @param end   结束指针的位置
      */
     @JvmStatic
-    private fun getWrite(filePath: String, index: Int, begin: Long, end: Long): TmpInfo {
+    fun getWrite(filePath: String, index: Int, begin: Long, end: Long): TmpInfo {
         val info = TmpInfo()
         try {
             //源文件
