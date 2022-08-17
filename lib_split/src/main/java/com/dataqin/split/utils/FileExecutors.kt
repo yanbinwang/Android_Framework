@@ -27,6 +27,9 @@ import java.util.concurrent.TimeUnit
 /**
  *  Created by wangyanbin
  *  文件线程池提交
+ *  Dispatchers.Main - 使用此调度程序可在 Android 主线程上运行协程。此调度程序只能用于与界面交互和执行快速工作。示例包括调用 suspend 函数，运行 Android 界面框架操作，以及更新LiveData对象。
+ *  Dispatchers.IO - 此调度程序经过了专门优化，适合在主线程之外执行磁盘或网络 I/O。示例包括使用Room组件、从文件中读取数据或向文件中写入数据，以及运行任何网络操作。
+ *  Dispatchers.Default - 此调度程序经过了专门优化，适合在主线程之外执行占用大量 CPU 资源的工作。用例示例包括对列表排序和解析 JSON。
  */
 object FileExecutors {
     private val TAG = "FileExecutors"
