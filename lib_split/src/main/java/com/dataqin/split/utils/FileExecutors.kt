@@ -95,12 +95,14 @@ object FileExecutors {
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n分片数量:${tmpInfo.getTotal(sourcePath)}\n当前下标：${position}\n当片路径：${tmpInfo.filePath}\n当片大小：${StringUtil.getFormatSize(File(tmpInfo.filePath?:"").length().toDouble())}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                         //成功记录此次分片，并删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
+                        //此次分片服务器已经收到了，手机本地记录一下
+                        FileHelper.update(sourcePath, tmpInfo.filePointer, position)
                         //重新获取当前数据库中存储的值
                         val fileDB = FileHelper.query(sourcePath)
                         if (null != fileDB) {
                             fileDB.index = fileDB.index + 1
                             if (fileDB.index < tmpInfo.getTotal(sourcePath)) {
-                                //获取下一块分片,并且记录
+                                //获取下一块分片,并在手机本地记录
                                 val nextTmp = FileHelper.split(fileDB)
                                 FileHelper.update(sourcePath, nextTmp.filePointer, fileDB.index)
                                 //再开启下一次传输
