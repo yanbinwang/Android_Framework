@@ -1,6 +1,7 @@
 package com.dataqin.split.utils
 
 import android.text.TextUtils
+import com.dataqin.base.utils.LogUtil
 import com.dataqin.common.BaseApplication
 import com.dataqin.common.constant.Constants
 import com.dataqin.common.dao.MobileFileDBDao
@@ -95,21 +96,17 @@ object FileHelper {
     fun split(fileDB: MobileFileDB): DocumentHelper.TmpInfo {
         //获取切片源文件
         val targetFile = File(fileDB.sourcePath)
-        //设置每片切片大小
-        val cutSize = (100 * 1024 * 1024).toLong()
         //文件的总大小
         val length = targetFile.length()
-        //计算切片的片数
-        val count = if (length.mod(cutSize) == 0L) length.div(cutSize) else length.div(cutSize).plus(1)
-        //计算每片切片的实际大小
-        val maxSize = length.div(count)
         //确定切割的结尾
-        var end = (fileDB.index + 1).times(maxSize)
+        var end = (fileDB.index + 1).times(fileDB.size)
         //如果当前是分片的最后一片，结尾为文件本身长度
-        if(fileDB.index + 1 >= count) end = length
+        if(fileDB.index + 1 >= fileDB.total) end = length
+        LogUtil.e("FileExecutors"," \n文件大小：${length}\n切割大小：${fileDB.size}\n分片开头：${fileDB.filePointer}\n分片结尾：${end}")
         //返回切割好的信息
         val tmp = DocumentHelper.write(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
-        return DocumentHelper.TmpInfo(tmp.filePath ?: "", tmp.filePointer)
+        tmp.filePointer = end
+        return tmp
     }
 
     //接口回调200成功存储此次断点和下标

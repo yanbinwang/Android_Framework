@@ -12,7 +12,6 @@ import com.dataqin.common.constant.Constants
 import com.dataqin.common.http.repository.HttpParams
 import com.dataqin.common.http.repository.HttpSubscriber
 import com.dataqin.common.model.MobileFileDB
-import com.dataqin.common.utils.file.DocumentHelper
 import com.dataqin.common.utils.file.FileUtil
 import com.dataqin.common.utils.helper.AccountHelper
 import com.dataqin.split.subscribe.SplitSubscribe
@@ -62,14 +61,15 @@ object FileExecutors {
                     if (File(sourcePath).length() >= 100 * 1024 * 1024) {
                         executors.execute {
                             //查询/创建一条用于存表的数据，并重新插入一次
-                            val fileDB = query(sourcePath, baoquan_no)
-                            FileHelper.insert(fileDB)
+                            val queryDB = query(sourcePath, baoquan_no)
+                            FileHelper.insert(queryDB)
                             //先将当前查询/创建的数据在未上传列表内刷出来，文件分片需要一些时间
                             FileHelper.update(sourcePath, true)
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //开始分片，并获取分片信息
-                            val tmp = FileHelper.split(fileDB)
-                            weakHandler.post { toPartUpload(fileDB.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
+                            val tmp = FileHelper.split(queryDB)
+                            queryDB.filePointer = tmp.filePointer
+                            weakHandler.post { toPartUpload(queryDB, tmp.filePath ?: "", fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
                     } else toUpload(sourcePath, fileType, baoquan_no, isZip)
@@ -79,47 +79,48 @@ object FileExecutors {
         } else LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n正在上传:${sourcePath}\n————————————————————————文件上传————————————————————————")
     }
 
-    private fun toPartUpload(position: Int, sourcePath: String, tmpInfo: DocumentHelper.TmpInfo, fileType: String, baoquan_no: String, isZip: Boolean = false) {
+    private fun toPartUpload(queryDB: MobileFileDB, tmpPath: String, fileType: String, baoquan_no: String, isZip: Boolean = false) {
         executors.execute {
-            val paramsFile = File(tmpInfo.filePath ?: "")
+            val paramsFile = File(tmpPath)
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
             builder.addFormDataPart("baoquan", baoquan_no)
-            builder.addFormDataPart("totalNum", tmpInfo.getTotal(sourcePath).toString())
+            builder.addFormDataPart("totalNum", queryDB.total.toString())
             builder.addFormDataPart("file", paramsFile.name, paramsFile.asRequestBody((if (isZip) "zip" else "video").toMediaTypeOrNull()))
             SplitSubscribe.getPartUploadApi(builder.build().parts)
                 .compose(RxSchedulers.ioMain())
                 .subscribeWith(object : HttpSubscriber<Any>() {
                     override fun onSuccess(data: Any?) {
                         super.onSuccess(data)
-                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n分片数量:${tmpInfo.getTotal(sourcePath)}\n当前下标：${position}\n当片路径：${tmpInfo.filePath}\n当片大小：${StringUtil.getFormatSize(File(tmpInfo.filePath?:"").length().toDouble())}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
+                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${queryDB.sourcePath}\n分片数量:${queryDB.total}\n当前下标：${queryDB.index}\n当片路径：${tmpPath}\n当片大小：${StringUtil.getFormatSize(File(tmpPath).length().toDouble())}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                         //成功记录此次分片，并删除这个切片
-                        FileUtil.deleteFile(tmpInfo.filePath)
+                        FileUtil.deleteFile(tmpPath)
                         //此次分片服务器已经收到了，手机本地记录一下
-                        FileHelper.update(sourcePath, tmpInfo.filePointer, position)
+                        FileHelper.update(queryDB.sourcePath, queryDB.filePointer, queryDB.index)
                         //重新获取当前数据库中存储的值
-                        val fileDB = FileHelper.query(sourcePath)
+                        val fileDB = FileHelper.query(queryDB.sourcePath)
                         if (null != fileDB) {
+                            //下标+1，开始切下一块
                             fileDB.index = fileDB.index + 1
-                            if (fileDB.index < tmpInfo.getTotal(sourcePath)) {
-                                //获取下一块分片,并在手机本地记录
+                            if (fileDB.index < queryDB.total) {
+                                //获取下一块分片,并且记录
                                 val nextTmp = FileHelper.split(fileDB)
-                                FileHelper.update(sourcePath, nextTmp.filePointer, fileDB.index)
+                                fileDB.filePointer = nextTmp.filePointer
                                 //再开启下一次传输
-                                weakHandler.post { toPartUpload(fileDB.index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
-                            } else if (fileDB.index >= tmpInfo.getTotal(sourcePath)) toCombinePart(sourcePath, baoquan_no, fileType)
+                                weakHandler.post { toPartUpload(fileDB, nextTmp.filePath ?: "", fileType, baoquan_no, isZip) }
+                            } else if (fileDB.index >= queryDB.total) toCombinePart(queryDB.sourcePath, baoquan_no, fileType)
                         }
                     }
 
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
                         if (msg == "该保全号信息有误") {
-                            FileUtil.deleteFile(tmpInfo.filePath)
-                            FileUtil.deleteFile(sourcePath)
-                            FileHelper.delete(sourcePath)
+                            FileUtil.deleteFile(tmpPath)
+                            FileUtil.deleteFile(queryDB.sourcePath)
+                            FileHelper.delete(queryDB.sourcePath)
                             weakHandler.post { RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_UPDATE, fileType), RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE)) }
-                        } else FileHelper.update(sourcePath, false)
-                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传-分片————————————————————————")
+                        } else FileHelper.complete(queryDB.sourcePath, false)
+                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${queryDB.sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传-分片————————————————————————")
                     }
 
                     override fun onComplete() {
@@ -176,7 +177,7 @@ object FileExecutors {
                     override fun onFailed(e: Throwable?, msg: String?) {
                         super.onFailed(e, msg)
                         FileHelper.update(sourcePath)
-                        LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：" + sourcePath + "\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传————————————————————————")
+                        LogUtil.e(TAG, " \n————————————————————————文件上传————————————————————————\n文件路径：${sourcePath}\n上传状态：失败\n失败原因：${if (TextUtils.isEmpty(msg)) e.toString() else msg}\n————————————————————————文件上传————————————————————————")
                     }
 
                     override fun onComplete() {

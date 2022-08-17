@@ -4,6 +4,8 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
 
+import java.io.File;
+
 /**
  * 手机文件数据库
  */
@@ -75,4 +77,14 @@ public class MobileFileDB {
         this.complete = complete;
     }
 
+    //获取分片总数
+    public int getTotal() {
+        long targetLength = new File(sourcePath).length();
+        return targetLength % getSize() == 0 ? (int) (targetLength / getSize()) : (int) (targetLength / getSize() + 1);
+    }
+
+    //配置分片大小
+    public long getSize() {
+        return 100 * 1024 * 1024;
+    }
 }
