@@ -21,9 +21,16 @@ object DocumentHelper {
         var filePath: String? = null
         var filePointer: Long = 0
 
-        fun getTotal(): Int {
+        constructor()
+
+        constructor(filePath: String, filePointer: Long) {
+            this.filePath = filePath
+            this.filePointer = filePointer
+        }
+
+        fun getTotal(sourcePath: String): Int {
             val cutSize = 100 * 1024 * 1024
-            val targetLength = File(filePath ?: "").length()
+            val targetLength = File(sourcePath).length()
             return if (targetLength.mod(cutSize) == 0) targetLength.div(cutSize).toInt() else targetLength.div(cutSize).plus(1).toInt()
         }
     }

@@ -110,7 +110,8 @@ object FileHelper {
         //如果当前是分片的最后一片，结尾为文件本身长度
         if(fileDB.index + 1 >= count) end = length
         //返回切割好的信息
-        return DocumentHelper.write(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
+        val tmp = DocumentHelper.write(fileDB.sourcePath, fileDB.index, fileDB.filePointer, end)
+        return DocumentHelper.TmpInfo(tmp.filePath ?: "", tmp.filePointer)
     }
 
     //接口回调200成功存储此次断点和下标
