@@ -68,7 +68,6 @@ object FileExecutors {
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //开始分片，并获取分片信息
                             val tmp = FileHelper.split(fileDB)
-                            fileDB.filePointer = tmp.filePointer
                             weakHandler.post { toPartUpload(fileDB.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
@@ -103,7 +102,7 @@ object FileExecutors {
                                 fileDB.index = index
                                 //获取下一块分片,并且记录
                                 val nextTmp = FileHelper.split(fileDB)
-                                fileDB.filePointer = nextTmp.filePointer
+                                FileHelper.update(sourcePath, nextTmp.filePointer, position)
                                 //再开启下一次传输
                                 weakHandler.post { toPartUpload(index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
                             } else if (index >= tmpInfo.getTotal(sourcePath)) toCombinePart(sourcePath, baoquan_no, fileType)
