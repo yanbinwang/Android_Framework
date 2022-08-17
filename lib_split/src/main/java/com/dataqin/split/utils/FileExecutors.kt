@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.text.TextUtils
 import com.dataqin.base.utils.LogUtil
+import com.dataqin.base.utils.StringUtil
 import com.dataqin.common.bus.RxBus
 import com.dataqin.common.bus.RxEvent
 import com.dataqin.common.bus.RxSchedulers
@@ -91,23 +92,21 @@ object FileExecutors {
                 .subscribeWith(object : HttpSubscriber<Any>() {
                     override fun onSuccess(data: Any?) {
                         super.onSuccess(data)
+                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n分片数量:${tmpInfo.getTotal(sourcePath)}\n当前下标：${position}\n当片路径：${tmpInfo.filePath}\n当片大小：${StringUtil.getFormatSize(File(tmpInfo.filePath?:"").length().toDouble())}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                         //成功记录此次分片，并删除这个切片
                         FileUtil.deleteFile(tmpInfo.filePath)
-                        FileHelper.update(sourcePath, tmpInfo.filePointer, position)
                         //重新获取当前数据库中存储的值
                         val fileDB = FileHelper.query(sourcePath)
                         if (null != fileDB) {
-                            val index = fileDB.index + 1
-                            if (index < tmpInfo.getTotal(sourcePath)) {
-                                fileDB.index = index
+                            fileDB.index = fileDB.index + 1
+                            if (fileDB.index < tmpInfo.getTotal(sourcePath)) {
                                 //获取下一块分片,并且记录
                                 val nextTmp = FileHelper.split(fileDB)
-                                FileHelper.update(sourcePath, nextTmp.filePointer, position)
+                                FileHelper.update(sourcePath, nextTmp.filePointer, fileDB.index)
                                 //再开启下一次传输
-                                weakHandler.post { toPartUpload(index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
-                            } else if (index >= tmpInfo.getTotal(sourcePath)) toCombinePart(sourcePath, baoquan_no, fileType)
+                                weakHandler.post { toPartUpload(fileDB.index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
+                            } else if (fileDB.index >= tmpInfo.getTotal(sourcePath)) toCombinePart(sourcePath, baoquan_no, fileType)
                         }
-                        LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                     }
 
                     override fun onFailed(e: Throwable?, msg: String?) {
