@@ -97,10 +97,8 @@ object FileHelper {
         val targetFile = File(fileDB.sourcePath)
         //设置每片切片大小
         val cutSize = (100 * 1024 * 1024).toLong()
-        //获取目标文件,预分配文件所占的空间,在磁盘中创建一个指定大小的文件(r:只读)
-        val accessFile = RandomAccessFile(targetFile, "r")
         //文件的总大小
-        val length = accessFile.length()
+        val length = targetFile.length()
         //计算切片的片数
         val count = if (length.mod(cutSize) == 0L) length.div(cutSize) else length.div(cutSize).plus(1)
         //计算每片切片的实际大小

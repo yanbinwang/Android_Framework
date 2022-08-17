@@ -68,6 +68,7 @@ object FileExecutors {
                             RxBus.instance.post(RxEvent(Constants.APP_EVIDENCE_EXTRAS_UPDATE))
                             //开始分片，并获取分片信息
                             val tmp = FileHelper.split(fileDB)
+                            fileDB.filePointer = tmp.filePointer
                             weakHandler.post { toPartUpload(fileDB.index, sourcePath, tmp, fileType, baoquan_no, isZip) }
                         }
                         executors.isShutdown
@@ -84,7 +85,7 @@ object FileExecutors {
             val builder = MultipartBody.Builder()
             builder.setType(MultipartBody.FORM)
             builder.addFormDataPart("baoquan", baoquan_no)
-            builder.addFormDataPart("totalNum", tmpInfo.getTotal().toString())
+            builder.addFormDataPart("totalNum", tmpInfo.getTotal(sourcePath).toString())
             builder.addFormDataPart("file", paramsFile.name, paramsFile.asRequestBody((if (isZip) "zip" else "video").toMediaTypeOrNull()))
             SplitSubscribe.getPartUploadApi(builder.build().parts)
                 .compose(RxSchedulers.ioMain())
@@ -98,13 +99,14 @@ object FileExecutors {
                         val fileDB = FileHelper.query(sourcePath)
                         if (null != fileDB) {
                             val index = fileDB.index + 1
-                            if (index < tmpInfo.getTotal()) {
+                            if (index < tmpInfo.getTotal(sourcePath)) {
                                 fileDB.index = index
                                 //获取下一块分片,并且记录
                                 val nextTmp = FileHelper.split(fileDB)
+                                fileDB.filePointer = nextTmp.filePointer
                                 //再开启下一次传输
                                 weakHandler.post { toPartUpload(index, sourcePath, nextTmp, fileType, baoquan_no, isZip) }
-                            } else if (index >= tmpInfo.getTotal()) toCombinePart(sourcePath, baoquan_no, fileType)
+                            } else if (index >= tmpInfo.getTotal(sourcePath)) toCombinePart(sourcePath, baoquan_no, fileType)
                         }
                         LogUtil.e(TAG, " \n————————————————————————文件上传-分片————————————————————————\n文件路径：${sourcePath}\n上传状态：成功\n————————————————————————文件上传-分片————————————————————————")
                     }
